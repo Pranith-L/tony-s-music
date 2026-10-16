@@ -1,0 +1,141 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --primary: #1B7C9D;
+  --primary-dark: #0E5671;
+  --bg-gray: #9C9C9C;
+  --surface: #EDF5F8;
+  --text: #2A2120;
+  --accent: #C9B27C;
+  --color-gold: #C9B27C;
+  --color-gold-light: #E8DCB8;
+  --color-gold-dark: #9C8550;
+  --color-teal: #1B7C9D;
+  --color-teal-dark: #0E5671;
+  --color-midnight: #07151D;
+  --color-espresso: #0B222E;
+  --color-ivory: #EDF5F8;
+  --color-charcoal: #0F2B38;
+}
+
+@layer base {
+  html, body, #root {
+    height: 100%;
+    height: 100dvh;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    overscroll-behavior: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    color-scheme: dark;
+  }
+
+  body {
+    background-color: #07151D;
+    color: #EDF5F8;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    letter-spacing: -0.01em;
+    position: relative;
+  }
+
+  h1, h2, h3, .font-heading {
+    font-family: 'Cormorant Garamond', 'Georgia', serif;
+    letter-spacing: -0.015em;
+  }
+
+  .font-telugu {
+    font-family: 'Noto Serif Telugu', 'Cormorant Garamond', serif;
+    line-height: 1.5;
+  }
+}
+
+/* Custom Refined Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 0px; /* Hide all horizontal scrollbars site-wide for native touch feel */
+}
+
+::-webkit-scrollbar-track {
+  background: #07151D;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #183D4E;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #1B7C9D;
+}
+
+/* Hide scrollbar for mobile carousels & chip strips */
+.no-scrollbar::-webkit-scrollbar,
+.scrollbar-none::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+.no-scrollbar,
+.scrollbar-none {
+  -ms-overflow-style: none !important; /* IE and Edge */
+  scrollbar-width: none !important; /* Firefox */
+  -webkit-overflow-scrolling: touch; /* Smooth iOS momentum */
+}
+
+/* Tactile Editorial Surfaces with Oceanic Teal Depth */
+.editorial-card {
+  background: linear-gradient(180deg, rgba(15, 43, 56, 0.75) 0%, rgba(9, 27, 36, 0.9) 100%);
+  border: 1px solid rgba(27, 124, 157, 0.22);
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.editorial-card:hover {
+  border-color: rgba(201, 178, 124, 0.45);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 35px -10px rgba(0, 0, 0, 0.85), 0 0 25px -5px rgba(27, 124, 157, 0.25);
+}
+
+.gold-hairline {
+  border-color: rgba(201, 178, 124, 0.25);
+}
+
+.gold-gradient-text {
+  background: linear-gradient(135deg, #EDF5F8 0%, #E8DCB8 35%, #C9B27C 70%, #9C8550 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.teal-gradient-text {
+  background: linear-gradient(135deg, #EDF5F8 0%, #1B7C9D 50%, #0E5671 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Atmospheric Stage Glow */
+.stage-spotlight {
+  background: radial-gradient(ellipse at 50% 15%, rgba(27, 124, 157, 0.22) 0%, rgba(14, 86, 113, 0.12) 45%, rgba(7, 21, 29, 0) 75%);
+}
+
+.warm-halo {
+  box-shadow: 0 0 60px -10px rgba(201, 178, 124, 0.25);
+}
+
+/* Audio Wave Visualizer */
+@keyframes soundPulse {
+  0%, 100% { height: 3px; }
+  50% { height: 16px; }
+}
+
+.wave-bar-1 { animation: soundPulse 0.9s ease-in-out infinite; }
+.wave-bar-2 { animation: soundPulse 1.2s ease-in-out infinite 0.15s; }
+.wave-bar-3 { animation: soundPulse 0.75s ease-in-out infinite 0.35s; }
+.wave-bar-4 { animation: soundPulse 1.05s ease-in-out infinite 0.1s; }

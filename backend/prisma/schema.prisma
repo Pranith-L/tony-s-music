@@ -1,0 +1,172 @@
+// Prisma schema for Tony Prakash Official Music Platform (MongoDB)
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String         @id @default(auto()) @map("_id") @db.ObjectId
+  email         String         @unique
+  passwordHash  String?
+  name          String
+  phone         String?
+  avatar        String?
+  provider      String         @default("LOCAL") // "LOCAL" | "GOOGLE" | "FACEBOOK"
+  googleId      String?
+  facebookId    String?
+  role          String         @default("USER") // "USER" | "ADMIN"
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  subscriptions Subscription[]
+  purchases     Purchase[]
+  entitlements  Entitlement[]
+}
+
+model Subscription {
+  id                     String    @id @default(auto()) @map("_id") @db.ObjectId
+  userId                 String    @db.ObjectId
+  user                   User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  planName               String    @default("Tony's VIP Pass")
+  status                 String    @default("ACTIVE") // "ACTIVE" | "CANCELLED" | "EXPIRED" | "PENDING"
+  amountPaise            Int       @default(29900)
+  currentPeriodStart     DateTime  @default(now())
+  currentPeriodEnd       DateTime
+  razorpaySubscriptionId String?   @unique
+  razorpayPaymentId      String?
+  createdAt              DateTime  @default(now())
+  updatedAt              DateTime  @updatedAt
+}
+
+model Purchase {
+  id                String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId            String   @db.ObjectId
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  trackId           String   @db.ObjectId
+  track             Track    @relation(fields: [trackId], references: [id], onDelete: Cascade)
+  amountPaise       Int      @default(9900)
+  status            String   @default("SUCCESS") // "SUCCESS" | "PENDING" | "FAILED"
+  razorpayOrderId   String?  @unique
+  razorpayPaymentId String?
+  createdAt         DateTime @default(now())
+}
+
+model Track {
+  id                 String        @id @default(auto()) @map("_id") @db.ObjectId
+  slug               String        @unique
+  titleTelugu        String
+  titleEnglish       String
+  albumId            String?       @db.ObjectId
+  album              Album?        @relation(fields: [albumId], references: [id], onDelete: SetNull)
+  duration           String        @default("5:30")
+  category           String        @default("Worship") // "Worship" | "Devotional" | "Praise" | "Gospel" | "Track"
+  isTrack            Boolean       @default(false)
+  isFeatured         Boolean       @default(false)
+  isPopular          Boolean       @default(false)
+  isSubscriberOnly   Boolean       @default(false)
+  isDownloadable     Boolean       @default(true)
+  downloadPricePaise Int           @default(9900)
+  rightsConfirmed    Boolean       @default(true)
+  audioUrl           String        // Public streaming URL or preview URL
+  privateStorageKey  String?       // Protected storage identifier
+  coverImage         String?
+  lyricsTelugu       String?
+  lyricsEnglish      String?
+  composer           String        @default("Tony Prakash")
+  lyricist           String        @default("Tony Prakash")
+  singer             String        @default("Tony Prakash")
+  releaseYear        Int           @default(2024)
+  status             String        @default("PUBLISHED") // "DRAFT" | "PUBLISHED" | "ARCHIVED"
+  orderIndex         Int           @default(0)
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime      @updatedAt
+
+  purchases          Purchase[]
+  entitlements       Entitlement[]
+}
+
+model Album {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  slug         String   @unique
+  titleTelugu  String
+  titleEnglish String
+  coverImage   String
+  releaseYear  Int      @default(2024)
+  description  String?
+  isFeatured   Boolean  @default(false)
+  status       String   @default("PUBLISHED") // "DRAFT" | "PUBLISHED" | "ARCHIVED"
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  tracks       Track[]
+}
+
+model Video {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  youtubeId   String   @unique
+  title       String
+  description String?
+  thumbnail   String
+  duration    String   @default("6:15")
+  isFeatured  Boolean  @default(false)
+  orderIndex  Int      @default(0)
+  status      String   @default("PUBLISHED")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Booking {
+  id               String   @id @default(auto()) @map("_id") @db.ObjectId
+  referenceNo      String   @unique
+  fullName         String
+  email            String
+  phone            String
+  eventType        String   // Church Worship Event, Christian Conference, Concert, Special Programme, Private / Other
+  organization     String?
+  eventDate        String
+  preferredTime    String?
+  city             String
+  venue            String?
+  expectedAudience String?
+  message          String
+  status           String   @default("NEW") // "NEW" | "CONTACTED" | "UNDER_DISCUSSION" | "CONFIRMED" | "COMPLETED" | "CANCELLED"
+  internalNotes    String?
+  consentGiven     Boolean  @default(true)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+model Entitlement {
+  id              String    @id @default(auto()) @map("_id") @db.ObjectId
+  userId          String    @db.ObjectId
+  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  trackId         String    @db.ObjectId
+  track           Track     @relation(fields: [trackId], references: [id], onDelete: Cascade)
+  entitlementType String    // "PURCHASE" | "SUBSCRIPTION"
+  validUntil      DateTime?
+  createdAt       DateTime  @default(now())
+
+  @@unique([userId, trackId, entitlementType])
+}
+
+model WebhookEvent {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  eventId     String   @unique
+  eventType   String
+  payload     String
+  status      String   @default("PROCESSED")
+  processedAt DateTime @default(now())
+  createdAt   DateTime @default(now())
+}
+
+model SiteSetting {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  key       String   @unique
+  value     String
+  updatedAt DateTime @updatedAt
+}

@@ -1,0 +1,940 @@
+import React, { useState, useEffect, useMemo } from 'react';
+import {
+  ListMusic,
+  Plus,
+  Play,
+  Shuffle,
+  Trash2,
+  Edit2,
+  Heart,
+  Disc3,
+  Search,
+  Music,
+  Check,
+  X,
+  ChevronLeft,
+  Share2,
+  LogIn,
+  Sparkles,
+} from 'lucide-react';
+import { usePlaylists, Playlist } from '../context/PlaylistContext.js';
+import { usePlayer } from '../context/PlayerContext.js';
+import { useAuth } from '../context/AuthContext.js';
+import { Track } from '../types/index.js';
+import { api } from '../services/api.js';
+import { TrackActionMenu } from '../components/layout/TrackActionMenu.js';
+import { Link } from 'react-router-dom';
+
+export const LibraryPage: React.FC = () => {
+  const { user } = useAuth();
+  const {
+    playlists,
+    createPlaylist,
+    deletePlaylist,
+    updatePlaylist,
+    removeTrackFromPlaylist,
+    addTrackToPlaylist,
+    isTrackInPlaylist,
+  } = usePlaylists();
+
+  const {
+    playTrack,
+    currentTrack,
+    isPlaying,
+    isLiked,
+    likedTrackIds,
+    hasTrackAccess,
+  } = usePlayer();
+
+  const [activeTab, setActiveTab] = useState<'playlists' | 'liked' | 'purchased'>('playlists');
+  const [selectedPlaylistId, setSelectedPlaylistId] = useState<string | null>(null);
+  const [allTracks, setAllTracks] = useState<Track[]>([]);
+  const [isLoadingTracks, setIsLoadingTracks] = useState(false);
+
+  // New Playlist Modal state
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [newPlaylistName, setNewPlaylistName] = useState('');
+  const [newPlaylistDesc, setNewPlaylistDesc] = useState('');
+
+  // Edit Playlist Modal state
+  const [editingPlaylist, setEditingPlaylist] = useState<Playlist | null>(null);
+  const [editName, setEditName] = useState('');
+  const [editDesc, setEditDesc] = useState('');
+
+  // Add Songs Drawer / Modal within playlist
+  const [showAddSongsModal, setShowAddSongsModal] = useState(false);
+  const [searchSongQuery, setSearchSongQuery] = useState('');
+
+  // Load all tracks from API / mock catalog
+  useEffect(() => {
+    let mounted = true;
+    const fetchCatalog = async () => {
+      setIsLoadingTracks(true);
+      try {
+        const data = await api.tracks.getAll();
+        if (mounted) setAllTracks(data);
+      } catch (e) {
+        console.error('Failed to load catalog for library', e);
+      } finally {
+        if (mounted) setIsLoadingTracks(false);
+      }
+    };
+    fetchCatalog();
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  const selectedPlaylist = useMemo(() => {
+    return playlists.find((p) => p.id === selectedPlaylistId) || null;
+  }, [playlists, selectedPlaylistId]);
+
+  // Tracks in the selected playlist
+  const playlistTracks = useMemo(() => {
+    if (!selectedPlaylist) return [];
+    return selectedPlaylist.trackIds
+      .map((id) => allTracks.find((t) => t.id === id))
+      .filter((t): t is Track => Boolean(t));
+  }, [selectedPlaylist, allTracks]);
+
+  // Liked tracks from catalog
+  const userLikedTracks = useMemo(() => {
+    return allTracks.filter((t) => likedTrackIds.includes(t.id));
+  }, [allTracks, likedTrackIds]);
+
+  // Purchased backing tracks
+  const userPurchasedTracks = useMemo(() => {
+    return allTracks.filter((t) => t.isTrack && hasTrackAccess(t));
+  }, [allTracks, user?.purchases]);
+
+  // Handle Play Playlist
+  const handlePlayPlaylist = (tracksToPlay: Track[], shuffle = false) => {
+    if (tracksToPlay.length === 0) return;
+    const list = shuffle ? [...tracksToPlay].sort(() => Math.random() - 0.5) : tracksToPlay;
+    playTrack(list[0], list);
+  };
+
+  const handleCreateSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newPlaylistName.trim()) return;
+    const created = createPlaylist(newPlaylistName.trim(), newPlaylistDesc.trim());
+    setNewPlaylistName('');
+    setNewPlaylistDesc('');
+    setShowCreateModal(false);
+    setSelectedPlaylistId(created.id);
+  };
+
+  const handleEditSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingPlaylist || !editName.trim()) return;
+    updatePlaylist(editingPlaylist.id, editName.trim(), editDesc.trim());
+    setEditingPlaylist(null);
+  };
+
+  return (
+    <div className="space-y-6 max-w-[1600px] mx-auto pb-12">
+      {/* 1. Header Banner */}
+      <div className="relative rounded-3xl p-6 sm:p-8 bg-gradient-to-r from-[#07151D] via-[#0B2533] to-[#12364B] border border-[#1B7C9D]/30 shadow-2xl overflow-hidden">
+        <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="space-y-1.5">
+            <div className="flex items-center gap-2">
+              <span className="px-3 py-0.5 rounded-full text-[10px] font-mono font-bold tracking-wider uppercase bg-[#1B7C9D]/20 text-[#8CE2FF] border border-[#1B7C9D]/40">
+                Personal Library
+              </span>
+              <span className="font-telugu text-xs text-[#C9B27C]">మీ వ్యక్తిగత లైబ్రరీ</span>
+            </div>
+            <h1 className="text-2xl sm:text-4xl font-heading font-extrabold text-[#EDF5F8]">
+              {user ? `${user.name}'s Sanctuary` : 'Your Music Library'}
+            </h1>
+            <p className="text-xs sm:text-sm text-[#A5C1CC]">
+              Manage custom devotional playlists, explore your liked hymns, and replay purchased backing tracks.
+            </p>
+          </div>
+
+          <div className="flex items-center gap-3 shrink-0">
+            {!user ? (
+              <Link
+                to="/auth"
+                className="px-4 py-2.5 rounded-2xl bg-[#09212C] border border-[#C9B27C]/40 text-xs font-bold text-[#E8DCB8] hover:text-white hover:bg-[#12303E] flex items-center gap-2 transition-all shadow-md"
+              >
+                <LogIn className="w-4 h-4 text-[#C9B27C]" />
+                <span>Log In / Sign Up</span>
+              </Link>
+            ) : null}
+
+            <button
+              onClick={() => setShowCreateModal(true)}
+              className="px-4 py-2.5 rounded-2xl bg-gradient-to-r from-[#1B7C9D] to-[#0E5671] text-xs font-bold text-white hover:brightness-110 flex items-center gap-2 shadow-[0_0_20px_rgba(27,124,157,0.4)] transition-all active:scale-95"
+            >
+              <Plus className="w-4 h-4" />
+              <span>New Playlist</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* 2. Library Tabs */}
+      <div className="flex items-center gap-2 border-b border-[#1B7C9D]/20 pb-3">
+        <button
+          onClick={() => {
+            setActiveTab('playlists');
+            setSelectedPlaylistId(null);
+          }}
+          className={`px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 transition-all ${
+            activeTab === 'playlists'
+              ? 'bg-[#1B7C9D] text-white shadow-md'
+              : 'text-[#A5C1CC] hover:text-white hover:bg-[#0B222E]'
+          }`}
+        >
+          <ListMusic className="w-4 h-4" />
+          <span>Playlists ({playlists.length})</span>
+        </button>
+
+        <button
+          onClick={() => {
+            setActiveTab('liked');
+            setSelectedPlaylistId(null);
+          }}
+          className={`px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 transition-all ${
+            activeTab === 'liked'
+              ? 'bg-[#1B7C9D] text-white shadow-md'
+              : 'text-[#A5C1CC] hover:text-white hover:bg-[#0B222E]'
+          }`}
+        >
+          <Heart className="w-4 h-4 text-[#C9B27C]" />
+          <span>Liked Songs ({userLikedTracks.length})</span>
+        </button>
+
+        <button
+          onClick={() => {
+            setActiveTab('purchased');
+            setSelectedPlaylistId(null);
+          }}
+          className={`px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 transition-all ${
+            activeTab === 'purchased'
+              ? 'bg-[#1B7C9D] text-white shadow-md'
+              : 'text-[#A5C1CC] hover:text-white hover:bg-[#0B222E]'
+          }`}
+        >
+          <Disc3 className="w-4 h-4 text-[#C9B27C]" />
+          <span>Purchased Tracks ({userPurchasedTracks.length})</span>
+        </button>
+      </div>
+
+      {/* 3. Tab Contents */}
+
+      {/* ================= PLAYLISTS TAB ================= */}
+      {activeTab === 'playlists' && (
+        <div>
+          {/* Detail View of a Selected Playlist */}
+          {selectedPlaylist ? (
+            <div className="space-y-6 animate-fadeIn">
+              {/* Back to Playlists Button */}
+              <button
+                onClick={() => setSelectedPlaylistId(null)}
+                className="inline-flex items-center gap-1.5 text-xs text-[#A5C1CC] hover:text-white transition-colors"
+              >
+                <ChevronLeft className="w-4 h-4" />
+                <span>Back to all playlists</span>
+              </button>
+
+              {/* Playlist Billboard */}
+              <div className="rounded-3xl p-6 sm:p-8 bg-[#09212C]/80 border border-[#1B7C9D]/30 flex flex-col md:flex-row gap-6 items-start md:items-end">
+                <div className="w-32 h-32 sm:w-44 sm:h-44 rounded-2xl overflow-hidden bg-gradient-to-tr from-[#07151D] via-[#0F2B38] to-[#1B7C9D] border border-[#1B7C9D]/40 shadow-2xl flex items-center justify-center shrink-0">
+                  {selectedPlaylist.coverImage ? (
+                    <img
+                      src={selectedPlaylist.coverImage}
+                      alt={selectedPlaylist.name}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <ListMusic className="w-16 h-16 text-[#C9B27C]" />
+                  )}
+                </div>
+
+                <div className="space-y-2 min-w-0 flex-1">
+                  <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-[#C9B27C]">
+                    Devotional Playlist
+                  </span>
+                  <h2 className="text-2xl sm:text-4xl font-heading font-extrabold text-[#EDF5F8] truncate">
+                    {selectedPlaylist.name}
+                  </h2>
+                  {selectedPlaylist.description && (
+                    <p className="text-xs sm:text-sm text-[#A5C1CC] max-w-2xl">
+                      {selectedPlaylist.description}
+                    </p>
+                  )}
+                  <p className="text-xs text-[#A5C1CC]/80 pt-1">
+                    Created by <strong className="text-white">{user?.name || 'You'}</strong> •{' '}
+                    {playlistTracks.length} {playlistTracks.length === 1 ? 'song' : 'songs'}
+                  </p>
+                </div>
+
+                {/* Playlist Action Toolbar */}
+                <div className="flex items-center gap-2.5 shrink-0 w-full sm:w-auto pt-2 sm:pt-0">
+                  <button
+                    onClick={() => handlePlayPlaylist(playlistTracks, false)}
+                    disabled={playlistTracks.length === 0}
+                    className="flex-1 sm:flex-initial px-5 py-3 rounded-2xl bg-gradient-to-tr from-[#1B7C9D] to-[#0E5671] text-xs font-bold text-white hover:brightness-110 flex items-center justify-center gap-2 shadow-lg disabled:opacity-40"
+                  >
+                    <Play className="w-4 h-4 fill-current" />
+                    <span>Play All</span>
+                  </button>
+
+                  <button
+                    onClick={() => handlePlayPlaylist(playlistTracks, true)}
+                    disabled={playlistTracks.length === 0}
+                    className="p-3 rounded-2xl bg-[#0B222E] border border-[#1B7C9D]/30 text-[#A5C1CC] hover:text-white hover:bg-[#12303E] transition-colors disabled:opacity-40"
+                    title="Shuffle Play"
+                  >
+                    <Shuffle className="w-4 h-4" />
+                  </button>
+
+                  <button
+                    onClick={() => setShowAddSongsModal(true)}
+                    className="px-3.5 py-3 rounded-2xl bg-[#0B222E] border border-[#C9B27C]/40 text-xs font-bold text-[#E8DCB8] hover:text-white hover:bg-[#12303E] flex items-center gap-1.5 transition-colors"
+                  >
+                    <Plus className="w-4 h-4 text-[#C9B27C]" />
+                    <span>Add Songs</span>
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      setEditingPlaylist(selectedPlaylist);
+                      setEditName(selectedPlaylist.name);
+                      setEditDesc(selectedPlaylist.description || '');
+                    }}
+                    className="p-3 rounded-2xl bg-[#0B222E] border border-[#1B7C9D]/30 text-[#A5C1CC] hover:text-white hover:bg-[#12303E] transition-colors"
+                    title="Edit Playlist Details"
+                  >
+                    <Edit2 className="w-4 h-4" />
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      if (confirm(`Are you sure you want to delete "${selectedPlaylist.name}"?`)) {
+                        deletePlaylist(selectedPlaylist.id);
+                        setSelectedPlaylistId(null);
+                      }
+                    }}
+                    className="p-3 rounded-2xl bg-[#0B222E] border border-rose-500/30 text-rose-400 hover:text-white hover:bg-rose-500/20 transition-colors"
+                    title="Delete Playlist"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Playlist Tracks Table */}
+              <div className="bg-[#09212C]/60 rounded-3xl border border-[#1B7C9D]/20 shadow-xl overflow-hidden">
+                {playlistTracks.length === 0 ? (
+                  <div className="py-16 text-center space-y-4 px-4">
+                    <Music className="w-12 h-12 text-[#A5C1CC]/40 mx-auto" />
+                    <h4 className="text-base font-semibold text-[#EDF5F8]">This playlist is empty</h4>
+                    <p className="text-xs text-[#A5C1CC] max-w-sm mx-auto">
+                      Add your favorite Telugu devotional hymns and worship tracks to start listening.
+                    </p>
+                    <button
+                      onClick={() => setShowAddSongsModal(true)}
+                      className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#1B7C9D] hover:bg-[#0E5671] text-xs font-bold text-white transition-all shadow-md"
+                    >
+                      <Plus className="w-4 h-4" />
+                      <span>Find & Add Songs</span>
+                    </button>
+                  </div>
+                ) : (
+                  <div className="divide-y divide-[#1B7C9D]/10">
+                    {playlistTracks.map((track, idx) => {
+                      const isCurrent = currentTrack?.id === track.id;
+                      const isThisPlaying = isCurrent && isPlaying;
+
+                      return (
+                        <div
+                          key={track.id}
+                          onClick={() => playTrack(track, playlistTracks)}
+                          className={`group flex items-center justify-between px-4 py-3 sm:px-6 sm:py-3.5 hover:bg-[#12303E]/70 transition-colors cursor-pointer ${
+                            isCurrent ? 'bg-[#12303E]/90' : ''
+                          }`}
+                        >
+                          <div className="flex items-center gap-3 sm:gap-4 min-w-0 flex-1">
+                            <span className="font-mono text-xs text-[#A5C1CC] w-5 text-center shrink-0">
+                              {isThisPlaying ? (
+                                <div className="flex items-end justify-center gap-0.5 h-3.5">
+                                  <span className="w-0.5 bg-[#C9B27C] rounded-full wave-bar-1" />
+                                  <span className="w-0.5 bg-[#C9B27C] rounded-full wave-bar-2" />
+                                  <span className="w-0.5 bg-[#C9B27C] rounded-full wave-bar-3" />
+                                </div>
+                              ) : (
+                                idx + 1
+                              )}
+                            </span>
+
+                            <div className="relative w-11 h-11 rounded-xl overflow-hidden bg-[#0F2B38] shrink-0 border border-[#1B7C9D]/20">
+                              <img
+                                src={track.coverImage || '/covers/001_prayermp3.jpg'}
+                                alt={track.titleEnglish}
+                                className="w-full h-full object-cover"
+                              />
+                            </div>
+
+                            <div className="min-w-0 flex-1 pr-2">
+                              <h4
+                                className={`text-sm font-semibold truncate ${
+                                  isCurrent ? 'text-[#1B7C9D]' : 'text-[#EDF5F8]'
+                                }`}
+                              >
+                                {track.titleEnglish}
+                              </h4>
+                              <p className="font-telugu text-xs text-[#C9B27C] truncate mt-0.5">
+                                {track.titleTelugu}
+                              </p>
+                            </div>
+                          </div>
+
+                          <div className="flex items-center gap-2 shrink-0">
+                            <span className="font-mono text-xs text-[#A5C1CC] hidden sm:inline-block px-2">
+                              {track.duration}
+                            </span>
+
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                removeTrackFromPlaylist(selectedPlaylist.id, track.id);
+                              }}
+                              className="p-1.5 rounded-full text-[#A5C1CC] hover:text-rose-400 hover:bg-[#07151D] transition-colors"
+                              title="Remove from playlist"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+
+                            <TrackActionMenu track={track} />
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            </div>
+          ) : (
+            /* Playlists Grid */
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-6 animate-fadeIn">
+              {/* Create New Card */}
+              <button
+                onClick={() => setShowCreateModal(true)}
+                className="group flex flex-col items-center justify-center p-6 rounded-3xl bg-[#09212C]/40 border-2 border-dashed border-[#1B7C9D]/40 hover:border-[#C9B27C] hover:bg-[#0B222E]/80 transition-all text-center space-y-3 min-h-[220px]"
+              >
+                <div className="w-14 h-14 rounded-2xl bg-[#0F2B38] border border-[#1B7C9D]/30 group-hover:scale-110 flex items-center justify-center transition-transform text-[#8CE2FF] group-hover:text-[#C9B27C]">
+                  <Plus className="w-7 h-7" />
+                </div>
+                <div>
+                  <h4 className="font-bold text-sm text-[#EDF5F8] group-hover:text-white">
+                    Create Playlist
+                  </h4>
+                  <p className="text-[11px] text-[#A5C1CC] mt-1">కొత్త ప్లేలిస్ట్ తయారుచేయండి</p>
+                </div>
+              </button>
+
+              {/* User Playlists */}
+              {playlists.map((pl) => (
+                <div
+                  key={pl.id}
+                  onClick={() => setSelectedPlaylistId(pl.id)}
+                  className="group relative flex flex-col justify-between p-4 rounded-3xl bg-[#09212C]/70 hover:bg-[#0E2838] border border-[#1B7C9D]/30 hover:border-[#C9B27C]/60 transition-all cursor-pointer shadow-lg hover:shadow-2xl hover:-translate-y-1"
+                >
+                  <div className="relative aspect-square w-full rounded-2xl overflow-hidden bg-gradient-to-tr from-[#07151D] via-[#0F2B38] to-[#12364B] border border-[#1B7C9D]/30 mb-3 flex items-center justify-center">
+                    {pl.coverImage ? (
+                      <img src={pl.coverImage} alt={pl.name} className="w-full h-full object-cover" />
+                    ) : (
+                      <ListMusic className="w-12 h-12 text-[#C9B27C]" />
+                    )}
+
+                    {/* Quick Play Overlay */}
+                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
+                      <div className="w-11 h-11 rounded-full bg-gradient-to-tr from-[#1B7C9D] to-[#0E5671] text-white flex items-center justify-center shadow-xl transform scale-75 group-hover:scale-100 transition-transform">
+                        <Play className="w-5 h-5 fill-current ml-0.5" />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="space-y-1 min-w-0">
+                    <h4 className="font-bold text-sm text-[#EDF5F8] truncate group-hover:text-white">
+                      {pl.name}
+                    </h4>
+                    <p className="text-[11px] text-[#A5C1CC] truncate">
+                      {pl.trackIds.length} {pl.trackIds.length === 1 ? 'song' : 'songs'}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* ================= LIKED SONGS TAB ================= */}
+      {activeTab === 'liked' && (
+        <div className="space-y-4 animate-fadeIn">
+          <div className="flex items-center justify-between">
+            <span className="text-xs text-[#A5C1CC]">
+              {userLikedTracks.length} Saved Devotional Songs
+            </span>
+            {userLikedTracks.length > 0 && (
+              <button
+                onClick={() => handlePlayPlaylist(userLikedTracks, false)}
+                className="px-4 py-2 rounded-xl bg-gradient-to-r from-[#1B7C9D] to-[#0E5671] text-xs font-bold text-white flex items-center gap-2 hover:brightness-110 shadow-md"
+              >
+                <Play className="w-3.5 h-3.5 fill-current" />
+                <span>Play All Liked</span>
+              </button>
+            )}
+          </div>
+
+          <div className="bg-[#09212C]/60 rounded-3xl border border-[#1B7C9D]/20 shadow-xl overflow-hidden">
+            {userLikedTracks.length === 0 ? (
+              <div className="py-16 text-center space-y-3 px-4">
+                <Heart className="w-12 h-12 text-[#A5C1CC]/30 mx-auto" />
+                <h4 className="text-base font-semibold text-[#EDF5F8]">No liked songs yet</h4>
+                <p className="text-xs text-[#A5C1CC]">
+                  Tap the heart icon on any song while listening to save it to your library.
+                </p>
+                <Link
+                  to="/music"
+                  className="inline-block mt-2 px-5 py-2.5 rounded-full bg-[#1B7C9D] text-xs font-bold text-white"
+                >
+                  Explore Songs
+                </Link>
+              </div>
+            ) : (
+              <div className="divide-y divide-[#1B7C9D]/10">
+                {userLikedTracks.map((track, idx) => {
+                  const isCurrent = currentTrack?.id === track.id;
+                  const isThisPlaying = isCurrent && isPlaying;
+
+                  return (
+                    <div
+                      key={track.id}
+                      onClick={() => playTrack(track, userLikedTracks)}
+                      className={`group flex items-center justify-between px-4 py-3 sm:px-6 sm:py-3.5 hover:bg-[#12303E]/70 transition-colors cursor-pointer ${
+                        isCurrent ? 'bg-[#12303E]/90' : ''
+                      }`}
+                    >
+                      <div className="flex items-center gap-3 sm:gap-4 min-w-0 flex-1">
+                        <span className="font-mono text-xs text-[#A5C1CC] w-5 text-center shrink-0">
+                          {idx + 1}
+                        </span>
+
+                        <div className="relative w-11 h-11 rounded-xl overflow-hidden bg-[#0F2B38] shrink-0 border border-[#1B7C9D]/20">
+                          <img
+                            src={track.coverImage || '/covers/001_prayermp3.jpg'}
+                            alt={track.titleEnglish}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+
+                        <div className="min-w-0 flex-1 pr-2">
+                          <h4
+                            className={`text-sm font-semibold truncate ${
+                              isCurrent ? 'text-[#1B7C9D]' : 'text-[#EDF5F8]'
+                            }`}
+                          >
+                            {track.titleEnglish}
+                          </h4>
+                          <p className="font-telugu text-xs text-[#C9B27C] truncate mt-0.5">
+                            {track.titleTelugu}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-2 shrink-0">
+                        <span className="font-mono text-xs text-[#A5C1CC] hidden sm:inline-block px-2">
+                          {track.duration}
+                        </span>
+                        <TrackActionMenu track={track} />
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* ================= PURCHASED BACKING TRACKS TAB ================= */}
+      {activeTab === 'purchased' && (
+        <div className="space-y-4 animate-fadeIn">
+          <div className="flex items-center justify-between">
+            <span className="text-xs text-[#A5C1CC]">
+              {userPurchasedTracks.length} Unlocked Studio Backing Tracks
+            </span>
+            {userPurchasedTracks.length > 0 && (
+              <button
+                onClick={() => handlePlayPlaylist(userPurchasedTracks, false)}
+                className="px-4 py-2 rounded-xl bg-gradient-to-r from-[#1B7C9D] to-[#0E5671] text-xs font-bold text-white flex items-center gap-2 hover:brightness-110 shadow-md"
+              >
+                <Play className="w-3.5 h-3.5 fill-current" />
+                <span>Play All Backing Tracks</span>
+              </button>
+            )}
+          </div>
+
+          <div className="bg-[#09212C]/60 rounded-3xl border border-[#1B7C9D]/20 shadow-xl overflow-hidden">
+            {userPurchasedTracks.length === 0 ? (
+              <div className="py-16 text-center space-y-3 px-4">
+                <Disc3 className="w-12 h-12 text-[#A5C1CC]/30 mx-auto" />
+                <h4 className="text-base font-semibold text-[#EDF5F8]">
+                  No purchased backing tracks yet
+                </h4>
+                <p className="text-xs text-[#A5C1CC] max-w-sm mx-auto">
+                  Browse studio minus-one backing tracks (karaoke) for choirs and live ministry. Individual tracks are unlocked for ₹99 each.
+                </p>
+                <Link
+                  to="/tracks"
+                  className="inline-block mt-2 px-5 py-2.5 rounded-full bg-[#1B7C9D] text-xs font-bold text-white"
+                >
+                  Browse Backing Tracks
+                </Link>
+              </div>
+            ) : (
+              <div className="divide-y divide-[#1B7C9D]/10">
+                {userPurchasedTracks.map((track, idx) => {
+                  const isCurrent = currentTrack?.id === track.id;
+
+                  return (
+                    <div
+                      key={track.id}
+                      onClick={() => playTrack(track, userPurchasedTracks)}
+                      className={`group flex items-center justify-between px-4 py-3 sm:px-6 sm:py-3.5 hover:bg-[#12303E]/70 transition-colors cursor-pointer ${
+                        isCurrent ? 'bg-[#12303E]/90' : ''
+                      }`}
+                    >
+                      <div className="flex items-center gap-3 sm:gap-4 min-w-0 flex-1">
+                        <span className="font-mono text-xs text-[#A5C1CC] w-5 text-center shrink-0">
+                          {idx + 1}
+                        </span>
+
+                        <div className="relative w-11 h-11 rounded-xl overflow-hidden bg-[#0F2B38] shrink-0 border border-[#1B7C9D]/20">
+                          <img
+                            src={track.coverImage || '/dad_white_suit.jpg'}
+                            alt={track.titleEnglish}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+
+                        <div className="min-w-0 flex-1 pr-2">
+                          <h4
+                            className={`text-sm font-semibold truncate ${
+                              isCurrent ? 'text-[#1B7C9D]' : 'text-[#EDF5F8]'
+                            }`}
+                          >
+                            {track.titleEnglish}
+                          </h4>
+                          <p className="font-telugu text-xs text-[#C9B27C] truncate mt-0.5">
+                            {track.titleTelugu}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-2 shrink-0">
+                        <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                          Full Access
+                        </span>
+                        <TrackActionMenu track={track} />
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* ================= MODAL: CREATE PLAYLIST ================= */}
+      {showCreateModal && (
+        <div
+          className="fixed inset-0 z-[200] w-screen h-screen min-h-[100dvh] bg-[#030B10]/98 backdrop-blur-2xl flex items-center justify-center p-4 animate-fadeIn overflow-y-auto"
+          onClick={() => setShowCreateModal(false)}
+        >
+          <div
+            className="w-full max-w-md bg-[#09212C] border border-[#1B7C9D]/40 rounded-3xl p-6 sm:p-7 shadow-2xl text-[#EDF5F8] space-y-5 animate-scaleUp my-auto max-h-[92dvh] overflow-y-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between pb-3 border-b border-[#1B7C9D]/20">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-2xl bg-[#0F2B38] border border-[#1B7C9D]/30 flex items-center justify-center">
+                  <ListMusic className="w-5 h-5 text-[#C9B27C]" />
+                </div>
+                <div>
+                  <h3 className="font-heading font-bold text-lg text-white">Create New Playlist</h3>
+                  <p className="text-xs text-[#A5C1CC]">కొత్త ప్లేలిస్ట్‌ను ప్రారంభించండి</p>
+                </div>
+              </div>
+              <button
+                onClick={() => setShowCreateModal(false)}
+                className="p-1.5 rounded-full text-[#A5C1CC] hover:text-white hover:bg-[#12303E]"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <form onSubmit={handleCreateSubmit} className="space-y-4">
+              <div>
+                <label className="block text-xs font-semibold text-[#A5C1CC] mb-1.5">
+                  Playlist Title *
+                </label>
+                <input
+                  type="text"
+                  autoFocus
+                  required
+                  value={newPlaylistName}
+                  onChange={(e) => setNewPlaylistName(e.target.value)}
+                  placeholder="e.g. Sunday Morning Hymns, Prayer Sanctuary..."
+                  className="w-full px-4 py-3 rounded-2xl bg-[#07151D] border border-[#1B7C9D]/40 text-sm text-white placeholder-[#A5C1CC]/50 focus:outline-none focus:border-[#C9B27C]"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-[#A5C1CC] mb-1.5">
+                  Description (Optional)
+                </label>
+                <textarea
+                  rows={2}
+                  value={newPlaylistDesc}
+                  onChange={(e) => setNewPlaylistDesc(e.target.value)}
+                  placeholder="A short note about the theme of this playlist..."
+                  className="w-full px-4 py-2.5 rounded-2xl bg-[#07151D] border border-[#1B7C9D]/40 text-xs text-white placeholder-[#A5C1CC]/50 focus:outline-none focus:border-[#C9B27C] resize-none"
+                />
+              </div>
+
+              {/* Suggestions */}
+              <div>
+                <p className="text-[11px] text-[#A5C1CC] mb-2">Suggestions:</p>
+                <div className="flex flex-wrap gap-1.5">
+                  {['Morning Worship', 'Sunday Choir', 'Quiet Devotion', 'Fast & Praise'].map(
+                    (tag) => (
+                      <button
+                        key={tag}
+                        type="button"
+                        onClick={() => setNewPlaylistName(tag)}
+                        className="px-2.5 py-1 rounded-xl bg-[#0B222E] border border-[#1B7C9D]/30 text-[11px] text-[#8CE2FF] hover:border-[#C9B27C]"
+                      >
+                        + {tag}
+                      </button>
+                    )
+                  )}
+                </div>
+              </div>
+
+              <div className="flex items-center justify-end gap-3 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setShowCreateModal(false)}
+                  className="px-4 py-2.5 rounded-xl text-xs text-[#A5C1CC] hover:text-white"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={!newPlaylistName.trim()}
+                  className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#1B7C9D] to-[#0E5671] text-xs font-bold text-white hover:brightness-110 disabled:opacity-50 shadow-md"
+                >
+                  Create Playlist
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* ================= MODAL: EDIT PLAYLIST ================= */}
+      {editingPlaylist && (
+        <div
+          className="fixed inset-0 z-[200] w-screen h-screen min-h-[100dvh] bg-[#030B10]/98 backdrop-blur-2xl flex items-center justify-center p-4 animate-fadeIn overflow-y-auto"
+          onClick={() => setEditingPlaylist(null)}
+        >
+          <div
+            className="w-full max-w-md bg-[#09212C] border border-[#1B7C9D]/40 rounded-3xl p-6 sm:p-7 shadow-2xl text-[#EDF5F8] space-y-5 animate-scaleUp my-auto max-h-[92dvh] overflow-y-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between pb-3 border-b border-[#1B7C9D]/20">
+              <h3 className="font-heading font-bold text-lg text-white">Edit Playlist</h3>
+              <button
+                onClick={() => setEditingPlaylist(null)}
+                className="p-1.5 rounded-full text-[#A5C1CC] hover:text-white hover:bg-[#12303E]"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <form onSubmit={handleEditSubmit} className="space-y-4">
+              <div>
+                <label className="block text-xs font-semibold text-[#A5C1CC] mb-1.5">
+                  Playlist Title *
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={editName}
+                  onChange={(e) => setEditName(e.target.value)}
+                  className="w-full px-4 py-3 rounded-2xl bg-[#07151D] border border-[#1B7C9D]/40 text-sm text-white focus:outline-none focus:border-[#C9B27C]"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-[#A5C1CC] mb-1.5">
+                  Description
+                </label>
+                <textarea
+                  rows={2}
+                  value={editDesc}
+                  onChange={(e) => setEditDesc(e.target.value)}
+                  className="w-full px-4 py-2.5 rounded-2xl bg-[#07151D] border border-[#1B7C9D]/40 text-xs text-white focus:outline-none focus:border-[#C9B27C] resize-none"
+                />
+              </div>
+
+              <div className="flex items-center justify-end gap-3 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setEditingPlaylist(null)}
+                  className="px-4 py-2.5 rounded-xl text-xs text-[#A5C1CC] hover:text-white"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={!editName.trim()}
+                  className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#1B7C9D] to-[#0E5671] text-xs font-bold text-white hover:brightness-110 disabled:opacity-50"
+                >
+                  Save Changes
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* ================= MODAL: ADD SONGS TO PLAYLIST ================= */}
+      {showAddSongsModal && selectedPlaylist && (
+        <div
+          className="fixed inset-0 z-[200] w-screen h-screen min-h-[100dvh] bg-[#030B10]/98 backdrop-blur-2xl flex items-center justify-center p-4 animate-fadeIn overflow-y-auto"
+          onClick={() => setShowAddSongsModal(false)}
+        >
+          <div
+            className="w-full max-w-xl bg-[#09212C] border border-[#1B7C9D]/40 rounded-3xl p-6 sm:p-7 shadow-2xl text-[#EDF5F8] space-y-4 my-auto max-h-[88dvh] flex flex-col animate-scaleUp overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between pb-3 border-b border-[#1B7C9D]/20 shrink-0">
+              <div>
+                <h3 className="font-heading font-bold text-lg text-white">Add Songs to Playlist</h3>
+                <p className="text-xs text-[#A5C1CC]">
+                  Adding to <strong className="text-[#C9B27C]">{selectedPlaylist.name}</strong>
+                </p>
+              </div>
+              <button
+                onClick={() => setShowAddSongsModal(false)}
+                className="p-1.5 rounded-full text-[#A5C1CC] hover:text-white hover:bg-[#12303E]"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Search Input */}
+            <div className="relative shrink-0">
+              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#A5C1CC]" />
+              <input
+                type="text"
+                value={searchSongQuery}
+                onChange={(e) => setSearchSongQuery(e.target.value)}
+                placeholder="Search by Telugu or English song name..."
+                className="w-full pl-10 pr-4 py-2.5 rounded-2xl bg-[#07151D] border border-[#1B7C9D]/40 text-xs text-white placeholder-[#A5C1CC]/50 focus:outline-none focus:border-[#C9B27C]"
+              />
+            </div>
+
+            {/* Song Catalog List */}
+            <div className="flex-1 overflow-y-auto space-y-1.5 pr-1 divide-y divide-[#1B7C9D]/10">
+              {allTracks
+                .filter((t) => {
+                  if (!searchSongQuery.trim()) return true;
+                  const q = searchSongQuery.toLowerCase();
+                  return (
+                    t.titleEnglish.toLowerCase().includes(q) ||
+                    t.titleTelugu.toLowerCase().includes(q)
+                  );
+                })
+                .map((track) => {
+                  const alreadyIn = isTrackInPlaylist(selectedPlaylist.id, track.id);
+
+                  return (
+                    <div
+                      key={track.id}
+                      className="pt-2 flex items-center justify-between gap-3 px-2 py-2 rounded-xl hover:bg-[#12303E]/50 transition-colors"
+                    >
+                      <div className="flex items-center gap-3 min-w-0 flex-1">
+                        <div className="w-10 h-10 rounded-xl overflow-hidden bg-[#0F2B38] shrink-0 border border-[#1B7C9D]/20">
+                          <img
+                            src={track.coverImage || '/covers/001_prayermp3.jpg'}
+                            alt={track.titleEnglish}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                        <div className="min-w-0">
+                          <p className="font-semibold text-xs text-white truncate">
+                            {track.titleEnglish}
+                          </p>
+                          <p className="font-telugu text-[11px] text-[#C9B27C] truncate">
+                            {track.titleTelugu}
+                          </p>
+                        </div>
+                      </div>
+
+                      <button
+                        type="button"
+                        data-testid="modal-add-track-btn"
+                        onClick={() => {
+                          if (alreadyIn) {
+                            removeTrackFromPlaylist(selectedPlaylist.id, track.id);
+                          } else {
+                            addTrackToPlaylist(selectedPlaylist.id, track);
+                          }
+                        }}
+                        className={`px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all ${
+                          alreadyIn
+                            ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
+                            : 'bg-[#1B7C9D] text-white hover:bg-[#0E5671]'
+                        }`}
+                      >
+                        {alreadyIn ? (
+                          <>
+                            <Check className="w-3.5 h-3.5" />
+                            <span>Added</span>
+                          </>
+                        ) : (
+                          <>
+                            <Plus className="w-3.5 h-3.5" />
+                            <span>Add</span>
+                          </>
+                        )}
+                      </button>
+                    </div>
+                  );
+                })}
+            </div>
+
+            <div className="pt-2 border-t border-[#1B7C9D]/20 shrink-0">
+              <button
+                onClick={() => setShowAddSongsModal(false)}
+                className="w-full py-2.5 rounded-xl bg-[#0B222E] hover:bg-[#12303E] text-xs font-semibold text-white transition-colors"
+              >
+                Done
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+export default LibraryPage;

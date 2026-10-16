@@ -1,0 +1,52 @@
+# Audio Files (Strictly excluded for GitHub & Vercel limits)
+Tony Prakash songs/
+**/Tony Prakash songs/**
+*.mp3
+*.wav
+*.m4a
+*.flac
+*.ogg
+*.aac
+*.wma
+
+# Node & Build artifacts
+node_modules/
+*/node_modules/
+dist/
+*/dist/
+.vercel/
+
+# Environment Variables & Secrets
+.env
+.env.*
+!.env.example
+backend/.env
+frontend/.env.local
+
+# Database & SQLite files
+*.db
+*.db-journal
+backend/prisma/dev.db*
+
+# Python & Virtual Environments
+.venv/
+__pycache__/
+*.pyc
+
+# IDE & OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Test outputs & temporary scripts/media
+popup_screenshot_*.png
+test_cover.jpg
+extracted_videos.json
+admin.txt
+apply_exact_covers.cjs
+match_covers.cjs
+exact_hero_card_0.jsx
+extracted_hero_section.jsx
+remove_bg*.py
+hero_version_2.txt

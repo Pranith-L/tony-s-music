@@ -1,0 +1,9 @@
+# robots.txt for Tony's Music Platform (https://tonyprakash.com)
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /api/admin
+Disallow: /api/auth
+
+# Sitemaps
+Sitemap: https://tonyprakash.com/sitemap.xml
