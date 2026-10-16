@@ -55,8 +55,8 @@ export const AlbumDetailPage: React.FC = () => {
   if (isLoading) {
     return (
       <div className="py-24 text-center">
-        <div className="w-10 h-10 border-2 border-[#C41E3A] border-t-transparent rounded-full animate-spin mx-auto mb-3" />
-        <p className="text-xs text-[#4B5563]">Loading album details...</p>
+        <div className="w-10 h-10 border-2 border-[#FA243C] border-t-transparent rounded-full animate-spin mx-auto mb-3" />
+        <p className="text-xs text-[#86868B]">Loading album details...</p>
       </div>
     );
   }
@@ -64,8 +64,8 @@ export const AlbumDetailPage: React.FC = () => {
   if (!album) {
     return (
       <div className="py-24 text-center space-y-4">
-        <h2 className="text-2xl font-heading text-[#111827]">Album Not Found</h2>
-        <Link to="/albums" className="text-xs text-[#C41E3A] hover:underline">
+        <h2 className="text-2xl font-heading text-[#1D1D1F]">Album Not Found</h2>
+        <Link to="/albums" className="text-xs text-[#FA243C] hover:underline">
           Return to Discography
         </Link>
       </div>
@@ -98,17 +98,17 @@ export const AlbumDetailPage: React.FC = () => {
       {/* Back to Albums Link */}
       <Link
         to="/albums"
-        className="inline-flex items-center gap-1.5 text-xs text-[#4B5563] hover:text-[#FFFFFF] transition-colors"
+        className="inline-flex items-center gap-1.5 text-xs text-[#86868B] hover:text-[#FFFFFF] transition-colors"
       >
         <ChevronLeft className="w-4 h-4" />
         <span>Back to All Albums</span>
       </Link>
 
       {/* Album Billboard Header */}
-      <div className="relative rounded-3xl p-6 sm:p-8 bg-gradient-to-b from-[#8B1524]/40 via-[#1A060A] to-[#0E0305] border border-[#C41E3A]/30 grid grid-cols-1 md:grid-cols-12 gap-8 items-end shadow-2xl">
+      <div className="relative rounded-3xl p-6 sm:p-8 bg-gradient-to-b from-[#D71A30]/40 via-[#1A060A] to-[#0E0305] border border-[#E5E5EA] grid grid-cols-1 md:grid-cols-12 gap-8 items-end shadow-2xl">
         {/* Cover Art */}
         <div className="md:col-span-4 lg:col-span-3">
-          <div className="relative aspect-square rounded-2xl overflow-hidden bg-[#F3F4F6] border border-[#C41E3A]/40 shadow-2xl">
+          <div className="relative aspect-square rounded-2xl overflow-hidden bg-[#F2F2F7] border border-[#E5E5EA] shadow-2xl">
             <img
               src={album.coverImage}
               alt={album.titleEnglish}
@@ -119,31 +119,31 @@ export const AlbumDetailPage: React.FC = () => {
 
         {/* Album Meta */}
         <div className="md:col-span-8 lg:col-span-9 space-y-3">
-          <span className="text-xs font-mono uppercase tracking-widest text-[#C9B27C] font-semibold">
+          <span className="text-xs font-mono uppercase tracking-widest text-[#D4A017] font-semibold">
             Album • ఆల్బమ్
           </span>
 
-          <h1 className="text-3xl sm:text-5xl font-heading font-bold text-[#111827]">
+          <h1 className="text-3xl sm:text-5xl font-heading font-bold text-[#1D1D1F]">
             {album.titleTelugu}
           </h1>
-          <p className="text-xl sm:text-2xl text-[#4B5563] font-heading font-normal">
+          <p className="text-xl sm:text-2xl text-[#86868B] font-heading font-normal">
             {album.titleEnglish}
           </p>
 
-          <p className="text-xs sm:text-sm text-[#4B5563] leading-relaxed max-w-2xl">
+          <p className="text-xs sm:text-sm text-[#86868B] leading-relaxed max-w-2xl">
             {album.description}
           </p>
 
           {/* Artist Avatar & Stats Row */}
           <div className="flex flex-wrap items-center gap-2 pt-2 text-xs text-[#FFFFFF]">
-            <div className="w-6 h-6 rounded-full overflow-hidden bg-[#F9FAFB] border border-[#C9B27C]/50 flex items-center justify-center">
+            <div className="w-6 h-6 rounded-full overflow-hidden bg-[#F5F5F7] border border-[#D4A017]/40 flex items-center justify-center">
               <img src="/tony_avatar_cutout.png" alt="Tony Prakash" className="w-full h-full object-cover object-center" />
             </div>
             <span className="font-bold">Rev. Tony Prakash</span>
             <span>•</span>
-            <span className="text-[#4B5563]">{album.releaseYear}</span>
+            <span className="text-[#86868B]">{album.releaseYear}</span>
             <span>•</span>
-            <span className="text-[#4B5563]">{tracks.length} songs</span>
+            <span className="text-[#86868B]">{tracks.length} songs</span>
           </div>
         </div>
       </div>
@@ -152,7 +152,7 @@ export const AlbumDetailPage: React.FC = () => {
       <div className="flex items-center gap-4 py-2">
         <button
           onClick={handlePlayAlbum}
-          className="w-14 h-14 rounded-full bg-gradient-to-tr from-[#C41E3A] via-[#8B1524] to-[#C41E3A] text-[#FFFFFF] flex items-center justify-center shadow-[0_0_25px_rgba(27,124,157,0.6)] border border-[#C9B27C]/50 hover:scale-105 active:scale-95 transition-all"
+          className="w-14 h-14 rounded-full bg-gradient-to-tr from-[#FC3C44] to-[#FA243C] text-[#FFFFFF] flex items-center justify-center shadow-[0_0_25px_rgba(27,124,157,0.6)] border border-[#D4A017]/40 hover:scale-105 active:scale-95 transition-all"
           title={isCurrentAlbumPlaying ? 'Pause album' : 'Play album'}
         >
           {isCurrentAlbumPlaying ? (
@@ -164,17 +164,17 @@ export const AlbumDetailPage: React.FC = () => {
 
         <button
           onClick={handleShare}
-          className="p-3 rounded-full bg-[#F9FAFB] hover:bg-[#FEE2E2] text-[#4B5563] hover:text-[#FFFFFF] border border-[#C41E3A]/30 transition-colors"
+          className="p-3 rounded-full bg-[#F5F5F7] hover:bg-[#FEE2E2] text-[#86868B] hover:text-[#FFFFFF] border border-[#E5E5EA] transition-colors"
           title="Share album"
         >
-          {copied ? <Check className="w-5 h-5 text-[#C9B27C]" /> : <Share2 className="w-5 h-5" />}
+          {copied ? <Check className="w-5 h-5 text-[#D4A017]" /> : <Share2 className="w-5 h-5" />}
         </button>
       </div>
 
       {/* Tracklist Table */}
-      <div className="rounded-2xl bg-[#F9FAFB]/70 border border-[#C41E3A]/20 overflow-hidden">
+      <div className="rounded-2xl bg-[#F5F5F7]/70 border border-[#E5E5EA] overflow-hidden">
         {/* Table Header */}
-        <div className="hidden sm:grid grid-cols-12 gap-4 px-4 py-2.5 border-b border-[#C41E3A]/15 text-[11px] font-mono text-[#4B5563] uppercase tracking-wider">
+        <div className="hidden sm:grid grid-cols-12 gap-4 px-4 py-2.5 border-b border-[#E5E5EA] text-[11px] font-mono text-[#86868B] uppercase tracking-wider">
           <div className="col-span-1 text-center">#</div>
           <div className="col-span-7">Title / కీర్తన</div>
           <div className="col-span-2 text-center">Category</div>
@@ -182,7 +182,7 @@ export const AlbumDetailPage: React.FC = () => {
         </div>
 
         {/* Rows */}
-        <div className="divide-y divide-[#C41E3A]/10">
+        <div className="divide-y divide-[#FA243C]/10">
           {tracks.map((track, idx) => {
             const isThisPlaying = currentTrack?.id === track.id && isPlaying;
             const liked = isLiked(track.id);
@@ -195,18 +195,18 @@ export const AlbumDetailPage: React.FC = () => {
                   else playTrack(track, tracks);
                 }}
                 className={`group grid grid-cols-12 gap-3 sm:gap-4 px-3 sm:px-4 py-3 items-center hover:bg-[#FEE2E2]/80 transition-colors cursor-pointer ${
-                  currentTrack?.id === track.id ? 'bg-[#C41E3A]/15' : ''
+                  currentTrack?.id === track.id ? 'bg-[#FA243C]/15' : ''
                 }`}
               >
                 <div className="col-span-2 sm:col-span-1 flex items-center justify-center">
                   {isThisPlaying ? (
                     <div className="flex items-center gap-0.5">
-                      <div className="w-0.5 bg-[#C41E3A] rounded-full wave-bar-1" />
-                      <div className="w-0.5 bg-[#C9B27C] rounded-full wave-bar-2" />
-                      <div className="w-0.5 bg-[#C41E3A] rounded-full wave-bar-3" />
+                      <div className="w-0.5 bg-[#FA243C] rounded-full wave-bar-1" />
+                      <div className="w-0.5 bg-[#D4A017] rounded-full wave-bar-2" />
+                      <div className="w-0.5 bg-[#FA243C] rounded-full wave-bar-3" />
                     </div>
                   ) : (
-                    <span className="font-mono text-xs text-[#4B5563] group-hover:hidden">
+                    <span className="font-mono text-xs text-[#86868B] group-hover:hidden">
                       {String(idx + 1).padStart(2, '0')}
                     </span>
                   )}
@@ -217,18 +217,18 @@ export const AlbumDetailPage: React.FC = () => {
                   <p
                     className={`font-telugu text-sm font-semibold truncate leading-tight ${
                       currentTrack?.id === track.id
-                        ? 'text-[#C41E3A]'
-                        : 'text-[#FFFFFF] group-hover:text-[#C41E3A]'
+                        ? 'text-[#FA243C]'
+                        : 'text-[#FFFFFF] group-hover:text-[#FA243C]'
                     }`}
                   >
                     {track.titleTelugu}
                   </p>
-                  <p className="text-[11px] text-[#4B5563] truncate">
+                  <p className="text-[11px] text-[#86868B] truncate">
                     {track.singer || 'Rev. Tony Prakash'} • {track.titleEnglish}
                   </p>
                 </div>
 
-                <div className="hidden sm:block col-span-2 text-center text-xs text-[#C41E3A] font-mono">
+                <div className="hidden sm:block col-span-2 text-center text-xs text-[#FA243C] font-mono">
                   {track.category}
                 </div>
 
@@ -239,14 +239,14 @@ export const AlbumDetailPage: React.FC = () => {
                       toggleLikeTrack(track.id);
                     }}
                     className={`p-1.5 transition-colors hidden sm:block ${
-                      liked ? '!opacity-100 text-[#C9B27C]' : 'text-[#4B5563] hover:text-[#FFFFFF]'
+                      liked ? '!opacity-100 text-[#D4A017]' : 'text-[#86868B] hover:text-[#FFFFFF]'
                     }`}
                     title={liked ? 'Liked' : 'Like'}
                   >
-                    <Heart className={`w-4 h-4 ${liked ? 'fill-[#C9B27C]' : ''}`} />
+                    <Heart className={`w-4 h-4 ${liked ? 'fill-[#D4A017]' : ''}`} />
                   </button>
 
-                  <span className="font-mono text-xs text-[#4B5563] pr-1 hidden xs:inline">
+                  <span className="font-mono text-xs text-[#86868B] pr-1 hidden xs:inline">
                     {track.duration}
                   </span>
 

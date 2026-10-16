@@ -15,29 +15,29 @@ export const VideoModal: React.FC<VideoModalProps> = ({ video, onClose }) => {
   return createPortal(
     <div
       onClick={onClose}
-      className="fixed inset-0 z-[200] w-screen h-screen min-h-[100dvh] bg-[#030B10]/98 backdrop-blur-2xl flex items-center justify-center p-3 sm:p-6 animate-in fade-in duration-200 overflow-y-auto"
+      className="fixed inset-0 z-[200] w-screen h-screen min-h-[100dvh] bg-black/60 backdrop-blur-2xl flex items-center justify-center p-3 sm:p-6 animate-in fade-in duration-200 overflow-y-auto"
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="relative w-full max-w-4xl bg-gradient-to-b from-[#8B1524]/40 via-[#1A060A] to-[#0E0305] rounded-2xl sm:rounded-3xl p-4 sm:p-6 border border-[#C41E3A]/40 shadow-2xl space-y-4 my-auto max-h-[92dvh] overflow-y-auto"
+        className="relative w-full max-w-4xl bg-gradient-to-b from-[#D71A30]/40 via-[#1A060A] to-[#0E0305] rounded-2xl sm:rounded-3xl p-4 sm:p-6 border border-[#E5E5EA] shadow-2xl space-y-4 my-auto max-h-[92dvh] overflow-y-auto"
       >
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2 text-xs font-mono text-[#C9B27C]">
-            <Sparkles className="w-4 h-4 text-[#C9B27C]" />
+          <div className="flex items-center gap-2 text-xs font-mono text-[#D4A017]">
+            <Sparkles className="w-4 h-4 text-[#D4A017]" />
             <span className="font-bold">{video.category || 'Official Worship Release'}</span>
           </div>
 
           <button
             onClick={onClose}
             aria-label="Close video"
-            className="p-1.5 rounded-full bg-black/60 hover:bg-[#C41E3A] text-[#E2CBD0] hover:text-white transition-colors"
+            className="p-1.5 rounded-full bg-[#F2F2F7] hover:bg-[#E5E5EA] text-[#1D1D1F] hover:text-[#FA243C] transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* 16:9 Responsive YouTube Embed */}
-        <div className="relative aspect-video w-full rounded-xl sm:rounded-2xl overflow-hidden bg-black shadow-2xl border border-[#C41E3A]/40">
+        <div className="relative aspect-video w-full rounded-xl sm:rounded-2xl overflow-hidden bg-black shadow-2xl border border-[#E5E5EA]">
           <iframe
             key={video.youtubeId}
             src={`https://www.youtube-nocookie.com/embed/${video.youtubeId}?autoplay=1&rel=0`}
@@ -52,25 +52,25 @@ export const VideoModal: React.FC<VideoModalProps> = ({ video, onClose }) => {
         <div className="space-y-2 pt-1">
           <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
             <div className="space-y-1 min-w-0">
-              <h3 className="font-telugu text-base sm:text-xl font-bold text-[#FFFFFF] leading-snug">
+              <h3 className="font-telugu text-base sm:text-xl font-bold text-[#1D1D1F] leading-snug">
                 {video.title}
               </h3>
-              <div className="flex flex-wrap items-center gap-3 text-xs text-[#E2CBD0] font-mono">
+              <div className="flex flex-wrap items-center gap-3 text-xs text-[#86868B] font-mono">
                 {video.duration && (
                   <span className="flex items-center gap-1">
-                    <Clock className="w-3.5 h-3.5 text-[#C41E3A]" />
+                    <Clock className="w-3.5 h-3.5 text-[#FA243C]" />
                     {video.duration}
                   </span>
                 )}
                 {video.views && (
-                  <span className="flex items-center gap-1 text-[#C9B27C]">
+                  <span className="flex items-center gap-1 text-[#D4A017]">
                     <Eye className="w-3.5 h-3.5" />
                     {video.views}
                   </span>
                 )}
                 {video.published && (
                   <span className="flex items-center gap-1">
-                    <Calendar className="w-3.5 h-3.5 text-[#C41E3A]" />
+                    <Calendar className="w-3.5 h-3.5 text-[#FA243C]" />
                     {video.published}
                   </span>
                 )}
@@ -81,7 +81,7 @@ export const VideoModal: React.FC<VideoModalProps> = ({ video, onClose }) => {
               href={`https://www.youtube.com/watch?v=${video.youtubeId}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-red-600 hover:bg-red-500 text-xs font-semibold text-white transition-all shadow-md shrink-0 self-start"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#FA243C] hover:bg-[#D71A30] text-xs font-semibold text-white transition-all shadow-md shrink-0 self-start"
             >
               <Youtube className="w-3.5 h-3.5 fill-current" />
               <span>Watch on YouTube</span>
@@ -90,7 +90,7 @@ export const VideoModal: React.FC<VideoModalProps> = ({ video, onClose }) => {
           </div>
 
           {video.description && (
-            <p className="text-xs text-[#E2CBD0] leading-relaxed max-w-3xl line-clamp-2">
+            <p className="text-xs text-[#86868B] leading-relaxed max-w-3xl line-clamp-2">
               {video.description}
             </p>
           )}

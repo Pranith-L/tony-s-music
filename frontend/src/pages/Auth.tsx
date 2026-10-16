@@ -184,32 +184,32 @@ export const AuthPage: React.FC = () => {
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="relative w-full max-w-md bg-white rounded-3xl p-6 sm:p-8 border border-[#D4AF37]/40 shadow-2xl space-y-6 my-auto text-gray-900 animate-in zoom-in-95 duration-200"
+        className="relative w-full max-w-md bg-white rounded-3xl p-6 sm:p-8 border border-[#E5E5EA] shadow-2xl space-y-6 my-auto text-[#1D1D1F] animate-in zoom-in-95 duration-200"
       >
         {/* Modal Close Button */}
         <button
           onClick={handleClose}
           aria-label="Close modal"
-          className="absolute top-5 right-5 p-2 rounded-full text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-colors"
+          className="absolute top-5 right-5 p-2 rounded-full text-[#86868B] hover:text-gray-700 hover:bg-gray-100 transition-colors"
         >
           <X className="w-5 h-5" />
         </button>
 
         {/* Brand Crest & Title */}
         <div className="text-center space-y-2">
-          <div className="w-12 h-12 rounded-full bg-gradient-to-tr from-[#C41E3A] to-[#8B1524] text-white flex items-center justify-center mx-auto mb-1 shadow-md border border-[#D4AF37]/50">
+          <div className="w-12 h-12 rounded-full bg-gradient-to-tr from-[#FC3C44] to-[#FA243C] text-white flex items-center justify-center mx-auto mb-1 shadow-md border border-[#D4A017]/40">
             <Sparkles className="w-6 h-6 text-[#F5D77F]" />
           </div>
-          <h1 className="text-2xl font-heading font-bold text-gray-900">
+          <h1 className="text-2xl font-heading font-bold text-[#1D1D1F]">
             {mode === 'LOGIN' ? "Welcome to Tony's Music" : "Join Tony's Music"}
           </h1>
-          <p className="text-xs text-gray-500 font-telugu">
+          <p className="text-xs text-[#86868B] font-telugu">
             టోనీ ప్రకాష్ భక్తి సంగీత వేదిక • Official Music Portal
           </p>
         </div>
 
         {/* Mode Toggle Tabs (Sign In / Register) */}
-        <div className="grid grid-cols-2 bg-gray-100 p-1 rounded-2xl border border-gray-200 text-xs font-semibold">
+        <div className="grid grid-cols-2 bg-gray-100 p-1 rounded-2xl border border-[#E5E5EA] text-xs font-semibold">
           <button
             type="button"
             onClick={() => {
@@ -219,8 +219,8 @@ export const AuthPage: React.FC = () => {
             }}
             className={`py-2 rounded-xl transition-all ${
               mode === 'LOGIN'
-                ? 'bg-gradient-to-r from-[#C41E3A] to-[#8B1524] text-white shadow-sm'
-                : 'text-gray-600 hover:text-gray-900'
+                ? 'bg-gradient-to-r from-[#FC3C44] to-[#FA243C] text-white shadow-sm'
+                : 'text-[#86868B] hover:text-[#1D1D1F]'
             }`}
           >
             Sign In
@@ -234,8 +234,8 @@ export const AuthPage: React.FC = () => {
             }}
             className={`py-2 rounded-xl transition-all ${
               mode === 'REGISTER'
-                ? 'bg-gradient-to-r from-[#C41E3A] to-[#8B1524] text-white shadow-sm'
-                : 'text-gray-600 hover:text-gray-900'
+                ? 'bg-gradient-to-r from-[#FC3C44] to-[#FA243C] text-white shadow-sm'
+                : 'text-[#86868B] hover:text-[#1D1D1F]'
             }`}
           >
             Create Account
@@ -243,7 +243,7 @@ export const AuthPage: React.FC = () => {
         </div>
 
         {oauthStatus && (
-          <div className="p-3 rounded-xl bg-red-50 border border-[#C41E3A]/40 text-[#C41E3A] text-xs text-center font-medium animate-pulse">
+          <div className="p-3 rounded-xl bg-red-50 border border-[#E5E5EA] text-[#FA243C] text-xs text-center font-medium animate-pulse">
             {oauthStatus}
           </div>
         )}
@@ -265,14 +265,14 @@ export const AuthPage: React.FC = () => {
           {mode === 'REGISTER' && (
             <div className="space-y-1">
               <div className="relative">
-                <UserIcon className="w-5 h-5 text-gray-400 absolute left-4 top-3.5" />
+                <UserIcon className="w-5 h-5 text-[#86868B] absolute left-4 top-3.5" />
                 <input
                   type="text"
                   required
                   placeholder="Full Name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full bg-gray-50 hover:bg-white focus:bg-white border border-gray-300 focus:border-[#C41E3A] rounded-2xl pl-12 pr-4 py-3.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none transition-colors shadow-inner"
+                  className="w-full bg-gray-50 hover:bg-white focus:bg-white border border-[#E5E5EA] focus:border-[#FA243C] rounded-2xl pl-12 pr-4 py-3.5 text-sm text-[#1D1D1F] placeholder-gray-400 focus:outline-none transition-colors shadow-inner"
                 />
               </div>
             </div>
@@ -280,33 +280,33 @@ export const AuthPage: React.FC = () => {
 
           {/* Email Input Field */}
           <div className="relative">
-            <Mail className="w-5 h-5 text-gray-400 absolute left-4 top-3.5" />
+            <Mail className="w-5 h-5 text-[#86868B] absolute left-4 top-3.5" />
             <input
               type="email"
               required
               placeholder="Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full bg-gray-50 hover:bg-white focus:bg-white border border-gray-300 focus:border-[#C41E3A] rounded-2xl pl-12 pr-4 py-3.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none transition-colors shadow-inner"
+              className="w-full bg-gray-50 hover:bg-white focus:bg-white border border-[#E5E5EA] focus:border-[#FA243C] rounded-2xl pl-12 pr-4 py-3.5 text-sm text-[#1D1D1F] placeholder-gray-400 focus:outline-none transition-colors shadow-inner"
             />
           </div>
 
           {/* Password Input Field with Eye Toggle */}
           <div className="space-y-1.5">
             <div className="relative">
-              <Lock className="w-5 h-5 text-gray-400 absolute left-4 top-3.5" />
+              <Lock className="w-5 h-5 text-[#86868B] absolute left-4 top-3.5" />
               <input
                 type={showPassword ? 'text' : 'password'}
                 required
                 placeholder="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full bg-gray-50 hover:bg-white focus:bg-white border border-gray-300 focus:border-[#C41E3A] rounded-2xl pl-12 pr-12 py-3.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none transition-colors shadow-inner"
+                className="w-full bg-gray-50 hover:bg-white focus:bg-white border border-[#E5E5EA] focus:border-[#FA243C] rounded-2xl pl-12 pr-12 py-3.5 text-sm text-[#1D1D1F] placeholder-gray-400 focus:outline-none transition-colors shadow-inner"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-4 top-3.5 text-gray-400 hover:text-gray-700 transition-colors"
+                className="absolute right-4 top-3.5 text-[#86868B] hover:text-gray-700 transition-colors"
                 title={showPassword ? 'Hide password' : 'Show password'}
               >
                 {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
@@ -318,7 +318,7 @@ export const AuthPage: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setShowForgotNotice(true)}
-                className="text-xs text-gray-500 hover:text-[#C41E3A] transition-colors"
+                className="text-xs text-[#86868B] hover:text-[#FA243C] transition-colors"
               >
                 Forgot password?
               </button>
@@ -327,13 +327,13 @@ export const AuthPage: React.FC = () => {
 
           {mode === 'REGISTER' && (
             <div className="relative">
-              <Phone className="w-5 h-5 text-gray-400 absolute left-4 top-3.5" />
+              <Phone className="w-5 h-5 text-[#86868B] absolute left-4 top-3.5" />
               <input
                 type="tel"
                 placeholder="Phone Number (Optional)"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
-                className="w-full bg-gray-50 hover:bg-white focus:bg-white border border-gray-300 focus:border-[#C41E3A] rounded-2xl pl-12 pr-4 py-3.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none transition-colors shadow-inner"
+                className="w-full bg-gray-50 hover:bg-white focus:bg-white border border-[#E5E5EA] focus:border-[#FA243C] rounded-2xl pl-12 pr-4 py-3.5 text-sm text-[#1D1D1F] placeholder-gray-400 focus:outline-none transition-colors shadow-inner"
               />
             </div>
           )}
@@ -342,7 +342,7 @@ export const AuthPage: React.FC = () => {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-[#C41E3A] to-[#8B1524] hover:brightness-110 border border-[#D4AF37]/30 text-white font-bold text-sm tracking-wide transition-all shadow-md hover:shadow-lg active:scale-[0.99] disabled:opacity-60"
+            className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-[#FC3C44] to-[#FA243C] hover:brightness-110 border border-[#E5E5EA] text-white font-bold text-sm tracking-wide transition-all shadow-md hover:shadow-lg active:scale-[0.99] disabled:opacity-60"
           >
             {isLoading
               ? 'Please wait...'
@@ -354,8 +354,8 @@ export const AuthPage: React.FC = () => {
 
         {/* ================= DIVIDER ================= */}
         <div className="relative flex items-center justify-center my-6">
-          <div className="border-t border-gray-200 w-full" />
-          <span className="bg-white px-4 text-xs text-gray-500 whitespace-nowrap absolute">
+          <div className="border-t border-[#E5E5EA] w-full" />
+          <span className="bg-white px-4 text-xs text-[#86868B] whitespace-nowrap absolute">
             Or sign in with
           </span>
         </div>
@@ -366,7 +366,7 @@ export const AuthPage: React.FC = () => {
             type="button"
             onClick={handleGoogleClick}
             disabled={isLoading}
-            className="w-full h-12 rounded-2xl bg-white hover:bg-gray-50 border border-gray-300 flex items-center justify-center gap-3 transition-all shadow-sm hover:shadow active:scale-[0.99] disabled:opacity-60 text-gray-700 text-sm font-semibold"
+            className="w-full h-12 rounded-2xl bg-white hover:bg-gray-50 border border-[#E5E5EA] flex items-center justify-center gap-3 transition-all shadow-sm hover:shadow active:scale-[0.99] disabled:opacity-60 text-gray-700 text-sm font-semibold"
             title="Sign in with Google"
           >
             <svg className="w-5 h-5 shrink-0" viewBox="0 0 24 24">

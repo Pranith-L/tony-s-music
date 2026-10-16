@@ -89,14 +89,14 @@ export const VideosPage: React.FC = () => {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div className="space-y-2">
-          <div className="inline-flex items-center gap-2 text-xs uppercase tracking-widest text-[#C9B27C] font-semibold font-mono">
+          <div className="inline-flex items-center gap-2 text-xs uppercase tracking-widest text-[#D4A017] font-semibold font-mono">
             <Youtube className="w-4 h-4 text-red-500 fill-current" />
             <span>@TonyPrakashOfficial • Official YouTube Channel</span>
           </div>
-          <h1 className="text-3xl sm:text-4xl font-heading font-bold text-[#111827]">
+          <h1 className="text-3xl sm:text-4xl font-heading font-bold text-[#1D1D1F]">
             Official Worship & Devotional Videos
           </h1>
-          <p className="text-xs sm:text-sm text-[#4B5563] max-w-2xl leading-relaxed">
+          <p className="text-xs sm:text-sm text-[#86868B] max-w-2xl leading-relaxed">
             All music releases, worship sessions, and gospel songs posted by Rev. Tony Prakash directly embedded from his official YouTube channel.
           </p>
         </div>
@@ -115,28 +115,28 @@ export const VideosPage: React.FC = () => {
 
       {/* FEATURED THEATRE YOUTUBE EMBED PLAYER */}
       {activeVideo && (
-        <section className="rounded-3xl p-4 sm:p-6 bg-white border border-[#D4AF37]/30 shadow-xl space-y-4">
-          <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-[#B8860B] font-mono">
+        <section className="rounded-3xl p-4 sm:p-6 bg-white border border-[#E5E5EA] shadow-xl space-y-4">
+          <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-[#D4A017] font-mono">
             <span className="flex items-center gap-2 font-bold">
               <Sparkles className="w-4 h-4 text-[#D4AF37]" />
               <span>FEATURED WORSHIP VIDEO • {activeVideo.category || 'Official Release'}</span>
             </span>
-            <div className="flex items-center gap-4 text-[#4B5563]">
+            <div className="flex items-center gap-4 text-[#86868B]">
               {activeVideo.duration && (
                 <span className="flex items-center gap-1">
-                  <Clock className="w-3.5 h-3.5 text-[#C41E3A]" />
+                  <Clock className="w-3.5 h-3.5 text-[#FA243C]" />
                   {activeVideo.duration}
                 </span>
               )}
               {activeVideo.views && (
                 <span className="flex items-center gap-1">
-                  <Eye className="w-3.5 h-3.5 text-[#C41E3A]" />
+                  <Eye className="w-3.5 h-3.5 text-[#FA243C]" />
                   {activeVideo.views}
                 </span>
               )}
               {activeVideo.published && (
                 <span className="flex items-center gap-1 hidden sm:inline-flex">
-                  <Calendar className="w-3.5 h-3.5 text-[#C41E3A]" />
+                  <Calendar className="w-3.5 h-3.5 text-[#FA243C]" />
                   {activeVideo.published}
                 </span>
               )}
@@ -144,7 +144,7 @@ export const VideosPage: React.FC = () => {
           </div>
 
           {/* 16:9 Responsive High-Definition YouTube Embed */}
-          <div className="relative aspect-video w-full rounded-2xl overflow-hidden bg-black shadow-2xl border border-[#C41E3A]/50">
+          <div className="relative aspect-video w-full rounded-2xl overflow-hidden bg-black shadow-2xl border border-[#FA243C]/50">
             <iframe
               key={activeVideo.youtubeId}
               src={`https://www.youtube-nocookie.com/embed/${activeVideo.youtubeId}?autoplay=1&rel=0&modestbranding=1`}
@@ -156,12 +156,12 @@ export const VideosPage: React.FC = () => {
           </div>
 
           {/* Video Information Bar */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2 border-t border-[#C41E3A]/15">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2 border-t border-[#E5E5EA]">
             <div className="space-y-1 min-w-0">
-              <h2 className="font-telugu text-lg sm:text-xl font-bold text-[#111827]">
+              <h2 className="font-telugu text-lg sm:text-xl font-bold text-[#1D1D1F]">
                 {activeVideo.title}
               </h2>
-              <p className="text-xs text-[#4B5563] line-clamp-2">
+              <p className="text-xs text-[#86868B] line-clamp-2">
                 {activeVideo.description}
               </p>
             </div>
@@ -169,11 +169,11 @@ export const VideosPage: React.FC = () => {
             <div className="flex items-center gap-2 shrink-0">
               <button
                 onClick={() => handleShare(activeVideo)}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#F9FAFB] hover:bg-[#FEE2E2] text-xs text-[#FFFFFF] border border-[#C41E3A]/30 transition-colors"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#F5F5F7] hover:bg-[#FEE2E2] text-xs text-[#FFFFFF] border border-[#E5E5EA] transition-colors"
                 title="Copy Video Link"
               >
                 {copiedId === activeVideo.id ? (
-                  <Check className="w-3.5 h-3.5 text-[#C9B27C]" />
+                  <Check className="w-3.5 h-3.5 text-[#D4A017]" />
                 ) : (
                   <Share2 className="w-3.5 h-3.5" />
                 )}
@@ -184,7 +184,7 @@ export const VideosPage: React.FC = () => {
                 href={`https://www.youtube.com/watch?v=${activeVideo.youtubeId}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-red-600 hover:bg-red-500 text-xs text-white font-semibold transition-colors shadow"
+                className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#FA243C] hover:bg-[#D71A30] text-xs text-white font-semibold transition-colors shadow"
               >
                 <Youtube className="w-3.5 h-3.5 fill-current" />
                 <span>Watch on YouTube</span>
@@ -199,19 +199,19 @@ export const VideosPage: React.FC = () => {
         <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
           {/* Search Input */}
           <div className="relative flex-1 max-w-md">
-            <Search className="w-4 h-4 text-[#C41E3A] absolute left-4 top-3" />
+            <Search className="w-4 h-4 text-[#FA243C] absolute left-4 top-3" />
             <input
               type="text"
               placeholder={`Search all ${videos.length} videos (e.g. 'నజరేయుడైన', 'Sree Yesu')...`}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-[#F9FAFB] border border-[#C41E3A]/30 rounded-xl pl-11 pr-4 py-2.5 text-xs sm:text-sm text-[#FFFFFF] placeholder-[#E2CBD0]/60 focus:outline-none focus:border-[#C9B27C] transition-colors"
+              className="w-full bg-[#F5F5F7] border border-[#E5E5EA] rounded-xl pl-11 pr-4 py-2.5 text-xs sm:text-sm text-[#FFFFFF] placeholder-[#E2CBD0]/60 focus:outline-none focus:border-[#D4A017] transition-colors"
             />
           </div>
 
-          <div className="flex items-center justify-between md:justify-end gap-3 text-xs font-mono text-[#4B5563]">
+          <div className="flex items-center justify-between md:justify-end gap-3 text-xs font-mono text-[#86868B]">
             <span className="flex items-center gap-1.5">
-              <Filter className="w-3.5 h-3.5 text-[#C9B27C]" />
+              <Filter className="w-3.5 h-3.5 text-[#D4A017]" />
               <span>Showing: <strong className="text-[#FFFFFF]">{filteredVideos.length}</strong> of {videos.length}</span>
             </span>
           </div>
@@ -227,8 +227,8 @@ export const VideosPage: React.FC = () => {
                 onClick={() => setSelectedCategory(cat)}
                 className={`px-4 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-all duration-200 border ${
                   isSelected
-                    ? 'bg-[#C41E3A] border-[#C41E3A] text-white shadow-md'
-                    : 'bg-[#F9FAFB]/80 border-[#C41E3A]/20 text-[#4B5563] hover:text-[#FFFFFF] hover:border-[#C41E3A]/40'
+                    ? 'bg-[#FA243C] border-[#FA243C] text-white shadow-md'
+                    : 'bg-[#F5F5F7]/80 border-[#E5E5EA] text-[#86868B] hover:text-[#FFFFFF] hover:border-[#E5E5EA]'
                 }`}
               >
                 {cat}
@@ -241,19 +241,19 @@ export const VideosPage: React.FC = () => {
       {/* VIDEO CARDS GRID */}
       {isLoading ? (
         <div className="py-24 text-center">
-          <div className="w-10 h-10 border-2 border-[#C41E3A] border-t-transparent rounded-full animate-spin mx-auto mb-3" />
-          <p className="text-xs text-[#4B5563]">Loading official YouTube channel video catalog...</p>
+          <div className="w-10 h-10 border-2 border-[#FA243C] border-t-transparent rounded-full animate-spin mx-auto mb-3" />
+          <p className="text-xs text-[#86868B]">Loading official YouTube channel video catalog...</p>
         </div>
       ) : filteredVideos.length === 0 ? (
-        <div className="py-16 text-center rounded-2xl bg-[#F9FAFB] border border-[#C41E3A]/20">
-          <VideoIcon className="w-10 h-10 text-[#4B5563] mx-auto mb-2" />
+        <div className="py-16 text-center rounded-2xl bg-[#F5F5F7] border border-[#E5E5EA]">
+          <VideoIcon className="w-10 h-10 text-[#86868B] mx-auto mb-2" />
           <p className="text-sm text-[#FFFFFF]">No matching videos found in this category.</p>
           <button
             onClick={() => {
               setSearchQuery('');
               setSelectedCategory('All Videos');
             }}
-            className="mt-3 text-xs text-[#B8860B] hover:underline"
+            className="mt-3 text-xs text-[#D4A017] hover:underline"
           >
             Clear filters
           </button>
@@ -264,10 +264,10 @@ export const VideosPage: React.FC = () => {
             <div
               key={video.id}
               onClick={() => handleSelectVideo(video)}
-              className="group cursor-pointer rounded-2xl p-3.5 bg-white hover:bg-red-50/40 border border-gray-200 hover:border-[#C41E3A]/40 transition-all duration-300 shadow-sm hover:shadow-md flex flex-col justify-between"
+              className="group cursor-pointer rounded-2xl p-3.5 bg-white hover:bg-red-50/40 border border-[#E5E5EA] hover:border-[#E5E5EA] transition-all duration-300 shadow-sm hover:shadow-md flex flex-col justify-between"
             >
               <div>
-                <div className="relative aspect-video rounded-xl overflow-hidden bg-black mb-3 border border-gray-200 shadow-sm">
+                <div className="relative aspect-video rounded-xl overflow-hidden bg-black mb-3 border border-[#E5E5EA] shadow-sm">
                   <img
                     src={video.thumbnail}
                     alt={video.title}
@@ -275,7 +275,7 @@ export const VideosPage: React.FC = () => {
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
                   <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 flex items-center justify-center transition-colors">
-                    <div className="w-12 h-12 rounded-full bg-gradient-to-tr from-[#C41E3A] to-[#8B1524] text-white flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform border border-[#D4AF37]/40">
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-tr from-[#FC3C44] to-[#FA243C] text-white flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform border border-[#E5E5EA]">
                       <Play className="w-5 h-5 fill-current ml-0.5" />
                     </div>
                   </div>
@@ -294,19 +294,19 @@ export const VideosPage: React.FC = () => {
                 </div>
 
                 <div className="space-y-1.5">
-                  <h3 className="font-telugu text-sm font-bold text-[#111827] group-hover:text-[#C41E3A] transition-colors line-clamp-2 leading-snug">
+                  <h3 className="font-telugu text-sm font-bold text-[#1D1D1F] group-hover:text-[#FA243C] transition-colors line-clamp-2 leading-snug">
                     {video.title}
                   </h3>
-                  <p className="text-xs text-[#4B5563] line-clamp-2 leading-relaxed">
+                  <p className="text-xs text-[#86868B] line-clamp-2 leading-relaxed">
                     {video.description}
                   </p>
                 </div>
               </div>
 
-              <div className="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between text-xs text-[#4B5563]">
+              <div className="mt-4 pt-3 border-t border-[#E5E5EA] flex items-center justify-between text-xs text-[#86868B]">
                 <div className="flex items-center gap-2">
                   {video.views && (
-                    <span className="flex items-center gap-1 font-mono text-[11px] text-[#B8860B]">
+                    <span className="flex items-center gap-1 font-mono text-[11px] text-[#D4A017]">
                       <Eye className="w-3 h-3" />
                       {video.views}
                     </span>
@@ -318,7 +318,7 @@ export const VideosPage: React.FC = () => {
                   )}
                 </div>
 
-                <span className="flex items-center gap-1 font-semibold text-[#C41E3A] group-hover:translate-x-1 transition-transform">
+                <span className="flex items-center gap-1 font-semibold text-[#FA243C] group-hover:translate-x-1 transition-transform">
                   <span>Watch</span>
                 </span>
               </div>
