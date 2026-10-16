@@ -14,7 +14,7 @@ declare global {
 export const AuthPage: React.FC = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const { login, register, adminLogin, loginWithGoogle, loginWithFacebook } = useAuth();
+  const { login, register, adminLogin, loginWithGoogle } = useAuth();
 
   const redirectPath = searchParams.get('redirect') || '/account';
 
@@ -110,26 +110,6 @@ export const AuthPage: React.FC = () => {
     }
   };
 
-  const handleFacebookClick = async () => {
-    setIsLoading(true);
-    setErrorMsg(null);
-    setOauthStatus('Connecting with Facebook...');
-    try {
-      const fbData = {
-        userID: 'fb_user_' + Date.now(),
-        name: 'Worship Member (Facebook)',
-        email: 'tony.worshipper@facebook.com',
-        picture: 'https://graph.facebook.com/4/picture?type=large',
-      };
-      await loginWithFacebook(fbData);
-      navigate(redirectPath);
-    } catch (err: any) {
-      setErrorMsg(err.message || 'Facebook authentication failed.');
-    } finally {
-      setIsLoading(false);
-      setOauthStatus(null);
-    }
-  };
 
   const handleAppleClick = () => {
     setIsLoading(true);
@@ -346,17 +326,16 @@ export const AuthPage: React.FC = () => {
           </span>
         </div>
 
-        {/* ================= 3 OAUTH SOCIAL ICONS ROW (Image 1 Style) ================= */}
-        <div className="grid grid-cols-3 gap-3 pt-1">
-          {/* 1. Google (Multi-color G) */}
+        {/* ================= GOOGLE OAUTH SECTION ================= */}
+        <div className="pt-1">
           <button
             type="button"
             onClick={handleGoogleClick}
             disabled={isLoading}
-            className="h-12 rounded-2xl bg-white hover:bg-neutral-100 flex items-center justify-center transition-all shadow-sm hover:shadow-md active:scale-95 disabled:opacity-60"
+            className="w-full h-12 rounded-2xl bg-white hover:bg-neutral-100 flex items-center justify-center gap-3 transition-all shadow-sm hover:shadow-md active:scale-[0.99] disabled:opacity-60 text-neutral-800 text-sm font-semibold"
             title="Sign in with Google"
           >
-            <svg className="w-5 h-5" viewBox="0 0 24 24">
+            <svg className="w-5 h-5 shrink-0" viewBox="0 0 24 24">
               <path
                 fill="#4285F4"
                 d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"
@@ -374,32 +353,7 @@ export const AuthPage: React.FC = () => {
                 d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z"
               />
             </svg>
-          </button>
-
-          {/* 2. Facebook (Blue circle with 'f') */}
-          <button
-            type="button"
-            onClick={handleFacebookClick}
-            disabled={isLoading}
-            className="h-12 rounded-2xl bg-white hover:bg-neutral-100 flex items-center justify-center transition-all shadow-sm hover:shadow-md active:scale-95 disabled:opacity-60"
-            title="Sign in with Facebook"
-          >
-            <svg className="w-5 h-5 text-[#1877F2] fill-current" viewBox="0 0 24 24">
-              <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
-            </svg>
-          </button>
-
-          {/* 3. Apple (Black Apple Logo) */}
-          <button
-            type="button"
-            onClick={handleAppleClick}
-            disabled={isLoading}
-            className="h-12 rounded-2xl bg-white hover:bg-neutral-100 flex items-center justify-center transition-all shadow-sm hover:shadow-md active:scale-95 disabled:opacity-60"
-            title="Sign in with Apple"
-          >
-            <svg className="w-5 h-5 text-black fill-current" viewBox="0 0 170 170">
-              <path d="M150.37 130.25c-2.45 5.66-5.35 10.87-8.71 15.66-4.58 6.53-8.33 11.05-11.22 13.56-4.48 4.12-9.28 6.23-14.42 6.35-3.69 0-8.14-1.05-13.32-3.18-5.19-2.12-9.97-3.17-14.34-3.17-4.58 0-9.49 1.05-14.75 3.17-5.26 2.13-9.5 3.24-12.74 3.35-4.35.13-9.16-1.9-14.42-6.08-3.69-3.05-7.69-7.85-12.01-14.41-6.73-10.37-12-21.73-15.81-34.07-3.8-12.35-5.71-24.31-5.71-35.89 0-14.49 3.51-26.66 10.53-36.52 7.02-9.87 16.03-14.88 27.02-15.05 4.35 0 9.4 1.16 15.15 3.49 5.75 2.33 9.44 3.53 11.08 3.59 1.84 0 5.86-1.32 12.06-3.96 6.2-2.64 11.66-3.79 16.38-3.44 12.23.63 21.94 4.87 29.13 12.71-10.73 6.53-15.98 15.53-15.76 27.02.22 9.07 3.57 16.73 10.05 22.98 6.48 6.25 14.34 9.77 23.58 10.57-2.34 7.1-5.36 14.18-9.06 21.25zM119.22 33.64c0-7.23 2.66-14.07 7.98-20.52 5.32-6.45 11.96-10.68 19.92-12.69 1.05 6.66-.43 13.56-4.44 20.7-4.01 7.14-9.89 11.75-17.64 13.83-.9-1.22-1.35-2.61-1.35-4.17z" />
-            </svg>
+            <span>Continue with Google</span>
           </button>
         </div>
       </div>
