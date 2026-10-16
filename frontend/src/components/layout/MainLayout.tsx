@@ -35,7 +35,7 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
   const { user, isAdmin } = useAuth();
 
   return (
-    <div className="flex h-screen h-[100dvh] w-screen overflow-hidden bg-[#0E0305] text-[#FFFFFF] font-sans selection:bg-[#C41E3A] selection:text-[#FFFFFF]">
+    <div className="flex h-screen h-[100dvh] w-screen overflow-hidden bg-[#FAFAFA] text-[#111827] font-sans selection:bg-[#C41E3A] selection:text-[#111827]">
       {/* 1. Left Navigation Sidebar (Desktop / Tablet) */}
       <Sidebar
         collapsed={sidebarCollapsed}
@@ -68,8 +68,8 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
 
       {/* 7. Mobile Drawer Overlay for full navigation */}
       {mobileDrawerOpen && (
-        <div className="md:hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex flex-col animate-fadeIn">
-          <div className="p-4 flex items-center justify-between border-b border-[#C41E3A]/30 bg-[#0E0305]">
+        <div className="md:hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-md flex flex-col animate-fadeIn">
+          <div className="p-4 flex items-center justify-between border-b border-[#C41E3A]/30 bg-white">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-[#22070D] via-[#8B1524] to-[#C41E3A] border border-[#C9B27C] overflow-hidden flex items-center justify-center">
                 <img

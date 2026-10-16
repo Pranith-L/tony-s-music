@@ -168,7 +168,7 @@ export const Home: React.FC = () => {
       <section className="space-y-4">
         <div className="flex items-baseline justify-between">
           <div>
-            <h2 className="text-2xl sm:text-3xl font-heading font-bold text-[#FFFFFF] tracking-tight">
+            <h2 className="text-2xl sm:text-3xl font-heading font-bold text-[#111827] tracking-tight">
               {greeting.en}
             </h2>
             <p className="font-telugu text-sm text-[#C9B27C] font-semibold">
@@ -206,9 +206,9 @@ export const Home: React.FC = () => {
               <div
                 key={card.id}
                 onClick={handleCardClick}
-                className="group relative flex items-center gap-3.5 bg-[#1A060A]/80 hover:bg-[#340C14] rounded-xl overflow-hidden border border-[#C41E3A]/20 hover:border-[#C41E3A]/40 transition-all duration-200 cursor-pointer shadow-md pr-3"
+                className="group relative flex items-center gap-3.5 bg-[#F9FAFB]/80 hover:bg-[#FEE2E2] rounded-xl overflow-hidden border border-[#C41E3A]/20 hover:border-[#C41E3A]/40 transition-all duration-200 cursor-pointer shadow-md pr-3"
               >
-                <div className="w-16 h-16 sm:w-20 sm:h-20 shrink-0 bg-[#26080F] overflow-hidden relative">
+                <div className="w-16 h-16 sm:w-20 sm:h-20 shrink-0 bg-[#F3F4F6] overflow-hidden relative">
                   <img
                     src={card.image}
                     alt={card.titleEnglish}
@@ -222,10 +222,10 @@ export const Home: React.FC = () => {
                 </div>
 
                 <div className="flex-1 min-w-0 py-2">
-                  <h4 className="font-telugu text-sm font-bold text-[#FFFFFF] truncate leading-tight group-hover:text-[#C41E3A] transition-colors">
+                  <h4 className="font-telugu text-sm font-bold text-[#111827] truncate leading-tight group-hover:text-[#C41E3A] transition-colors">
                     {card.titleTelugu}
                   </h4>
-                  <p className="text-xs text-[#E2CBD0] truncate font-medium">
+                  <p className="text-xs text-[#4B5563] truncate font-medium">
                     {card.titleEnglish}
                   </p>
                 </div>
@@ -259,48 +259,48 @@ export const Home: React.FC = () => {
       </section>
 
       {/* ================= 2. TONY'S MUSIC ARTIST HERO SHOWCASE ================= */}
-      <section className="relative rounded-3xl overflow-hidden bg-gradient-to-r from-[#041117] via-[#22070D] to-[#0E0305] border-2 border-[#C41E3A]/30 shadow-2xl">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-[#C41E3A]/25 via-[#C9B27C]/10 to-transparent pointer-events-none" />
-        <div className="absolute -top-24 -right-24 w-96 h-96 bg-[#C41E3A]/15 rounded-full blur-3xl pointer-events-none" />
+      <section className="relative rounded-3xl overflow-hidden bg-gradient-to-r from-red-50/60 via-white to-amber-50/50 border border-[#D4AF37]/35 shadow-xl">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-[#C41E3A]/10 via-[#D4AF37]/10 to-transparent pointer-events-none" />
+        <div className="absolute -top-24 -right-24 w-96 h-96 bg-[#C41E3A]/10 rounded-full blur-3xl pointer-events-none" />
 
         <div className="relative p-6 sm:p-10 lg:p-12 flex flex-col md:flex-row items-center justify-between gap-8">
           <div className="space-y-4 max-w-2xl text-center md:text-left z-10">
             {/* Brand Monogram Crest */}
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#0E0305]/80 border border-[#C9B27C]/50 text-[#C9B27C] text-xs font-mono uppercase tracking-widest shadow-lg">
-              <Sparkles className="w-3.5 h-3.5 text-[#C9B27C]" />
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-[#D4AF37]/50 text-[#B8860B] text-xs font-mono uppercase tracking-widest shadow-sm">
+              <Sparkles className="w-3.5 h-3.5 text-[#D4AF37]" />
               <span>TONY'S MUSIC • OFFICIAL DEVOTIONAL HUB</span>
             </div>
 
             <div className="space-y-2">
-              <h1 className="text-3xl sm:text-5xl lg:text-6xl font-heading font-black text-[#FFFFFF] tracking-tight">
+              <h1 className="text-3xl sm:text-5xl lg:text-6xl font-heading font-black text-[#111827] tracking-tight">
                 Rev. Tony Prakash
               </h1>
-              <p className="font-telugu text-lg sm:text-2xl text-[#C9B27C] font-semibold leading-relaxed">
+              <p className="font-telugu text-lg sm:text-2xl text-[#B8860B] font-semibold leading-relaxed">
                 దైవజనులు టోనీ ప్రకాష్ గారి దివ్య ఆత్మీయ గీతాల భాండాగారం
               </p>
             </div>
 
-            <p className="text-xs sm:text-sm text-[#E2CBD0] leading-relaxed max-w-xl">
+            <p className="text-xs sm:text-sm text-[#4B5563] leading-relaxed max-w-xl">
               Spreading the gospel of Jesus Christ through anointed melody, biblical truth, and heartfelt worship for over 30 years. Stream 68+ soul-lifting devotional hymns and 57 studio minus-one backing tracks.
             </p>
 
             {/* Ministry Stats Ribbon */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 max-w-lg">
-              <div className="p-2.5 rounded-xl bg-[#0E0305]/60 border border-[#C41E3A]/30 text-center">
-                <span className="block font-mono text-base font-bold text-[#FFFFFF]">125+</span>
-                <span className="text-[10px] text-[#E2CBD0] uppercase tracking-wider font-semibold">Total Tracks</span>
+              <div className="p-2.5 rounded-xl bg-white border border-gray-200 text-center shadow-sm">
+                <span className="block font-mono text-base font-bold text-[#111827]">125+</span>
+                <span className="text-[10px] text-[#4B5563] uppercase tracking-wider font-semibold">Total Tracks</span>
               </div>
-              <div className="p-2.5 rounded-xl bg-[#0E0305]/60 border border-[#C9B27C]/30 text-center">
-                <span className="block font-mono text-base font-bold text-[#C9B27C]">57</span>
-                <span className="text-[10px] text-[#C9B27C] uppercase tracking-wider font-semibold">Tracks • ₹99</span>
+              <div className="p-2.5 rounded-xl bg-white border border-[#D4AF37]/35 text-center shadow-sm">
+                <span className="block font-mono text-base font-bold text-[#B8860B]">57</span>
+                <span className="text-[10px] text-[#B8860B] uppercase tracking-wider font-semibold">Tracks • ₹99</span>
               </div>
-              <div className="p-2.5 rounded-xl bg-[#0E0305]/60 border border-[#C41E3A]/30 text-center">
+              <div className="p-2.5 rounded-xl bg-white border border-[#C41E3A]/30 text-center shadow-sm">
                 <span className="block font-mono text-base font-bold text-[#C41E3A]">68</span>
                 <span className="text-[10px] text-[#C41E3A] uppercase tracking-wider font-semibold">VIP Hymns</span>
               </div>
-              <div className="p-2.5 rounded-xl bg-[#0E0305]/60 border border-[#C41E3A]/30 text-center">
-                <span className="block font-mono text-base font-bold text-[#FFFFFF]">320k</span>
-                <span className="text-[10px] text-[#E2CBD0] uppercase tracking-wider font-semibold">Master Audio</span>
+              <div className="p-2.5 rounded-xl bg-white border border-gray-200 text-center shadow-sm">
+                <span className="block font-mono text-base font-bold text-[#111827]">320k</span>
+                <span className="text-[10px] text-[#4B5563] uppercase tracking-wider font-semibold">Master Audio</span>
               </div>
             </div>
 
@@ -308,7 +308,7 @@ export const Home: React.FC = () => {
             <div className="pt-2 flex flex-wrap items-center justify-center md:justify-start gap-3 sm:gap-4">
               <button
                 onClick={handlePlayAll}
-                className="inline-flex items-center gap-2.5 px-7 py-3 rounded-full bg-gradient-to-r from-[#C41E3A] to-[#8B1524] text-[#FFFFFF] font-heading font-bold text-sm uppercase tracking-wider shadow-lg shadow-[#C41E3A]/30 hover:scale-105 transition-all duration-200 border border-[#C9B27C]/50"
+                className="inline-flex items-center gap-2.5 px-7 py-3 rounded-full bg-gradient-to-r from-[#C41E3A] to-[#8B1524] text-white font-heading font-bold text-sm uppercase tracking-wider shadow-lg shadow-red-500/25 hover:scale-105 transition-all duration-200 border border-[#D4AF37]/40"
               >
                 <Play className="w-4 h-4 fill-current ml-0.5" />
                 <span>Play Tony's Hits</span>
@@ -316,31 +316,31 @@ export const Home: React.FC = () => {
 
               <Link
                 to="/tracks"
-                className="inline-flex items-center gap-2 px-5 py-3 rounded-full border border-[#C9B27C]/60 text-[#C9B27C] bg-[#C9B27C]/10 hover:bg-[#C9B27C]/20 text-xs font-bold uppercase tracking-wider transition-all duration-200 shadow-md"
+                className="inline-flex items-center gap-2 px-5 py-3 rounded-full border border-[#D4AF37]/70 text-[#B8860B] bg-white hover:bg-amber-50 text-xs font-bold uppercase tracking-wider transition-all duration-200 shadow-sm"
               >
                 <span>🎹 Studio Backing Tracks (₹99)</span>
               </Link>
 
               <Link
                 to="/membership"
-                className="inline-flex items-center gap-1.5 px-5 py-3 rounded-full bg-gradient-to-r from-[#1A060A] to-[#340C14] border border-[#C41E3A]/50 text-[#FFFFFF] hover:text-[#C9B27C] text-xs font-bold uppercase tracking-wider hover:border-[#C9B27C]/60 transition-all shadow-[0_0_15px_rgba(27,124,157,0.2)]"
+                className="inline-flex items-center gap-1.5 px-5 py-3 rounded-full bg-white hover:bg-red-50 border border-[#C41E3A]/50 text-[#C41E3A] text-xs font-bold uppercase tracking-wider transition-all shadow-sm"
               >
-                <Sparkles className="w-3.5 h-3.5 text-[#C9B27C]" />
+                <Sparkles className="w-3.5 h-3.5 text-[#D4AF37]" />
                 <span>Tony's VIP Pass (₹299 One-Time)</span>
               </Link>
             </div>
           </div>
 
           {/* Artist Portrait Showcase with Gold Vinyl Halo */}
-          <div className="relative w-52 h-52 sm:w-64 sm:h-64 lg:w-80 lg:h-80 rounded-3xl overflow-hidden bg-gradient-to-b from-[#C41E3A]/30 via-[#8B1524]/20 to-[#0E0305] border-2 border-[#C9B27C]/60 shadow-[0_0_50px_rgba(201,178,124,0.25)] shrink-0 group">
+          <div className="relative w-52 h-52 sm:w-64 sm:h-64 lg:w-80 lg:h-80 rounded-3xl overflow-hidden bg-gradient-to-b from-red-100/50 to-amber-100/50 border-2 border-[#D4AF37]/60 shadow-[0_10px_35px_rgba(212,175,55,0.2)] shrink-0 group">
             <img
               src="/hero_tony_prakash.png"
               alt="Rev. Tony Prakash"
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#0E0305] via-transparent to-transparent opacity-60" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-40" />
             <div className="absolute bottom-3 left-3 right-3 text-center">
-              <span className="text-[11px] font-telugu text-[#C9B27C] bg-[#0E0305]/90 px-3 py-1 rounded-full border border-[#C9B27C]/40 shadow">
+              <span className="text-[11px] font-telugu text-[#B8860B] bg-white/95 px-3 py-1 rounded-full border border-[#D4AF37]/40 shadow-sm font-semibold">
                 30+ వసంతాల దైవ పరిచర్య
               </span>
             </div>
@@ -357,7 +357,7 @@ export const Home: React.FC = () => {
                 100% Free Full Listening
               </span>
             </div>
-            <h3 className="text-xl sm:text-2xl font-heading font-bold text-[#FFFFFF] mt-1">
+            <h3 className="text-xl sm:text-2xl font-heading font-bold text-[#111827] mt-1">
               Popular Devotional Songs
             </h3>
             <p className="font-telugu text-xs text-[#C9B27C]">
@@ -385,7 +385,7 @@ export const Home: React.FC = () => {
                 className={`px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all duration-200 shrink-0 ${
                   isActive
                     ? 'bg-[#C41E3A] text-[#FFFFFF] shadow-md shadow-[#C41E3A]/40 border border-[#C9B27C]/50'
-                    : 'bg-[#1A060A] text-[#E2CBD0] hover:text-[#FFFFFF] hover:bg-[#340C14] border border-[#C41E3A]/20'
+                    : 'bg-[#F9FAFB] text-[#4B5563] hover:text-[#FFFFFF] hover:bg-[#FEE2E2] border border-[#C41E3A]/20'
                 }`}
               >
                 <span>{chip.en}</span>
@@ -396,7 +396,7 @@ export const Home: React.FC = () => {
         </div>
 
         {/* Songs List */}
-        <div className="bg-[#22070D]/60 rounded-2xl border border-[#C41E3A]/20 overflow-hidden shadow-lg">
+        <div className="bg-[#F9FAFB]/60 rounded-2xl border border-[#C41E3A]/20 overflow-hidden shadow-lg">
           <div className="divide-y divide-[#C41E3A]/10">
             {popularTracks.map((track, idx) => {
               const isCurrent = currentTrack?.id === track.id;
@@ -407,13 +407,13 @@ export const Home: React.FC = () => {
                 <div
                   key={track.id}
                   onClick={() => playTrack(track, popularTracks)}
-                  className={`group flex items-center justify-between px-4 py-3 sm:py-3.5 hover:bg-[#340C14]/70 transition-colors cursor-pointer ${
-                    isCurrent ? 'bg-[#340C14]/90' : ''
+                  className={`group flex items-center justify-between px-4 py-3 sm:py-3.5 hover:bg-[#FEE2E2]/70 transition-colors cursor-pointer ${
+                    isCurrent ? 'bg-[#FEE2E2]/90' : ''
                   }`}
                 >
                   {/* Left: Index & Art & Title */}
                   <div className="flex items-center gap-3.5 sm:gap-4 min-w-0 flex-1">
-                    <span className="font-mono text-xs text-[#E2CBD0] w-5 text-center shrink-0">
+                    <span className="font-mono text-xs text-[#4B5563] w-5 text-center shrink-0">
                       {isThisPlaying ? (
                         <div className="flex items-end justify-center gap-0.5 h-3.5">
                           <span className="w-0.5 bg-[#C9B27C] rounded-full wave-bar-1" />
@@ -426,7 +426,7 @@ export const Home: React.FC = () => {
                       )}
                     </span>
 
-                    <div className="relative w-11 h-11 sm:w-12 sm:h-12 rounded-lg overflow-hidden bg-[#26080F] shrink-0 border border-[#C41E3A]/20 shadow-sm">
+                    <div className="relative w-11 h-11 sm:w-12 sm:h-12 rounded-lg overflow-hidden bg-[#F3F4F6] shrink-0 border border-[#C41E3A]/20 shadow-sm">
                       <img
                         src={track.coverImage || '/covers/001_prayermp3.jpg'}
                         alt={track.titleEnglish}
@@ -464,7 +464,7 @@ export const Home: React.FC = () => {
                         e.stopPropagation();
                         setSelectedTrack(track);
                       }}
-                      className="px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-[#C41E3A]/25 text-[#C41E3A] border border-[#C41E3A]/50 hover:bg-[#C41E3A] hover:text-[#FFFFFF] transition-colors cursor-pointer shrink-0 shadow-sm"
+                      className="px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-[#C41E3A]/25 text-[#C41E3A] border border-[#C41E3A]/50 hover:bg-[#C41E3A] hover:text-white transition-colors cursor-pointer shrink-0 shadow-sm"
                       title="Download requires Tony's VIP Lifetime Pass (₹299)"
                     >
                       VIP Pass • ₹299
@@ -476,7 +476,7 @@ export const Home: React.FC = () => {
                         toggleLikeTrack(track.id);
                       }}
                       className={`p-1.5 transition-colors opacity-0 group-hover:opacity-100 ${
-                        liked ? '!opacity-100 text-[#C9B27C]' : 'text-[#E2CBD0] hover:text-[#FFFFFF]'
+                        liked ? '!opacity-100 text-[#C9B27C]' : 'text-[#4B5563] hover:text-[#FFFFFF]'
                       }`}
                       title={liked ? 'Liked' : 'Like'}
                     >
@@ -488,13 +488,13 @@ export const Home: React.FC = () => {
                         e.stopPropagation();
                         setSelectedTrack(track);
                       }}
-                      className="p-1.5 text-[#E2CBD0] hover:text-[#C9B27C] transition-colors opacity-0 group-hover:opacity-100"
+                      className="p-1.5 text-[#4B5563] hover:text-[#C9B27C] transition-colors opacity-0 group-hover:opacity-100"
                       title="View Lyrics (సాహిత్యం) & Download"
                     >
                       <FileText className="w-4 h-4" />
                     </button>
 
-                    <span className="font-mono text-xs text-[#E2CBD0] pr-1">
+                    <span className="font-mono text-xs text-[#4B5563] pr-1">
                       {track.duration}
                     </span>
                   </div>
@@ -517,7 +517,7 @@ export const Home: React.FC = () => {
                 ₹99 / Track
               </span>
             </div>
-            <h3 className="text-xl sm:text-2xl font-heading font-bold text-[#FFFFFF] mt-1">
+            <h3 className="text-xl sm:text-2xl font-heading font-bold text-[#111827] mt-1">
               Studio Backing Tracks (Minus-One / Karaoke)
             </h3>
             <p className="font-telugu text-xs text-[#C9B27C]">
@@ -544,9 +544,9 @@ export const Home: React.FC = () => {
               <div
                 key={track.id}
                 onClick={() => playTrack(track, studioBackingTracks)}
-                className="group p-3 rounded-2xl bg-[#1A060A]/80 hover:bg-[#340C14] border border-[#C9B27C]/30 hover:border-[#C9B27C]/70 transition-all duration-300 cursor-pointer shadow-lg space-y-2 flex flex-col justify-between"
+                className="group p-3 rounded-2xl bg-[#F9FAFB]/80 hover:bg-[#FEE2E2] border border-[#C9B27C]/30 hover:border-[#C9B27C]/70 transition-all duration-300 cursor-pointer shadow-lg space-y-2 flex flex-col justify-between"
               >
-                <div className="relative aspect-square rounded-xl overflow-hidden bg-[#26080F] border border-[#C9B27C]/20">
+                <div className="relative aspect-square rounded-xl overflow-hidden bg-[#F3F4F6] border border-[#C9B27C]/20">
                   <img
                     src={track.coverImage || '/covers/001_prayermp3.jpg'}
                     alt={track.titleEnglish}
@@ -561,7 +561,7 @@ export const Home: React.FC = () => {
                 </div>
 
                 <div className="space-y-0.5">
-                  <h4 className="font-semibold text-xs sm:text-sm text-[#FFFFFF] truncate group-hover:text-[#C9B27C] transition-colors">
+                  <h4 className="font-semibold text-xs sm:text-sm text-[#111827] truncate group-hover:text-[#C9B27C] transition-colors">
                     {track.titleEnglish}
                   </h4>
                   <p className="font-telugu text-[11px] text-[#C9B27C] truncate">
@@ -570,7 +570,7 @@ export const Home: React.FC = () => {
                 </div>
 
                 <div className="pt-1 flex items-center justify-between text-[10px]">
-                  <span className="text-[#E2CBD0] font-mono">{track.duration}</span>
+                  <span className="text-[#4B5563] font-mono">{track.duration}</span>
                   <span className="px-2 py-0.5 rounded-full font-bold bg-[#C9B27C]/20 text-[#E8DCB8] border border-[#C9B27C]/40">
                     ₹99
                   </span>
@@ -585,7 +585,7 @@ export const Home: React.FC = () => {
       <section className="space-y-4">
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="text-xl sm:text-2xl font-heading font-bold text-[#FFFFFF]">
+            <h3 className="text-xl sm:text-2xl font-heading font-bold text-[#111827]">
               Devotional Albums
             </h3>
             <p className="font-telugu text-xs text-[#C9B27C]">
@@ -606,10 +606,10 @@ export const Home: React.FC = () => {
             <div
               key={album.id}
               onClick={() => navigate(`/albums/${album.slug}`)}
-              className="group p-3.5 sm:p-4 rounded-2xl bg-[#1A060A]/80 hover:bg-[#340C14] border border-[#C41E3A]/20 hover:border-[#C41E3A]/50 transition-all duration-300 cursor-pointer shadow-lg space-y-3"
+              className="group p-3.5 sm:p-4 rounded-2xl bg-[#F9FAFB]/80 hover:bg-[#FEE2E2] border border-[#C41E3A]/20 hover:border-[#C41E3A]/50 transition-all duration-300 cursor-pointer shadow-lg space-y-3"
             >
               {/* Album Art with Floating Round Play Button on Hover */}
-              <div className="relative aspect-square rounded-xl overflow-hidden bg-[#26080F] shadow-md">
+              <div className="relative aspect-square rounded-xl overflow-hidden bg-[#F3F4F6] shadow-md">
                 <img
                   src={album.coverImage}
                   alt={album.titleEnglish}
@@ -629,13 +629,13 @@ export const Home: React.FC = () => {
 
               {/* Album Info */}
               <div className="space-y-1">
-                <h4 className="font-telugu text-base font-bold text-[#FFFFFF] truncate leading-tight group-hover:text-[#C41E3A] transition-colors">
+                <h4 className="font-telugu text-base font-bold text-[#111827] truncate leading-tight group-hover:text-[#C41E3A] transition-colors">
                   {album.titleTelugu}
                 </h4>
-                <p className="text-xs text-[#E2CBD0] truncate">
+                <p className="text-xs text-[#4B5563] truncate">
                   {album.titleEnglish}
                 </p>
-                <div className="flex items-center gap-2 pt-1 text-[11px] text-[#E2CBD0]/70 font-mono">
+                <div className="flex items-center gap-2 pt-1 text-[11px] text-[#4B5563]/70 font-mono">
                   <span>{album.releaseYear}</span>
                   <span>•</span>
                   <span>Album</span>
@@ -654,7 +654,7 @@ export const Home: React.FC = () => {
               <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
               <span>@TonyPrakashOfficial Channel</span>
             </div>
-            <h3 className="text-xl sm:text-2xl font-heading font-bold text-[#FFFFFF]">
+            <h3 className="text-xl sm:text-2xl font-heading font-bold text-[#111827]">
               Official Videos & Live Worship
             </h3>
             <p className="font-telugu text-xs text-[#C9B27C]">
@@ -675,10 +675,10 @@ export const Home: React.FC = () => {
             <div
               key={video.id}
               onClick={() => setActiveVideo(video)}
-              className="group bg-[#1A060A]/80 hover:bg-[#340C14] rounded-2xl overflow-hidden border border-[#C41E3A]/20 hover:border-[#C41E3A]/50 transition-all duration-300 cursor-pointer shadow-lg flex flex-col justify-between"
+              className="group bg-[#F9FAFB]/80 hover:bg-[#FEE2E2] rounded-2xl overflow-hidden border border-[#C41E3A]/20 hover:border-[#C41E3A]/50 transition-all duration-300 cursor-pointer shadow-lg flex flex-col justify-between"
             >
               <div>
-                <div className="relative aspect-video bg-[#0E0305] overflow-hidden">
+                <div className="relative aspect-video bg-white overflow-hidden">
                   <img
                     src={video.thumbnail}
                     alt={video.title}
@@ -703,10 +703,10 @@ export const Home: React.FC = () => {
                 </div>
 
                 <div className="p-4 space-y-1.5">
-                  <h4 className="font-telugu text-sm font-bold text-[#FFFFFF] line-clamp-2 group-hover:text-[#C41E3A] transition-colors leading-snug">
+                  <h4 className="font-telugu text-sm font-bold text-[#111827] line-clamp-2 group-hover:text-[#C41E3A] transition-colors leading-snug">
                     {video.title}
                   </h4>
-                  <p className="text-xs text-[#E2CBD0] line-clamp-1">
+                  <p className="text-xs text-[#4B5563] line-clamp-1">
                     Rev. Tony Prakash Official Channel
                   </p>
                 </div>
@@ -733,10 +733,10 @@ export const Home: React.FC = () => {
             <Sparkles className="w-4 h-4" />
             <span>Ministry Calling & Vision</span>
           </div>
-          <h3 className="text-2xl sm:text-3xl font-heading font-bold text-[#FFFFFF]">
+          <h3 className="text-2xl sm:text-3xl font-heading font-bold text-[#111827]">
             Singing For the Glory of the King of Kings
           </h3>
-          <p className="text-xs sm:text-sm text-[#E2CBD0] leading-relaxed">
+          <p className="text-xs sm:text-sm text-[#4B5563] leading-relaxed">
             Rev. Tony Prakash has committed over three decades of divine service, touching millions through Telugu gospel hymns, soul-stirring worship, and biblical preaching. Join Tony's VIP Ministry Membership for full access or get studio backing tracks for your church.
           </p>
         </div>
@@ -750,7 +750,7 @@ export const Home: React.FC = () => {
           </Link>
           <Link
             to="/about"
-            className="px-6 py-3 rounded-full border border-[#C41E3A]/50 text-[#FFFFFF] hover:bg-[#340C14] text-xs font-bold uppercase tracking-wider text-center transition-colors"
+            className="px-6 py-3 rounded-full border border-[#C41E3A]/50 text-[#FFFFFF] hover:bg-[#FEE2E2] text-xs font-bold uppercase tracking-wider text-center transition-colors"
           >
             Read Ministry Story
           </Link>

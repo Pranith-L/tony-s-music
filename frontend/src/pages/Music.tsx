@@ -168,10 +168,10 @@ export const MusicPage: React.FC = () => {
             <Headphones className="w-5 h-5" />
           </div>
           <div>
-            <h3 className="text-sm sm:text-base font-bold text-[#FFFFFF]">
+            <h3 className="text-sm sm:text-base font-bold text-[#111827]">
               Devotional Vocal Songs • 100% Free Full Listening
             </h3>
-            <p className="text-xs text-[#E2CBD0]">
+            <p className="text-xs text-[#4B5563]">
               Rev. Tony Prakash's 68 spiritual songs are free to stream anytime.
             </p>
           </div>
@@ -192,7 +192,7 @@ export const MusicPage: React.FC = () => {
       <div className="space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h1 className="text-3xl sm:text-4xl font-heading font-bold text-[#FFFFFF]">
+            <h1 className="text-3xl sm:text-4xl font-heading font-bold text-[#111827]">
               {isLikedFilter ? 'Liked Devotional Songs' : 'Devotional Songs Catalogue'}
             </h1>
             <p className="text-xs sm:text-sm text-[#C9B27C]">
@@ -205,18 +205,18 @@ export const MusicPage: React.FC = () => {
 
         {/* Search Input Bar */}
         <div className="relative">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#E2CBD0]" />
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#4B5563]" />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => handleSearchChange(e.target.value)}
             placeholder="Search devotional songs by Telugu or English name (e.g. Nee Prema, ప్రార్థన)..."
-            className="w-full pl-12 pr-10 py-3.5 rounded-2xl bg-[#22070D] border border-[#C41E3A]/30 text-sm text-[#FFFFFF] placeholder-[#E2CBD0]/60 focus:outline-none focus:border-[#C9B27C] shadow-inner"
+            className="w-full pl-12 pr-10 py-3.5 rounded-2xl bg-[#F9FAFB] border border-[#C41E3A]/30 text-sm text-[#FFFFFF] placeholder-[#E2CBD0]/60 focus:outline-none focus:border-[#C9B27C] shadow-inner"
           />
           {searchQuery && (
             <button
               onClick={() => handleSearchChange('')}
-              className="absolute right-3.5 top-1/2 -translate-y-1/2 p-1 text-[#E2CBD0] hover:text-[#FFFFFF]"
+              className="absolute right-3.5 top-1/2 -translate-y-1/2 p-1 text-[#4B5563] hover:text-[#FFFFFF]"
             >
               <X className="w-4 h-4" />
             </button>
@@ -239,7 +239,7 @@ export const MusicPage: React.FC = () => {
               className={`px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-2 ${
                 activeCategory === cat.id && !isLikedFilter
                   ? 'bg-gradient-to-r from-[#C41E3A] to-[#8B1524] text-[#FFFFFF] shadow-[0_0_15px_rgba(27,124,157,0.4)]'
-                  : 'bg-[#22070D] text-[#E2CBD0] hover:text-[#FFFFFF] hover:bg-[#1A060A] border border-[#C41E3A]/20'
+                  : 'bg-[#F9FAFB] text-[#4B5563] hover:text-[#FFFFFF] hover:bg-[#F9FAFB] border border-[#C41E3A]/20'
               }`}
             >
               <span>{cat.en}</span>
@@ -254,7 +254,7 @@ export const MusicPage: React.FC = () => {
         <section className="space-y-3">
           <div className="flex items-center gap-2">
             <Sparkles className="w-4 h-4 text-[#C9B27C]" />
-            <h2 className="text-sm font-semibold tracking-wider uppercase text-[#FFFFFF]">
+            <h2 className="text-sm font-semibold tracking-wider uppercase text-[#111827]">
               Spiritual Atmospheres • ఆత్మీయ విభాగములు
             </h2>
           </div>
@@ -267,7 +267,7 @@ export const MusicPage: React.FC = () => {
                 className={`relative overflow-hidden rounded-2xl p-4 sm:p-5 bg-gradient-to-br ${tile.bg} cursor-pointer group hover:scale-[1.02] transition-transform duration-300 border border-white/10 shadow-lg min-h-[120px] sm:min-h-[140px] flex flex-col justify-between`}
               >
                 <div>
-                  <h3 className="font-heading font-bold text-sm sm:text-base text-[#FFFFFF] group-hover:text-white">
+                  <h3 className="font-heading font-bold text-sm sm:text-base text-[#111827] group-hover:text-white">
                     {tile.title}
                   </h3>
                   <p className="text-[10px] sm:text-xs text-white/80 line-clamp-2 mt-1">
@@ -287,7 +287,7 @@ export const MusicPage: React.FC = () => {
 
       {/* 4. Songs Table */}
       <section className="space-y-3">
-        <div className="flex items-center justify-between text-xs text-[#E2CBD0]">
+        <div className="flex items-center justify-between text-xs text-[#4B5563]">
           <span>Showing {sortedTracks.length} Devotional Vocal Songs</span>
           {isLikedFilter && (
             <button
@@ -303,13 +303,13 @@ export const MusicPage: React.FC = () => {
           )}
         </div>
 
-        <div className="bg-[#22070D]/60 rounded-2xl border border-[#C41E3A]/20 shadow-lg">
+        <div className="bg-[#F9FAFB]/60 rounded-2xl border border-[#C41E3A]/20 shadow-lg">
           <div className="divide-y divide-[#C41E3A]/10">
             {sortedTracks.length === 0 ? (
               <div className="p-12 text-center space-y-3">
-                <Music className="w-12 h-12 text-[#E2CBD0]/40 mx-auto" />
-                <h4 className="text-base font-semibold text-[#FFFFFF]">No songs found</h4>
-                <p className="text-xs text-[#E2CBD0]">
+                <Music className="w-12 h-12 text-[#4B5563]/40 mx-auto" />
+                <h4 className="text-base font-semibold text-[#111827]">No songs found</h4>
+                <p className="text-xs text-[#4B5563]">
                   Try adjusting your search terms or selecting another category.
                 </p>
               </div>
@@ -323,13 +323,13 @@ export const MusicPage: React.FC = () => {
                   <div
                     key={track.id}
                     onClick={() => playTrack(track, sortedTracks)}
-                    className={`group relative flex items-center justify-between px-4 py-3 sm:py-3.5 hover:bg-[#340C14]/70 transition-colors cursor-pointer first:rounded-t-2xl last:rounded-b-2xl ${
-                      isCurrent ? 'bg-[#340C14]/90' : ''
+                    className={`group relative flex items-center justify-between px-4 py-3 sm:py-3.5 hover:bg-[#FEE2E2]/70 transition-colors cursor-pointer first:rounded-t-2xl last:rounded-b-2xl ${
+                      isCurrent ? 'bg-[#FEE2E2]/90' : ''
                     }`}
                   >
                     {/* Left: Index & Art & Title */}
                     <div className="flex items-center gap-3 sm:gap-4 min-w-0 flex-1">
-                      <span className="font-mono text-xs text-[#E2CBD0] w-5 sm:w-6 text-center shrink-0">
+                      <span className="font-mono text-xs text-[#4B5563] w-5 sm:w-6 text-center shrink-0">
                         {isThisPlaying ? (
                           <div className="flex items-end justify-center gap-0.5 h-3.5">
                             <span className="w-0.5 bg-[#C9B27C] rounded-full wave-bar-1" />
@@ -342,7 +342,7 @@ export const MusicPage: React.FC = () => {
                         )}
                       </span>
 
-                      <div className="relative w-11 h-11 sm:w-12 sm:h-12 rounded-xl overflow-hidden bg-[#26080F] shrink-0 border border-[#C41E3A]/20 shadow-sm">
+                      <div className="relative w-11 h-11 sm:w-12 sm:h-12 rounded-xl overflow-hidden bg-[#F3F4F6] shrink-0 border border-[#C41E3A]/20 shadow-sm">
                         <img
                           src={track.coverImage || '/covers/001_prayermp3.jpg'}
                           alt={track.titleEnglish}
@@ -364,7 +364,7 @@ export const MusicPage: React.FC = () => {
                         <p className="font-telugu text-xs text-[#C9B27C] truncate mt-0.5 leading-snug">
                           {track.titleTelugu}
                         </p>
-                        <p className="text-[10px] text-[#E2CBD0] truncate hidden sm:block mt-0.5">
+                        <p className="text-[10px] text-[#4B5563] truncate hidden sm:block mt-0.5">
                           Rev. Tony Prakash • Devotional Sanctuary
                         </p>
                       </div>
@@ -383,7 +383,7 @@ export const MusicPage: React.FC = () => {
                           toggleLikeTrack(track.id);
                         }}
                         className={`p-1.5 transition-colors hidden sm:block ${
-                          liked ? '!opacity-100 text-[#C9B27C]' : 'text-[#E2CBD0] hover:text-[#FFFFFF]'
+                          liked ? '!opacity-100 text-[#C9B27C]' : 'text-[#4B5563] hover:text-[#FFFFFF]'
                         }`}
                         title={liked ? 'Liked' : 'Like'}
                       >
@@ -391,7 +391,7 @@ export const MusicPage: React.FC = () => {
                       </button>
 
                       {/* Duration */}
-                      <span className="font-mono text-xs text-[#E2CBD0] hidden xs:inline-block px-1">
+                      <span className="font-mono text-xs text-[#4B5563] hidden xs:inline-block px-1">
                         {track.duration}
                       </span>
 

@@ -143,10 +143,10 @@ export const LibraryPage: React.FC = () => {
               </span>
               <span className="font-telugu text-xs text-[#C9B27C]">మీ వ్యక్తిగత లైబ్రరీ</span>
             </div>
-            <h1 className="text-2xl sm:text-4xl font-heading font-extrabold text-[#FFFFFF]">
+            <h1 className="text-2xl sm:text-4xl font-heading font-extrabold text-[#111827]">
               {user ? `${user.name}'s Sanctuary` : 'Your Music Library'}
             </h1>
-            <p className="text-xs sm:text-sm text-[#E2CBD0]">
+            <p className="text-xs sm:text-sm text-[#4B5563]">
               Manage custom devotional playlists, explore your liked hymns, and replay purchased backing tracks.
             </p>
           </div>
@@ -155,7 +155,7 @@ export const LibraryPage: React.FC = () => {
             {!user ? (
               <Link
                 to="/auth"
-                className="px-4 py-2.5 rounded-2xl bg-[#22070D] border border-[#C9B27C]/40 text-xs font-bold text-[#E8DCB8] hover:text-white hover:bg-[#340C14] flex items-center gap-2 transition-all shadow-md"
+                className="px-4 py-2.5 rounded-2xl bg-[#F9FAFB] border border-[#C9B27C]/40 text-xs font-bold text-[#E8DCB8] hover:text-white hover:bg-[#FEE2E2] flex items-center gap-2 transition-all shadow-md"
               >
                 <LogIn className="w-4 h-4 text-[#C9B27C]" />
                 <span>Log In / Sign Up</span>
@@ -183,7 +183,7 @@ export const LibraryPage: React.FC = () => {
           className={`px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 transition-all ${
             activeTab === 'playlists'
               ? 'bg-[#C41E3A] text-white shadow-md'
-              : 'text-[#E2CBD0] hover:text-white hover:bg-[#1A060A]'
+              : 'text-[#4B5563] hover:text-white hover:bg-[#F9FAFB]'
           }`}
         >
           <ListMusic className="w-4 h-4" />
@@ -198,7 +198,7 @@ export const LibraryPage: React.FC = () => {
           className={`px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 transition-all ${
             activeTab === 'liked'
               ? 'bg-[#C41E3A] text-white shadow-md'
-              : 'text-[#E2CBD0] hover:text-white hover:bg-[#1A060A]'
+              : 'text-[#4B5563] hover:text-white hover:bg-[#F9FAFB]'
           }`}
         >
           <Heart className="w-4 h-4 text-[#C9B27C]" />
@@ -213,7 +213,7 @@ export const LibraryPage: React.FC = () => {
           className={`px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 transition-all ${
             activeTab === 'purchased'
               ? 'bg-[#C41E3A] text-white shadow-md'
-              : 'text-[#E2CBD0] hover:text-white hover:bg-[#1A060A]'
+              : 'text-[#4B5563] hover:text-white hover:bg-[#F9FAFB]'
           }`}
         >
           <Disc3 className="w-4 h-4 text-[#C9B27C]" />
@@ -232,14 +232,14 @@ export const LibraryPage: React.FC = () => {
               {/* Back to Playlists Button */}
               <button
                 onClick={() => setSelectedPlaylistId(null)}
-                className="inline-flex items-center gap-1.5 text-xs text-[#E2CBD0] hover:text-white transition-colors"
+                className="inline-flex items-center gap-1.5 text-xs text-[#4B5563] hover:text-white transition-colors"
               >
                 <ChevronLeft className="w-4 h-4" />
                 <span>Back to all playlists</span>
               </button>
 
               {/* Playlist Billboard */}
-              <div className="rounded-3xl p-6 sm:p-8 bg-[#22070D]/80 border border-[#C41E3A]/30 flex flex-col md:flex-row gap-6 items-start md:items-end">
+              <div className="rounded-3xl p-6 sm:p-8 bg-[#F9FAFB]/80 border border-[#C41E3A]/30 flex flex-col md:flex-row gap-6 items-start md:items-end">
                 <div className="w-32 h-32 sm:w-44 sm:h-44 rounded-2xl overflow-hidden bg-gradient-to-tr from-[#0E0305] via-[#26080F] to-[#C41E3A] border border-[#C41E3A]/40 shadow-2xl flex items-center justify-center shrink-0">
                   {selectedPlaylist.coverImage ? (
                     <img
@@ -256,15 +256,15 @@ export const LibraryPage: React.FC = () => {
                   <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-[#C9B27C]">
                     Devotional Playlist
                   </span>
-                  <h2 className="text-2xl sm:text-4xl font-heading font-extrabold text-[#FFFFFF] truncate">
+                  <h2 className="text-2xl sm:text-4xl font-heading font-extrabold text-[#111827] truncate">
                     {selectedPlaylist.name}
                   </h2>
                   {selectedPlaylist.description && (
-                    <p className="text-xs sm:text-sm text-[#E2CBD0] max-w-2xl">
+                    <p className="text-xs sm:text-sm text-[#4B5563] max-w-2xl">
                       {selectedPlaylist.description}
                     </p>
                   )}
-                  <p className="text-xs text-[#E2CBD0]/80 pt-1">
+                  <p className="text-xs text-[#4B5563]/80 pt-1">
                     Created by <strong className="text-white">{user?.name || 'You'}</strong> •{' '}
                     {playlistTracks.length} {playlistTracks.length === 1 ? 'song' : 'songs'}
                   </p>
@@ -284,7 +284,7 @@ export const LibraryPage: React.FC = () => {
                   <button
                     onClick={() => handlePlayPlaylist(playlistTracks, true)}
                     disabled={playlistTracks.length === 0}
-                    className="p-3 rounded-2xl bg-[#1A060A] border border-[#C41E3A]/30 text-[#E2CBD0] hover:text-white hover:bg-[#340C14] transition-colors disabled:opacity-40"
+                    className="p-3 rounded-2xl bg-[#F9FAFB] border border-[#C41E3A]/30 text-[#4B5563] hover:text-white hover:bg-[#FEE2E2] transition-colors disabled:opacity-40"
                     title="Shuffle Play"
                   >
                     <Shuffle className="w-4 h-4" />
@@ -292,7 +292,7 @@ export const LibraryPage: React.FC = () => {
 
                   <button
                     onClick={() => setShowAddSongsModal(true)}
-                    className="px-3.5 py-3 rounded-2xl bg-[#1A060A] border border-[#C9B27C]/40 text-xs font-bold text-[#E8DCB8] hover:text-white hover:bg-[#340C14] flex items-center gap-1.5 transition-colors"
+                    className="px-3.5 py-3 rounded-2xl bg-[#F9FAFB] border border-[#C9B27C]/40 text-xs font-bold text-[#E8DCB8] hover:text-white hover:bg-[#FEE2E2] flex items-center gap-1.5 transition-colors"
                   >
                     <Plus className="w-4 h-4 text-[#C9B27C]" />
                     <span>Add Songs</span>
@@ -304,7 +304,7 @@ export const LibraryPage: React.FC = () => {
                       setEditName(selectedPlaylist.name);
                       setEditDesc(selectedPlaylist.description || '');
                     }}
-                    className="p-3 rounded-2xl bg-[#1A060A] border border-[#C41E3A]/30 text-[#E2CBD0] hover:text-white hover:bg-[#340C14] transition-colors"
+                    className="p-3 rounded-2xl bg-[#F9FAFB] border border-[#C41E3A]/30 text-[#4B5563] hover:text-white hover:bg-[#FEE2E2] transition-colors"
                     title="Edit Playlist Details"
                   >
                     <Edit2 className="w-4 h-4" />
@@ -317,7 +317,7 @@ export const LibraryPage: React.FC = () => {
                         setSelectedPlaylistId(null);
                       }
                     }}
-                    className="p-3 rounded-2xl bg-[#1A060A] border border-rose-500/30 text-rose-400 hover:text-white hover:bg-rose-500/20 transition-colors"
+                    className="p-3 rounded-2xl bg-[#F9FAFB] border border-rose-500/30 text-rose-400 hover:text-white hover:bg-rose-500/20 transition-colors"
                     title="Delete Playlist"
                   >
                     <Trash2 className="w-4 h-4" />
@@ -326,12 +326,12 @@ export const LibraryPage: React.FC = () => {
               </div>
 
               {/* Playlist Tracks Table */}
-              <div className="bg-[#22070D]/60 rounded-3xl border border-[#C41E3A]/20 shadow-xl overflow-hidden">
+              <div className="bg-[#F9FAFB]/60 rounded-3xl border border-[#C41E3A]/20 shadow-xl overflow-hidden">
                 {playlistTracks.length === 0 ? (
                   <div className="py-16 text-center space-y-4 px-4">
-                    <Music className="w-12 h-12 text-[#E2CBD0]/40 mx-auto" />
-                    <h4 className="text-base font-semibold text-[#FFFFFF]">This playlist is empty</h4>
-                    <p className="text-xs text-[#E2CBD0] max-w-sm mx-auto">
+                    <Music className="w-12 h-12 text-[#4B5563]/40 mx-auto" />
+                    <h4 className="text-base font-semibold text-[#111827]">This playlist is empty</h4>
+                    <p className="text-xs text-[#4B5563] max-w-sm mx-auto">
                       Add your favorite Telugu devotional hymns and worship tracks to start listening.
                     </p>
                     <button
@@ -352,12 +352,12 @@ export const LibraryPage: React.FC = () => {
                         <div
                           key={track.id}
                           onClick={() => playTrack(track, playlistTracks)}
-                          className={`group flex items-center justify-between px-4 py-3 sm:px-6 sm:py-3.5 hover:bg-[#340C14]/70 transition-colors cursor-pointer ${
-                            isCurrent ? 'bg-[#340C14]/90' : ''
+                          className={`group flex items-center justify-between px-4 py-3 sm:px-6 sm:py-3.5 hover:bg-[#FEE2E2]/70 transition-colors cursor-pointer ${
+                            isCurrent ? 'bg-[#FEE2E2]/90' : ''
                           }`}
                         >
                           <div className="flex items-center gap-3 sm:gap-4 min-w-0 flex-1">
-                            <span className="font-mono text-xs text-[#E2CBD0] w-5 text-center shrink-0">
+                            <span className="font-mono text-xs text-[#4B5563] w-5 text-center shrink-0">
                               {isThisPlaying ? (
                                 <div className="flex items-end justify-center gap-0.5 h-3.5">
                                   <span className="w-0.5 bg-[#C9B27C] rounded-full wave-bar-1" />
@@ -369,7 +369,7 @@ export const LibraryPage: React.FC = () => {
                               )}
                             </span>
 
-                            <div className="relative w-11 h-11 rounded-xl overflow-hidden bg-[#26080F] shrink-0 border border-[#C41E3A]/20">
+                            <div className="relative w-11 h-11 rounded-xl overflow-hidden bg-[#F3F4F6] shrink-0 border border-[#C41E3A]/20">
                               <img
                                 src={track.coverImage || '/covers/001_prayermp3.jpg'}
                                 alt={track.titleEnglish}
@@ -392,7 +392,7 @@ export const LibraryPage: React.FC = () => {
                           </div>
 
                           <div className="flex items-center gap-2 shrink-0">
-                            <span className="font-mono text-xs text-[#E2CBD0] hidden sm:inline-block px-2">
+                            <span className="font-mono text-xs text-[#4B5563] hidden sm:inline-block px-2">
                               {track.duration}
                             </span>
 
@@ -402,7 +402,7 @@ export const LibraryPage: React.FC = () => {
                                 e.stopPropagation();
                                 removeTrackFromPlaylist(selectedPlaylist.id, track.id);
                               }}
-                              className="p-1.5 rounded-full text-[#E2CBD0] hover:text-rose-400 hover:bg-[#0E0305] transition-colors"
+                              className="p-1.5 rounded-full text-[#4B5563] hover:text-rose-400 hover:bg-white transition-colors"
                               title="Remove from playlist"
                             >
                               <Trash2 className="w-4 h-4" />
@@ -423,16 +423,16 @@ export const LibraryPage: React.FC = () => {
               {/* Create New Card */}
               <button
                 onClick={() => setShowCreateModal(true)}
-                className="group flex flex-col items-center justify-center p-6 rounded-3xl bg-[#22070D]/40 border-2 border-dashed border-[#C41E3A]/40 hover:border-[#C9B27C] hover:bg-[#1A060A]/80 transition-all text-center space-y-3 min-h-[220px]"
+                className="group flex flex-col items-center justify-center p-6 rounded-3xl bg-[#F9FAFB]/40 border-2 border-dashed border-[#C41E3A]/40 hover:border-[#C9B27C] hover:bg-[#F9FAFB]/80 transition-all text-center space-y-3 min-h-[220px]"
               >
-                <div className="w-14 h-14 rounded-2xl bg-[#26080F] border border-[#C41E3A]/30 group-hover:scale-110 flex items-center justify-center transition-transform text-[#8CE2FF] group-hover:text-[#C9B27C]">
+                <div className="w-14 h-14 rounded-2xl bg-[#F3F4F6] border border-[#C41E3A]/30 group-hover:scale-110 flex items-center justify-center transition-transform text-[#8CE2FF] group-hover:text-[#C9B27C]">
                   <Plus className="w-7 h-7" />
                 </div>
                 <div>
-                  <h4 className="font-bold text-sm text-[#FFFFFF] group-hover:text-white">
+                  <h4 className="font-bold text-sm text-[#111827] group-hover:text-white">
                     Create Playlist
                   </h4>
-                  <p className="text-[11px] text-[#E2CBD0] mt-1">కొత్త ప్లేలిస్ట్ తయారుచేయండి</p>
+                  <p className="text-[11px] text-[#4B5563] mt-1">కొత్త ప్లేలిస్ట్ తయారుచేయండి</p>
                 </div>
               </button>
 
@@ -441,7 +441,7 @@ export const LibraryPage: React.FC = () => {
                 <div
                   key={pl.id}
                   onClick={() => setSelectedPlaylistId(pl.id)}
-                  className="group relative flex flex-col justify-between p-4 rounded-3xl bg-[#22070D]/70 hover:bg-[#0E2838] border border-[#C41E3A]/30 hover:border-[#C9B27C]/60 transition-all cursor-pointer shadow-lg hover:shadow-2xl hover:-translate-y-1"
+                  className="group relative flex flex-col justify-between p-4 rounded-3xl bg-[#F9FAFB]/70 hover:bg-[#0E2838] border border-[#C41E3A]/30 hover:border-[#C9B27C]/60 transition-all cursor-pointer shadow-lg hover:shadow-2xl hover:-translate-y-1"
                 >
                   <div className="relative aspect-square w-full rounded-2xl overflow-hidden bg-gradient-to-tr from-[#0E0305] via-[#26080F] to-[#12364B] border border-[#C41E3A]/30 mb-3 flex items-center justify-center">
                     {pl.coverImage ? (
@@ -459,10 +459,10 @@ export const LibraryPage: React.FC = () => {
                   </div>
 
                   <div className="space-y-1 min-w-0">
-                    <h4 className="font-bold text-sm text-[#FFFFFF] truncate group-hover:text-white">
+                    <h4 className="font-bold text-sm text-[#111827] truncate group-hover:text-white">
                       {pl.name}
                     </h4>
-                    <p className="text-[11px] text-[#E2CBD0] truncate">
+                    <p className="text-[11px] text-[#4B5563] truncate">
                       {pl.trackIds.length} {pl.trackIds.length === 1 ? 'song' : 'songs'}
                     </p>
                   </div>
@@ -477,7 +477,7 @@ export const LibraryPage: React.FC = () => {
       {activeTab === 'liked' && (
         <div className="space-y-4 animate-fadeIn">
           <div className="flex items-center justify-between">
-            <span className="text-xs text-[#E2CBD0]">
+            <span className="text-xs text-[#4B5563]">
               {userLikedTracks.length} Saved Devotional Songs
             </span>
             {userLikedTracks.length > 0 && (
@@ -491,12 +491,12 @@ export const LibraryPage: React.FC = () => {
             )}
           </div>
 
-          <div className="bg-[#22070D]/60 rounded-3xl border border-[#C41E3A]/20 shadow-xl overflow-hidden">
+          <div className="bg-[#F9FAFB]/60 rounded-3xl border border-[#C41E3A]/20 shadow-xl overflow-hidden">
             {userLikedTracks.length === 0 ? (
               <div className="py-16 text-center space-y-3 px-4">
-                <Heart className="w-12 h-12 text-[#E2CBD0]/30 mx-auto" />
-                <h4 className="text-base font-semibold text-[#FFFFFF]">No liked songs yet</h4>
-                <p className="text-xs text-[#E2CBD0]">
+                <Heart className="w-12 h-12 text-[#4B5563]/30 mx-auto" />
+                <h4 className="text-base font-semibold text-[#111827]">No liked songs yet</h4>
+                <p className="text-xs text-[#4B5563]">
                   Tap the heart icon on any song while listening to save it to your library.
                 </p>
                 <Link
@@ -516,16 +516,16 @@ export const LibraryPage: React.FC = () => {
                     <div
                       key={track.id}
                       onClick={() => playTrack(track, userLikedTracks)}
-                      className={`group flex items-center justify-between px-4 py-3 sm:px-6 sm:py-3.5 hover:bg-[#340C14]/70 transition-colors cursor-pointer ${
-                        isCurrent ? 'bg-[#340C14]/90' : ''
+                      className={`group flex items-center justify-between px-4 py-3 sm:px-6 sm:py-3.5 hover:bg-[#FEE2E2]/70 transition-colors cursor-pointer ${
+                        isCurrent ? 'bg-[#FEE2E2]/90' : ''
                       }`}
                     >
                       <div className="flex items-center gap-3 sm:gap-4 min-w-0 flex-1">
-                        <span className="font-mono text-xs text-[#E2CBD0] w-5 text-center shrink-0">
+                        <span className="font-mono text-xs text-[#4B5563] w-5 text-center shrink-0">
                           {idx + 1}
                         </span>
 
-                        <div className="relative w-11 h-11 rounded-xl overflow-hidden bg-[#26080F] shrink-0 border border-[#C41E3A]/20">
+                        <div className="relative w-11 h-11 rounded-xl overflow-hidden bg-[#F3F4F6] shrink-0 border border-[#C41E3A]/20">
                           <img
                             src={track.coverImage || '/covers/001_prayermp3.jpg'}
                             alt={track.titleEnglish}
@@ -548,7 +548,7 @@ export const LibraryPage: React.FC = () => {
                       </div>
 
                       <div className="flex items-center gap-2 shrink-0">
-                        <span className="font-mono text-xs text-[#E2CBD0] hidden sm:inline-block px-2">
+                        <span className="font-mono text-xs text-[#4B5563] hidden sm:inline-block px-2">
                           {track.duration}
                         </span>
                         <TrackActionMenu track={track} />
@@ -566,7 +566,7 @@ export const LibraryPage: React.FC = () => {
       {activeTab === 'purchased' && (
         <div className="space-y-4 animate-fadeIn">
           <div className="flex items-center justify-between">
-            <span className="text-xs text-[#E2CBD0]">
+            <span className="text-xs text-[#4B5563]">
               {userPurchasedTracks.length} Unlocked Studio Backing Tracks
             </span>
             {userPurchasedTracks.length > 0 && (
@@ -580,14 +580,14 @@ export const LibraryPage: React.FC = () => {
             )}
           </div>
 
-          <div className="bg-[#22070D]/60 rounded-3xl border border-[#C41E3A]/20 shadow-xl overflow-hidden">
+          <div className="bg-[#F9FAFB]/60 rounded-3xl border border-[#C41E3A]/20 shadow-xl overflow-hidden">
             {userPurchasedTracks.length === 0 ? (
               <div className="py-16 text-center space-y-3 px-4">
-                <Disc3 className="w-12 h-12 text-[#E2CBD0]/30 mx-auto" />
-                <h4 className="text-base font-semibold text-[#FFFFFF]">
+                <Disc3 className="w-12 h-12 text-[#4B5563]/30 mx-auto" />
+                <h4 className="text-base font-semibold text-[#111827]">
                   No purchased backing tracks yet
                 </h4>
-                <p className="text-xs text-[#E2CBD0] max-w-sm mx-auto">
+                <p className="text-xs text-[#4B5563] max-w-sm mx-auto">
                   Browse studio minus-one backing tracks (karaoke) for choirs and live ministry. Individual tracks are unlocked for ₹99 each.
                 </p>
                 <Link
@@ -606,16 +606,16 @@ export const LibraryPage: React.FC = () => {
                     <div
                       key={track.id}
                       onClick={() => playTrack(track, userPurchasedTracks)}
-                      className={`group flex items-center justify-between px-4 py-3 sm:px-6 sm:py-3.5 hover:bg-[#340C14]/70 transition-colors cursor-pointer ${
-                        isCurrent ? 'bg-[#340C14]/90' : ''
+                      className={`group flex items-center justify-between px-4 py-3 sm:px-6 sm:py-3.5 hover:bg-[#FEE2E2]/70 transition-colors cursor-pointer ${
+                        isCurrent ? 'bg-[#FEE2E2]/90' : ''
                       }`}
                     >
                       <div className="flex items-center gap-3 sm:gap-4 min-w-0 flex-1">
-                        <span className="font-mono text-xs text-[#E2CBD0] w-5 text-center shrink-0">
+                        <span className="font-mono text-xs text-[#4B5563] w-5 text-center shrink-0">
                           {idx + 1}
                         </span>
 
-                        <div className="relative w-11 h-11 rounded-xl overflow-hidden bg-[#26080F] shrink-0 border border-[#C41E3A]/20">
+                        <div className="relative w-11 h-11 rounded-xl overflow-hidden bg-[#F3F4F6] shrink-0 border border-[#C41E3A]/20">
                           <img
                             src={track.coverImage || '/dad_white_suit.jpg'}
                             alt={track.titleEnglish}
@@ -659,22 +659,22 @@ export const LibraryPage: React.FC = () => {
           onClick={() => setShowCreateModal(false)}
         >
           <div
-            className="w-full max-w-md bg-[#22070D] border border-[#C41E3A]/40 rounded-3xl p-6 sm:p-7 shadow-2xl text-[#FFFFFF] space-y-5 animate-scaleUp my-auto max-h-[92dvh] overflow-y-auto"
+            className="w-full max-w-md bg-[#F9FAFB] border border-[#C41E3A]/40 rounded-3xl p-6 sm:p-7 shadow-2xl text-[#FFFFFF] space-y-5 animate-scaleUp my-auto max-h-[92dvh] overflow-y-auto"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between pb-3 border-b border-[#C41E3A]/20">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-2xl bg-[#26080F] border border-[#C41E3A]/30 flex items-center justify-center">
+                <div className="w-10 h-10 rounded-2xl bg-[#F3F4F6] border border-[#C41E3A]/30 flex items-center justify-center">
                   <ListMusic className="w-5 h-5 text-[#C9B27C]" />
                 </div>
                 <div>
                   <h3 className="font-heading font-bold text-lg text-white">Create New Playlist</h3>
-                  <p className="text-xs text-[#E2CBD0]">కొత్త ప్లేలిస్ట్‌ను ప్రారంభించండి</p>
+                  <p className="text-xs text-[#4B5563]">కొత్త ప్లేలిస్ట్‌ను ప్రారంభించండి</p>
                 </div>
               </div>
               <button
                 onClick={() => setShowCreateModal(false)}
-                className="p-1.5 rounded-full text-[#E2CBD0] hover:text-white hover:bg-[#340C14]"
+                className="p-1.5 rounded-full text-[#4B5563] hover:text-white hover:bg-[#FEE2E2]"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -682,7 +682,7 @@ export const LibraryPage: React.FC = () => {
 
             <form onSubmit={handleCreateSubmit} className="space-y-4">
               <div>
-                <label className="block text-xs font-semibold text-[#E2CBD0] mb-1.5">
+                <label className="block text-xs font-semibold text-[#4B5563] mb-1.5">
                   Playlist Title *
                 </label>
                 <input
@@ -692,12 +692,12 @@ export const LibraryPage: React.FC = () => {
                   value={newPlaylistName}
                   onChange={(e) => setNewPlaylistName(e.target.value)}
                   placeholder="e.g. Sunday Morning Hymns, Prayer Sanctuary..."
-                  className="w-full px-4 py-3 rounded-2xl bg-[#0E0305] border border-[#C41E3A]/40 text-sm text-white placeholder-[#E2CBD0]/50 focus:outline-none focus:border-[#C9B27C]"
+                  className="w-full px-4 py-3 rounded-2xl bg-white border border-[#C41E3A]/40 text-sm text-white placeholder-[#E2CBD0]/50 focus:outline-none focus:border-[#C9B27C]"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-[#E2CBD0] mb-1.5">
+                <label className="block text-xs font-semibold text-[#4B5563] mb-1.5">
                   Description (Optional)
                 </label>
                 <textarea
@@ -705,13 +705,13 @@ export const LibraryPage: React.FC = () => {
                   value={newPlaylistDesc}
                   onChange={(e) => setNewPlaylistDesc(e.target.value)}
                   placeholder="A short note about the theme of this playlist..."
-                  className="w-full px-4 py-2.5 rounded-2xl bg-[#0E0305] border border-[#C41E3A]/40 text-xs text-white placeholder-[#E2CBD0]/50 focus:outline-none focus:border-[#C9B27C] resize-none"
+                  className="w-full px-4 py-2.5 rounded-2xl bg-white border border-[#C41E3A]/40 text-xs text-white placeholder-[#E2CBD0]/50 focus:outline-none focus:border-[#C9B27C] resize-none"
                 />
               </div>
 
               {/* Suggestions */}
               <div>
-                <p className="text-[11px] text-[#E2CBD0] mb-2">Suggestions:</p>
+                <p className="text-[11px] text-[#4B5563] mb-2">Suggestions:</p>
                 <div className="flex flex-wrap gap-1.5">
                   {['Morning Worship', 'Sunday Choir', 'Quiet Devotion', 'Fast & Praise'].map(
                     (tag) => (
@@ -719,7 +719,7 @@ export const LibraryPage: React.FC = () => {
                         key={tag}
                         type="button"
                         onClick={() => setNewPlaylistName(tag)}
-                        className="px-2.5 py-1 rounded-xl bg-[#1A060A] border border-[#C41E3A]/30 text-[11px] text-[#8CE2FF] hover:border-[#C9B27C]"
+                        className="px-2.5 py-1 rounded-xl bg-[#F9FAFB] border border-[#C41E3A]/30 text-[11px] text-[#8CE2FF] hover:border-[#C9B27C]"
                       >
                         + {tag}
                       </button>
@@ -732,7 +732,7 @@ export const LibraryPage: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setShowCreateModal(false)}
-                  className="px-4 py-2.5 rounded-xl text-xs text-[#E2CBD0] hover:text-white"
+                  className="px-4 py-2.5 rounded-xl text-xs text-[#4B5563] hover:text-white"
                 >
                   Cancel
                 </button>
@@ -756,14 +756,14 @@ export const LibraryPage: React.FC = () => {
           onClick={() => setEditingPlaylist(null)}
         >
           <div
-            className="w-full max-w-md bg-[#22070D] border border-[#C41E3A]/40 rounded-3xl p-6 sm:p-7 shadow-2xl text-[#FFFFFF] space-y-5 animate-scaleUp my-auto max-h-[92dvh] overflow-y-auto"
+            className="w-full max-w-md bg-[#F9FAFB] border border-[#C41E3A]/40 rounded-3xl p-6 sm:p-7 shadow-2xl text-[#FFFFFF] space-y-5 animate-scaleUp my-auto max-h-[92dvh] overflow-y-auto"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between pb-3 border-b border-[#C41E3A]/20">
               <h3 className="font-heading font-bold text-lg text-white">Edit Playlist</h3>
               <button
                 onClick={() => setEditingPlaylist(null)}
-                className="p-1.5 rounded-full text-[#E2CBD0] hover:text-white hover:bg-[#340C14]"
+                className="p-1.5 rounded-full text-[#4B5563] hover:text-white hover:bg-[#FEE2E2]"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -771,7 +771,7 @@ export const LibraryPage: React.FC = () => {
 
             <form onSubmit={handleEditSubmit} className="space-y-4">
               <div>
-                <label className="block text-xs font-semibold text-[#E2CBD0] mb-1.5">
+                <label className="block text-xs font-semibold text-[#4B5563] mb-1.5">
                   Playlist Title *
                 </label>
                 <input
@@ -779,19 +779,19 @@ export const LibraryPage: React.FC = () => {
                   required
                   value={editName}
                   onChange={(e) => setEditName(e.target.value)}
-                  className="w-full px-4 py-3 rounded-2xl bg-[#0E0305] border border-[#C41E3A]/40 text-sm text-white focus:outline-none focus:border-[#C9B27C]"
+                  className="w-full px-4 py-3 rounded-2xl bg-white border border-[#C41E3A]/40 text-sm text-white focus:outline-none focus:border-[#C9B27C]"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-[#E2CBD0] mb-1.5">
+                <label className="block text-xs font-semibold text-[#4B5563] mb-1.5">
                   Description
                 </label>
                 <textarea
                   rows={2}
                   value={editDesc}
                   onChange={(e) => setEditDesc(e.target.value)}
-                  className="w-full px-4 py-2.5 rounded-2xl bg-[#0E0305] border border-[#C41E3A]/40 text-xs text-white focus:outline-none focus:border-[#C9B27C] resize-none"
+                  className="w-full px-4 py-2.5 rounded-2xl bg-white border border-[#C41E3A]/40 text-xs text-white focus:outline-none focus:border-[#C9B27C] resize-none"
                 />
               </div>
 
@@ -799,7 +799,7 @@ export const LibraryPage: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setEditingPlaylist(null)}
-                  className="px-4 py-2.5 rounded-xl text-xs text-[#E2CBD0] hover:text-white"
+                  className="px-4 py-2.5 rounded-xl text-xs text-[#4B5563] hover:text-white"
                 >
                   Cancel
                 </button>
@@ -823,19 +823,19 @@ export const LibraryPage: React.FC = () => {
           onClick={() => setShowAddSongsModal(false)}
         >
           <div
-            className="w-full max-w-xl bg-[#22070D] border border-[#C41E3A]/40 rounded-3xl p-6 sm:p-7 shadow-2xl text-[#FFFFFF] space-y-4 my-auto max-h-[88dvh] flex flex-col animate-scaleUp overflow-hidden"
+            className="w-full max-w-xl bg-[#F9FAFB] border border-[#C41E3A]/40 rounded-3xl p-6 sm:p-7 shadow-2xl text-[#FFFFFF] space-y-4 my-auto max-h-[88dvh] flex flex-col animate-scaleUp overflow-hidden"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between pb-3 border-b border-[#C41E3A]/20 shrink-0">
               <div>
                 <h3 className="font-heading font-bold text-lg text-white">Add Songs to Playlist</h3>
-                <p className="text-xs text-[#E2CBD0]">
+                <p className="text-xs text-[#4B5563]">
                   Adding to <strong className="text-[#C9B27C]">{selectedPlaylist.name}</strong>
                 </p>
               </div>
               <button
                 onClick={() => setShowAddSongsModal(false)}
-                className="p-1.5 rounded-full text-[#E2CBD0] hover:text-white hover:bg-[#340C14]"
+                className="p-1.5 rounded-full text-[#4B5563] hover:text-white hover:bg-[#FEE2E2]"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -843,13 +843,13 @@ export const LibraryPage: React.FC = () => {
 
             {/* Search Input */}
             <div className="relative shrink-0">
-              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#E2CBD0]" />
+              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#4B5563]" />
               <input
                 type="text"
                 value={searchSongQuery}
                 onChange={(e) => setSearchSongQuery(e.target.value)}
                 placeholder="Search by Telugu or English song name..."
-                className="w-full pl-10 pr-4 py-2.5 rounded-2xl bg-[#0E0305] border border-[#C41E3A]/40 text-xs text-white placeholder-[#E2CBD0]/50 focus:outline-none focus:border-[#C9B27C]"
+                className="w-full pl-10 pr-4 py-2.5 rounded-2xl bg-white border border-[#C41E3A]/40 text-xs text-white placeholder-[#E2CBD0]/50 focus:outline-none focus:border-[#C9B27C]"
               />
             </div>
 
@@ -870,10 +870,10 @@ export const LibraryPage: React.FC = () => {
                   return (
                     <div
                       key={track.id}
-                      className="pt-2 flex items-center justify-between gap-3 px-2 py-2 rounded-xl hover:bg-[#340C14]/50 transition-colors"
+                      className="pt-2 flex items-center justify-between gap-3 px-2 py-2 rounded-xl hover:bg-[#FEE2E2]/50 transition-colors"
                     >
                       <div className="flex items-center gap-3 min-w-0 flex-1">
-                        <div className="w-10 h-10 rounded-xl overflow-hidden bg-[#26080F] shrink-0 border border-[#C41E3A]/20">
+                        <div className="w-10 h-10 rounded-xl overflow-hidden bg-[#F3F4F6] shrink-0 border border-[#C41E3A]/20">
                           <img
                             src={track.coverImage || '/covers/001_prayermp3.jpg'}
                             alt={track.titleEnglish}
@@ -926,7 +926,7 @@ export const LibraryPage: React.FC = () => {
             <div className="pt-2 border-t border-[#C41E3A]/20 shrink-0">
               <button
                 onClick={() => setShowAddSongsModal(false)}
-                className="w-full py-2.5 rounded-xl bg-[#1A060A] hover:bg-[#340C14] text-xs font-semibold text-white transition-colors"
+                className="w-full py-2.5 rounded-xl bg-[#F9FAFB] hover:bg-[#FEE2E2] text-xs font-semibold text-white transition-colors"
               >
                 Done
               </button>

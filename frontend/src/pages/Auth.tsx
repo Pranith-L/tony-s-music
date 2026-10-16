@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { useNavigate, useSearchParams, Link } from 'react-router-dom';
-import { Lock, Mail, User as UserIcon, Phone, Sparkles, Eye, EyeOff } from 'lucide-react';
+import { Lock, Mail, User as UserIcon, Phone, Sparkles, Eye, EyeOff, X } from 'lucide-react';
 import { useAuth } from '../context/AuthContext.js';
 
 declare global {
@@ -17,6 +18,24 @@ export const AuthPage: React.FC = () => {
   const { login, register, adminLogin, loginWithGoogle } = useAuth();
 
   const redirectPath = searchParams.get('redirect') || '/account';
+
+  const handleClose = () => {
+    if (window.history.length > 2) {
+      navigate(-1);
+    } else {
+      navigate('/');
+    }
+  };
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        handleClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
   const [mode, setMode] = useState<'LOGIN' | 'REGISTER'>('LOGIN');
   const [email, setEmail] = useState('');
@@ -158,24 +177,39 @@ export const AuthPage: React.FC = () => {
     }
   };
 
-  return (
-    <div className="py-10 px-4 flex items-center justify-center text-sacred-ivory">
-      <div className="w-full max-w-md sacred-glass-glow rounded-3xl p-6 sm:p-8 border border-sacred-gold/30 shadow-2xl space-y-6">
+  return createPortal(
+    <div
+      onClick={handleClose}
+      className="fixed inset-0 z-[250] w-screen h-screen min-h-[100dvh] bg-black/60 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto animate-in fade-in duration-200"
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className="relative w-full max-w-md bg-white rounded-3xl p-6 sm:p-8 border border-[#D4AF37]/40 shadow-2xl space-y-6 my-auto text-gray-900 animate-in zoom-in-95 duration-200"
+      >
+        {/* Modal Close Button */}
+        <button
+          onClick={handleClose}
+          aria-label="Close modal"
+          className="absolute top-5 right-5 p-2 rounded-full text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-colors"
+        >
+          <X className="w-5 h-5" />
+        </button>
+
         {/* Brand Crest & Title */}
         <div className="text-center space-y-2">
-          <div className="w-12 h-12 rounded-full sacred-glass border border-sacred-gold/40 flex items-center justify-center text-sacred-gold mx-auto mb-1 shadow-[0_0_20px_rgba(201,178,124,0.25)]">
-            <Sparkles className="w-6 h-6" />
+          <div className="w-12 h-12 rounded-full bg-gradient-to-tr from-[#C41E3A] to-[#8B1524] text-white flex items-center justify-center mx-auto mb-1 shadow-md border border-[#D4AF37]/50">
+            <Sparkles className="w-6 h-6 text-[#F5D77F]" />
           </div>
-          <h1 className="text-2xl font-heading font-medium text-sacred-ivory">
+          <h1 className="text-2xl font-heading font-bold text-gray-900">
             {mode === 'LOGIN' ? "Welcome to Tony's Music" : "Join Tony's Music"}
           </h1>
-          <p className="text-xs text-sacred-ivoryMuted font-telugu">
+          <p className="text-xs text-gray-500 font-telugu">
             టోనీ ప్రకాష్ భక్తి సంగీత వేదిక • Official Music Portal
           </p>
         </div>
 
         {/* Mode Toggle Tabs (Sign In / Register) */}
-        <div className="grid grid-cols-2 sacred-glass p-1 rounded-2xl border border-white/10 text-xs font-semibold">
+        <div className="grid grid-cols-2 bg-gray-100 p-1 rounded-2xl border border-gray-200 text-xs font-semibold">
           <button
             type="button"
             onClick={() => {
@@ -185,8 +219,8 @@ export const AuthPage: React.FC = () => {
             }}
             className={`py-2 rounded-xl transition-all ${
               mode === 'LOGIN'
-                ? 'bg-gradient-to-r from-[#C41E3A] to-[#8B1524] text-white shadow-md'
-                : 'text-sacred-ivoryMuted hover:text-sacred-ivory'
+                ? 'bg-gradient-to-r from-[#C41E3A] to-[#8B1524] text-white shadow-sm'
+                : 'text-gray-600 hover:text-gray-900'
             }`}
           >
             Sign In
@@ -200,8 +234,8 @@ export const AuthPage: React.FC = () => {
             }}
             className={`py-2 rounded-xl transition-all ${
               mode === 'REGISTER'
-                ? 'bg-gradient-to-r from-[#C41E3A] to-[#8B1524] text-white shadow-md'
-                : 'text-sacred-ivoryMuted hover:text-sacred-ivory'
+                ? 'bg-gradient-to-r from-[#C41E3A] to-[#8B1524] text-white shadow-sm'
+                : 'text-gray-600 hover:text-gray-900'
             }`}
           >
             Create Account
@@ -209,24 +243,24 @@ export const AuthPage: React.FC = () => {
         </div>
 
         {oauthStatus && (
-          <div className="p-3 rounded-xl bg-[#C41E3A]/20 border border-[#C41E3A]/50 text-[#FFFFFF] text-xs text-center animate-pulse">
+          <div className="p-3 rounded-xl bg-red-50 border border-[#C41E3A]/40 text-[#C41E3A] text-xs text-center font-medium animate-pulse">
             {oauthStatus}
           </div>
         )}
 
         {errorMsg && (
-          <div className="p-3.5 rounded-xl bg-red-950/80 border border-red-500/40 text-red-200 text-xs">
+          <div className="p-3.5 rounded-xl bg-red-50 border border-red-300 text-red-700 text-xs font-medium">
             {errorMsg}
           </div>
         )}
 
         {showForgotNotice && (
-          <div className="p-3 rounded-xl bg-[#C9B27C]/15 border border-[#C9B27C]/40 text-[#FFFFFF] text-xs">
+          <div className="p-3 rounded-xl bg-amber-50 border border-amber-300 text-amber-800 text-xs">
             Password reset link sent to your email. You can also contact support or login as official admin.
           </div>
         )}
 
-        {/* ================= PRIMARY FORM (Image 1 Style) ================= */}
+        {/* ================= PRIMARY FORM ================= */}
         <form onSubmit={handleSubmit} className="space-y-4">
           {mode === 'REGISTER' && (
             <div className="space-y-1">
@@ -238,7 +272,7 @@ export const AuthPage: React.FC = () => {
                   placeholder="Full Name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full bg-[#12222D]/90 hover:bg-[#162A38] border border-white/10 focus:border-[#C41E3A] rounded-2xl pl-12 pr-4 py-3.5 text-sm text-[#FFFFFF] placeholder-gray-400 focus:outline-none transition-colors"
+                  className="w-full bg-gray-50 hover:bg-white focus:bg-white border border-gray-300 focus:border-[#C41E3A] rounded-2xl pl-12 pr-4 py-3.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none transition-colors shadow-inner"
                 />
               </div>
             </div>
@@ -253,7 +287,7 @@ export const AuthPage: React.FC = () => {
               placeholder="Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full bg-[#12222D]/90 hover:bg-[#162A38] border border-white/10 focus:border-[#C41E3A] rounded-2xl pl-12 pr-4 py-3.5 text-sm text-[#FFFFFF] placeholder-gray-400 focus:outline-none transition-colors"
+              className="w-full bg-gray-50 hover:bg-white focus:bg-white border border-gray-300 focus:border-[#C41E3A] rounded-2xl pl-12 pr-4 py-3.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none transition-colors shadow-inner"
             />
           </div>
 
@@ -267,24 +301,24 @@ export const AuthPage: React.FC = () => {
                 placeholder="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full bg-[#12222D]/90 hover:bg-[#162A38] border border-white/10 focus:border-[#C41E3A] rounded-2xl pl-12 pr-12 py-3.5 text-sm text-[#FFFFFF] placeholder-gray-400 focus:outline-none transition-colors"
+                className="w-full bg-gray-50 hover:bg-white focus:bg-white border border-gray-300 focus:border-[#C41E3A] rounded-2xl pl-12 pr-12 py-3.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none transition-colors shadow-inner"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-4 top-3.5 text-gray-400 hover:text-white transition-colors"
+                className="absolute right-4 top-3.5 text-gray-400 hover:text-gray-700 transition-colors"
                 title={showPassword ? 'Hide password' : 'Show password'}
               >
                 {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
               </button>
             </div>
 
-            {/* Forgot password? (Right aligned, exactly like Image 1) */}
+            {/* Forgot password */}
             <div className="flex justify-end pt-0.5">
               <button
                 type="button"
                 onClick={() => setShowForgotNotice(true)}
-                className="text-xs text-gray-400 hover:text-[#C9B27C] transition-colors"
+                className="text-xs text-gray-500 hover:text-[#C41E3A] transition-colors"
               >
                 Forgot password?
               </button>
@@ -299,16 +333,16 @@ export const AuthPage: React.FC = () => {
                 placeholder="Phone Number (Optional)"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
-                className="w-full bg-[#12222D]/90 hover:bg-[#162A38] border border-white/10 focus:border-[#C41E3A] rounded-2xl pl-12 pr-4 py-3.5 text-sm text-[#FFFFFF] placeholder-gray-400 focus:outline-none transition-colors"
+                className="w-full bg-gray-50 hover:bg-white focus:bg-white border border-gray-300 focus:border-[#C41E3A] rounded-2xl pl-12 pr-4 py-3.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none transition-colors shadow-inner"
               />
             </div>
           )}
 
-          {/* CTA Button: Get Started (Dark rounded button like Image 1) */}
+          {/* CTA Button: Get Started */}
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full py-4 rounded-2xl bg-[#1C2630] hover:bg-[#253340] border border-white/15 text-white font-medium text-sm transition-all shadow-lg hover:shadow-xl active:scale-[0.99] disabled:opacity-60"
+            className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-[#C41E3A] to-[#8B1524] hover:brightness-110 border border-[#D4AF37]/30 text-white font-bold text-sm tracking-wide transition-all shadow-md hover:shadow-lg active:scale-[0.99] disabled:opacity-60"
           >
             {isLoading
               ? 'Please wait...'
@@ -318,10 +352,10 @@ export const AuthPage: React.FC = () => {
           </button>
         </form>
 
-        {/* ================= DIVIDER (Image 1 Style: Or sign in with) ================= */}
+        {/* ================= DIVIDER ================= */}
         <div className="relative flex items-center justify-center my-6">
-          <div className="border-t border-dotted border-white/20 w-full" />
-          <span className="bg-[#0E0305] px-4 text-xs text-gray-400 whitespace-nowrap absolute">
+          <div className="border-t border-gray-200 w-full" />
+          <span className="bg-white px-4 text-xs text-gray-500 whitespace-nowrap absolute">
             Or sign in with
           </span>
         </div>
@@ -332,7 +366,7 @@ export const AuthPage: React.FC = () => {
             type="button"
             onClick={handleGoogleClick}
             disabled={isLoading}
-            className="w-full h-12 rounded-2xl bg-white hover:bg-neutral-100 flex items-center justify-center gap-3 transition-all shadow-sm hover:shadow-md active:scale-[0.99] disabled:opacity-60 text-neutral-800 text-sm font-semibold"
+            className="w-full h-12 rounded-2xl bg-white hover:bg-gray-50 border border-gray-300 flex items-center justify-center gap-3 transition-all shadow-sm hover:shadow active:scale-[0.99] disabled:opacity-60 text-gray-700 text-sm font-semibold"
             title="Sign in with Google"
           >
             <svg className="w-5 h-5 shrink-0" viewBox="0 0 24 24">
@@ -357,6 +391,7 @@ export const AuthPage: React.FC = () => {
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };

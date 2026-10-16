@@ -30,10 +30,10 @@ export const AlbumsPage: React.FC = () => {
           <Disc3 className="w-4 h-4 text-[#C41E3A]" />
           <span>Complete Discography • ఆల్బమ్‌లు</span>
         </div>
-        <h1 className="text-3xl sm:text-4xl font-heading font-bold text-[#FFFFFF]">
+        <h1 className="text-3xl sm:text-4xl font-heading font-bold text-[#111827]">
           Telugu Devotional Albums & Songbooks
         </h1>
-        <p className="text-xs sm:text-sm text-[#E2CBD0] max-w-2xl leading-relaxed">
+        <p className="text-xs sm:text-sm text-[#4B5563] max-w-2xl leading-relaxed">
           Explore devotional studio collections released by Rev. Tony Prakash across thirty years of ministry. Click any album to stream, explore tracklists, and view verified lyrics.
         </p>
       </div>
@@ -41,7 +41,7 @@ export const AlbumsPage: React.FC = () => {
       {isLoading ? (
         <div className="py-24 text-center">
           <div className="w-10 h-10 border-2 border-[#C41E3A] border-t-transparent rounded-full animate-spin mx-auto mb-3" />
-          <p className="text-xs text-[#E2CBD0]">Loading albums...</p>
+          <p className="text-xs text-[#4B5563]">Loading albums...</p>
         </div>
       ) : (
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
@@ -49,10 +49,10 @@ export const AlbumsPage: React.FC = () => {
             <Link
               key={album.id}
               to={`/albums/${album.slug}`}
-              className="group p-4 rounded-2xl bg-[#1A060A]/80 hover:bg-[#340C14] border border-[#C41E3A]/20 hover:border-[#C41E3A]/50 transition-all duration-300 shadow-lg space-y-3 flex flex-col justify-between"
+              className="group p-4 rounded-2xl bg-[#F9FAFB]/80 hover:bg-[#FEE2E2] border border-[#C41E3A]/20 hover:border-[#C41E3A]/50 transition-all duration-300 shadow-lg space-y-3 flex flex-col justify-between"
             >
               <div>
-                <div className="relative aspect-square rounded-xl overflow-hidden bg-[#26080F] mb-3 shadow-md border border-[#C41E3A]/30">
+                <div className="relative aspect-square rounded-xl overflow-hidden bg-[#F3F4F6] mb-3 shadow-md border border-[#C41E3A]/30">
                   <img
                     src={album.coverImage}
                     alt={album.titleEnglish}
@@ -68,13 +68,13 @@ export const AlbumsPage: React.FC = () => {
                 </div>
 
                 <div className="space-y-1">
-                  <h2 className="font-telugu text-base sm:text-lg font-bold text-[#FFFFFF] group-hover:text-[#C41E3A] transition-colors leading-tight">
+                  <h2 className="font-telugu text-base sm:text-lg font-bold text-[#111827] group-hover:text-[#C41E3A] transition-colors leading-tight">
                     {album.titleTelugu}
                   </h2>
-                  <h3 className="text-xs text-[#E2CBD0] truncate">
+                  <h3 className="text-xs text-[#4B5563] truncate">
                     {album.titleEnglish}
                   </h3>
-                  <p className="text-[11px] text-[#E2CBD0]/80 line-clamp-2 mt-2 leading-relaxed">
+                  <p className="text-[11px] text-[#4B5563]/80 line-clamp-2 mt-2 leading-relaxed">
                     {album.description}
                   </p>
                 </div>

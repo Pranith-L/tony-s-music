@@ -103,17 +103,17 @@ export const MembershipPage: React.FC = () => {
       />
       {/* Header */}
       <div className="text-center space-y-3 max-w-2xl mx-auto">
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#1A060A] border border-[#C9B27C]/30 text-xs font-mono uppercase tracking-widest text-[#C9B27C] font-semibold">
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#F9FAFB] border border-[#C9B27C]/30 text-xs font-mono uppercase tracking-widest text-[#C9B27C] font-semibold">
           <Sparkles className="w-3.5 h-3.5 text-[#C9B27C]" />
           <span>One-Time Lifetime Membership • జీవితకాల సభ్యత్వం</span>
         </div>
-        <h1 className="text-3xl sm:text-5xl font-heading text-[#FFFFFF] font-bold">
+        <h1 className="text-3xl sm:text-5xl font-heading text-[#111827] font-bold">
           Songs One-Time Pass
         </h1>
         <p className="font-telugu text-base sm:text-lg text-[#C9B27C] font-semibold">
           “ఒక్కసారి చెల్లించి జీవితకాలం అపరిమిత భక్తి సంగీతాన్ని ఆనందించండి”
         </p>
-        <p className="text-xs sm:text-sm text-[#E2CBD0] leading-relaxed pt-1">
+        <p className="text-xs sm:text-sm text-[#4B5563] leading-relaxed pt-1">
           Pay once, enjoy forever. Unlock full devotional songs master WAV downloads, infinite skips, unlimited queue additions, and ad-free listening with zero recurring subscriptions.
         </p>
       </div>
@@ -133,26 +133,26 @@ export const MembershipPage: React.FC = () => {
       {/* 3 Tier Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 items-stretch">
         {/* Tier 1: Free Public Streaming */}
-        <div className="rounded-3xl p-6 sm:p-8 flex flex-col justify-between bg-[#0E0305] border border-white/10 shadow-lg">
+        <div className="rounded-3xl p-6 sm:p-8 flex flex-col justify-between bg-white border border-white/10 shadow-lg">
           <div className="space-y-6">
             <div>
-              <h3 className="text-xl font-heading text-[#FFFFFF] font-semibold">
+              <h3 className="text-xl font-heading text-[#111827] font-semibold">
                 Free Listening
               </h3>
               <p className="font-telugu text-xs text-[#C9B27C] mt-1">
                 ఉచిత ఆరాధనా శ్రవణం
               </p>
-              <p className="text-xs text-[#E2CBD0] mt-1">
+              <p className="text-xs text-[#4B5563] mt-1">
                 For every believer listening at home, daily devotion, or family prayer.
               </p>
             </div>
 
             <div className="flex items-baseline gap-1">
-              <span className="text-4xl font-mono font-bold text-[#FFFFFF]">₹0</span>
-              <span className="text-xs text-[#E2CBD0]">/ always free</span>
+              <span className="text-4xl font-mono font-bold text-[#111827]">₹0</span>
+              <span className="text-xs text-[#4B5563]">/ always free</span>
             </div>
 
-            <ul className="space-y-3 text-xs text-[#E2CBD0]">
+            <ul className="space-y-3 text-xs text-[#4B5563]">
               <li className="flex items-center gap-2.5">
                 <Check className="w-4 h-4 text-emerald-400 shrink-0" />
                 <span>Stream all 68 Devotional Songs in full</span>
@@ -162,11 +162,11 @@ export const MembershipPage: React.FC = () => {
                 <span>Watch worship ministry videos</span>
               </li>
               <li className="flex items-center gap-2.5">
-                <FastForward className="w-4 h-4 text-[#E2CBD0] shrink-0" />
+                <FastForward className="w-4 h-4 text-[#4B5563] shrink-0" />
                 <span>6 skips per day (resets daily)</span>
               </li>
               <li className="flex items-center gap-2.5">
-                <Disc3 className="w-4 h-4 text-[#E2CBD0] shrink-0" />
+                <Disc3 className="w-4 h-4 text-[#4B5563] shrink-0" />
                 <span>30-second preview on backing tracks</span>
               </li>
             </ul>
@@ -175,7 +175,7 @@ export const MembershipPage: React.FC = () => {
           <div className="pt-8">
             <button
               onClick={() => navigate('/music')}
-              className="w-full py-3 rounded-full bg-[#1A060A] border border-white/10 text-xs uppercase tracking-wider font-semibold text-[#FFFFFF] hover:text-[#C9B27C] hover:border-[#C9B27C]/40 transition-colors"
+              className="w-full py-3 rounded-full bg-[#F9FAFB] border border-white/10 text-xs uppercase tracking-wider font-semibold text-[#111827] hover:text-[#C9B27C] hover:border-[#C9B27C]/40 transition-colors"
             >
               Start Free Listening
             </button>
@@ -196,7 +196,7 @@ export const MembershipPage: React.FC = () => {
               <p className="font-telugu text-xs text-[#C9B27C] mt-1 font-semibold">
                 జీవితకాల సభ్యత్వం • Pay Once, Keep Forever
               </p>
-              <p className="text-xs text-[#E2CBD0] mt-1">
+              <p className="text-xs text-[#4B5563] mt-1">
                 Complete unlimited access across the entire platform with zero recurring payments.
               </p>
             </div>
@@ -225,8 +225,8 @@ export const MembershipPage: React.FC = () => {
                 <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
                 <span>Lifetime Validity (100 Years) • No Renewals</span>
               </li>
-              <li className="flex items-center gap-2.5 text-[#E2CBD0]">
-                <Disc3 className="w-4 h-4 text-[#E2CBD0] shrink-0" />
+              <li className="flex items-center gap-2.5 text-[#4B5563]">
+                <Disc3 className="w-4 h-4 text-[#4B5563] shrink-0" />
                 <span>Karaoke Backing Tracks Sold Separately (₹99/Track)</span>
               </li>
             </ul>
@@ -248,33 +248,33 @@ export const MembershipPage: React.FC = () => {
                 {isLoading ? 'Processing...' : 'Get Lifetime Pass • ₹299 (One-Time)'}
               </button>
             )}
-            <p className="text-[10px] text-[#E2CBD0] text-center mt-2.5 font-mono">
+            <p className="text-[10px] text-[#4B5563] text-center mt-2.5 font-mono">
               Single payment of ₹299 (29,900 paise). Secure Razorpay integration.
             </p>
           </div>
         </div>
 
         {/* Tier 3: Individual Backing Track Purchases */}
-        <div className="rounded-3xl p-6 sm:p-8 flex flex-col justify-between bg-[#0E0305] border border-white/10 shadow-lg">
+        <div className="rounded-3xl p-6 sm:p-8 flex flex-col justify-between bg-white border border-white/10 shadow-lg">
           <div className="space-y-6">
             <div>
-              <h3 className="text-xl font-heading text-[#FFFFFF] font-semibold">
+              <h3 className="text-xl font-heading text-[#111827] font-semibold">
                 Single Studio Track
               </h3>
               <p className="font-telugu text-xs text-[#C9B27C] mt-1">
                 సింగిల్ మ్యూజిక్ ట్రాక్ కొనుగోలు
               </p>
-              <p className="text-xs text-[#E2CBD0] mt-1">
+              <p className="text-xs text-[#4B5563] mt-1">
                 Pick individual minus-one / karaoke audio tracks for special church songs or solo singing.
               </p>
             </div>
 
             <div className="flex items-baseline gap-1">
               <span className="text-4xl font-mono font-bold text-[#C9B27C]">₹99</span>
-              <span className="text-xs text-[#E2CBD0]">/ per track</span>
+              <span className="text-xs text-[#4B5563]">/ per track</span>
             </div>
 
-            <ul className="space-y-3 text-xs text-[#E2CBD0]">
+            <ul className="space-y-3 text-xs text-[#4B5563]">
               <li className="flex items-center gap-2.5">
                 <Check className="w-4 h-4 text-emerald-400 shrink-0" />
                 <span>Full playback of selected backing track</span>
@@ -297,7 +297,7 @@ export const MembershipPage: React.FC = () => {
           <div className="pt-8">
             <button
               onClick={() => navigate('/tracks')}
-              className="w-full py-3 rounded-full bg-[#1A060A] hover:bg-[#340C14] border border-[#C41E3A]/40 text-xs uppercase tracking-wider font-semibold text-[#FFFFFF] hover:text-[#C9B27C] transition-colors"
+              className="w-full py-3 rounded-full bg-[#F9FAFB] hover:bg-[#FEE2E2] border border-[#C41E3A]/40 text-xs uppercase tracking-wider font-semibold text-[#111827] hover:text-[#C9B27C] transition-colors"
             >
               Browse Studio Tracks (₹99)
             </button>
@@ -307,18 +307,18 @@ export const MembershipPage: React.FC = () => {
 
       {/* FAQs */}
       <div className="pt-8 space-y-6 max-w-3xl mx-auto">
-        <h3 className="text-2xl font-heading text-[#FFFFFF] text-center font-bold">
+        <h3 className="text-2xl font-heading text-[#111827] text-center font-bold">
           Frequently Asked Questions
         </h3>
 
         <div className="space-y-3">
           {faqs.map((faq, i) => (
-            <div key={i} className="rounded-2xl p-5 bg-[#22070D] border border-[#C41E3A]/20 space-y-2 shadow-sm">
-              <h4 className="text-sm font-semibold text-[#FFFFFF] flex items-center gap-2">
+            <div key={i} className="rounded-2xl p-5 bg-[#F9FAFB] border border-[#C41E3A]/20 space-y-2 shadow-sm">
+              <h4 className="text-sm font-semibold text-[#111827] flex items-center gap-2">
                 <HelpCircle className="w-4 h-4 text-[#C9B27C] shrink-0" />
                 <span>{faq.q}</span>
               </h4>
-              <p className="text-xs text-[#E2CBD0] leading-relaxed pl-6">
+              <p className="text-xs text-[#4B5563] leading-relaxed pl-6">
                 {faq.a}
               </p>
             </div>
