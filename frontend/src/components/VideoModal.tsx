@@ -19,7 +19,7 @@ export const VideoModal: React.FC<VideoModalProps> = ({ video, onClose }) => {
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="relative w-full max-w-4xl bg-gradient-to-b from-[#0E5671]/40 via-[#0B222E] to-[#07151D] rounded-2xl sm:rounded-3xl p-4 sm:p-6 border border-[#1B7C9D]/40 shadow-2xl space-y-4 my-auto max-h-[92dvh] overflow-y-auto"
+        className="relative w-full max-w-4xl bg-gradient-to-b from-[#8B1524]/40 via-[#1A060A] to-[#0E0305] rounded-2xl sm:rounded-3xl p-4 sm:p-6 border border-[#C41E3A]/40 shadow-2xl space-y-4 my-auto max-h-[92dvh] overflow-y-auto"
       >
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2 text-xs font-mono text-[#C9B27C]">
@@ -30,14 +30,14 @@ export const VideoModal: React.FC<VideoModalProps> = ({ video, onClose }) => {
           <button
             onClick={onClose}
             aria-label="Close video"
-            className="p-1.5 rounded-full bg-black/60 hover:bg-[#1B7C9D] text-[#A5C1CC] hover:text-white transition-colors"
+            className="p-1.5 rounded-full bg-black/60 hover:bg-[#C41E3A] text-[#E2CBD0] hover:text-white transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* 16:9 Responsive YouTube Embed */}
-        <div className="relative aspect-video w-full rounded-xl sm:rounded-2xl overflow-hidden bg-black shadow-2xl border border-[#1B7C9D]/40">
+        <div className="relative aspect-video w-full rounded-xl sm:rounded-2xl overflow-hidden bg-black shadow-2xl border border-[#C41E3A]/40">
           <iframe
             key={video.youtubeId}
             src={`https://www.youtube-nocookie.com/embed/${video.youtubeId}?autoplay=1&rel=0`}
@@ -52,13 +52,13 @@ export const VideoModal: React.FC<VideoModalProps> = ({ video, onClose }) => {
         <div className="space-y-2 pt-1">
           <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
             <div className="space-y-1 min-w-0">
-              <h3 className="font-telugu text-base sm:text-xl font-bold text-[#EDF5F8] leading-snug">
+              <h3 className="font-telugu text-base sm:text-xl font-bold text-[#FFFFFF] leading-snug">
                 {video.title}
               </h3>
-              <div className="flex flex-wrap items-center gap-3 text-xs text-[#A5C1CC] font-mono">
+              <div className="flex flex-wrap items-center gap-3 text-xs text-[#E2CBD0] font-mono">
                 {video.duration && (
                   <span className="flex items-center gap-1">
-                    <Clock className="w-3.5 h-3.5 text-[#1B7C9D]" />
+                    <Clock className="w-3.5 h-3.5 text-[#C41E3A]" />
                     {video.duration}
                   </span>
                 )}
@@ -70,7 +70,7 @@ export const VideoModal: React.FC<VideoModalProps> = ({ video, onClose }) => {
                 )}
                 {video.published && (
                   <span className="flex items-center gap-1">
-                    <Calendar className="w-3.5 h-3.5 text-[#1B7C9D]" />
+                    <Calendar className="w-3.5 h-3.5 text-[#C41E3A]" />
                     {video.published}
                   </span>
                 )}
@@ -90,7 +90,7 @@ export const VideoModal: React.FC<VideoModalProps> = ({ video, onClose }) => {
           </div>
 
           {video.description && (
-            <p className="text-xs text-[#A5C1CC] leading-relaxed max-w-3xl line-clamp-2">
+            <p className="text-xs text-[#E2CBD0] leading-relaxed max-w-3xl line-clamp-2">
               {video.description}
             </p>
           )}

@@ -88,19 +88,19 @@ export const LyricsModal: React.FC<LyricsModalProps> = ({ track, onClose }) => {
       {/* Click outside backdrop to close */}
       <div className="fixed inset-0 -z-10" onClick={onClose} aria-hidden="true" />
 
-      <div className="relative w-full max-w-2xl bg-[#09212C] rounded-2xl p-6 sm:p-8 my-auto max-h-[88vh] overflow-y-auto border border-[#C9B27C]/40 shadow-[0_25px_80px_rgba(0,0,0,0.95)]">
+      <div className="relative w-full max-w-2xl bg-[#22070D] rounded-2xl p-6 sm:p-8 my-auto max-h-[88vh] overflow-y-auto border border-[#C9B27C]/40 shadow-[0_25px_80px_rgba(0,0,0,0.95)]">
         {/* Close Button */}
         <button
           onClick={onClose}
           aria-label="Close track details"
-          className="absolute top-4 right-4 sm:top-6 sm:right-6 w-9 h-9 rounded-full bg-[#0B222E] hover:bg-[#12303E] border border-[#1B7C9D]/40 text-[#A5C1CC] hover:text-[#EDF5F8] flex items-center justify-center transition-colors shadow-md z-10"
+          className="absolute top-4 right-4 sm:top-6 sm:right-6 w-9 h-9 rounded-full bg-[#1A060A] hover:bg-[#340C14] border border-[#C41E3A]/40 text-[#E2CBD0] hover:text-[#FFFFFF] flex items-center justify-center transition-colors shadow-md z-10"
         >
           <X className="w-5 h-5" />
         </button>
 
         {/* Top Header info */}
-        <div className="flex flex-col sm:flex-row gap-5 items-start pb-6 border-b border-[#1B7C9D]/20 pr-8">
-          <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-xl overflow-hidden bg-[#0F2B38] border border-[#C9B27C]/40 shrink-0 shadow-lg">
+        <div className="flex flex-col sm:flex-row gap-5 items-start pb-6 border-b border-[#C41E3A]/20 pr-8">
+          <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-xl overflow-hidden bg-[#26080F] border border-[#C9B27C]/40 shrink-0 shadow-lg">
             <img
               src={track.coverImage || '/hero_tony_prakash.png'}
               alt={track.titleEnglish}
@@ -110,7 +110,7 @@ export const LyricsModal: React.FC<LyricsModalProps> = ({ track, onClose }) => {
 
           <div className="flex-1 min-w-0 space-y-2">
             <div className="flex items-center gap-2">
-              <span className="px-2.5 py-0.5 rounded-full text-[10px] tracking-wider uppercase font-semibold bg-[#1B7C9D]/20 text-[#1B7C9D] border border-[#1B7C9D]/40">
+              <span className="px-2.5 py-0.5 rounded-full text-[10px] tracking-wider uppercase font-semibold bg-[#C41E3A]/20 text-[#C41E3A] border border-[#C41E3A]/40">
                 {track.category}
               </span>
               {track.isSubscriberOnly && (
@@ -120,17 +120,17 @@ export const LyricsModal: React.FC<LyricsModalProps> = ({ track, onClose }) => {
               )}
             </div>
 
-            <h2 className="text-xl sm:text-2xl font-bold text-[#EDF5F8] leading-tight">
+            <h2 className="text-xl sm:text-2xl font-bold text-[#FFFFFF] leading-tight">
               {track.titleEnglish}
             </h2>
-            <p className="text-xs text-[#A5C1CC]">
+            <p className="text-xs text-[#E2CBD0]">
               {track.singer || 'Rev. Tony Prakash'} • {track.composer || 'Rev. Tony Prakash'}
             </p>
 
             <div className="pt-2 flex flex-wrap items-center gap-3">
               <button
                 onClick={handlePlay}
-                className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-gradient-to-r from-[#1B7C9D] to-[#0E5671] text-[#EDF5F8] font-bold text-xs uppercase tracking-wider shadow-md hover:scale-105 transition-transform border border-[#C9B27C]/40"
+                className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-gradient-to-r from-[#C41E3A] to-[#8B1524] text-[#FFFFFF] font-bold text-xs uppercase tracking-wider shadow-md hover:scale-105 transition-transform border border-[#C9B27C]/40"
               >
                 {isThisPlaying ? <Pause className="w-3.5 h-3.5 fill-current" /> : <Play className="w-3.5 h-3.5 fill-current ml-0.5" />}
                 <span>{isThisPlaying ? 'Pause' : 'Play Track'}</span>
@@ -140,7 +140,7 @@ export const LyricsModal: React.FC<LyricsModalProps> = ({ track, onClose }) => {
                 <button
                   onClick={handleDownload}
                   disabled={downloading}
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#0B222E] border border-[#C9B27C]/40 text-xs text-[#C9B27C] hover:bg-[#12303E] transition-colors"
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#1A060A] border border-[#C9B27C]/40 text-xs text-[#C9B27C] hover:bg-[#340C14] transition-colors"
                 >
                   <Download className="w-3.5 h-3.5" />
                   <span>Download Audio</span>
@@ -162,22 +162,22 @@ export const LyricsModal: React.FC<LyricsModalProps> = ({ track, onClose }) => {
         )}
 
         {/* Credits Row */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 py-4 border-b border-[#1B7C9D]/15 text-xs">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 py-4 border-b border-[#C41E3A]/15 text-xs">
           <div>
-            <span className="text-[#A5C1CC]/70 block text-[10px] uppercase font-mono">Singer</span>
-            <span className="text-[#EDF5F8] font-medium">{track.singer}</span>
+            <span className="text-[#E2CBD0]/70 block text-[10px] uppercase font-mono">Singer</span>
+            <span className="text-[#FFFFFF] font-medium">{track.singer}</span>
           </div>
           <div>
-            <span className="text-[#A5C1CC]/70 block text-[10px] uppercase font-mono">Lyrics</span>
-            <span className="text-[#EDF5F8] font-medium">{track.lyricist}</span>
+            <span className="text-[#E2CBD0]/70 block text-[10px] uppercase font-mono">Lyrics</span>
+            <span className="text-[#FFFFFF] font-medium">{track.lyricist}</span>
           </div>
           <div>
-            <span className="text-[#A5C1CC]/70 block text-[10px] uppercase font-mono">Composer</span>
-            <span className="text-[#EDF5F8] font-medium">{track.composer}</span>
+            <span className="text-[#E2CBD0]/70 block text-[10px] uppercase font-mono">Composer</span>
+            <span className="text-[#FFFFFF] font-medium">{track.composer}</span>
           </div>
           <div>
-            <span className="text-[#A5C1CC]/70 block text-[10px] uppercase font-mono">Release Year</span>
-            <span className="text-[#EDF5F8] font-medium">{track.releaseYear}</span>
+            <span className="text-[#E2CBD0]/70 block text-[10px] uppercase font-mono">Release Year</span>
+            <span className="text-[#FFFFFF] font-medium">{track.releaseYear}</span>
           </div>
         </div>
 
@@ -188,12 +188,12 @@ export const LyricsModal: React.FC<LyricsModalProps> = ({ track, onClose }) => {
               <h4 className="text-xs uppercase tracking-widest text-[#C9B27C] font-semibold mb-3">
                 Telugu Lyrics (సాహిత్యం)
               </h4>
-              <div className="font-telugu text-sm leading-relaxed whitespace-pre-line text-[#EDF5F8]/90 p-4 rounded-xl bg-[#07151D]/80 border border-[#1B7C9D]/20">
+              <div className="font-telugu text-sm leading-relaxed whitespace-pre-line text-[#FFFFFF]/90 p-4 rounded-xl bg-[#0E0305]/80 border border-[#C41E3A]/20">
                 {track.lyricsTelugu}
               </div>
             </div>
           ) : (
-            <p className="text-xs text-[#A5C1CC] italic">
+            <p className="text-xs text-[#E2CBD0] italic">
               Lyrics are being transcribed and verified from the official recordings.
             </p>
           )}
@@ -203,7 +203,7 @@ export const LyricsModal: React.FC<LyricsModalProps> = ({ track, onClose }) => {
               <h4 className="text-xs uppercase tracking-widest text-[#C9B27C] font-semibold mb-3">
                 English Translation / Transliteration
               </h4>
-              <div className="text-xs leading-relaxed whitespace-pre-line text-[#A5C1CC] p-4 rounded-xl bg-[#07151D]/60 border border-[#1B7C9D]/20">
+              <div className="text-xs leading-relaxed whitespace-pre-line text-[#E2CBD0] p-4 rounded-xl bg-[#0E0305]/60 border border-[#C41E3A]/20">
                 {track.lyricsEnglish}
               </div>
             </div>
@@ -212,20 +212,20 @@ export const LyricsModal: React.FC<LyricsModalProps> = ({ track, onClose }) => {
 
         {/* If Backing Track: One-time ₹99 purchase */}
         {track.isTrack && !purchaseSuccess && (
-          <div className="mt-6 p-4 rounded-xl bg-[#07151D]/90 border border-[#C9B27C]/40 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-lg">
+          <div className="mt-6 p-4 rounded-xl bg-[#0E0305]/90 border border-[#C9B27C]/40 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-lg">
             <div>
               <div className="text-xs font-semibold text-[#C9B27C] flex items-center gap-1.5">
                 <Sparkles className="w-3.5 h-3.5" />
                 <span>Official Studio Backing Track</span>
               </div>
-              <p className="text-[11px] text-[#A5C1CC]">
+              <p className="text-[11px] text-[#E2CBD0]">
                 High-fidelity minus-one / karaoke track for churches and worship leaders at ₹99 each.
               </p>
             </div>
             <button
               onClick={handleBuySingleTrack}
               disabled={purchasing}
-              className="px-5 py-2.5 rounded-full bg-gradient-to-r from-[#C9B27C] to-[#E5D7A8] text-[#07151D] text-xs font-bold uppercase tracking-wider shrink-0 hover:scale-105 transition-transform shadow-md"
+              className="px-5 py-2.5 rounded-full bg-gradient-to-r from-[#C9B27C] to-[#E5D7A8] text-[#0E0305] text-xs font-bold uppercase tracking-wider shrink-0 hover:scale-105 transition-transform shadow-md"
             >
               {purchasing ? 'Processing...' : 'Buy Track (₹99)'}
             </button>
@@ -234,19 +234,19 @@ export const LyricsModal: React.FC<LyricsModalProps> = ({ track, onClose }) => {
 
         {/* If Vocal Song: Requires ₹299 One-Time Pass */}
         {!track.isTrack && !isSubscriber && (
-          <div className="mt-6 p-4 rounded-xl bg-[#07151D]/90 border border-[#1B7C9D]/40 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-lg">
+          <div className="mt-6 p-4 rounded-xl bg-[#0E0305]/90 border border-[#C41E3A]/40 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-lg">
             <div>
-              <div className="text-xs font-semibold text-[#1B7C9D] flex items-center gap-1.5">
+              <div className="text-xs font-semibold text-[#C41E3A] flex items-center gap-1.5">
                 <Sparkles className="w-3.5 h-3.5 text-[#C9B27C]" />
                 <span>Vocal Song Download • One-Time Pass Exclusive</span>
               </div>
-              <p className="text-[11px] text-[#A5C1CC]">
+              <p className="text-[11px] text-[#E2CBD0]">
                 Devotional vocal songs can be downloaded with the One-Time Pass (₹299). Backing tracks are unlocked separately.
               </p>
             </div>
             <a
               href="/membership"
-              className="px-5 py-2.5 rounded-full bg-gradient-to-r from-[#1B7C9D] to-[#0E5671] text-[#EDF5F8] text-xs font-bold uppercase tracking-wider shrink-0 hover:scale-105 transition-transform shadow-md border border-[#C9B27C]/40"
+              className="px-5 py-2.5 rounded-full bg-gradient-to-r from-[#C41E3A] to-[#8B1524] text-[#FFFFFF] text-xs font-bold uppercase tracking-wider shrink-0 hover:scale-105 transition-transform shadow-md border border-[#C9B27C]/40"
             >
               Get One-Time Pass (₹299)
             </a>

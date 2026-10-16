@@ -95,7 +95,7 @@ export const TrackActionMenu: React.FC<TrackActionMenuProps> = ({
             e.stopPropagation();
             setIsOpen(!isOpen);
           }}
-          className="w-8 h-8 rounded-full text-[#A5C1CC] hover:text-[#EDF5F8] hover:bg-[#12303E] flex items-center justify-center transition-colors active:scale-95"
+          className="w-8 h-8 rounded-full text-[#E2CBD0] hover:text-[#FFFFFF] hover:bg-[#340C14] flex items-center justify-center transition-colors active:scale-95"
           title="More options"
           aria-label="More options"
         >
@@ -106,11 +106,11 @@ export const TrackActionMenu: React.FC<TrackActionMenuProps> = ({
           <div
             data-testid="track-action-dropdown"
             onClick={(e) => e.stopPropagation()}
-            className="absolute right-0 top-full mt-1.5 z-[100] w-52 sm:w-56 rounded-2xl bg-[#09212C]/98 backdrop-blur-2xl border border-[#1B7C9D]/50 shadow-[0_12px_40px_rgba(0,0,0,0.9)] py-2 text-xs font-semibold text-[#EDF5F8] animate-fadeIn select-none"
+            className="absolute right-0 top-full mt-1.5 z-[100] w-52 sm:w-56 rounded-2xl bg-[#22070D]/98 backdrop-blur-2xl border border-[#C41E3A]/50 shadow-[0_12px_40px_rgba(0,0,0,0.9)] py-2 text-xs font-semibold text-[#FFFFFF] animate-fadeIn select-none"
           >
             {/* Quick Track Header */}
             <div className="px-3 py-1.5 border-b border-white/10 mb-1">
-              <p className="text-[11px] font-bold text-[#EDF5F8] truncate">{track.titleEnglish}</p>
+              <p className="text-[11px] font-bold text-[#FFFFFF] truncate">{track.titleEnglish}</p>
               <p className="font-telugu text-[10px] text-[#C9B27C] truncate">{track.titleTelugu}</p>
             </div>
 
@@ -121,9 +121,9 @@ export const TrackActionMenu: React.FC<TrackActionMenuProps> = ({
                 playNextInQueue(track);
                 setIsOpen(false);
               }}
-              className="w-full px-3.5 py-2 hover:bg-[#12303E] flex items-center gap-2.5 text-[#EDF5F8] transition-colors"
+              className="w-full px-3.5 py-2 hover:bg-[#340C14] flex items-center gap-2.5 text-[#FFFFFF] transition-colors"
             >
-              <ListStart className="w-4 h-4 text-[#1B7C9D]" />
+              <ListStart className="w-4 h-4 text-[#C41E3A]" />
               <span>Play Next</span>
             </button>
 
@@ -134,9 +134,9 @@ export const TrackActionMenu: React.FC<TrackActionMenuProps> = ({
                 addToQueue(track);
                 setIsOpen(false);
               }}
-              className="w-full px-3.5 py-2 hover:bg-[#12303E] flex items-center gap-2.5 text-[#EDF5F8] transition-colors"
+              className="w-full px-3.5 py-2 hover:bg-[#340C14] flex items-center gap-2.5 text-[#FFFFFF] transition-colors"
             >
-              <ListPlus className="w-4 h-4 text-[#1B7C9D]" />
+              <ListPlus className="w-4 h-4 text-[#C41E3A]" />
               <span>Add to Queue</span>
             </button>
 
@@ -147,7 +147,7 @@ export const TrackActionMenu: React.FC<TrackActionMenuProps> = ({
                 setIsOpen(false);
                 setShowPlaylistModal(true);
               }}
-              className="w-full px-3.5 py-2 hover:bg-[#12303E] flex items-center gap-2.5 text-[#EDF5F8] transition-colors"
+              className="w-full px-3.5 py-2 hover:bg-[#340C14] flex items-center gap-2.5 text-[#FFFFFF] transition-colors"
             >
               <ListMusic className="w-4 h-4 text-[#C9B27C]" />
               <span>Add to Playlist</span>
@@ -160,9 +160,9 @@ export const TrackActionMenu: React.FC<TrackActionMenuProps> = ({
                 toggleLikeTrack(track.id);
                 setIsOpen(false);
               }}
-              className="w-full px-3.5 py-2 hover:bg-[#12303E] flex items-center gap-2.5 text-[#EDF5F8] transition-colors"
+              className="w-full px-3.5 py-2 hover:bg-[#340C14] flex items-center gap-2.5 text-[#FFFFFF] transition-colors"
             >
-              <Heart className={`w-4 h-4 ${liked ? 'text-[#C9B27C] fill-[#C9B27C]' : 'text-[#A5C1CC]'}`} />
+              <Heart className={`w-4 h-4 ${liked ? 'text-[#C9B27C] fill-[#C9B27C]' : 'text-[#E2CBD0]'}`} />
               <span>{liked ? 'Remove from Liked' : 'Save to Liked Songs'}</span>
             </button>
 
@@ -174,9 +174,9 @@ export const TrackActionMenu: React.FC<TrackActionMenuProps> = ({
                   onOpenLyrics(track);
                   setIsOpen(false);
                 }}
-                className="w-full px-3.5 py-2 hover:bg-[#12303E] flex items-center gap-2.5 text-[#EDF5F8] transition-colors"
+                className="w-full px-3.5 py-2 hover:bg-[#340C14] flex items-center gap-2.5 text-[#FFFFFF] transition-colors"
               >
-                <FileText className="w-4 h-4 text-[#A5C1CC]" />
+                <FileText className="w-4 h-4 text-[#E2CBD0]" />
                 <span>Lyrics & Devotional Info</span>
               </button>
             )}
@@ -190,7 +190,7 @@ export const TrackActionMenu: React.FC<TrackActionMenuProps> = ({
                     if (onDownload) onDownload(track);
                     setIsOpen(false);
                   }}
-                  className="w-full px-3.5 py-2 hover:bg-[#12303E] flex items-center gap-2.5 text-emerald-300 transition-colors"
+                  className="w-full px-3.5 py-2 hover:bg-[#340C14] flex items-center gap-2.5 text-emerald-300 transition-colors"
                 >
                   <Download className="w-4 h-4" />
                   <span>Download Master WAV</span>
@@ -206,7 +206,7 @@ export const TrackActionMenu: React.FC<TrackActionMenuProps> = ({
                     }
                     setIsOpen(false);
                   }}
-                  className="w-full px-3.5 py-2 hover:bg-[#12303E] flex items-center gap-2.5 text-[#C9B27C] transition-colors"
+                  className="w-full px-3.5 py-2 hover:bg-[#340C14] flex items-center gap-2.5 text-[#C9B27C] transition-colors"
                 >
                   <Lock className="w-4 h-4" />
                   <span>Unlock Studio Track (₹99)</span>
@@ -223,9 +223,9 @@ export const TrackActionMenu: React.FC<TrackActionMenuProps> = ({
                   }
                   setIsOpen(false);
                 }}
-                className="w-full px-3.5 py-2 hover:bg-[#12303E] flex items-center gap-2.5 text-[#EDF5F8] transition-colors"
+                className="w-full px-3.5 py-2 hover:bg-[#340C14] flex items-center gap-2.5 text-[#FFFFFF] transition-colors"
               >
-                <Download className="w-4 h-4 text-[#A5C1CC]" />
+                <Download className="w-4 h-4 text-[#E2CBD0]" />
                 <span>Download Song Audio</span>
               </button>
             )}
@@ -234,7 +234,7 @@ export const TrackActionMenu: React.FC<TrackActionMenuProps> = ({
             <button
               type="button"
               onClick={handleShare}
-              className="w-full px-3.5 py-2 hover:bg-[#12303E] flex items-center gap-2.5 text-[#EDF5F8] transition-colors border-t border-white/5 mt-1 pt-2"
+              className="w-full px-3.5 py-2 hover:bg-[#340C14] flex items-center gap-2.5 text-[#FFFFFF] transition-colors border-t border-white/5 mt-1 pt-2"
             >
               {copied ? (
                 <>
@@ -243,7 +243,7 @@ export const TrackActionMenu: React.FC<TrackActionMenuProps> = ({
                 </>
               ) : (
                 <>
-                  <Share2 className="w-4 h-4 text-[#A5C1CC]" />
+                  <Share2 className="w-4 h-4 text-[#E2CBD0]" />
                   <span>Share Song</span>
                 </>
               )}

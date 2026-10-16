@@ -185,7 +185,7 @@ export const AuthPage: React.FC = () => {
             }}
             className={`py-2 rounded-xl transition-all ${
               mode === 'LOGIN'
-                ? 'bg-gradient-to-r from-[#1B7C9D] to-[#0E5671] text-white shadow-md'
+                ? 'bg-gradient-to-r from-[#C41E3A] to-[#8B1524] text-white shadow-md'
                 : 'text-sacred-ivoryMuted hover:text-sacred-ivory'
             }`}
           >
@@ -200,7 +200,7 @@ export const AuthPage: React.FC = () => {
             }}
             className={`py-2 rounded-xl transition-all ${
               mode === 'REGISTER'
-                ? 'bg-gradient-to-r from-[#1B7C9D] to-[#0E5671] text-white shadow-md'
+                ? 'bg-gradient-to-r from-[#C41E3A] to-[#8B1524] text-white shadow-md'
                 : 'text-sacred-ivoryMuted hover:text-sacred-ivory'
             }`}
           >
@@ -209,7 +209,7 @@ export const AuthPage: React.FC = () => {
         </div>
 
         {oauthStatus && (
-          <div className="p-3 rounded-xl bg-[#1B7C9D]/20 border border-[#1B7C9D]/50 text-cyan-200 text-xs text-center animate-pulse">
+          <div className="p-3 rounded-xl bg-[#C41E3A]/20 border border-[#C41E3A]/50 text-[#FFFFFF] text-xs text-center animate-pulse">
             {oauthStatus}
           </div>
         )}
@@ -221,7 +221,7 @@ export const AuthPage: React.FC = () => {
         )}
 
         {showForgotNotice && (
-          <div className="p-3 rounded-xl bg-[#C9B27C]/15 border border-[#C9B27C]/40 text-[#EDF5F8] text-xs">
+          <div className="p-3 rounded-xl bg-[#C9B27C]/15 border border-[#C9B27C]/40 text-[#FFFFFF] text-xs">
             Password reset link sent to your email. You can also contact support or login as official admin.
           </div>
         )}
@@ -238,7 +238,7 @@ export const AuthPage: React.FC = () => {
                   placeholder="Full Name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full bg-[#12222D]/90 hover:bg-[#162A38] border border-white/10 focus:border-[#1B7C9D] rounded-2xl pl-12 pr-4 py-3.5 text-sm text-[#EDF5F8] placeholder-gray-400 focus:outline-none transition-colors"
+                  className="w-full bg-[#12222D]/90 hover:bg-[#162A38] border border-white/10 focus:border-[#C41E3A] rounded-2xl pl-12 pr-4 py-3.5 text-sm text-[#FFFFFF] placeholder-gray-400 focus:outline-none transition-colors"
                 />
               </div>
             </div>
@@ -253,7 +253,7 @@ export const AuthPage: React.FC = () => {
               placeholder="Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full bg-[#12222D]/90 hover:bg-[#162A38] border border-white/10 focus:border-[#1B7C9D] rounded-2xl pl-12 pr-4 py-3.5 text-sm text-[#EDF5F8] placeholder-gray-400 focus:outline-none transition-colors"
+              className="w-full bg-[#12222D]/90 hover:bg-[#162A38] border border-white/10 focus:border-[#C41E3A] rounded-2xl pl-12 pr-4 py-3.5 text-sm text-[#FFFFFF] placeholder-gray-400 focus:outline-none transition-colors"
             />
           </div>
 
@@ -267,7 +267,7 @@ export const AuthPage: React.FC = () => {
                 placeholder="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full bg-[#12222D]/90 hover:bg-[#162A38] border border-white/10 focus:border-[#1B7C9D] rounded-2xl pl-12 pr-12 py-3.5 text-sm text-[#EDF5F8] placeholder-gray-400 focus:outline-none transition-colors"
+                className="w-full bg-[#12222D]/90 hover:bg-[#162A38] border border-white/10 focus:border-[#C41E3A] rounded-2xl pl-12 pr-12 py-3.5 text-sm text-[#FFFFFF] placeholder-gray-400 focus:outline-none transition-colors"
               />
               <button
                 type="button"
@@ -299,7 +299,7 @@ export const AuthPage: React.FC = () => {
                 placeholder="Phone Number (Optional)"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
-                className="w-full bg-[#12222D]/90 hover:bg-[#162A38] border border-white/10 focus:border-[#1B7C9D] rounded-2xl pl-12 pr-4 py-3.5 text-sm text-[#EDF5F8] placeholder-gray-400 focus:outline-none transition-colors"
+                className="w-full bg-[#12222D]/90 hover:bg-[#162A38] border border-white/10 focus:border-[#C41E3A] rounded-2xl pl-12 pr-4 py-3.5 text-sm text-[#FFFFFF] placeholder-gray-400 focus:outline-none transition-colors"
               />
             </div>
           )}
@@ -321,7 +321,7 @@ export const AuthPage: React.FC = () => {
         {/* ================= DIVIDER (Image 1 Style: Or sign in with) ================= */}
         <div className="relative flex items-center justify-center my-6">
           <div className="border-t border-dotted border-white/20 w-full" />
-          <span className="bg-[#07151D] px-4 text-xs text-gray-400 whitespace-nowrap absolute">
+          <span className="bg-[#0E0305] px-4 text-xs text-gray-400 whitespace-nowrap absolute">
             Or sign in with
           </span>
         </div>

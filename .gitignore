@@ -41,11 +41,13 @@ Thumbs.db
 
 # Test outputs & temporary scripts/media
 popup_screenshot_*.png
+Screenshot*.png
 test_cover.jpg
 extracted_videos.json
 admin.txt
 apply_exact_covers.cjs
 match_covers.cjs
+apply_palette.cjs
 exact_hero_card_0.jsx
 extracted_hero_section.jsx
 remove_bg*.py

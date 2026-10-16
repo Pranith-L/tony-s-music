@@ -30,11 +30,11 @@ export const MobileNav: React.FC = () => {
     <div className="md:hidden fixed inset-x-0 bottom-0 z-40 transform-gpu pointer-events-auto select-none">
       {/* 1. Mobile Floating Mini-Player */}
       {currentTrack && (
-        <div className="mx-2 mb-1.5 rounded-xl bg-[#0B222E]/95 backdrop-blur-xl border border-[#1B7C9D]/40 shadow-2xl overflow-hidden">
+        <div className="mx-2 mb-1.5 rounded-xl bg-[#1A060A]/95 backdrop-blur-xl border border-[#C41E3A]/40 shadow-2xl overflow-hidden">
           {/* Top subtle progress line */}
-          <div className="h-0.5 bg-[#0F2B38] w-full">
+          <div className="h-0.5 bg-[#26080F] w-full">
             <div
-              className="h-full bg-gradient-to-r from-[#1B7C9D] to-[#C9B27C]"
+              className="h-full bg-gradient-to-r from-[#C41E3A] to-[#C9B27C]"
               style={{ width: `${progressPercent}%` }}
             />
           </div>
@@ -45,7 +45,7 @@ export const MobileNav: React.FC = () => {
               onClick={toggleFullscreenPlayer}
               className="flex items-center gap-2.5 min-w-0 flex-1 cursor-pointer"
             >
-              <div className="w-10 h-10 rounded-lg overflow-hidden bg-[#0F2B38] shrink-0 border border-[#1B7C9D]/30">
+              <div className="w-10 h-10 rounded-lg overflow-hidden bg-[#26080F] shrink-0 border border-[#C41E3A]/30">
                 <img
                   src={currentTrack.coverImage || '/covers/001_prayermp3.jpg'}
                   alt={currentTrack.titleEnglish}
@@ -53,10 +53,10 @@ export const MobileNav: React.FC = () => {
                 />
               </div>
               <div className="min-w-0 flex-1">
-                <p className="font-telugu text-xs font-bold text-[#EDF5F8] truncate">
+                <p className="font-telugu text-xs font-bold text-[#FFFFFF] truncate">
                   {currentTrack.titleTelugu}
                 </p>
-                <p className="text-[10px] text-[#A5C1CC] truncate flex items-center gap-1">
+                <p className="text-[10px] text-[#E2CBD0] truncate flex items-center gap-1">
                   <span>{currentTrack.singer || 'Rev. Tony Prakash'}</span>
                   <span>•</span>
                   <span className="text-[#C9B27C]">{currentTrack.duration}</span>
@@ -69,7 +69,7 @@ export const MobileNav: React.FC = () => {
               <button
                 onClick={() => toggleLikeTrack(currentTrack.id)}
                 className={`p-2 transition-colors ${
-                  isLiked(currentTrack.id) ? 'text-[#C9B27C]' : 'text-[#A5C1CC]'
+                  isLiked(currentTrack.id) ? 'text-[#C9B27C]' : 'text-[#E2CBD0]'
                 }`}
               >
                 <Heart
@@ -79,7 +79,7 @@ export const MobileNav: React.FC = () => {
 
               <button
                 onClick={togglePlay}
-                className="w-8 h-8 rounded-full bg-gradient-to-tr from-[#1B7C9D] to-[#0E5671] text-[#EDF5F8] flex items-center justify-center shadow-md border border-[#C9B27C]/30"
+                className="w-8 h-8 rounded-full bg-gradient-to-tr from-[#C41E3A] to-[#8B1524] text-[#FFFFFF] flex items-center justify-center shadow-md border border-[#C9B27C]/30"
               >
                 {isPlaying ? (
                   <Pause className="w-4 h-4 fill-current" />
@@ -93,11 +93,11 @@ export const MobileNav: React.FC = () => {
       )}
 
       {/* 2. Mobile 4-Tab Bottom Navigation Bar */}
-      <nav className="bg-[#07151D]/95 backdrop-blur-2xl border-t border-[#1B7C9D]/20 px-4 pt-2 pb-2.5 pb-[max(0.625rem,env(safe-area-inset-bottom))] flex items-center justify-around">
+      <nav className="bg-[#0E0305]/95 backdrop-blur-2xl border-t border-[#C41E3A]/20 px-4 pt-2 pb-2.5 pb-[max(0.625rem,env(safe-area-inset-bottom))] flex items-center justify-around">
         <Link
           to="/"
           className={`flex flex-col items-center gap-1 text-[10px] font-semibold transition-colors ${
-            location.pathname === '/' ? 'text-[#1B7C9D]' : 'text-[#A5C1CC] hover:text-[#EDF5F8]'
+            location.pathname === '/' ? 'text-[#C41E3A]' : 'text-[#E2CBD0] hover:text-[#FFFFFF]'
           }`}
         >
           <Home className="w-5 h-5" />
@@ -107,7 +107,7 @@ export const MobileNav: React.FC = () => {
         <Link
           to="/music"
           className={`flex flex-col items-center gap-1 text-[10px] font-semibold transition-colors ${
-            location.pathname === '/music' ? 'text-[#1B7C9D]' : 'text-[#A5C1CC] hover:text-[#EDF5F8]'
+            location.pathname === '/music' ? 'text-[#C41E3A]' : 'text-[#E2CBD0] hover:text-[#FFFFFF]'
           }`}
         >
           <Search className="w-5 h-5" />
@@ -118,8 +118,8 @@ export const MobileNav: React.FC = () => {
           to="/library"
           className={`flex flex-col items-center gap-1 text-[10px] font-semibold transition-colors ${
             location.pathname.startsWith('/library')
-              ? 'text-[#1B7C9D]'
-              : 'text-[#A5C1CC] hover:text-[#EDF5F8]'
+              ? 'text-[#C41E3A]'
+              : 'text-[#E2CBD0] hover:text-[#FFFFFF]'
           }`}
         >
           <Library className="w-5 h-5" />
@@ -131,7 +131,7 @@ export const MobileNav: React.FC = () => {
           className={`flex flex-col items-center gap-1 text-[10px] font-semibold transition-colors ${
             location.pathname === '/bookings'
               ? 'text-[#C9B27C]'
-              : 'text-[#A5C1CC] hover:text-[#EDF5F8]'
+              : 'text-[#E2CBD0] hover:text-[#FFFFFF]'
           }`}
         >
           <Calendar className="w-5 h-5" />

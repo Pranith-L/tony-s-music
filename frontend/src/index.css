@@ -3,21 +3,21 @@
 @tailwind utilities;
 
 :root {
-  --primary: #1B7C9D;
-  --primary-dark: #0E5671;
-  --bg-gray: #9C9C9C;
-  --surface: #EDF5F8;
-  --text: #2A2120;
-  --accent: #C9B27C;
-  --color-gold: #C9B27C;
-  --color-gold-light: #E8DCB8;
-  --color-gold-dark: #9C8550;
-  --color-teal: #1B7C9D;
-  --color-teal-dark: #0E5671;
-  --color-midnight: #07151D;
-  --color-espresso: #0B222E;
-  --color-ivory: #EDF5F8;
-  --color-charcoal: #0F2B38;
+  --primary: #C41E3A;
+  --primary-dark: #8B1524;
+  --bg-gray: #A89295;
+  --surface: #FFFFFF;
+  --text: #150406;
+  --accent: #D4AF37;
+  --color-gold: #D4AF37;
+  --color-gold-light: #F5D77F;
+  --color-gold-dark: #9C7A28;
+  --color-red: #C41E3A;
+  --color-red-dark: #8B1524;
+  --color-midnight: #0E0305;
+  --color-espresso: #1A060A;
+  --color-ivory: #FFFFFF;
+  --color-charcoal: #26080F;
 }
 
 @layer base {
@@ -37,8 +37,8 @@
   }
 
   body {
-    background-color: #07151D;
-    color: #EDF5F8;
+    background-color: #0E0305;
+    color: #FFFFFF;
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
     letter-spacing: -0.01em;
     position: relative;
@@ -58,20 +58,20 @@
 /* Custom Refined Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
-  height: 0px; /* Hide all horizontal scrollbars site-wide for native touch feel */
+  height: 0px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #07151D;
+  background: #0E0305;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #183D4E;
+  background: #45101B;
   border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #1B7C9D;
+  background: #C41E3A;
 }
 
 /* Hide scrollbar for mobile carousels & chip strips */
@@ -84,37 +84,38 @@
 
 .no-scrollbar,
 .scrollbar-none {
-  -ms-overflow-style: none !important; /* IE and Edge */
-  scrollbar-width: none !important; /* Firefox */
-  -webkit-overflow-scrolling: touch; /* Smooth iOS momentum */
+  -ms-overflow-style: none !important;
+  scrollbar-width: none !important;
+  -webkit-overflow-scrolling: touch;
 }
 
-/* Tactile Editorial Surfaces with Oceanic Teal Depth */
+/* Tactile Editorial Surfaces with Velvet Red & Gold Depth */
 .editorial-card {
-  background: linear-gradient(180deg, rgba(15, 43, 56, 0.75) 0%, rgba(9, 27, 36, 0.9) 100%);
-  border: 1px solid rgba(27, 124, 157, 0.22);
+  background: linear-gradient(180deg, rgba(38, 8, 15, 0.75) 0%, rgba(22, 5, 9, 0.9) 100%);
+  border: 1px solid rgba(212, 175, 55, 0.22);
   transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .editorial-card:hover {
-  border-color: rgba(201, 178, 124, 0.45);
+  border-color: rgba(212, 175, 55, 0.55);
   transform: translateY(-2px);
-  box-shadow: 0 12px 35px -10px rgba(0, 0, 0, 0.85), 0 0 25px -5px rgba(27, 124, 157, 0.25);
+  box-shadow: 0 12px 35px -10px rgba(0, 0, 0, 0.85), 0 0 25px -5px rgba(196, 30, 58, 0.3);
 }
 
 .gold-hairline {
-  border-color: rgba(201, 178, 124, 0.25);
+  border-color: rgba(212, 175, 55, 0.3);
 }
 
 .gold-gradient-text {
-  background: linear-gradient(135deg, #EDF5F8 0%, #E8DCB8 35%, #C9B27C 70%, #9C8550 100%);
+  background: linear-gradient(135deg, #FFFFFF 0%, #F5D77F 40%, #D4AF37 75%, #9C7A28 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
-.teal-gradient-text {
-  background: linear-gradient(135deg, #EDF5F8 0%, #1B7C9D 50%, #0E5671 100%);
+.teal-gradient-text,
+.red-gradient-text {
+  background: linear-gradient(135deg, #FFFFFF 0%, #C41E3A 50%, #8B1524 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -122,11 +123,11 @@
 
 /* Atmospheric Stage Glow */
 .stage-spotlight {
-  background: radial-gradient(ellipse at 50% 15%, rgba(27, 124, 157, 0.22) 0%, rgba(14, 86, 113, 0.12) 45%, rgba(7, 21, 29, 0) 75%);
+  background: radial-gradient(ellipse at 50% 15%, rgba(196, 30, 58, 0.25) 0%, rgba(139, 21, 36, 0.15) 45%, rgba(14, 3, 5, 0) 75%);
 }
 
 .warm-halo {
-  box-shadow: 0 0 60px -10px rgba(201, 178, 124, 0.25);
+  box-shadow: 0 0 60px -10px rgba(212, 175, 55, 0.3);
 }
 
 /* Audio Wave Visualizer */

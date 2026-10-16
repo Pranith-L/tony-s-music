@@ -117,7 +117,7 @@ export const BottomPlayer: React.FC = () => {
   return (
     <footer
       aria-label="Audio playback controls"
-      className="fixed bottom-0 left-0 right-0 z-40 bg-[#07151D]/95 backdrop-blur-2xl border-t border-[#1B7C9D]/30 shadow-[0_-10px_30px_rgba(0,0,0,0.85)] px-3 sm:px-6 py-2.5 sm:py-3 transition-all"
+      className="fixed bottom-0 left-0 right-0 z-40 bg-[#0E0305]/95 backdrop-blur-2xl border-t border-[#C41E3A]/30 shadow-[0_-10px_30px_rgba(0,0,0,0.85)] px-3 sm:px-6 py-2.5 sm:py-3 transition-all"
     >
       <div className="max-w-[1600px] mx-auto flex items-center justify-between gap-3 sm:gap-6">
         {/* ================= LEFT SECTION: Track Info ================= */}
@@ -125,7 +125,7 @@ export const BottomPlayer: React.FC = () => {
           {/* Track Cover Thumbnail */}
           <div
             onClick={handleNowPlayingToggle}
-            className="relative w-12 h-12 sm:w-14 sm:h-14 rounded-xl overflow-hidden bg-[#0B222E] border border-[#1B7C9D]/40 shrink-0 shadow-md group cursor-pointer"
+            className="relative w-12 h-12 sm:w-14 sm:h-14 rounded-xl overflow-hidden bg-[#1A060A] border border-[#C41E3A]/40 shrink-0 shadow-md group cursor-pointer"
             title="Toggle Now Playing view"
           >
             <img
@@ -135,9 +135,9 @@ export const BottomPlayer: React.FC = () => {
             />
             {isPlaying && (
               <div className="absolute inset-0 bg-black/45 backdrop-blur-[1px] flex items-center justify-center gap-0.5 pointer-events-none">
-                <div className="w-1 bg-[#1B7C9D] rounded-full wave-bar-1" />
+                <div className="w-1 bg-[#C41E3A] rounded-full wave-bar-1" />
                 <div className="w-1 bg-[#C9B27C] rounded-full wave-bar-2" />
-                <div className="w-1 bg-[#1B7C9D] rounded-full wave-bar-3" />
+                <div className="w-1 bg-[#C41E3A] rounded-full wave-bar-3" />
                 <div className="w-1 bg-[#C9B27C] rounded-full wave-bar-4" />
               </div>
             )}
@@ -147,7 +147,7 @@ export const BottomPlayer: React.FC = () => {
           <div className="min-w-0 overflow-hidden space-y-0.5">
             <div className="flex items-center gap-2">
               <span
-                className="text-xs sm:text-sm font-semibold text-[#EDF5F8] truncate leading-tight hover:underline cursor-pointer"
+                className="text-xs sm:text-sm font-semibold text-[#FFFFFF] truncate leading-tight hover:underline cursor-pointer"
                 onClick={handleNowPlayingToggle}
               >
                 {currentTrack.titleEnglish}
@@ -155,7 +155,7 @@ export const BottomPlayer: React.FC = () => {
               {isBackingTrack(currentTrack) && !hasTrackAccess(currentTrack) && (
                 <button
                   onClick={() => setShowPreviewLimitModal(true)}
-                  className="px-2 py-0.5 rounded-full text-[9px] font-bold bg-[#C9B27C]/20 text-[#E8DCB8] border border-[#C9B27C]/50 hover:bg-[#C9B27C] hover:text-[#07151D] transition-colors shrink-0"
+                  className="px-2 py-0.5 rounded-full text-[9px] font-bold bg-[#C9B27C]/20 text-[#E8DCB8] border border-[#C9B27C]/50 hover:bg-[#C9B27C] hover:text-[#0E0305] transition-colors shrink-0"
                   title="30s Studio Preview • Click to Unlock"
                 >
                   30s Preview • ₹99
@@ -164,8 +164,8 @@ export const BottomPlayer: React.FC = () => {
             </div>
             <div className="text-[11px] font-telugu text-[#C9B27C] truncate flex items-center gap-1.5">
               <span className="truncate">{currentTrack.titleTelugu}</span>
-              <span className="text-[#A5C1CC]">•</span>
-              <span className="text-[#A5C1CC] text-[10px] font-sans truncate">
+              <span className="text-[#E2CBD0]">•</span>
+              <span className="text-[#E2CBD0] text-[10px] font-sans truncate">
                 {currentTrack.singer || 'Rev. Tony Prakash'}
               </span>
             </div>
@@ -175,7 +175,7 @@ export const BottomPlayer: React.FC = () => {
           <button
             onClick={() => toggleLikeTrack(currentTrack.id)}
             className={`p-1.5 rounded-full transition-transform hover:scale-110 shrink-0 ${
-              liked ? 'text-[#C9B27C]' : 'text-[#A5C1CC] hover:text-[#EDF5F8]'
+              liked ? 'text-[#C9B27C]' : 'text-[#E2CBD0] hover:text-[#FFFFFF]'
             }`}
             title={liked ? 'Remove from Liked Songs' : 'Save to Liked Songs'}
           >
@@ -191,20 +191,20 @@ export const BottomPlayer: React.FC = () => {
             <button
               onClick={toggleShuffle}
               className={`p-1.5 rounded-full transition-colors relative ${
-                shuffle ? 'text-[#1B7C9D]' : 'text-[#A5C1CC] hover:text-[#EDF5F8]'
+                shuffle ? 'text-[#C41E3A]' : 'text-[#E2CBD0] hover:text-[#FFFFFF]'
               }`}
               title={shuffle ? 'Shuffle enabled' : 'Shuffle disabled'}
             >
               <Shuffle className="w-4 h-4" />
               {shuffle && (
-                <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1 h-1 bg-[#1B7C9D] rounded-full" />
+                <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1 h-1 bg-[#C41E3A] rounded-full" />
               )}
             </button>
 
             {/* Previous */}
             <button
               onClick={playPrev}
-              className="p-1.5 text-[#A5C1CC] hover:text-[#EDF5F8] transition-colors hover:scale-105"
+              className="p-1.5 text-[#E2CBD0] hover:text-[#FFFFFF] transition-colors hover:scale-105"
               title="Previous song"
             >
               <SkipBack className="w-4 h-4 sm:w-5 sm:h-5 fill-current" />
@@ -214,7 +214,7 @@ export const BottomPlayer: React.FC = () => {
             <button
               onClick={togglePlay}
               aria-label={isPlaying ? 'Pause' : 'Play'}
-              className="w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-gradient-to-tr from-[#1B7C9D] via-[#0E5671] to-[#1B7C9D] text-[#EDF5F8] flex items-center justify-center shadow-[0_0_20px_rgba(27,124,157,0.5)] border border-[#C9B27C]/40 hover:scale-105 active:scale-95 transition-all"
+              className="w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-gradient-to-tr from-[#C41E3A] via-[#8B1524] to-[#C41E3A] text-[#FFFFFF] flex items-center justify-center shadow-[0_0_20px_rgba(27,124,157,0.5)] border border-[#C9B27C]/40 hover:scale-105 active:scale-95 transition-all"
             >
               {isPlaying ? (
                 <Pause className="w-4 h-4 sm:w-5 sm:h-5 fill-current" />
@@ -227,7 +227,7 @@ export const BottomPlayer: React.FC = () => {
             <div className="relative group/skip">
               <button
                 onClick={playNext}
-                className="p-1.5 text-[#A5C1CC] hover:text-[#EDF5F8] transition-colors hover:scale-105"
+                className="p-1.5 text-[#E2CBD0] hover:text-[#FFFFFF] transition-colors hover:scale-105"
                 title={
                   isSubscriber
                     ? 'Next song (Unlimited VIP skips)'
@@ -238,7 +238,7 @@ export const BottomPlayer: React.FC = () => {
               </button>
               {!isSubscriber && (
                 <span
-                  className="hidden sm:inline-block absolute -top-1 -right-1 text-[8px] font-mono px-1 rounded-full bg-[#1B7C9D]/40 text-[#8CE2FF] border border-[#1B7C9D]/60 pointer-events-none"
+                  className="hidden sm:inline-block absolute -top-1 -right-1 text-[8px] font-mono px-1 rounded-full bg-[#C41E3A]/40 text-[#8CE2FF] border border-[#C41E3A]/60 pointer-events-none"
                   title={`${remainingSkips} free skips left`}
                 >
                   {remainingSkips}
@@ -250,7 +250,7 @@ export const BottomPlayer: React.FC = () => {
             <button
               onClick={toggleRepeat}
               className={`p-1.5 rounded-full transition-colors relative ${
-                repeatMode !== 'off' ? 'text-[#1B7C9D]' : 'text-[#A5C1CC] hover:text-[#EDF5F8]'
+                repeatMode !== 'off' ? 'text-[#C41E3A]' : 'text-[#E2CBD0] hover:text-[#FFFFFF]'
               }`}
               title={`Repeat: ${repeatMode}`}
             >
@@ -260,13 +260,13 @@ export const BottomPlayer: React.FC = () => {
                 <Repeat className="w-4 h-4" />
               )}
               {repeatMode !== 'off' && (
-                <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1 h-1 bg-[#1B7C9D] rounded-full" />
+                <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1 h-1 bg-[#C41E3A] rounded-full" />
               )}
             </button>
           </div>
 
           {/* Bottom Scrub Bar */}
-          <div className="w-full flex items-center gap-2 sm:gap-3 text-[10px] sm:text-xs font-mono text-[#A5C1CC]">
+          <div className="w-full flex items-center gap-2 sm:gap-3 text-[10px] sm:text-xs font-mono text-[#E2CBD0]">
             <span className="w-8 text-right select-none">{formatSeconds(currentTime)}</span>
 
             {/* Interactive Progress Bar */}
@@ -275,23 +275,23 @@ export const BottomPlayer: React.FC = () => {
               onClick={handleProgressBarClick}
               onMouseMove={handleProgressBarMouseMove}
               onMouseLeave={() => setHoverSeekTime(null)}
-              className="relative flex-1 h-1.5 bg-[#0F2B38] rounded-full cursor-pointer group py-1 -my-1"
+              className="relative flex-1 h-1.5 bg-[#26080F] rounded-full cursor-pointer group py-1 -my-1"
             >
-              <div className="absolute inset-0 bg-[#0F2B38] rounded-full overflow-hidden border border-[#1B7C9D]/20">
+              <div className="absolute inset-0 bg-[#26080F] rounded-full overflow-hidden border border-[#C41E3A]/20">
                 <div
-                  className="h-full bg-gradient-to-r from-[#1B7C9D] to-[#C9B27C] rounded-full transition-all group-hover:brightness-110"
+                  className="h-full bg-gradient-to-r from-[#C41E3A] to-[#C9B27C] rounded-full transition-all group-hover:brightness-110"
                   style={{ width: `${progressPercent}%` }}
                 />
               </div>
 
               <div
-                className="absolute top-1/2 -translate-y-1/2 w-3 h-3 bg-[#EDF5F8] border border-[#1B7C9D] rounded-full shadow-md opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none -translate-x-1/2"
+                className="absolute top-1/2 -translate-y-1/2 w-3 h-3 bg-[#FFFFFF] border border-[#C41E3A] rounded-full shadow-md opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none -translate-x-1/2"
                 style={{ left: `${progressPercent}%` }}
               />
 
               {hoverSeekTime !== null && (
                 <div
-                  className="absolute -top-7 -translate-x-1/2 bg-[#0B222E] border border-[#1B7C9D]/40 text-[#EDF5F8] text-[10px] font-mono px-1.5 py-0.5 rounded shadow pointer-events-none"
+                  className="absolute -top-7 -translate-x-1/2 bg-[#1A060A] border border-[#C41E3A]/40 text-[#FFFFFF] text-[10px] font-mono px-1.5 py-0.5 rounded shadow pointer-events-none"
                   style={{ left: `${hoverSeekPos}px` }}
                 >
                   {formatSeconds(hoverSeekTime)}
@@ -310,8 +310,8 @@ export const BottomPlayer: React.FC = () => {
             onClick={handleLyricsToggle}
             className={`p-1.5 rounded-lg transition-colors hidden sm:flex ${
               isRightSidebarOpen && rightSidebarTab === 'lyrics'
-                ? 'text-[#C9B27C] bg-[#12303E]'
-                : 'text-[#A5C1CC] hover:text-[#EDF5F8]'
+                ? 'text-[#C9B27C] bg-[#340C14]'
+                : 'text-[#E2CBD0] hover:text-[#FFFFFF]'
             }`}
             title="Lyrics (సాహిత్యం)"
           >
@@ -323,8 +323,8 @@ export const BottomPlayer: React.FC = () => {
             onClick={handleQueueToggle}
             className={`p-1.5 rounded-lg transition-colors hidden sm:flex ${
               isRightSidebarOpen && rightSidebarTab === 'queue'
-                ? 'text-[#1B7C9D] bg-[#12303E]'
-                : 'text-[#A5C1CC] hover:text-[#EDF5F8]'
+                ? 'text-[#C41E3A] bg-[#340C14]'
+                : 'text-[#E2CBD0] hover:text-[#FFFFFF]'
             }`}
             title="Queue (రాబోయే గీతాలు)"
           >
@@ -336,8 +336,8 @@ export const BottomPlayer: React.FC = () => {
             onClick={handleNowPlayingToggle}
             className={`p-1.5 rounded-lg transition-colors hidden md:flex ${
               isRightSidebarOpen && rightSidebarTab === 'now-playing'
-                ? 'text-[#1B7C9D] bg-[#12303E]'
-                : 'text-[#A5C1CC] hover:text-[#EDF5F8]'
+                ? 'text-[#C41E3A] bg-[#340C14]'
+                : 'text-[#E2CBD0] hover:text-[#FFFFFF]'
             }`}
             title="Now Playing View"
           >
@@ -352,7 +352,7 @@ export const BottomPlayer: React.FC = () => {
           <div className="hidden lg:flex items-center gap-1.5 w-24 xl:w-28">
             <button
               onClick={toggleMute}
-              className="p-1 text-[#A5C1CC] hover:text-[#EDF5F8] transition-colors"
+              className="p-1 text-[#E2CBD0] hover:text-[#FFFFFF] transition-colors"
               title={isMuted ? 'Unmute' : 'Mute'}
             >
               {isMuted || volume === 0 ? (
@@ -370,7 +370,7 @@ export const BottomPlayer: React.FC = () => {
               step="0.01"
               value={isMuted ? 0 : volume}
               onChange={(e) => setVolumeLevel(parseFloat(e.target.value))}
-              className="w-full h-1 bg-[#0F2B38] accent-[#1B7C9D] rounded-full cursor-pointer"
+              className="w-full h-1 bg-[#26080F] accent-[#C41E3A] rounded-full cursor-pointer"
             />
           </div>
 
@@ -379,8 +379,8 @@ export const BottomPlayer: React.FC = () => {
             onClick={toggleFullscreenPlayer}
             className={`p-1.5 rounded-lg transition-colors ${
               isFullscreenPlayer
-                ? 'text-[#1B7C9D] bg-[#12303E]'
-                : 'text-[#A5C1CC] hover:text-[#EDF5F8]'
+                ? 'text-[#C41E3A] bg-[#340C14]'
+                : 'text-[#E2CBD0] hover:text-[#FFFFFF]'
             }`}
             title={isFullscreenPlayer ? 'Exit Full Screen' : 'Full Screen Player'}
           >

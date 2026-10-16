@@ -35,7 +35,7 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
   const { user, isAdmin } = useAuth();
 
   return (
-    <div className="flex h-screen h-[100dvh] w-screen overflow-hidden bg-[#07151D] text-[#EDF5F8] font-sans selection:bg-[#1B7C9D] selection:text-[#EDF5F8]">
+    <div className="flex h-screen h-[100dvh] w-screen overflow-hidden bg-[#0E0305] text-[#FFFFFF] font-sans selection:bg-[#C41E3A] selection:text-[#FFFFFF]">
       {/* 1. Left Navigation Sidebar (Desktop / Tablet) */}
       <Sidebar
         collapsed={sidebarCollapsed}
@@ -69,9 +69,9 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
       {/* 7. Mobile Drawer Overlay for full navigation */}
       {mobileDrawerOpen && (
         <div className="md:hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex flex-col animate-fadeIn">
-          <div className="p-4 flex items-center justify-between border-b border-[#1B7C9D]/30 bg-[#07151D]">
+          <div className="p-4 flex items-center justify-between border-b border-[#C41E3A]/30 bg-[#0E0305]">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-[#09212C] via-[#0E5671] to-[#1B7C9D] border border-[#C9B27C] overflow-hidden flex items-center justify-center">
+              <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-[#22070D] via-[#8B1524] to-[#C41E3A] border border-[#C9B27C] overflow-hidden flex items-center justify-center">
                 <img
                   src="/tony_avatar_cutout.png"
                   alt="Tony Prakash"
@@ -79,13 +79,13 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
                 />
               </div>
               <div>
-                <span className="font-heading font-bold text-sm text-[#EDF5F8]">TONY'S MUSIC</span>
+                <span className="font-heading font-bold text-sm text-[#FFFFFF]">TONY'S MUSIC</span>
                 <p className="font-telugu text-[10px] text-[#C9B27C]">టోనీ ప్రకాష్ భక్తి గీతాలు</p>
               </div>
             </div>
             <button
               onClick={() => setMobileDrawerOpen(false)}
-              className="p-2 text-[#A5C1CC] hover:text-[#EDF5F8]"
+              className="p-2 text-[#E2CBD0] hover:text-[#FFFFFF]"
             >
               <X className="w-5 h-5" />
             </button>
@@ -97,8 +97,8 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
               onClick={() => setMobileDrawerOpen(false)}
               className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold ${
                 location.pathname === '/'
-                  ? 'bg-[#1B7C9D] text-white'
-                  : 'text-[#A5C1CC] hover:bg-[#0B222E]'
+                  ? 'bg-[#C41E3A] text-white'
+                  : 'text-[#E2CBD0] hover:bg-[#1A060A]'
               }`}
             >
               <Home className="w-4 h-4" />
@@ -110,8 +110,8 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
               onClick={() => setMobileDrawerOpen(false)}
               className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold ${
                 location.pathname === '/music'
-                  ? 'bg-[#1B7C9D] text-white'
-                  : 'text-[#A5C1CC] hover:bg-[#0B222E]'
+                  ? 'bg-[#C41E3A] text-white'
+                  : 'text-[#E2CBD0] hover:bg-[#1A060A]'
               }`}
             >
               <Search className="w-4 h-4" />
@@ -123,8 +123,8 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
               onClick={() => setMobileDrawerOpen(false)}
               className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold ${
                 location.pathname === '/tracks'
-                  ? 'bg-[#1B7C9D] text-white'
-                  : 'text-[#A5C1CC] hover:bg-[#0B222E]'
+                  ? 'bg-[#C41E3A] text-white'
+                  : 'text-[#E2CBD0] hover:bg-[#1A060A]'
               }`}
             >
               <Disc3 className="w-4 h-4" />
@@ -136,8 +136,8 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
               onClick={() => setMobileDrawerOpen(false)}
               className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold ${
                 location.pathname.startsWith('/library')
-                  ? 'bg-[#1B7C9D] text-white'
-                  : 'text-[#A5C1CC] hover:bg-[#0B222E]'
+                  ? 'bg-[#C41E3A] text-white'
+                  : 'text-[#E2CBD0] hover:bg-[#1A060A]'
               }`}
             >
               <Library className="w-4 h-4" />
@@ -149,8 +149,8 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
               onClick={() => setMobileDrawerOpen(false)}
               className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold ${
                 location.pathname.startsWith('/albums')
-                  ? 'bg-[#1B7C9D] text-white'
-                  : 'text-[#A5C1CC] hover:bg-[#0B222E]'
+                  ? 'bg-[#C41E3A] text-white'
+                  : 'text-[#E2CBD0] hover:bg-[#1A060A]'
               }`}
             >
               <ListMusic className="w-4 h-4" />
@@ -162,8 +162,8 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
               onClick={() => setMobileDrawerOpen(false)}
               className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold ${
                 location.pathname === '/videos'
-                  ? 'bg-[#1B7C9D] text-white'
-                  : 'text-[#A5C1CC] hover:bg-[#0B222E]'
+                  ? 'bg-[#C41E3A] text-white'
+                  : 'text-[#E2CBD0] hover:bg-[#1A060A]'
               }`}
             >
               <Video className="w-4 h-4" />
@@ -175,8 +175,8 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
               onClick={() => setMobileDrawerOpen(false)}
               className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold ${
                 location.pathname === '/bookings'
-                  ? 'bg-[#1B7C9D] text-white'
-                  : 'text-[#A5C1CC] hover:bg-[#0B222E]'
+                  ? 'bg-[#C41E3A] text-white'
+                  : 'text-[#E2CBD0] hover:bg-[#1A060A]'
               }`}
             >
               <Calendar className="w-4 h-4" />
@@ -186,20 +186,20 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
             <Link
               to="/membership"
               onClick={() => setMobileDrawerOpen(false)}
-              className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-[#C9B27C] hover:bg-[#0B222E]"
+              className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-[#C9B27C] hover:bg-[#1A060A]"
             >
               <Sparkles className="w-4 h-4" />
               <span>One-Time Pass (₹299)</span>
             </Link>
 
-            <div className="pt-4 border-t border-[#1B7C9D]/20 mt-4 space-y-1">
+            <div className="pt-4 border-t border-[#C41E3A]/20 mt-4 space-y-1">
               {user ? (
                 <Link
                   to="/account"
                   onClick={() => setMobileDrawerOpen(false)}
-                  className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-[#EDF5F8]"
+                  className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-[#FFFFFF]"
                 >
-                  <User className="w-4 h-4 text-[#1B7C9D]" />
+                  <User className="w-4 h-4 text-[#C41E3A]" />
                   <span>My Account ({user.name})</span>
                 </Link>
               ) : (
@@ -217,7 +217,7 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
                 <Link
                   to="/admin"
                   onClick={() => setMobileDrawerOpen(false)}
-                  className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-cyan-400"
+                  className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-[#D4AF37]"
                 >
                   <Shield className="w-4 h-4" />
                   <span>Admin Dashboard</span>

@@ -177,7 +177,7 @@ export const TracksPage: React.FC = () => {
         canonical="https://tonyprakash.com/tracks"
       />
       {/* 1. Page Header with Visual Distinction */}
-      <div className="relative rounded-3xl p-6 sm:p-10 bg-gradient-to-r from-[#07151D] via-[#0E2838] to-[#12364B] border-2 border-[#C9B27C]/40 shadow-[0_0_50px_rgba(201,178,124,0.15)] overflow-hidden">
+      <div className="relative rounded-3xl p-6 sm:p-10 bg-gradient-to-r from-[#0E0305] via-[#0E2838] to-[#12364B] border-2 border-[#C9B27C]/40 shadow-[0_0_50px_rgba(201,178,124,0.15)] overflow-hidden">
         <div className="absolute right-0 top-0 bottom-0 w-1/3 opacity-10 bg-[radial-gradient(circle,#C9B27C,transparent)] pointer-events-none" />
         
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
@@ -187,36 +187,36 @@ export const TracksPage: React.FC = () => {
                 <Disc3 className="w-3.5 h-3.5 text-[#C9B27C]" />
                 57 Studio Backing Tracks
               </span>
-              <span className="px-2.5 py-1 rounded-full text-[11px] font-mono font-bold bg-[#1B7C9D]/30 text-[#8CE2FF] border border-[#1B7C9D]/50">
+              <span className="px-2.5 py-1 rounded-full text-[11px] font-mono font-bold bg-[#C41E3A]/30 text-[#8CE2FF] border border-[#C41E3A]/50">
                 ₹99 / Track
               </span>
             </div>
 
-            <h1 className="text-3xl sm:text-5xl font-heading font-extrabold text-[#EDF5F8] tracking-tight">
+            <h1 className="text-3xl sm:text-5xl font-heading font-extrabold text-[#FFFFFF] tracking-tight">
               Studio Backing Tracks
             </h1>
             <p className="font-telugu text-lg sm:text-xl text-[#C9B27C] font-semibold">
               ప్రత్యేక స్టూడియో ట్రాక్స్ సమాహారం (మైనస్-వన్ / కారౌకే)
             </p>
-            <p className="text-xs sm:text-sm text-[#A5C1CC] leading-relaxed">
+            <p className="text-xs sm:text-sm text-[#E2CBD0] leading-relaxed">
               Professional minus-one instrumental tracks engineered for church choirs, live gospel ministry, and vocal performances. Free users can listen to a <strong className="text-white">30-second studio preview</strong>. Unlock complete tracks & high-fidelity studio WAV downloads for <strong className="text-[#C9B27C]">₹99 each</strong>.
             </p>
           </div>
 
           {/* Quick Studio Track Purchase Callout */}
-          <div className="shrink-0 p-5 rounded-2xl bg-[#07151D]/90 border border-[#C9B27C]/50 shadow-xl space-y-3 w-full md:w-80">
+          <div className="shrink-0 p-5 rounded-2xl bg-[#0E0305]/90 border border-[#C9B27C]/50 shadow-xl space-y-3 w-full md:w-80">
             <div className="flex items-center justify-between">
               <span className="text-xs font-mono uppercase tracking-wider text-[#C9B27C] font-bold">
                 Studio Master Tracks
               </span>
-              <span className="text-xs font-bold px-2.5 py-0.5 rounded bg-[#C9B27C] text-[#07151D]">
+              <span className="text-xs font-bold px-2.5 py-0.5 rounded bg-[#C9B27C] text-[#0E0305]">
                 ₹99 / TRACK
               </span>
             </div>
-            <p className="text-xs text-[#A5C1CC]">
+            <p className="text-xs text-[#E2CBD0]">
               Unlock individual minus-one arrangements with permanent account ownership and offline uncompressed WAV master audio.
             </p>
-            <div className="pt-1 flex items-center gap-2 text-[11px] text-[#A5C1CC]">
+            <div className="pt-1 flex items-center gap-2 text-[11px] text-[#E2CBD0]">
               <span className="text-emerald-400 font-semibold">✓ 24-bit 48kHz WAV</span>
               <span>•</span>
               <span>Choir & Solo</span>
@@ -229,18 +229,18 @@ export const TracksPage: React.FC = () => {
       <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
         {/* Search */}
         <div className="relative w-full sm:max-w-md">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#A5C1CC]" />
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#E2CBD0]" />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => handleSearchChange(e.target.value)}
             placeholder="Search backing tracks (e.g. Nee Prema, 001)..."
-            className="w-full pl-11 pr-10 py-3 rounded-2xl bg-[#09212C] border border-[#1B7C9D]/30 text-xs sm:text-sm text-[#EDF5F8] placeholder-[#A5C1CC]/60 focus:outline-none focus:border-[#C9B27C] shadow-inner"
+            className="w-full pl-11 pr-10 py-3 rounded-2xl bg-[#22070D] border border-[#C41E3A]/30 text-xs sm:text-sm text-[#FFFFFF] placeholder-[#E2CBD0]/60 focus:outline-none focus:border-[#C9B27C] shadow-inner"
           />
           {searchQuery && (
             <button
               onClick={() => handleSearchChange('')}
-              className="absolute right-3.5 top-1/2 -translate-y-1/2 p-1 text-[#A5C1CC] hover:text-[#EDF5F8]"
+              className="absolute right-3.5 top-1/2 -translate-y-1/2 p-1 text-[#E2CBD0] hover:text-[#FFFFFF]"
             >
               <X className="w-3.5 h-3.5" />
             </button>
@@ -249,25 +249,25 @@ export const TracksPage: React.FC = () => {
 
         {/* Track Count */}
         <div className="flex items-center justify-between sm:justify-end w-full sm:w-auto gap-4">
-          <span className="text-xs text-[#A5C1CC] font-mono">
+          <span className="text-xs text-[#E2CBD0] font-mono">
             Showing <strong className="text-white">{sortedTracks.length}</strong> Studio Tracks
           </span>
         </div>
       </div>
 
       {/* 3. Backing Tracks List */}
-      <div className="bg-[#09212C]/60 rounded-3xl border border-[#1B7C9D]/20 shadow-2xl">
-        <div className="divide-y divide-[#1B7C9D]/10">
+      <div className="bg-[#22070D]/60 rounded-3xl border border-[#C41E3A]/20 shadow-2xl">
+        <div className="divide-y divide-[#C41E3A]/10">
           {isLoading ? (
             <div className="p-16 text-center space-y-3">
               <div className="w-8 h-8 border-2 border-[#C9B27C] border-t-transparent rounded-full animate-spin mx-auto" />
-              <p className="text-xs text-[#A5C1CC]">Loading studio backing tracks...</p>
+              <p className="text-xs text-[#E2CBD0]">Loading studio backing tracks...</p>
             </div>
           ) : sortedTracks.length === 0 ? (
             <div className="p-16 text-center space-y-3">
-              <Disc3 className="w-12 h-12 text-[#A5C1CC]/40 mx-auto" />
-              <h4 className="text-base font-semibold text-[#EDF5F8]">No backing tracks found</h4>
-              <p className="text-xs text-[#A5C1CC]">Try checking your search terms.</p>
+              <Disc3 className="w-12 h-12 text-[#E2CBD0]/40 mx-auto" />
+              <h4 className="text-base font-semibold text-[#FFFFFF]">No backing tracks found</h4>
+              <p className="text-xs text-[#E2CBD0]">Try checking your search terms.</p>
             </div>
           ) : (
             sortedTracks.map((track, idx) => {
@@ -281,13 +281,13 @@ export const TracksPage: React.FC = () => {
                 <div
                   key={track.id}
                   onClick={() => playTrack(track, sortedTracks)}
-                  className={`group relative flex items-center justify-between px-4 py-3.5 sm:px-6 sm:py-4 hover:bg-[#12303E]/80 transition-colors cursor-pointer first:rounded-t-3xl last:rounded-b-3xl ${
-                    isCurrent ? 'bg-[#12303E]/95 border-l-4 border-[#C9B27C]' : ''
+                  className={`group relative flex items-center justify-between px-4 py-3.5 sm:px-6 sm:py-4 hover:bg-[#340C14]/80 transition-colors cursor-pointer first:rounded-t-3xl last:rounded-b-3xl ${
+                    isCurrent ? 'bg-[#340C14]/95 border-l-4 border-[#C9B27C]' : ''
                   }`}
                 >
                   {/* Left: Index, Album Artwork, Title */}
                   <div className="flex items-center gap-3.5 sm:gap-4 min-w-0 flex-1">
-                    <span className="font-mono text-xs text-[#A5C1CC] w-6 text-center shrink-0">
+                    <span className="font-mono text-xs text-[#E2CBD0] w-6 text-center shrink-0">
                       {isThisPlaying ? (
                         <div className="flex items-end justify-center gap-0.5 h-3.5">
                           <span className="w-0.5 bg-[#C9B27C] rounded-full wave-bar-1" />
@@ -300,7 +300,7 @@ export const TracksPage: React.FC = () => {
                       )}
                     </span>
 
-                    <div className="relative w-12 h-12 sm:w-14 sm:h-14 rounded-xl overflow-hidden bg-[#0F2B38] shrink-0 border border-[#C9B27C]/30 shadow-md">
+                    <div className="relative w-12 h-12 sm:w-14 sm:h-14 rounded-xl overflow-hidden bg-[#26080F] shrink-0 border border-[#C9B27C]/30 shadow-md">
                       <img
                         src={track.coverImage || '/covers/001_prayermp3.jpg'}
                         alt={track.titleEnglish}
@@ -308,9 +308,9 @@ export const TracksPage: React.FC = () => {
                       />
                       <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                         {isThisPlaying ? (
-                          <Pause className="w-5 h-5 text-[#EDF5F8] fill-current" />
+                          <Pause className="w-5 h-5 text-[#FFFFFF] fill-current" />
                         ) : (
-                          <Play className="w-5 h-5 text-[#EDF5F8] fill-current ml-0.5" />
+                          <Play className="w-5 h-5 text-[#FFFFFF] fill-current ml-0.5" />
                         )}
                       </div>
                     </div>
@@ -319,19 +319,19 @@ export const TracksPage: React.FC = () => {
                       <div className="flex items-center gap-2">
                         <h4
                           className={`text-sm sm:text-base font-semibold truncate ${
-                            isCurrent ? 'text-[#C9B27C]' : 'text-[#EDF5F8]'
+                            isCurrent ? 'text-[#C9B27C]' : 'text-[#FFFFFF]'
                           }`}
                         >
                           {track.titleEnglish}
                         </h4>
-                        <span className="hidden sm:inline-block px-2 py-0.5 rounded text-[10px] font-mono bg-[#0B222E] text-[#A5C1CC] border border-white/10 shrink-0">
+                        <span className="hidden sm:inline-block px-2 py-0.5 rounded text-[10px] font-mono bg-[#1A060A] text-[#E2CBD0] border border-white/10 shrink-0">
                           Studio Track
                         </span>
                       </div>
                       <p className="font-telugu text-xs sm:text-sm text-[#C9B27C] truncate">
                         {track.titleTelugu}
                       </p>
-                      <p className="text-[10px] text-[#A5C1CC] truncate">
+                      <p className="text-[10px] text-[#E2CBD0] truncate">
                         Rev. Tony Prakash • Minus-One Instrumental
                       </p>
                     </div>
@@ -340,7 +340,7 @@ export const TracksPage: React.FC = () => {
                   {/* Right: Preview badge, Buy / Download action, Duration */}
                   <div className="flex items-center gap-2 sm:gap-3 shrink-0 ml-3">
                     {unlocked ? (
-                      <span className="hidden sm:flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold bg-[#1B7C9D]/30 text-[#8CE2FF] border border-[#1B7C9D]/50 shadow-sm">
+                      <span className="hidden sm:flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold bg-[#C41E3A]/30 text-[#8CE2FF] border border-[#C41E3A]/50 shadow-sm">
                         <CheckCircle2 className="w-3 h-3 text-[#39A8CE]" />
                         <span className="hidden sm:inline">Full Track</span> Unlocked
                       </span>
@@ -358,7 +358,7 @@ export const TracksPage: React.FC = () => {
                           e.stopPropagation();
                           handleDownload(track);
                         }}
-                        className="hidden sm:flex px-3 py-1.5 rounded-xl text-xs font-semibold bg-[#1B7C9D]/20 hover:bg-[#1B7C9D] text-[#EDF5F8] border border-[#1B7C9D]/40 transition-all items-center gap-1.5 shadow-sm"
+                        className="hidden sm:flex px-3 py-1.5 rounded-xl text-xs font-semibold bg-[#C41E3A]/20 hover:bg-[#C41E3A] text-[#FFFFFF] border border-[#C41E3A]/40 transition-all items-center gap-1.5 shadow-sm"
                         title="Download Studio WAV"
                       >
                         <Download className="w-3.5 h-3.5" />
@@ -371,10 +371,10 @@ export const TracksPage: React.FC = () => {
                           handleBuyTrack(track);
                         }}
                         disabled={isPurchasing}
-                        className="hidden sm:flex px-3.5 py-1.5 rounded-xl text-xs font-bold bg-gradient-to-r from-[#C9B27C] to-[#E8DCB8] text-[#07151D] hover:opacity-90 transition-all items-center gap-1.5 shadow-md active:scale-95"
+                        className="hidden sm:flex px-3.5 py-1.5 rounded-xl text-xs font-bold bg-gradient-to-r from-[#C9B27C] to-[#E8DCB8] text-[#0E0305] hover:opacity-90 transition-all items-center gap-1.5 shadow-md active:scale-95"
                         title="Buy Full Studio Track for ₹99"
                       >
-                        <Sparkles className="w-3.5 h-3.5 text-[#07151D]" />
+                        <Sparkles className="w-3.5 h-3.5 text-[#0E0305]" />
                         <span>{isPurchasing ? 'Processing...' : 'Buy • ₹99'}</span>
                       </button>
                     )}
@@ -386,14 +386,14 @@ export const TracksPage: React.FC = () => {
                         toggleLikeTrack(track.id);
                       }}
                       className={`p-1.5 transition-colors hidden sm:block ${
-                        liked ? '!opacity-100 text-[#C9B27C]' : 'text-[#A5C1CC] hover:text-[#EDF5F8]'
+                        liked ? '!opacity-100 text-[#C9B27C]' : 'text-[#E2CBD0] hover:text-[#FFFFFF]'
                       }`}
                       title={liked ? 'Liked' : 'Like'}
                     >
                       <Heart className={`w-4 h-4 ${liked ? 'fill-[#C9B27C]' : ''}`} />
                     </button>
 
-                    <span className="font-mono text-xs text-[#A5C1CC] pr-1 hidden sm:inline">
+                    <span className="font-mono text-xs text-[#E2CBD0] pr-1 hidden sm:inline">
                       {track.duration}
                     </span>
 
