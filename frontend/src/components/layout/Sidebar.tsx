@@ -300,8 +300,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed, onToggleCollapse })
 
         {/* Bottom Pinned Ministry Card - Sleek Inline Fit */}
         {!collapsed && (
-          <div className="p-2 border-t border-[#E5E5EA] bg-gradient-to-t from-[#0E0305] to-transparent shrink-0">
-            <div className="p-2 rounded-xl bg-[#F5F5F7]/95 border border-[#D4A017]/30 flex items-center justify-between gap-2 shadow-sm">
+          <div className="p-2 border-t border-[#E5E5EA] bg-white shrink-0">
+            <div className="p-2 rounded-xl bg-[#F5F5F7] border border-[#E5E5EA] flex items-center justify-between gap-2 shadow-sm">
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-1 text-[11px] text-[#D4A017] font-semibold">
                   <Sparkles className="w-3 h-3 text-[#D4A017] shrink-0" />
@@ -313,7 +313,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed, onToggleCollapse })
               </div>
               <Link
                 to="/bookings"
-                className="px-2.5 py-1 rounded-md bg-gradient-to-r from-[#FC3C44] to-[#FA243C] text-[#1D1D1F] text-[10px] font-bold hover:brightness-110 transition-all shadow-sm shrink-0 flex items-center gap-1"
+                className="px-2.5 py-1 rounded-md bg-[#FA243C] hover:bg-[#D71A30] text-white text-[10px] font-bold transition-all shadow-sm shrink-0 flex items-center gap-1"
               >
                 <Calendar className="w-3 h-3" />
                 <span>Book</span>

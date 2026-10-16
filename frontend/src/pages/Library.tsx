@@ -134,11 +134,11 @@ export const LibraryPage: React.FC = () => {
   return (
     <div className="space-y-6 max-w-[1600px] mx-auto pb-12">
       {/* 1. Header Banner */}
-      <div className="relative rounded-3xl p-6 sm:p-8 bg-gradient-to-r from-[#0E0305] via-[#0B2533] to-[#12364B] border border-[#E5E5EA] shadow-2xl overflow-hidden">
+      <div className="relative rounded-3xl p-6 sm:p-8 bg-gradient-to-r from-red-50/60 via-white to-amber-50/50 border border-[#E5E5EA] shadow-apple-card overflow-hidden">
         <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="space-y-1.5">
             <div className="flex items-center gap-2">
-              <span className="px-3 py-0.5 rounded-full text-[10px] font-mono font-bold tracking-wider uppercase bg-[#FA243C]/20 text-[#FA243C] border border-[#E5E5EA]">
+              <span className="px-3 py-0.5 rounded-full text-[10px] font-mono font-bold tracking-wider uppercase bg-[#FA243C]/10 text-[#FA243C] border border-[#FA243C]/20">
                 Personal Library
               </span>
               <span className="font-telugu text-xs text-[#D4A017]">మీ వ్యక్తిగత లైబ్రరీ</span>
@@ -155,16 +155,16 @@ export const LibraryPage: React.FC = () => {
             {!user ? (
               <Link
                 to="/auth"
-                className="px-4 py-2.5 rounded-2xl bg-[#F5F5F7] border border-[#D4A017]/40 text-xs font-bold text-[#D4A017] hover:text-white hover:bg-[#FEE2E2] flex items-center gap-2 transition-all shadow-md"
+                className="px-4 py-2.5 rounded-2xl bg-white border border-[#E5E5EA] text-xs font-bold text-[#1D1D1F] hover:bg-[#F2F2F7] flex items-center gap-2 transition-all shadow-sm"
               >
-                <LogIn className="w-4 h-4 text-[#D4A017]" />
+                <LogIn className="w-4 h-4 text-[#FA243C]" />
                 <span>Log In / Sign Up</span>
               </Link>
             ) : null}
 
             <button
               onClick={() => setShowCreateModal(true)}
-              className="px-4 py-2.5 rounded-2xl bg-gradient-to-r from-[#FC3C44] to-[#FA243C] text-xs font-bold text-white hover:brightness-110 flex items-center gap-2 shadow-[0_0_20px_rgba(250,36,60,0.2)] transition-all active:scale-95"
+              className="px-4 py-2.5 rounded-2xl bg-[#FA243C] hover:bg-[#D71A30] text-xs font-bold text-white flex items-center gap-2 shadow-sm shadow-[#FA243C]/25 transition-all active:scale-95"
             >
               <Plus className="w-4 h-4" />
               <span>New Playlist</span>
@@ -182,8 +182,8 @@ export const LibraryPage: React.FC = () => {
           }}
           className={`px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 transition-all ${
             activeTab === 'playlists'
-              ? 'bg-[#FA243C] text-white shadow-md'
-              : 'text-[#86868B] hover:text-white hover:bg-[#F5F5F7]'
+              ? 'bg-[#FA243C] text-white shadow-sm'
+              : 'text-[#86868B] hover:text-[#1D1D1F] hover:bg-[#F2F2F7]'
           }`}
         >
           <ListMusic className="w-4 h-4" />
@@ -197,8 +197,8 @@ export const LibraryPage: React.FC = () => {
           }}
           className={`px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 transition-all ${
             activeTab === 'liked'
-              ? 'bg-[#FA243C] text-white shadow-md'
-              : 'text-[#86868B] hover:text-white hover:bg-[#F5F5F7]'
+              ? 'bg-[#FA243C] text-white shadow-sm'
+              : 'text-[#86868B] hover:text-[#1D1D1F] hover:bg-[#F2F2F7]'
           }`}
         >
           <Heart className="w-4 h-4 text-[#D4A017]" />
@@ -212,8 +212,8 @@ export const LibraryPage: React.FC = () => {
           }}
           className={`px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 transition-all ${
             activeTab === 'purchased'
-              ? 'bg-[#FA243C] text-white shadow-md'
-              : 'text-[#86868B] hover:text-white hover:bg-[#F5F5F7]'
+              ? 'bg-[#FA243C] text-white shadow-sm'
+              : 'text-[#86868B] hover:text-[#1D1D1F] hover:bg-[#F2F2F7]'
           }`}
         >
           <Disc3 className="w-4 h-4 text-[#D4A017]" />
@@ -232,15 +232,15 @@ export const LibraryPage: React.FC = () => {
               {/* Back to Playlists Button */}
               <button
                 onClick={() => setSelectedPlaylistId(null)}
-                className="inline-flex items-center gap-1.5 text-xs text-[#86868B] hover:text-white transition-colors"
+                className="inline-flex items-center gap-1.5 text-xs text-[#86868B] hover:text-[#1D1D1F] transition-colors"
               >
                 <ChevronLeft className="w-4 h-4" />
                 <span>Back to all playlists</span>
               </button>
 
               {/* Playlist Billboard */}
-              <div className="rounded-3xl p-6 sm:p-8 bg-[#F5F5F7]/80 border border-[#E5E5EA] flex flex-col md:flex-row gap-6 items-start md:items-end">
-                <div className="w-32 h-32 sm:w-44 sm:h-44 rounded-2xl overflow-hidden bg-gradient-to-tr from-[#0E0305] via-[#26080F] to-[#FA243C] border border-[#E5E5EA] shadow-2xl flex items-center justify-center shrink-0">
+              <div className="rounded-3xl p-6 sm:p-8 bg-white border border-[#E5E5EA] shadow-apple-card flex flex-col md:flex-row gap-6 items-start md:items-end">
+                <div className="w-32 h-32 sm:w-44 sm:h-44 rounded-2xl overflow-hidden bg-gradient-to-tr from-[#FFF0F2] via-white to-red-100 border border-[#E5E5EA] shadow-md flex items-center justify-center shrink-0">
                   {selectedPlaylist.coverImage ? (
                     <img
                       src={selectedPlaylist.coverImage}
@@ -248,7 +248,7 @@ export const LibraryPage: React.FC = () => {
                       className="w-full h-full object-cover"
                     />
                   ) : (
-                    <ListMusic className="w-16 h-16 text-[#D4A017]" />
+                    <ListMusic className="w-16 h-16 text-[#FA243C]" />
                   )}
                 </div>
 
@@ -441,13 +441,13 @@ export const LibraryPage: React.FC = () => {
                 <div
                   key={pl.id}
                   onClick={() => setSelectedPlaylistId(pl.id)}
-                  className="group relative flex flex-col justify-between p-4 rounded-3xl bg-[#F5F5F7]/70 hover:bg-[#0E2838] border border-[#E5E5EA] hover:border-[#D4A017]/60 transition-all cursor-pointer shadow-lg hover:shadow-2xl hover:-translate-y-1"
+                  className="group relative flex flex-col justify-between p-4 rounded-3xl bg-white hover:bg-[#F2F2F7] border border-[#E5E5EA] hover:border-[#FA243C]/40 transition-all cursor-pointer shadow-apple-card hover:shadow-apple-hover hover:-translate-y-1"
                 >
-                  <div className="relative aspect-square w-full rounded-2xl overflow-hidden bg-gradient-to-tr from-[#0E0305] via-[#26080F] to-[#12364B] border border-[#E5E5EA] mb-3 flex items-center justify-center">
+                  <div className="relative aspect-square w-full rounded-2xl overflow-hidden bg-gradient-to-tr from-[#FFF0F2] via-white to-red-100 border border-[#E5E5EA] mb-3 flex items-center justify-center">
                     {pl.coverImage ? (
                       <img src={pl.coverImage} alt={pl.name} className="w-full h-full object-cover" />
                     ) : (
-                      <ListMusic className="w-12 h-12 text-[#D4A017]" />
+                      <ListMusic className="w-12 h-12 text-[#FA243C]" />
                     )}
 
                     {/* Quick Play Overlay */}
@@ -459,7 +459,7 @@ export const LibraryPage: React.FC = () => {
                   </div>
 
                   <div className="space-y-1 min-w-0">
-                    <h4 className="font-bold text-sm text-[#1D1D1F] truncate group-hover:text-white">
+                    <h4 className="font-bold text-sm text-[#1D1D1F] truncate group-hover:text-[#FA243C] transition-colors">
                       {pl.name}
                     </h4>
                     <p className="text-[11px] text-[#86868B] truncate">

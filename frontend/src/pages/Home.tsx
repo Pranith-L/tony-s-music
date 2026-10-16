@@ -727,10 +727,10 @@ export const Home: React.FC = () => {
       </section>
 
       {/* ================= 6. ABOUT MINISTRY SPOTLIGHT ================= */}
-      <section className="rounded-3xl p-6 sm:p-10 bg-gradient-to-r from-[#0E0305] via-[#22070D] to-[#1A060A] border border-[#D4A017]/30 shadow-xl flex flex-col md:flex-row items-center justify-between gap-6">
+      <section className="rounded-3xl p-6 sm:p-10 bg-gradient-to-r from-[#FFF0F2] via-white to-[#F5F5F7] border border-[#E5E5EA] shadow-apple-card flex flex-col md:flex-row items-center justify-between gap-6">
         <div className="space-y-3 max-w-2xl">
-          <div className="inline-flex items-center gap-2 text-xs font-mono uppercase text-[#D4A017]">
-            <Sparkles className="w-4 h-4" />
+          <div className="inline-flex items-center gap-2 text-xs font-mono uppercase text-[#FA243C] font-semibold">
+            <Sparkles className="w-4 h-4 text-[#D4A017]" />
             <span>Ministry Calling & Vision</span>
           </div>
           <h3 className="text-2xl sm:text-3xl font-heading font-bold text-[#1D1D1F]">
@@ -744,13 +744,13 @@ export const Home: React.FC = () => {
         <div className="flex flex-col sm:flex-row gap-3 shrink-0">
           <Link
             to="/membership"
-            className="px-6 py-3 rounded-full bg-gradient-to-r from-[#D4A017] to-[#E5D7A8] text-[#0E0305] text-xs font-bold uppercase tracking-wider text-center shadow-lg hover:scale-105 transition-transform"
+            className="px-6 py-3 rounded-full bg-[#FA243C] hover:bg-[#D71A30] text-white text-xs font-bold uppercase tracking-wider text-center shadow-md shadow-[#FA243C]/25 hover:scale-105 transition-all"
           >
             VIP Lifetime Pass (₹299 One-Time)
           </Link>
           <Link
             to="/about"
-            className="px-6 py-3 rounded-full border border-[#FA243C]/50 text-[#FFFFFF] hover:bg-[#FEE2E2] text-xs font-bold uppercase tracking-wider text-center transition-colors"
+            className="px-6 py-3 rounded-full bg-white hover:bg-[#F2F2F7] border border-[#E5E5EA] text-[#1D1D1F] text-xs font-bold uppercase tracking-wider text-center transition-colors shadow-sm"
           >
             Read Ministry Story
           </Link>

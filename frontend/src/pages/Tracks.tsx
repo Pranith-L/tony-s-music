@@ -177,17 +177,17 @@ export const TracksPage: React.FC = () => {
         canonical="https://tonyprakash.com/tracks"
       />
       {/* 1. Page Header with Visual Distinction */}
-      <div className="relative rounded-3xl p-6 sm:p-10 bg-gradient-to-r from-[#0E0305] via-[#0E2838] to-[#12364B] border-2 border-[#D4A017]/40 shadow-[0_0_50px_rgba(212,160,23,0.15)] overflow-hidden">
+      <div className="relative rounded-3xl p-6 sm:p-10 bg-gradient-to-r from-red-50/60 via-white to-amber-50/50 border border-[#E5E5EA] shadow-apple-card overflow-hidden">
         <div className="absolute right-0 top-0 bottom-0 w-1/3 opacity-10 bg-[radial-gradient(circle,#D4A017,transparent)] pointer-events-none" />
         
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="space-y-3 max-w-3xl">
             <div className="flex items-center gap-2.5">
-              <span className="px-3 py-1 rounded-full text-[11px] font-mono font-bold tracking-widest uppercase bg-[#D4A017]/20 text-[#D4A017] border border-[#D4A017]/40 flex items-center gap-1.5">
+              <span className="px-3 py-1 rounded-full text-[11px] font-mono font-bold tracking-widest uppercase bg-[#D4A017]/15 text-[#D4A017] border border-[#D4A017]/30 flex items-center gap-1.5">
                 <Disc3 className="w-3.5 h-3.5 text-[#D4A017]" />
                 57 Studio Backing Tracks
               </span>
-              <span className="px-2.5 py-1 rounded-full text-[11px] font-mono font-bold bg-[#FA243C]/30 text-[#FA243C] border border-[#FA243C]/50">
+              <span className="px-2.5 py-1 rounded-full text-[11px] font-mono font-bold bg-[#FA243C]/10 text-[#FA243C] border border-[#FA243C]/20">
                 ₹99 / Track
               </span>
             </div>
@@ -199,17 +199,17 @@ export const TracksPage: React.FC = () => {
               ప్రత్యేక స్టూడియో ట్రాక్స్ సమాహారం (మైనస్-వన్ / కారౌకే)
             </p>
             <p className="text-xs sm:text-sm text-[#86868B] leading-relaxed">
-              Professional minus-one instrumental tracks engineered for church choirs, live gospel ministry, and vocal performances. Free users can listen to a <strong className="text-white">30-second studio preview</strong>. Unlock complete tracks & high-fidelity studio WAV downloads for <strong className="text-[#D4A017]">₹99 each</strong>.
+              Professional minus-one instrumental tracks engineered for church choirs, live gospel ministry, and vocal performances. Free users can listen to a <strong className="text-[#1D1D1F]">30-second studio preview</strong>. Unlock complete tracks & high-fidelity studio WAV downloads for <strong className="text-[#D4A017]">₹99 each</strong>.
             </p>
           </div>
 
           {/* Quick Studio Track Purchase Callout */}
-          <div className="shrink-0 p-5 rounded-2xl bg-white/90 border border-[#D4A017]/40 shadow-xl space-y-3 w-full md:w-80">
+          <div className="shrink-0 p-5 rounded-2xl bg-white border border-[#E5E5EA] shadow-md space-y-3 w-full md:w-80">
             <div className="flex items-center justify-between">
               <span className="text-xs font-mono uppercase tracking-wider text-[#D4A017] font-bold">
                 Studio Master Tracks
               </span>
-              <span className="text-xs font-bold px-2.5 py-0.5 rounded bg-[#D4A017] text-[#0E0305]">
+              <span className="text-xs font-bold px-2.5 py-0.5 rounded bg-[#D4A017] text-white">
                 ₹99 / TRACK
               </span>
             </div>
@@ -217,7 +217,7 @@ export const TracksPage: React.FC = () => {
               Unlock individual minus-one arrangements with permanent account ownership and offline uncompressed WAV master audio.
             </p>
             <div className="pt-1 flex items-center gap-2 text-[11px] text-[#86868B]">
-              <span className="text-emerald-400 font-semibold">✓ 24-bit 48kHz WAV</span>
+              <span className="text-emerald-600 font-semibold">✓ 24-bit 48kHz WAV</span>
               <span>•</span>
               <span>Choir & Solo</span>
             </div>
