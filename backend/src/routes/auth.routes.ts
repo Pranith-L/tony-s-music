@@ -302,10 +302,10 @@ router.post('/google', async (req, res: Response) => {
     }
 
     const normalizedEmail = email.toLowerCase().trim();
-    let user = await prisma.user.findUnique({ where: { email: normalizedEmail } });
+    let user: any = await prisma.user.findUnique({ where: { email: normalizedEmail } });
 
     if (!user) {
-      user = await prisma.user.create({
+      user = await (prisma.user as any).create({
         data: {
           email: normalizedEmail,
           name: name || 'Google User',
@@ -316,7 +316,7 @@ router.post('/google', async (req, res: Response) => {
         },
       });
     } else if (googleId && !user.googleId) {
-      user = await prisma.user.update({
+      user = await (prisma.user as any).update({
         where: { id: user.id },
         data: {
           googleId,
@@ -349,89 +349,6 @@ router.post('/google', async (req, res: Response) => {
   } catch (error) {
     console.error('Google OAuth error:', error);
     res.status(500).json({ error: 'Internal server error during Google authentication' });
-  }
-});
-
-// Facebook OAuth verification & sign-in
-router.post('/facebook', async (req, res: Response) => {
-  try {
-    const { accessToken, userID, name: providedName, email: providedEmail, picture } = req.body;
-    let email = providedEmail;
-    let name = providedName;
-    let avatar = picture;
-    let facebookId = userID;
-
-    // Verify token with Facebook Graph API if accessToken provided
-    if (accessToken) {
-      try {
-        const fbRes = await fetch(
-          `https://graph.facebook.com/me?fields=id,name,email,picture.type(large)&access_token=${accessToken}`
-        );
-        if (fbRes.ok) {
-          const fbData = (await fbRes.json()) as any;
-          if (fbData.email) email = fbData.email;
-          if (fbData.name) name = fbData.name;
-          if (fbData.id) facebookId = fbData.id;
-          if (fbData.picture?.data?.url) avatar = fbData.picture.data.url;
-        }
-      } catch (fbErr) {
-        console.warn('Facebook graph check non-blocking warning:', fbErr);
-      }
-    }
-
-    if (!email && !facebookId) {
-      res.status(400).json({ error: 'Valid Facebook account information is required' });
-      return;
-    }
-
-    const normalizedEmail = (email || `${facebookId}@facebook.user`).toLowerCase().trim();
-    let user = await prisma.user.findUnique({ where: { email: normalizedEmail } });
-
-    if (!user) {
-      user = await prisma.user.create({
-        data: {
-          email: normalizedEmail,
-          name: name || 'Facebook User',
-          avatar,
-          facebookId,
-          provider: 'FACEBOOK',
-          role: 'USER',
-        },
-      });
-    } else if (facebookId && !user.facebookId) {
-      user = await prisma.user.update({
-        where: { id: user.id },
-        data: {
-          facebookId,
-          avatar: avatar || user.avatar,
-        },
-      });
-    }
-
-    const safeUser = {
-      id: user.id,
-      email: user.email,
-      name: user.name,
-      role: user.role,
-      avatar: user.avatar,
-    };
-
-    const token = generateToken(safeUser);
-    res.cookie('token', token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-    });
-
-    res.json({
-      message: 'Signed in with Facebook successfully',
-      user: safeUser,
-      token,
-    });
-  } catch (error) {
-    console.error('Facebook OAuth error:', error);
-    res.status(500).json({ error: 'Internal server error during Facebook authentication' });
   }
 });
 
