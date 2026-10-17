@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom';
 import { useNavigate, useSearchParams, Link } from 'react-router-dom';
 import { Lock, Mail, User as UserIcon, Phone, Sparkles, Eye, EyeOff, X } from 'lucide-react';
 import { useAuth } from '../context/AuthContext.js';
+import { api } from '../services/api.js';
 
 declare global {
   interface Window {
@@ -48,11 +49,12 @@ export const AuthPage: React.FC = () => {
   const [oauthStatus, setOauthStatus] = useState<string | null>(null);
   const [showForgotNotice, setShowForgotNotice] = useState(false);
 
-  // Handle callback return from traditional Passport Google OAuth
+  // Handle callback return from traditional Passport Google OAuth or direct code redirect
   useEffect(() => {
     const oauth = searchParams.get('oauth');
     const token = searchParams.get('token');
     const error = searchParams.get('error');
+    const code = searchParams.get('code');
 
     if (oauth === 'success' && token) {
       setIsLoading(true);
@@ -64,6 +66,24 @@ export const AuthPage: React.FC = () => {
         .catch((err) => {
           console.error('Session establishment error:', err);
           setErrorMsg('Authentication succeeded but session could not be established.');
+        })
+        .finally(() => {
+          setIsLoading(false);
+          setOauthStatus(null);
+        });
+    } else if (code) {
+      setIsLoading(true);
+      setOauthStatus('Completing Google authentication...');
+      const redirectUri = window.location.origin + window.location.pathname;
+      api.auth
+        .exchangeGoogleCode(code, redirectUri)
+        .then(async (data) => {
+          await setAuthToken(data.token);
+          navigate(redirectPath, { replace: true });
+        })
+        .catch((err) => {
+          console.error('Google code exchange error:', err);
+          setErrorMsg(err.message || 'Failed to complete Google authentication.');
         })
         .finally(() => {
           setIsLoading(false);

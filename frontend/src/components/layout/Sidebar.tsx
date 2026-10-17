@@ -57,26 +57,25 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed, onToggleCollapse })
           className={`flex items-center gap-2.5 group transition-transform ${collapsed ? 'justify-center w-full' : ''}`}
           title="Tony's Music • Rev. Tony Prakash"
         >
-          <div className="relative w-9 h-9 rounded-xl bg-gradient-to-tr from-[#22070D] via-[#D71A30] to-[#FA243C] border border-[#D4A017]/50 flex items-center justify-center shadow-[0_0_15px_rgba(212,160,23,0.2)] group-hover:scale-105 transition-transform overflow-hidden shrink-0">
+          <div className="relative w-9 h-9 rounded-xl border border-[#E5E5EA] flex items-center justify-center group-hover:scale-105 transition-transform overflow-hidden shrink-0 shadow-sm bg-white">
             <img
               src="/tony_avatar_cutout.png"
               alt="Tony Prakash"
               className="w-full h-full object-cover object-center"
             />
-            <div className="absolute top-0 right-0 w-2.5 h-2.5 bg-[#D4A017] rounded-full border border-[#0E0305]" />
           </div>
 
           {!collapsed && (
             <div className="min-w-0">
               <div className="flex items-center gap-1.5">
-                <span className="font-heading text-lg font-bold tracking-tight text-[#1D1D1F] group-hover:text-[#D4A017] transition-colors truncate">
+                <span className="font-heading text-lg font-bold tracking-tight text-[#1D1D1F] group-hover:text-[#FA243C] transition-colors truncate">
                   TONY'S MUSIC
                 </span>
                 <span title="Verified Devotional Music Platform">
                   <ShieldCheck className="w-3.5 h-3.5 text-[#D4A017] shrink-0" />
                 </span>
               </div>
-              <p className="text-[9px] tracking-wider font-telugu text-[#D4A017] truncate">
+              <p className="text-[9px] tracking-wider font-telugu text-[#FA243C] font-semibold truncate">
                 టోనీ ప్రకాష్ సంగీతం • Official Hub
               </p>
             </div>
@@ -103,28 +102,28 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed, onToggleCollapse })
             <Link
               key={item.path}
               to={item.path}
-              className={`flex items-center gap-2.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all group ${
+              className={`flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold transition-all group ${
                 isActive
-                  ? 'bg-gradient-to-r from-[#FA243C]/30 to-[#D71A30]/20 text-[#1D1D1F] border border-[#E5E5EA] shadow-[0_0_15px_rgba(250,36,60,0.15)]'
-                  : 'text-[#86868B] hover:text-[#1D1D1F] hover:bg-[#F5F5F7]'
+                  ? 'bg-red-50 text-[#FA243C] border border-red-200/80 shadow-sm'
+                  : 'text-[#1D1D1F] hover:text-[#FA243C] hover:bg-[#F5F5F7]'
               } ${collapsed ? 'justify-center px-0' : ''}`}
               title={item.name}
             >
               <Icon
                 className={`w-4 h-4 shrink-0 transition-transform group-hover:scale-110 ${
-                  isActive ? 'text-white' : 'text-[#FA243C]'
+                  isActive ? 'text-[#FA243C]' : 'text-[#FA243C]/80 group-hover:text-[#FA243C]'
                 }`}
               />
               {!collapsed && (
                 <div className="flex items-center justify-between min-w-0 flex-1">
-                  <span className="truncate text-xs">{item.name}</span>
+                  <span className="truncate text-xs font-semibold">{item.name}</span>
                   {item.path === '/tracks' && (
-                    <span className="text-[9px] px-1.5 py-0.5 rounded bg-[#D4A017]/20 text-[#D4A017] font-mono shrink-0">
+                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-amber-50 text-amber-800 border border-amber-200 font-mono font-bold shrink-0">
                       ₹99
                     </span>
                   )}
                   {item.path === '/music' && (
-                    <span className="text-[9px] px-1.5 py-0.5 rounded bg-[#FA243C]/20 text-[#F5D77F] font-mono shrink-0">
+                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold tracking-wide shrink-0">
                       Free
                     </span>
                   )}

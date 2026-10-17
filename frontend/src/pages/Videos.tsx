@@ -115,10 +115,10 @@ export const VideosPage: React.FC = () => {
 
       {/* FEATURED THEATRE YOUTUBE EMBED PLAYER */}
       {activeVideo && (
-        <section className="rounded-3xl p-4 sm:p-6 bg-white border border-[#E5E5EA] shadow-xl space-y-4">
-          <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-[#D4A017] font-mono">
+        <section className="rounded-3xl p-4 sm:p-6 bg-white border border-[#E5E5EA] shadow-md max-w-4xl mx-auto w-full space-y-4">
+          <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-[#FA243C] font-mono">
             <span className="flex items-center gap-2 font-bold">
-              <Sparkles className="w-4 h-4 text-[#D4AF37]" />
+              <Sparkles className="w-4 h-4 text-[#FA243C]" />
               <span>FEATURED WORSHIP VIDEO • {activeVideo.category || 'Official Release'}</span>
             </span>
             <div className="flex items-center gap-4 text-[#86868B]">
@@ -143,14 +143,14 @@ export const VideosPage: React.FC = () => {
             </div>
           </div>
 
-          {/* 16:9 Responsive High-Definition YouTube Embed */}
-          <div className="relative aspect-video w-full rounded-2xl overflow-hidden bg-black shadow-2xl border border-[#FA243C]/50">
+          {/* 16:9 Compact High-Definition YouTube Embed (No Autoplay) */}
+          <div className="relative aspect-video w-full rounded-2xl overflow-hidden bg-black shadow-lg border border-[#E5E5EA]">
             <iframe
               key={activeVideo.youtubeId}
-              src={`https://www.youtube-nocookie.com/embed/${activeVideo.youtubeId}?autoplay=1&rel=0&modestbranding=1`}
+              src={`https://www.youtube-nocookie.com/embed/${activeVideo.youtubeId}?autoplay=0&rel=0&modestbranding=1`}
               title={activeVideo.title}
               className="w-full h-full border-0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
               allowFullScreen
             />
           </div>

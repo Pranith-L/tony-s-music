@@ -68,6 +68,15 @@ export const api = {
       return handleResponse<{ message: string; user: User; token: string }>(res);
     },
 
+    async exchangeGoogleCode(code: string, redirectUri?: string) {
+      const res = await fetch(`${API_BASE}/auth/google/code`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code, redirectUri }),
+      });
+      return handleResponse<{ message: string; user: User; token: string }>(res);
+    },
+
     async facebookLogin(data: {
       accessToken?: string;
       userID?: string;

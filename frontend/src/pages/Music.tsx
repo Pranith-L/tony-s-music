@@ -162,10 +162,10 @@ export const MusicPage: React.FC = () => {
         canonical="https://tonyprakash.com/music"
       />
       {/* 1. Dedicated Section Navigation Switcher */}
-      <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-[#1A060A] to-[#0E0305] border border-[#E5E5EA] flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div className="p-4 sm:p-5 rounded-2xl bg-white border border-[#E5E5EA] shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-[#FA243C]/20 text-[#39A8CE] flex items-center justify-center shrink-0 border border-[#E5E5EA]">
-            <Headphones className="w-5 h-5" />
+          <div className="w-10 h-10 rounded-xl bg-red-50 text-[#FA243C] flex items-center justify-center shrink-0 border border-red-100">
+            <Headphones className="w-5 h-5 text-[#FA243C]" />
           </div>
           <div>
             <h3 className="text-sm sm:text-base font-bold text-[#1D1D1F]">
@@ -180,9 +180,9 @@ export const MusicPage: React.FC = () => {
         {/* Link to Dedicated Studio Backing Tracks Page */}
         <Link
           to="/tracks"
-          className="w-full sm:w-auto px-4 py-2.5 rounded-xl text-xs font-bold bg-[#D4A017]/15 hover:bg-[#D4A017] text-[#D4A017] hover:text-[#0E0305] border border-[#D4A017]/40 transition-all flex items-center justify-center gap-2 shrink-0 group shadow-sm"
+          className="w-full sm:w-auto px-4 py-2.5 rounded-xl text-xs font-bold bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 transition-all flex items-center justify-center gap-2 shrink-0 group shadow-sm"
         >
-          <Disc3 className="w-4 h-4 text-[#D4A017] group-hover:text-[#0E0305]" />
+          <Disc3 className="w-4 h-4 text-amber-700 group-hover:rotate-45 transition-transform" />
           <span>Switch to Studio Backing Tracks (57) • ₹99</span>
           <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
         </Link>

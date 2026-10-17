@@ -319,6 +319,121 @@ router.get(
   }
 );
 
+// Exchange Google Authorization Code (Supports frontend redirect callback)
+router.post('/google/code', async (req, res: Response) => {
+  try {
+    const { code, redirectUri } = req.body;
+    if (!code) {
+      res.status(400).json({ error: 'Authorization code is required' });
+      return;
+    }
+
+    const clientId = process.env.GOOGLE_CLIENT_ID;
+    const clientSecret = process.env.GOOGLE_CLIENT_SECRET;
+    const callback =
+      redirectUri || process.env.GOOGLE_CALLBACK_URL || 'http://localhost:5000/api/auth/google/callback';
+
+    const tokenResponse = await fetch('https://oauth2.googleapis.com/token', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({
+        code,
+        client_id: clientId || '',
+        client_secret: clientSecret || '',
+        redirect_uri: callback,
+        grant_type: 'authorization_code',
+      }),
+    });
+
+    const tokenData: any = await tokenResponse.json();
+    if (tokenData.error) {
+      console.error('Google token exchange error:', tokenData);
+      res.status(400).json({ error: tokenData.error_description || tokenData.error });
+      return;
+    }
+
+    let email: string | undefined;
+    let name: string | undefined;
+    let avatar: string | undefined;
+    let googleId: string | undefined;
+
+    if (tokenData.id_token) {
+      const decoded: any = jwt.decode(tokenData.id_token);
+      if (decoded && decoded.email) {
+        email = decoded.email;
+        name = decoded.name || decoded.given_name || 'Google User';
+        avatar = decoded.picture;
+        googleId = decoded.sub;
+      }
+    }
+
+    if (!email && tokenData.access_token) {
+      const userInfoRes = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+        headers: { Authorization: `Bearer ${tokenData.access_token}` },
+      });
+      const userInfo: any = await userInfoRes.json();
+      email = userInfo.email;
+      name = userInfo.name || userInfo.given_name || 'Google User';
+      avatar = userInfo.picture;
+      googleId = userInfo.sub;
+    }
+
+    if (!email) {
+      res.status(400).json({ error: 'Failed to retrieve email from Google' });
+      return;
+    }
+
+    const normalizedEmail = email.toLowerCase().trim();
+    let user: any = await prisma.user.findUnique({ where: { email: normalizedEmail } });
+
+    if (!user) {
+      user = await (prisma.user as any).create({
+        data: {
+          email: normalizedEmail,
+          name: name || 'Google User',
+          avatar,
+          googleId,
+          provider: 'GOOGLE',
+          role: 'USER',
+        },
+      });
+    } else if (googleId && !user.googleId) {
+      user = await (prisma.user as any).update({
+        where: { id: user.id },
+        data: {
+          googleId,
+          avatar: avatar || user.avatar,
+        },
+      });
+    }
+
+    const safeUser = {
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      role: user.role,
+      avatar: user.avatar,
+    };
+
+    const token = generateToken(safeUser);
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+
+    res.json({
+      message: 'Signed in with Google successfully',
+      user: safeUser,
+      token,
+    });
+  } catch (error) {
+    console.error('Google authorization code exchange exception:', error);
+    res.status(500).json({ error: 'Internal server error during Google code exchange' });
+  }
+});
+
 // Google OAuth verification & sign-in (credential or token)
 router.post('/google', async (req, res: Response) => {
   try {
