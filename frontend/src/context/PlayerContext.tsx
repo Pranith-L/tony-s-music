@@ -4,6 +4,7 @@ import { MOCK_TRACKS } from '../services/mockData.js';
 import { useAuth } from './AuthContext.js';
 import { TrackPreviewLimitModal } from '../components/modals/TrackPreviewLimitModal.js';
 import { SkipLimitModal } from '../components/modals/SkipLimitModal.js';
+import { SongTheme, extractCoverTheme, applyGlobalSongTheme } from '../utils/themeEngine.js';
 
 export type RepeatMode = 'off' | 'all' | 'one';
 export type RightSidebarTab = 'now-playing' | 'queue' | 'lyrics';
@@ -12,6 +13,7 @@ const MAX_FREE_SKIPS_PER_DAY = 6;
 
 interface PlayerContextType {
   currentTrack: Track | null;
+  songTheme: SongTheme;
   isPlaying: boolean;
   currentTime: number;
   duration: number;
@@ -66,6 +68,26 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const { user, isSubscriber } = useAuth();
 
   const [currentTrack, setCurrentTrack] = useState<Track | null>(MOCK_TRACKS[0] || null);
+  const [songTheme, setSongTheme] = useState<SongTheme>({
+    primary: '#FA243C',
+    primaryRgb: '250, 36, 60',
+    secondary: '#D4A017',
+    secondaryRgb: '212, 160, 23',
+    accent: '#FA243C',
+    glow: 'rgba(250, 36, 60, 0.35)',
+    bgGradient: 'radial-gradient(circle at 40% 25%, rgba(250, 36, 60, 0.22), transparent 65%), radial-gradient(circle at 75% 75%, rgba(212, 160, 23, 0.18), transparent 60%)',
+    cardBg: 'rgba(255, 255, 255, 0.90)',
+  });
+
+  // Dynamically extract vibrant color theme whenever active track changes
+  useEffect(() => {
+    if (currentTrack?.coverImage) {
+      extractCoverTheme(currentTrack.coverImage).then((theme) => {
+        setSongTheme(theme);
+        applyGlobalSongTheme(theme);
+      });
+    }
+  }, [currentTrack?.coverImage]);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [currentTime, setCurrentTime] = useState<number>(0);
   const [duration, setDuration] = useState<number>(342); // 5:42 default
@@ -475,6 +497,7 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     <PlayerContext.Provider
       value={{
         currentTrack,
+        songTheme,
         isPlaying,
         currentTime,
         duration,

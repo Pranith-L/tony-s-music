@@ -124,7 +124,7 @@ export const TrackPreviewLimitModal: React.FC<TrackPreviewLimitModalProps> = ({
               <span className="text-[10px] font-mono uppercase tracking-widest text-[#FA243C] font-semibold block">
                 30-Second Studio Preview Ended
               </span>
-              <h3 className="text-xl font-heading font-bold text-[#1D1D1F]">
+              <h3 className="text-xl font-heading font-bold text-[#fff]">
                 Unlock Backing Track
               </h3>
             </div>

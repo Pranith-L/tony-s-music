@@ -34,6 +34,13 @@
   --color-espresso: #F5F5F7;
   --color-ivory: #1D1D1F;
   --color-charcoal: #F2F2F7;
+
+  /* Dynamic Cover Art Extracted Theme Tokens */
+  --song-theme-primary: #FA243C;
+  --song-theme-primary-rgb: 250, 36, 60;
+  --song-theme-secondary: #D4A017;
+  --song-theme-secondary-rgb: 212, 160, 23;
+  --song-theme-glow: rgba(250, 36, 60, 0.35);
 }
 
 @layer base {

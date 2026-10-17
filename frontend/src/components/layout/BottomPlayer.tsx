@@ -38,6 +38,7 @@ export const BottomPlayer: React.FC = () => {
     isMuted,
     shuffle,
     repeatMode,
+    songTheme,
     isRightSidebarOpen,
     rightSidebarTab,
     isFullscreenPlayer,
@@ -135,10 +136,10 @@ export const BottomPlayer: React.FC = () => {
             />
             {isPlaying && (
               <div className="absolute inset-0 bg-black/45 backdrop-blur-[1px] flex items-center justify-center gap-0.5 pointer-events-none">
-                <div className="w-1 bg-[#FA243C] rounded-full wave-bar-1" />
-                <div className="w-1 bg-[#D4A017] rounded-full wave-bar-2" />
-                <div className="w-1 bg-[#FA243C] rounded-full wave-bar-3" />
-                <div className="w-1 bg-[#D4A017] rounded-full wave-bar-4" />
+                <div className="w-1 rounded-full wave-bar-1" style={{ backgroundColor: songTheme.primary }} />
+                <div className="w-1 rounded-full wave-bar-2" style={{ backgroundColor: songTheme.secondary }} />
+                <div className="w-1 rounded-full wave-bar-3" style={{ backgroundColor: songTheme.primary }} />
+                <div className="w-1 rounded-full wave-bar-4" style={{ backgroundColor: songTheme.secondary }} />
               </div>
             )}
           </div>
@@ -174,12 +175,11 @@ export const BottomPlayer: React.FC = () => {
           {/* Like / Heart Action */}
           <button
             onClick={() => toggleLikeTrack(currentTrack.id)}
-            className={`p-1.5 rounded-full transition-transform hover:scale-110 shrink-0 ${
-              liked ? 'text-[#D4A017]' : 'text-[#86868B] hover:text-[#1D1D1F]'
-            }`}
+            className="p-1.5 rounded-full transition-transform hover:scale-110 shrink-0"
+            style={{ color: liked ? songTheme.primary : '#86868B' }}
             title={liked ? 'Remove from Liked Songs' : 'Save to Liked Songs'}
           >
-            <Heart className={`w-4 h-4 sm:w-5 sm:h-5 ${liked ? 'fill-[#D4A017]' : ''}`} />
+            <Heart className={`w-4 h-4 sm:w-5 sm:h-5 ${liked ? 'fill-current' : ''}`} />
           </button>
         </div>
 
@@ -214,7 +214,11 @@ export const BottomPlayer: React.FC = () => {
             <button
               onClick={togglePlay}
               aria-label={isPlaying ? 'Pause' : 'Play'}
-              className="w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-gradient-to-tr from-[#FC3C44] to-[#FA243C] text-[#1D1D1F] flex items-center justify-center shadow-[0_0_20px_rgba(250,36,60,0.25)] border border-[#D4A017]/40 hover:scale-105 active:scale-95 transition-all"
+              className="w-9 h-9 sm:w-11 sm:h-11 rounded-full text-white flex items-center justify-center border border-white/20 hover:scale-105 active:scale-95 transition-all"
+              style={{
+                background: `linear-gradient(135deg, ${songTheme.primary}, ${songTheme.secondary})`,
+                boxShadow: `0 4px 18px rgba(${songTheme.primaryRgb}, 0.35)`,
+              }}
             >
               {isPlaying ? (
                 <Pause className="w-4 h-4 sm:w-5 sm:h-5 fill-current" />
@@ -279,14 +283,21 @@ export const BottomPlayer: React.FC = () => {
             >
               <div className="absolute inset-0 bg-gray-100 rounded-full overflow-hidden border border-[#E5E5EA]">
                 <div
-                  className="h-full bg-[#FA243C] rounded-full transition-all group-hover:brightness-110"
-                  style={{ width: `${progressPercent}%` }}
+                  className="h-full rounded-full transition-all group-hover:brightness-110"
+                  style={{
+                    width: `${progressPercent}%`,
+                    background: `linear-gradient(90deg, ${songTheme.primary}, ${songTheme.secondary})`,
+                  }}
                 />
               </div>
 
               <div
-                className="absolute top-1/2 -translate-y-1/2 w-3 h-3 bg-[#FFFFFF] border border-[#FA243C] rounded-full shadow-md opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none -translate-x-1/2"
-                style={{ left: `${progressPercent}%` }}
+                className="absolute top-1/2 -translate-y-1/2 w-3 h-3 bg-[#FFFFFF] rounded-full shadow-md opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none -translate-x-1/2"
+                style={{
+                  left: `${progressPercent}%`,
+                  borderColor: songTheme.primary,
+                  borderWidth: '2px',
+                }}
               />
 
               {hoverSeekTime !== null && (
@@ -370,7 +381,8 @@ export const BottomPlayer: React.FC = () => {
               step="0.01"
               value={isMuted ? 0 : volume}
               onChange={(e) => setVolumeLevel(parseFloat(e.target.value))}
-              className="w-full h-1 bg-gray-100 accent-[#FA243C] rounded-full cursor-pointer"
+              className="w-full h-1 bg-gray-100 rounded-full cursor-pointer"
+              style={{ accentColor: songTheme.primary }}
             />
           </div>
 
