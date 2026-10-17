@@ -22,7 +22,6 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext.js';
 import { useAnalytics } from '../../hooks/useAnalytics.js';
-import { ThemeToggle } from '../common/ThemeToggle.js';
 
 interface MainLayoutProps {
   children: React.ReactNode;
@@ -224,12 +223,6 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
                   <span>Admin Dashboard</span>
                 </Link>
               )}
-
-              {/* Mobile Drawer Appearance Switcher */}
-              <div className="flex items-center justify-between px-3 py-2.5 rounded-xl bg-white border border-[#E5E5EA] mt-2">
-                <span className="text-xs font-semibold text-[#86868B]">Appearance Mode</span>
-                <ThemeToggle showLabel={true} />
-              </div>
             </div>
           </div>
         </div>

@@ -130,8 +130,8 @@ export const TopBar: React.FC<TopBarProps> = ({ onToggleMobileMenu }) => {
 
         {/* Right: Quick Action & Profile Pill */}
         <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
-          {/* Light / Dark Mode Toggle */}
-          <ThemeToggle />
+          {/* Light / Dark Mode Toggle (Desktop only, mobile automatically follows phone OS setting) */}
+          <ThemeToggle className="hidden md:inline-flex" />
 
           {/* Bookings / Ministry CTA (Desktop) */}
           <Link
