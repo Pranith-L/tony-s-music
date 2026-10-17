@@ -379,13 +379,13 @@ export const LibraryPage: React.FC = () => {
 
                             <div className="min-w-0 flex-1 pr-2">
                               <h4
-                                className={`text-sm font-semibold truncate ${
-                                  isCurrent ? 'text-[#FA243C]' : 'text-[#FFFFFF]'
+                                className={`text-sm font-semibold truncate transition-colors ${
+                                  isCurrent ? 'text-[#FA243C]' : 'text-[#1D1D1F] group-hover:text-[#FA243C]'
                                 }`}
                               >
                                 {track.titleEnglish}
                               </h4>
-                              <p className="font-telugu text-xs text-[#D4A017] truncate mt-0.5">
+                              <p className="font-telugu text-xs text-[#86868B] group-hover:text-[#48484A] truncate mt-0.5">
                                 {track.titleTelugu}
                               </p>
                             </div>
@@ -535,13 +535,13 @@ export const LibraryPage: React.FC = () => {
 
                         <div className="min-w-0 flex-1 pr-2">
                           <h4
-                            className={`text-sm font-semibold truncate ${
-                              isCurrent ? 'text-[#FA243C]' : 'text-[#FFFFFF]'
+                            className={`text-sm font-semibold truncate transition-colors ${
+                              isCurrent ? 'text-[#FA243C]' : 'text-[#1D1D1F] group-hover:text-[#FA243C]'
                             }`}
                           >
                             {track.titleEnglish}
                           </h4>
-                          <p className="font-telugu text-xs text-[#D4A017] truncate mt-0.5">
+                          <p className="font-telugu text-xs text-[#86868B] group-hover:text-[#48484A] truncate mt-0.5">
                             {track.titleTelugu}
                           </p>
                         </div>
@@ -625,20 +625,20 @@ export const LibraryPage: React.FC = () => {
 
                         <div className="min-w-0 flex-1 pr-2">
                           <h4
-                            className={`text-sm font-semibold truncate ${
-                              isCurrent ? 'text-[#FA243C]' : 'text-[#FFFFFF]'
+                            className={`text-sm font-semibold truncate transition-colors ${
+                              isCurrent ? 'text-[#FA243C]' : 'text-[#1D1D1F] group-hover:text-[#FA243C]'
                             }`}
                           >
                             {track.titleEnglish}
                           </h4>
-                          <p className="font-telugu text-xs text-[#D4A017] truncate mt-0.5">
+                          <p className="font-telugu text-xs text-[#86868B] group-hover:text-[#48484A] truncate mt-0.5">
                             {track.titleTelugu}
                           </p>
                         </div>
                       </div>
 
                       <div className="flex items-center gap-2 shrink-0">
-                        <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                        <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
                           Full Access
                         </span>
                         <TrackActionMenu track={track} />
@@ -659,22 +659,22 @@ export const LibraryPage: React.FC = () => {
           onClick={() => setShowCreateModal(false)}
         >
           <div
-            className="w-full max-w-md bg-[#F5F5F7] border border-[#E5E5EA] rounded-3xl p-6 sm:p-7 shadow-2xl text-[#FFFFFF] space-y-5 animate-scaleUp my-auto max-h-[92dvh] overflow-y-auto"
+            className="w-full max-w-md bg-[#F5F5F7] border border-[#E5E5EA] rounded-3xl p-6 sm:p-7 shadow-2xl text-[#1D1D1F] space-y-5 animate-scaleUp my-auto max-h-[92dvh] overflow-y-auto"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between pb-3 border-b border-[#E5E5EA]">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-2xl bg-[#F2F2F7] border border-[#E5E5EA] flex items-center justify-center">
-                  <ListMusic className="w-5 h-5 text-[#D4A017]" />
+                  <ListMusic className="w-5 h-5 text-[#FA243C]" />
                 </div>
                 <div>
-                  <h3 className="font-heading font-bold text-lg text-white">Create New Playlist</h3>
+                  <h3 className="font-heading font-bold text-lg text-[#1D1D1F]">Create New Playlist</h3>
                   <p className="text-xs text-[#86868B]">కొత్త ప్లేలిస్ట్‌ను ప్రారంభించండి</p>
                 </div>
               </div>
               <button
                 onClick={() => setShowCreateModal(false)}
-                className="p-1.5 rounded-full text-[#86868B] hover:text-white hover:bg-[#FEE2E2]"
+                className="p-1.5 rounded-full text-[#86868B] hover:text-[#FA243C] hover:bg-[#FEE2E2]"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -692,7 +692,7 @@ export const LibraryPage: React.FC = () => {
                   value={newPlaylistName}
                   onChange={(e) => setNewPlaylistName(e.target.value)}
                   placeholder="e.g. Sunday Morning Hymns, Prayer Sanctuary..."
-                  className="w-full px-4 py-3 rounded-2xl bg-white border border-[#E5E5EA] text-sm text-white placeholder-[#E2CBD0]/50 focus:outline-none focus:border-[#D4A017]"
+                  className="w-full px-4 py-3 rounded-2xl bg-white border border-[#E5E5EA] text-sm text-[#1D1D1F] placeholder-[#86868B] focus:outline-none focus:border-[#FA243C]"
                 />
               </div>
 
@@ -705,7 +705,7 @@ export const LibraryPage: React.FC = () => {
                   value={newPlaylistDesc}
                   onChange={(e) => setNewPlaylistDesc(e.target.value)}
                   placeholder="A short note about the theme of this playlist..."
-                  className="w-full px-4 py-2.5 rounded-2xl bg-white border border-[#E5E5EA] text-xs text-white placeholder-[#E2CBD0]/50 focus:outline-none focus:border-[#D4A017] resize-none"
+                  className="w-full px-4 py-2.5 rounded-2xl bg-white border border-[#E5E5EA] text-xs text-[#1D1D1F] placeholder-[#86868B] focus:outline-none focus:border-[#FA243C] resize-none"
                 />
               </div>
 
@@ -719,7 +719,7 @@ export const LibraryPage: React.FC = () => {
                         key={tag}
                         type="button"
                         onClick={() => setNewPlaylistName(tag)}
-                        className="px-2.5 py-1 rounded-xl bg-[#F5F5F7] border border-[#E5E5EA] text-[11px] text-[#FA243C] hover:border-[#D4A017]"
+                        className="px-2.5 py-1 rounded-xl bg-[#F5F5F7] border border-[#E5E5EA] text-[11px] text-[#FA243C] hover:border-[#FA243C]"
                       >
                         + {tag}
                       </button>
@@ -732,7 +732,7 @@ export const LibraryPage: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setShowCreateModal(false)}
-                  className="px-4 py-2.5 rounded-xl text-xs text-[#86868B] hover:text-white"
+                  className="px-4 py-2.5 rounded-xl text-xs text-[#86868B] hover:text-[#FA243C]"
                 >
                   Cancel
                 </button>
@@ -756,14 +756,14 @@ export const LibraryPage: React.FC = () => {
           onClick={() => setEditingPlaylist(null)}
         >
           <div
-            className="w-full max-w-md bg-[#F5F5F7] border border-[#E5E5EA] rounded-3xl p-6 sm:p-7 shadow-2xl text-[#FFFFFF] space-y-5 animate-scaleUp my-auto max-h-[92dvh] overflow-y-auto"
+            className="w-full max-w-md bg-[#F5F5F7] border border-[#E5E5EA] rounded-3xl p-6 sm:p-7 shadow-2xl text-[#1D1D1F] space-y-5 animate-scaleUp my-auto max-h-[92dvh] overflow-y-auto"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between pb-3 border-b border-[#E5E5EA]">
-              <h3 className="font-heading font-bold text-lg text-white">Edit Playlist</h3>
+              <h3 className="font-heading font-bold text-lg text-[#1D1D1F]">Edit Playlist</h3>
               <button
                 onClick={() => setEditingPlaylist(null)}
-                className="p-1.5 rounded-full text-[#86868B] hover:text-white hover:bg-[#FEE2E2]"
+                className="p-1.5 rounded-full text-[#86868B] hover:text-[#FA243C] hover:bg-[#FEE2E2]"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -779,7 +779,7 @@ export const LibraryPage: React.FC = () => {
                   required
                   value={editName}
                   onChange={(e) => setEditName(e.target.value)}
-                  className="w-full px-4 py-3 rounded-2xl bg-white border border-[#E5E5EA] text-sm text-white focus:outline-none focus:border-[#D4A017]"
+                  className="w-full px-4 py-3 rounded-2xl bg-white border border-[#E5E5EA] text-sm text-[#1D1D1F] focus:outline-none focus:border-[#FA243C]"
                 />
               </div>
 
@@ -791,7 +791,7 @@ export const LibraryPage: React.FC = () => {
                   rows={2}
                   value={editDesc}
                   onChange={(e) => setEditDesc(e.target.value)}
-                  className="w-full px-4 py-2.5 rounded-2xl bg-white border border-[#E5E5EA] text-xs text-white focus:outline-none focus:border-[#D4A017] resize-none"
+                  className="w-full px-4 py-2.5 rounded-2xl bg-white border border-[#E5E5EA] text-xs text-[#1D1D1F] focus:outline-none focus:border-[#FA243C] resize-none"
                 />
               </div>
 
@@ -799,7 +799,7 @@ export const LibraryPage: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setEditingPlaylist(null)}
-                  className="px-4 py-2.5 rounded-xl text-xs text-[#86868B] hover:text-white"
+                  className="px-4 py-2.5 rounded-xl text-xs text-[#86868B] hover:text-[#FA243C]"
                 >
                   Cancel
                 </button>
@@ -823,19 +823,19 @@ export const LibraryPage: React.FC = () => {
           onClick={() => setShowAddSongsModal(false)}
         >
           <div
-            className="w-full max-w-xl bg-[#F5F5F7] border border-[#E5E5EA] rounded-3xl p-6 sm:p-7 shadow-2xl text-[#FFFFFF] space-y-4 my-auto max-h-[88dvh] flex flex-col animate-scaleUp overflow-hidden"
+            className="w-full max-w-xl bg-[#F5F5F7] border border-[#E5E5EA] rounded-3xl p-6 sm:p-7 shadow-2xl text-[#1D1D1F] space-y-4 my-auto max-h-[88dvh] flex flex-col animate-scaleUp overflow-hidden"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between pb-3 border-b border-[#E5E5EA] shrink-0">
               <div>
-                <h3 className="font-heading font-bold text-lg text-white">Add Songs to Playlist</h3>
+                <h3 className="font-heading font-bold text-lg text-[#1D1D1F]">Add Songs to Playlist</h3>
                 <p className="text-xs text-[#86868B]">
-                  Adding to <strong className="text-[#D4A017]">{selectedPlaylist.name}</strong>
+                  Adding to <strong className="text-[#FA243C]">{selectedPlaylist.name}</strong>
                 </p>
               </div>
               <button
                 onClick={() => setShowAddSongsModal(false)}
-                className="p-1.5 rounded-full text-[#86868B] hover:text-white hover:bg-[#FEE2E2]"
+                className="p-1.5 rounded-full text-[#86868B] hover:text-[#FA243C] hover:bg-[#FEE2E2]"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -849,12 +849,12 @@ export const LibraryPage: React.FC = () => {
                 value={searchSongQuery}
                 onChange={(e) => setSearchSongQuery(e.target.value)}
                 placeholder="Search by Telugu or English song name..."
-                className="w-full pl-10 pr-4 py-2.5 rounded-2xl bg-white border border-[#E5E5EA] text-xs text-white placeholder-[#E2CBD0]/50 focus:outline-none focus:border-[#D4A017]"
+                className="w-full pl-10 pr-4 py-2.5 rounded-2xl bg-white border border-[#E5E5EA] text-xs text-[#1D1D1F] placeholder-[#86868B] focus:outline-none focus:border-[#FA243C]"
               />
             </div>
 
             {/* Song Catalog List */}
-            <div className="flex-1 overflow-y-auto space-y-1.5 pr-1 divide-y divide-[#FA243C]/10">
+            <div className="flex-1 overflow-y-auto space-y-1.5 pr-1 divide-y divide-[#E5E5EA]">
               {allTracks
                 .filter((t) => {
                   if (!searchSongQuery.trim()) return true;
@@ -881,10 +881,10 @@ export const LibraryPage: React.FC = () => {
                           />
                         </div>
                         <div className="min-w-0">
-                          <p className="font-semibold text-xs text-white truncate">
+                          <p className="font-semibold text-xs text-[#1D1D1F] truncate">
                             {track.titleEnglish}
                           </p>
-                          <p className="font-telugu text-[11px] text-[#D4A017] truncate">
+                          <p className="font-telugu text-[11px] text-[#86868B] truncate">
                             {track.titleTelugu}
                           </p>
                         </div>

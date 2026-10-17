@@ -169,11 +169,11 @@ export const VideosPage: React.FC = () => {
             <div className="flex items-center gap-2 shrink-0">
               <button
                 onClick={() => handleShare(activeVideo)}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#F5F5F7] hover:bg-[#FEE2E2] text-xs text-[#FFFFFF] border border-[#E5E5EA] transition-colors"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#F5F5F7] hover:bg-[#FEE2E2] text-xs text-[#1D1D1F] border border-[#E5E5EA] transition-colors"
                 title="Copy Video Link"
               >
                 {copiedId === activeVideo.id ? (
-                  <Check className="w-3.5 h-3.5 text-[#D4A017]" />
+                  <Check className="w-3.5 h-3.5 text-[#FA243C]" />
                 ) : (
                   <Share2 className="w-3.5 h-3.5" />
                 )}
@@ -205,14 +205,14 @@ export const VideosPage: React.FC = () => {
               placeholder={`Search all ${videos.length} videos (e.g. 'నజరేయుడైన', 'Sree Yesu')...`}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-[#F5F5F7] border border-[#E5E5EA] rounded-xl pl-11 pr-4 py-2.5 text-xs sm:text-sm text-[#FFFFFF] placeholder-[#E2CBD0]/60 focus:outline-none focus:border-[#D4A017] transition-colors"
+              className="w-full bg-[#F5F5F7] border border-[#E5E5EA] rounded-xl pl-11 pr-4 py-2.5 text-xs sm:text-sm text-[#1D1D1F] placeholder-[#86868B] focus:outline-none focus:border-[#FA243C] transition-colors"
             />
           </div>
 
           <div className="flex items-center justify-between md:justify-end gap-3 text-xs font-mono text-[#86868B]">
             <span className="flex items-center gap-1.5">
-              <Filter className="w-3.5 h-3.5 text-[#D4A017]" />
-              <span>Showing: <strong className="text-[#FFFFFF]">{filteredVideos.length}</strong> of {videos.length}</span>
+              <Filter className="w-3.5 h-3.5 text-[#FA243C]" />
+              <span>Showing: <strong className="text-[#1D1D1F]">{filteredVideos.length}</strong> of {videos.length}</span>
             </span>
           </div>
         </div>
@@ -228,7 +228,7 @@ export const VideosPage: React.FC = () => {
                 className={`px-4 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-all duration-200 border ${
                   isSelected
                     ? 'bg-[#FA243C] border-[#FA243C] text-white shadow-md'
-                    : 'bg-[#F5F5F7]/80 border-[#E5E5EA] text-[#86868B] hover:text-[#FFFFFF] hover:border-[#E5E5EA]'
+                    : 'bg-[#F5F5F7]/80 border-[#E5E5EA] text-[#86868B] hover:text-[#FA243C] hover:border-[#FA243C]/40'
                 }`}
               >
                 {cat}
@@ -247,7 +247,7 @@ export const VideosPage: React.FC = () => {
       ) : filteredVideos.length === 0 ? (
         <div className="py-16 text-center rounded-2xl bg-[#F5F5F7] border border-[#E5E5EA]">
           <VideoIcon className="w-10 h-10 text-[#86868B] mx-auto mb-2" />
-          <p className="text-sm text-[#FFFFFF]">No matching videos found in this category.</p>
+          <p className="text-sm text-[#1D1D1F]">No matching videos found in this category.</p>
           <button
             onClick={() => {
               setSearchQuery('');

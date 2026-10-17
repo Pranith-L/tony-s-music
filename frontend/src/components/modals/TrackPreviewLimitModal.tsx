@@ -109,7 +109,7 @@ export const TrackPreviewLimitModal: React.FC<TrackPreviewLimitModalProps> = ({
               e.stopPropagation();
               onClose();
             }}
-            className="absolute top-4 right-4 w-9 h-9 rounded-full bg-white hover:bg-[#F2F2F7] text-[#86868B] hover:text-[#FFFFFF] border border-white/10 flex items-center justify-center transition-colors shadow-md z-10"
+            className="absolute top-4 right-4 w-9 h-9 rounded-full bg-white hover:bg-[#F2F2F7] text-[#86868B] hover:text-[#FA243C] border border-[#E5E5EA] flex items-center justify-center transition-colors shadow-md z-10"
             title="Close modal"
           >
             <X className="w-5 h-5 pointer-events-none" />
@@ -117,49 +117,49 @@ export const TrackPreviewLimitModal: React.FC<TrackPreviewLimitModalProps> = ({
 
           {/* Top Icon Badge */}
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-[#D4A017] to-[#E8DCB8] text-[#0E0305] flex items-center justify-center shadow-lg shrink-0">
+            <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-[#FC3C44] to-[#FA243C] text-white flex items-center justify-center shadow-lg shrink-0">
               <Lock className="w-6 h-6" />
             </div>
             <div>
-              <span className="text-[10px] font-mono uppercase tracking-widest text-[#D4A017] font-semibold block">
+              <span className="text-[10px] font-mono uppercase tracking-widest text-[#FA243C] font-semibold block">
                 30-Second Studio Preview Ended
               </span>
-              <h3 className="text-xl font-heading font-bold text-[#FFFFFF]">
+              <h3 className="text-xl font-heading font-bold text-[#1D1D1F]">
                 Unlock Backing Track
               </h3>
             </div>
           </div>
 
           {/* Track Snapshot */}
-          <div className="flex items-center gap-3.5 p-3 rounded-2xl bg-white/80 border border-[#E5E5EA]">
+          <div className="flex items-center gap-3.5 p-3 rounded-2xl bg-white border border-[#E5E5EA] shadow-sm">
             <img
               src={track.coverImage || '/covers/001_prayermp3.jpg'}
               alt={track.titleEnglish}
-              className="w-12 h-12 rounded-xl object-cover shrink-0 border border-[#D4A017]/30"
+              className="w-12 h-12 rounded-xl object-cover shrink-0 border border-[#E5E5EA]"
             />
             <div className="min-w-0 flex-1">
-              <h4 className="text-sm font-semibold text-[#FFFFFF] truncate">
+              <h4 className="text-sm font-semibold text-[#1D1D1F] truncate">
                 {track.titleEnglish}
               </h4>
-              <p className="font-telugu text-xs text-[#D4A017] truncate">
+              <p className="font-telugu text-xs text-[#86868B] truncate">
                 {track.titleTelugu}
               </p>
               <p className="text-[10px] text-[#86868B]">
                 Minus-One Karaoke Master • 24-bit WAV
               </p>
             </div>
-            <span className="text-xs font-mono font-bold text-[#0E0305] bg-gradient-to-r from-[#D4A017] to-[#E8DCB8] px-3 py-1 rounded-full shadow-sm shrink-0">
+            <span className="text-xs font-mono font-bold text-white bg-gradient-to-r from-[#FC3C44] to-[#FA243C] px-3 py-1 rounded-full shadow-sm shrink-0">
               ₹99
             </span>
           </div>
 
           {/* Explanation of Separate Rules */}
           <p className="text-xs text-[#86868B] leading-relaxed">
-            Devotional vocal songs are 100% free to listen, but official studio backing tracks (minus-one arrangements) require a one-time purchase of <strong className="text-[#D4A017]">₹99 per track</strong> for permanent playback and offline master audio download.
+            Devotional vocal songs are 100% free to listen, but official studio backing tracks (minus-one arrangements) require a one-time purchase of <strong className="text-[#FA243C]">₹99 per track</strong> for permanent playback and offline master audio download.
           </p>
 
           {errorMsg && (
-            <div className="p-3 rounded-xl bg-red-950/60 border border-red-500/40 text-red-200 text-xs">
+            <div className="p-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs">
               {errorMsg}
             </div>
           )}
@@ -170,33 +170,33 @@ export const TrackPreviewLimitModal: React.FC<TrackPreviewLimitModalProps> = ({
             type="button"
             disabled={purchasing}
             onClick={handleBuyTrack}
-            className="w-full p-4 rounded-2xl bg-gradient-to-r from-[#D71A30]/40 via-[#1A060A] to-[#0E0305] border-2 border-[#D4A017]/60 hover:border-[#D4A017] text-left transition-all duration-200 group shadow-lg flex items-center justify-between"
+            className="w-full p-4 rounded-2xl bg-gradient-to-r from-[#FC3C44] to-[#FA243C] text-white text-left transition-all duration-200 group shadow-lg flex items-center justify-between hover:brightness-110 active:scale-[0.99]"
           >
             <div>
-              <span className="text-[10px] font-mono uppercase tracking-wider text-[#D4A017] font-bold block">
+              <span className="text-[10px] font-mono uppercase tracking-wider text-white/80 font-bold block">
                 Permanent Track Access
               </span>
-              <h4 className="text-base font-bold text-[#FFFFFF] group-hover:text-[#D4A017] transition-colors">
+              <h4 className="text-base font-bold text-white">
                 {purchasing ? 'Initiating Gateway...' : 'Buy Backing Track • ₹99'}
               </h4>
-              <p className="text-[11px] text-[#86868B]">
+              <p className="text-[11px] text-white/90">
                 Unlimited full playback & offline master WAV download.
               </p>
             </div>
-            <div className="w-10 h-10 rounded-xl bg-[#D4A017] text-[#0E0305] flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform shadow-md">
+            <div className="w-10 h-10 rounded-xl bg-white text-[#FA243C] flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform shadow-md">
               <ArrowRight className="w-5 h-5" />
             </div>
           </button>
 
           {/* Action 2: Vocal Songs Clarification */}
-          <div className="p-3.5 rounded-2xl bg-white/60 border border-[#E5E5EA] flex items-center justify-between gap-3 text-xs">
+          <div className="p-3.5 rounded-2xl bg-white border border-[#E5E5EA] flex items-center justify-between gap-3 text-xs">
             <span className="text-[#86868B]">
-              Want offline downloads of all <strong className="text-white">vocal songs</strong>?
+              Want offline downloads of all <strong className="text-[#1D1D1F]">vocal songs</strong>?
             </span>
             <button
               type="button"
               onClick={handleGoMembership}
-              className="text-[#D4A017] hover:underline font-semibold whitespace-nowrap shrink-0"
+              className="text-[#FA243C] hover:underline font-semibold whitespace-nowrap shrink-0"
             >
               Songs Pass (₹299) →
             </button>
@@ -207,7 +207,7 @@ export const TrackPreviewLimitModal: React.FC<TrackPreviewLimitModalProps> = ({
             <button
               type="button"
               onClick={onClose}
-              className="text-xs text-[#86868B] hover:text-[#FFFFFF] underline transition-colors"
+              className="text-xs text-[#86868B] hover:text-[#FA243C] underline transition-colors"
             >
               Continue listening to free devotional songs
             </button>

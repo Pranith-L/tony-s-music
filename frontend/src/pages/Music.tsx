@@ -211,12 +211,12 @@ export const MusicPage: React.FC = () => {
             value={searchQuery}
             onChange={(e) => handleSearchChange(e.target.value)}
             placeholder="Search devotional songs by Telugu or English name (e.g. Nee Prema, ప్రార్థన)..."
-            className="w-full pl-12 pr-10 py-3.5 rounded-2xl bg-[#F5F5F7] border border-[#E5E5EA] text-sm text-[#FFFFFF] placeholder-[#E2CBD0]/60 focus:outline-none focus:border-[#D4A017] shadow-inner"
+            className="w-full pl-12 pr-10 py-3.5 rounded-2xl bg-[#F5F5F7] border border-[#E5E5EA] text-sm text-[#1D1D1F] placeholder-[#86868B] focus:outline-none focus:border-[#FA243C] shadow-inner"
           />
           {searchQuery && (
             <button
               onClick={() => handleSearchChange('')}
-              className="absolute right-3.5 top-1/2 -translate-y-1/2 p-1 text-[#86868B] hover:text-[#FFFFFF]"
+              className="absolute right-3.5 top-1/2 -translate-y-1/2 p-1 text-[#86868B] hover:text-[#FA243C]"
             >
               <X className="w-4 h-4" />
             </button>
@@ -239,7 +239,7 @@ export const MusicPage: React.FC = () => {
               className={`px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-2 ${
                 activeCategory === cat.id && !isLikedFilter
                   ? 'bg-gradient-to-r from-[#FC3C44] to-[#FA243C] text-[#FFFFFF] shadow-[0_0_15px_rgba(250,36,60,0.2)]'
-                  : 'bg-[#F5F5F7] text-[#86868B] hover:text-[#FFFFFF] hover:bg-[#F5F5F7] border border-[#E5E5EA]'
+                  : 'bg-[#F5F5F7] text-[#86868B] hover:text-[#FA243C] hover:bg-[#FEE2E2] border border-[#E5E5EA]'
               }`}
             >
               <span>{cat.en}</span>
@@ -355,13 +355,13 @@ export const MusicPage: React.FC = () => {
 
                       <div className="min-w-0 flex-1 pr-2">
                         <h4
-                          className={`text-sm sm:text-base font-semibold truncate leading-snug ${
-                            isCurrent ? 'text-[#FA243C]' : 'text-[#FFFFFF]'
+                          className={`text-sm sm:text-base font-semibold truncate leading-snug transition-colors ${
+                            isCurrent ? 'text-[#FA243C]' : 'text-[#1D1D1F] group-hover:text-[#FA243C]'
                           }`}
                         >
                           {track.titleEnglish}
                         </h4>
-                        <p className="font-telugu text-xs text-[#D4A017] truncate mt-0.5 leading-snug">
+                        <p className="font-telugu text-xs text-[#86868B] group-hover:text-[#48484A] truncate mt-0.5 leading-snug">
                           {track.titleTelugu}
                         </p>
                         <p className="text-[10px] text-[#86868B] truncate hidden sm:block mt-0.5">
@@ -372,7 +372,7 @@ export const MusicPage: React.FC = () => {
 
                     {/* Right: Free Listening badge (desktop), Like, Duration, 3-dots Menu */}
                     <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0 ml-2">
-                      <span className="hidden md:inline-block px-2.5 py-0.5 rounded-full text-[10px] font-mono font-medium bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
+                      <span className="hidden md:inline-block px-2.5 py-0.5 rounded-full text-[10px] font-mono font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
                         100% Free
                       </span>
 
@@ -383,11 +383,11 @@ export const MusicPage: React.FC = () => {
                           toggleLikeTrack(track.id);
                         }}
                         className={`p-1.5 transition-colors hidden sm:block ${
-                          liked ? '!opacity-100 text-[#D4A017]' : 'text-[#86868B] hover:text-[#FFFFFF]'
+                          liked ? '!opacity-100 text-[#FA243C]' : 'text-[#86868B] hover:text-[#FA243C]'
                         }`}
                         title={liked ? 'Liked' : 'Like'}
                       >
-                        <Heart className={`w-4 h-4 ${liked ? 'fill-[#D4A017]' : ''}`} />
+                        <Heart className={`w-4 h-4 ${liked ? 'fill-[#FA243C] text-[#FA243C]' : ''}`} />
                       </button>
 
                       {/* Duration */}

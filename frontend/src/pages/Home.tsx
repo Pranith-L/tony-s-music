@@ -385,7 +385,7 @@ export const Home: React.FC = () => {
                 className={`px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all duration-200 shrink-0 ${
                   isActive
                     ? 'bg-[#FA243C] text-[#FFFFFF] shadow-md shadow-[#FA243C]/40 border border-[#D4A017]/40'
-                    : 'bg-[#F5F5F7] text-[#86868B] hover:text-[#FFFFFF] hover:bg-[#FEE2E2] border border-[#E5E5EA]'
+                    : 'bg-[#F5F5F7] text-[#86868B] hover:text-[#FA243C] hover:bg-[#FEE2E2] border border-[#E5E5EA]'
                 }`}
               >
                 <span>{chip.en}</span>
@@ -413,13 +413,13 @@ export const Home: React.FC = () => {
                 >
                   {/* Left: Index & Art & Title */}
                   <div className="flex items-center gap-3.5 sm:gap-4 min-w-0 flex-1">
-                    <span className="font-mono text-xs text-[#86868B] w-5 text-center shrink-0">
+                    <span className={`font-mono text-xs w-5 text-center shrink-0 ${isCurrent ? 'text-[#FA243C] font-bold' : 'text-[#86868B]'}`}>
                       {isThisPlaying ? (
                         <div className="flex items-end justify-center gap-0.5 h-3.5">
-                          <span className="w-0.5 bg-[#D4A017] rounded-full wave-bar-1" />
-                          <span className="w-0.5 bg-[#D4A017] rounded-full wave-bar-2" />
-                          <span className="w-0.5 bg-[#D4A017] rounded-full wave-bar-3" />
-                          <span className="w-0.5 bg-[#D4A017] rounded-full wave-bar-4" />
+                          <span className="w-0.5 bg-[#FA243C] rounded-full wave-bar-1" />
+                          <span className="w-0.5 bg-[#FA243C] rounded-full wave-bar-2" />
+                          <span className="w-0.5 bg-[#FA243C] rounded-full wave-bar-3" />
+                          <span className="w-0.5 bg-[#FA243C] rounded-full wave-bar-4" />
                         </div>
                       ) : (
                         idx + 1
@@ -440,14 +440,14 @@ export const Home: React.FC = () => {
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center gap-2">
                         <h4
-                          className={`text-sm sm:text-base font-semibold truncate ${
-                            isCurrent ? 'text-[#FA243C]' : 'text-[#FFFFFF]'
+                          className={`text-sm sm:text-base font-semibold truncate transition-colors ${
+                            isCurrent ? 'text-[#FA243C]' : 'text-[#1D1D1F] group-hover:text-[#FA243C]'
                           }`}
                         >
                           {track.titleEnglish}
                         </h4>
                       </div>
-                      <p className="font-telugu text-xs text-[#D4A017] truncate">
+                      <p className="font-telugu text-xs text-[#86868B] group-hover:text-[#48484A] truncate">
                         {track.titleTelugu}
                       </p>
                     </div>
@@ -455,7 +455,7 @@ export const Home: React.FC = () => {
 
                   {/* Right: Free Listening Badge, VIP Download, Like, Lyrics, Duration */}
                   <div className="flex items-center gap-2 sm:gap-3 shrink-0 ml-3">
-                    <span className="hidden sm:inline-block px-2 py-0.5 rounded-full text-[10px] font-mono bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
+                    <span className="hidden sm:inline-block px-2 py-0.5 rounded-full text-[10px] font-mono font-medium bg-emerald-50 text-emerald-700 border border-emerald-200 shadow-sm">
                       Free Listening
                     </span>
 
@@ -464,7 +464,7 @@ export const Home: React.FC = () => {
                         e.stopPropagation();
                         setSelectedTrack(track);
                       }}
-                      className="px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-[#FA243C]/25 text-[#FA243C] border border-[#FA243C]/50 hover:bg-[#FA243C] hover:text-white transition-colors cursor-pointer shrink-0 shadow-sm"
+                      className="px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-[#FA243C]/10 text-[#FA243C] border border-[#FA243C]/25 hover:bg-[#FA243C] hover:text-white transition-colors cursor-pointer shrink-0 shadow-sm"
                       title="Download requires Tony's VIP Lifetime Pass (₹299)"
                     >
                       VIP Pass • ₹299
@@ -476,11 +476,11 @@ export const Home: React.FC = () => {
                         toggleLikeTrack(track.id);
                       }}
                       className={`p-1.5 transition-colors opacity-0 group-hover:opacity-100 ${
-                        liked ? '!opacity-100 text-[#D4A017]' : 'text-[#86868B] hover:text-[#FFFFFF]'
+                        liked ? '!opacity-100 text-[#FA243C]' : 'text-[#86868B] hover:text-[#FA243C]'
                       }`}
                       title={liked ? 'Liked' : 'Like'}
                     >
-                      <Heart className={`w-4 h-4 ${liked ? 'fill-[#D4A017]' : ''}`} />
+                      <Heart className={`w-4 h-4 ${liked ? 'fill-[#FA243C] text-[#FA243C]' : ''}`} />
                     </button>
 
                     <button
@@ -488,13 +488,13 @@ export const Home: React.FC = () => {
                         e.stopPropagation();
                         setSelectedTrack(track);
                       }}
-                      className="p-1.5 text-[#86868B] hover:text-[#D4A017] transition-colors opacity-0 group-hover:opacity-100"
+                      className="p-1.5 text-[#86868B] hover:text-[#FA243C] transition-colors opacity-0 group-hover:opacity-100"
                       title="View Lyrics (సాహిత్యం) & Download"
                     >
                       <FileText className="w-4 h-4" />
                     </button>
 
-                    <span className="font-mono text-xs text-[#86868B] pr-1">
+                    <span className="font-mono text-xs text-[#86868B] group-hover:text-[#1D1D1F] pr-1">
                       {track.duration}
                     </span>
                   </div>

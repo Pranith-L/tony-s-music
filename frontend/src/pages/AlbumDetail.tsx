@@ -98,17 +98,17 @@ export const AlbumDetailPage: React.FC = () => {
       {/* Back to Albums Link */}
       <Link
         to="/albums"
-        className="inline-flex items-center gap-1.5 text-xs text-[#86868B] hover:text-[#FFFFFF] transition-colors"
+        className="inline-flex items-center gap-1.5 text-xs text-[#86868B] hover:text-[#FA243C] transition-colors"
       >
         <ChevronLeft className="w-4 h-4" />
         <span>Back to All Albums</span>
       </Link>
 
       {/* Album Billboard Header */}
-      <div className="relative rounded-3xl p-6 sm:p-8 bg-gradient-to-b from-[#D71A30]/40 via-[#1A060A] to-[#0E0305] border border-[#E5E5EA] grid grid-cols-1 md:grid-cols-12 gap-8 items-end shadow-2xl">
+      <div className="relative rounded-3xl p-6 sm:p-8 bg-gradient-to-b from-[#FEE2E2]/60 via-[#F5F5F7] to-[#FFFFFF] border border-[#E5E5EA] grid grid-cols-1 md:grid-cols-12 gap-8 items-end shadow-sm">
         {/* Cover Art */}
         <div className="md:col-span-4 lg:col-span-3">
-          <div className="relative aspect-square rounded-2xl overflow-hidden bg-[#F2F2F7] border border-[#E5E5EA] shadow-2xl">
+          <div className="relative aspect-square rounded-2xl overflow-hidden bg-[#F2F2F7] border border-[#E5E5EA] shadow-xl">
             <img
               src={album.coverImage}
               alt={album.titleEnglish}
@@ -119,7 +119,7 @@ export const AlbumDetailPage: React.FC = () => {
 
         {/* Album Meta */}
         <div className="md:col-span-8 lg:col-span-9 space-y-3">
-          <span className="text-xs font-mono uppercase tracking-widest text-[#D4A017] font-semibold">
+          <span className="text-xs font-mono uppercase tracking-widest text-[#FA243C] font-semibold">
             Album • ఆల్బమ్
           </span>
 
@@ -135,8 +135,8 @@ export const AlbumDetailPage: React.FC = () => {
           </p>
 
           {/* Artist Avatar & Stats Row */}
-          <div className="flex flex-wrap items-center gap-2 pt-2 text-xs text-[#FFFFFF]">
-            <div className="w-6 h-6 rounded-full overflow-hidden bg-[#F5F5F7] border border-[#D4A017]/40 flex items-center justify-center">
+          <div className="flex flex-wrap items-center gap-2 pt-2 text-xs text-[#1D1D1F]">
+            <div className="w-6 h-6 rounded-full overflow-hidden bg-[#F5F5F7] border border-[#E5E5EA] flex items-center justify-center">
               <img src="/tony_avatar_cutout.png" alt="Tony Prakash" className="w-full h-full object-cover object-center" />
             </div>
             <span className="font-bold">Rev. Tony Prakash</span>
@@ -152,7 +152,7 @@ export const AlbumDetailPage: React.FC = () => {
       <div className="flex items-center gap-4 py-2">
         <button
           onClick={handlePlayAlbum}
-          className="w-14 h-14 rounded-full bg-gradient-to-tr from-[#FC3C44] to-[#FA243C] text-[#FFFFFF] flex items-center justify-center shadow-[0_0_25px_rgba(27,124,157,0.6)] border border-[#D4A017]/40 hover:scale-105 active:scale-95 transition-all"
+          className="w-14 h-14 rounded-full bg-gradient-to-tr from-[#FC3C44] to-[#FA243C] text-[#FFFFFF] flex items-center justify-center shadow-md border border-[#FA243C]/40 hover:scale-105 active:scale-95 transition-all"
           title={isCurrentAlbumPlaying ? 'Pause album' : 'Play album'}
         >
           {isCurrentAlbumPlaying ? (
@@ -164,10 +164,10 @@ export const AlbumDetailPage: React.FC = () => {
 
         <button
           onClick={handleShare}
-          className="p-3 rounded-full bg-[#F5F5F7] hover:bg-[#FEE2E2] text-[#86868B] hover:text-[#FFFFFF] border border-[#E5E5EA] transition-colors"
+          className="p-3 rounded-full bg-[#F5F5F7] hover:bg-[#FEE2E2] text-[#86868B] hover:text-[#FA243C] border border-[#E5E5EA] transition-colors"
           title="Share album"
         >
-          {copied ? <Check className="w-5 h-5 text-[#D4A017]" /> : <Share2 className="w-5 h-5" />}
+          {copied ? <Check className="w-5 h-5 text-[#FA243C]" /> : <Share2 className="w-5 h-5" />}
         </button>
       </div>
 
@@ -215,10 +215,10 @@ export const AlbumDetailPage: React.FC = () => {
 
                 <div className="col-span-8 sm:col-span-7 min-w-0">
                   <p
-                    className={`font-telugu text-sm font-semibold truncate leading-tight ${
+                    className={`font-telugu text-sm font-semibold truncate leading-tight transition-colors ${
                       currentTrack?.id === track.id
                         ? 'text-[#FA243C]'
-                        : 'text-[#FFFFFF] group-hover:text-[#FA243C]'
+                        : 'text-[#1D1D1F] group-hover:text-[#FA243C]'
                     }`}
                   >
                     {track.titleTelugu}
@@ -239,11 +239,11 @@ export const AlbumDetailPage: React.FC = () => {
                       toggleLikeTrack(track.id);
                     }}
                     className={`p-1.5 transition-colors hidden sm:block ${
-                      liked ? '!opacity-100 text-[#D4A017]' : 'text-[#86868B] hover:text-[#FFFFFF]'
+                      liked ? '!opacity-100 text-[#FA243C]' : 'text-[#86868B] hover:text-[#FA243C]'
                     }`}
                     title={liked ? 'Liked' : 'Like'}
                   >
-                    <Heart className={`w-4 h-4 ${liked ? 'fill-[#D4A017]' : ''}`} />
+                    <Heart className={`w-4 h-4 ${liked ? 'fill-[#FA243C] text-[#FA243C]' : ''}`} />
                   </button>
 
                   <span className="font-mono text-xs text-[#86868B] pr-1 hidden xs:inline">

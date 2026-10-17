@@ -93,14 +93,14 @@ export const LyricsModal: React.FC<LyricsModalProps> = ({ track, onClose }) => {
         <button
           onClick={onClose}
           aria-label="Close track details"
-          className="absolute top-4 right-4 sm:top-6 sm:right-6 w-9 h-9 rounded-full bg-[#F5F5F7] hover:bg-[#F2F2F7] border border-[#E5E5EA] text-[#86868B] hover:text-[#FFFFFF] flex items-center justify-center transition-colors shadow-md z-10"
+          className="absolute top-4 right-4 sm:top-6 sm:right-6 w-9 h-9 rounded-full bg-white hover:bg-[#F2F2F7] border border-[#E5E5EA] text-[#86868B] hover:text-[#FA243C] flex items-center justify-center transition-colors shadow-md z-10"
         >
           <X className="w-5 h-5" />
         </button>
 
         {/* Top Header info */}
         <div className="flex flex-col sm:flex-row gap-5 items-start pb-6 border-b border-[#E5E5EA] pr-8">
-          <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-xl overflow-hidden bg-white border border-[#D4A017]/40 shrink-0 shadow-lg">
+          <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-xl overflow-hidden bg-white border border-[#E5E5EA] shrink-0 shadow-lg">
             <img
               src={track.coverImage || '/hero_tony_prakash.png'}
               alt={track.titleEnglish}
@@ -110,17 +110,17 @@ export const LyricsModal: React.FC<LyricsModalProps> = ({ track, onClose }) => {
 
           <div className="flex-1 min-w-0 space-y-2">
             <div className="flex items-center gap-2">
-              <span className="px-2.5 py-0.5 rounded-full text-[10px] tracking-wider uppercase font-semibold bg-[#FA243C]/20 text-[#FA243C] border border-[#E5E5EA]">
+              <span className="px-2.5 py-0.5 rounded-full text-[10px] tracking-wider uppercase font-semibold bg-[#FA243C]/10 text-[#FA243C] border border-[#FA243C]/20">
                 {track.category}
               </span>
               {track.isSubscriberOnly && (
-                <span className="px-2.5 py-0.5 rounded-full text-[10px] bg-amber-950/80 text-amber-300 border border-amber-600/40">
+                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-amber-50 text-amber-800 border border-amber-200">
                   Subscriber Exclusive
                 </span>
               )}
             </div>
 
-            <h2 className="text-xl sm:text-2xl font-bold text-[#FFFFFF] leading-tight">
+            <h2 className="text-xl sm:text-2xl font-bold text-[#1D1D1F] leading-tight">
               {track.titleEnglish}
             </h2>
             <p className="text-xs text-[#86868B]">
@@ -130,7 +130,7 @@ export const LyricsModal: React.FC<LyricsModalProps> = ({ track, onClose }) => {
             <div className="pt-2 flex flex-wrap items-center gap-3">
               <button
                 onClick={handlePlay}
-                className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-gradient-to-r from-[#FC3C44] to-[#FA243C] text-[#FFFFFF] font-bold text-xs uppercase tracking-wider shadow-md hover:scale-105 transition-transform border border-[#D4A017]/40"
+                className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-gradient-to-r from-[#FC3C44] to-[#FA243C] text-[#FFFFFF] font-bold text-xs uppercase tracking-wider shadow-md hover:scale-105 transition-transform"
               >
                 {isThisPlaying ? <Pause className="w-3.5 h-3.5 fill-current" /> : <Play className="w-3.5 h-3.5 fill-current ml-0.5" />}
                 <span>{isThisPlaying ? 'Pause' : 'Play Track'}</span>
@@ -140,7 +140,7 @@ export const LyricsModal: React.FC<LyricsModalProps> = ({ track, onClose }) => {
                 <button
                   onClick={handleDownload}
                   disabled={downloading}
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#F5F5F7] border border-[#D4A017]/40 text-xs text-[#D4A017] hover:bg-[#F2F2F7] transition-colors"
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-[#E5E5EA] text-xs text-[#1D1D1F] hover:bg-[#F2F2F7] transition-colors"
                 >
                   <Download className="w-3.5 h-3.5" />
                   <span>Download Audio</span>
@@ -152,8 +152,8 @@ export const LyricsModal: React.FC<LyricsModalProps> = ({ track, onClose }) => {
 
         {/* Purchase Notification banner if applicable */}
         {purchaseSuccess && (
-          <div className="my-4 p-4 rounded-xl bg-emerald-950/80 border border-emerald-500/40 text-emerald-200 text-xs flex items-center gap-3 shadow-md">
-            <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />
+          <div className="my-4 p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs flex items-center gap-3 shadow-md">
+            <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
             <div>
               <div className="font-semibold">Track Download Purchased Successfully!</div>
               <div>You can now download this high-fidelity audio track at any time.</div>
@@ -164,20 +164,20 @@ export const LyricsModal: React.FC<LyricsModalProps> = ({ track, onClose }) => {
         {/* Credits Row */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 py-4 border-b border-[#E5E5EA] text-xs">
           <div>
-            <span className="text-[#86868B]/70 block text-[10px] uppercase font-mono">Singer</span>
-            <span className="text-[#FFFFFF] font-medium">{track.singer}</span>
+            <span className="text-[#86868B] block text-[10px] uppercase font-mono">Singer</span>
+            <span className="text-[#1D1D1F] font-semibold">{track.singer}</span>
           </div>
           <div>
-            <span className="text-[#86868B]/70 block text-[10px] uppercase font-mono">Lyrics</span>
-            <span className="text-[#FFFFFF] font-medium">{track.lyricist}</span>
+            <span className="text-[#86868B] block text-[10px] uppercase font-mono">Lyrics</span>
+            <span className="text-[#1D1D1F] font-semibold">{track.lyricist}</span>
           </div>
           <div>
-            <span className="text-[#86868B]/70 block text-[10px] uppercase font-mono">Composer</span>
-            <span className="text-[#FFFFFF] font-medium">{track.composer}</span>
+            <span className="text-[#86868B] block text-[10px] uppercase font-mono">Composer</span>
+            <span className="text-[#1D1D1F] font-semibold">{track.composer}</span>
           </div>
           <div>
-            <span className="text-[#86868B]/70 block text-[10px] uppercase font-mono">Release Year</span>
-            <span className="text-[#FFFFFF] font-medium">{track.releaseYear}</span>
+            <span className="text-[#86868B] block text-[10px] uppercase font-mono">Release Year</span>
+            <span className="text-[#1D1D1F] font-semibold">{track.releaseYear}</span>
           </div>
         </div>
 
@@ -185,10 +185,10 @@ export const LyricsModal: React.FC<LyricsModalProps> = ({ track, onClose }) => {
         <div className="pt-6 space-y-6">
           {track.lyricsTelugu ? (
             <div>
-              <h4 className="text-xs uppercase tracking-widest text-[#D4A017] font-semibold mb-3">
+              <h4 className="text-xs uppercase tracking-widest text-[#FA243C] font-semibold mb-3">
                 Telugu Lyrics (సాహిత్యం)
               </h4>
-              <div className="font-telugu text-sm leading-relaxed whitespace-pre-line text-[#FFFFFF]/90 p-4 rounded-xl bg-white/80 border border-[#E5E5EA]">
+              <div className="font-telugu text-sm leading-relaxed whitespace-pre-line text-[#1D1D1F] p-4 rounded-xl bg-white border border-[#E5E5EA] shadow-inner">
                 {track.lyricsTelugu}
               </div>
             </div>
@@ -200,10 +200,10 @@ export const LyricsModal: React.FC<LyricsModalProps> = ({ track, onClose }) => {
 
           {track.lyricsEnglish && (
             <div>
-              <h4 className="text-xs uppercase tracking-widest text-[#D4A017] font-semibold mb-3">
+              <h4 className="text-xs uppercase tracking-widest text-[#FA243C] font-semibold mb-3">
                 English Translation / Transliteration
               </h4>
-              <div className="text-xs leading-relaxed whitespace-pre-line text-[#86868B] p-4 rounded-xl bg-white/60 border border-[#E5E5EA]">
+              <div className="text-xs leading-relaxed whitespace-pre-line text-[#333336] p-4 rounded-xl bg-white border border-[#E5E5EA]">
                 {track.lyricsEnglish}
               </div>
             </div>

@@ -50,17 +50,17 @@ export const AddToPlaylistModal: React.FC<AddToPlaylistModalProps> = ({
       onClick={onClose}
     >
       <div
-        className="w-full max-w-md bg-[#F5F5F7] border border-[#E5E5EA] rounded-3xl p-6 shadow-2xl text-[#FFFFFF] space-y-5 animate-scaleUp my-auto max-h-[92dvh] overflow-y-auto"
+        className="w-full max-w-md bg-[#F5F5F7] border border-[#E5E5EA] rounded-3xl p-6 shadow-2xl text-[#1D1D1F] space-y-5 animate-scaleUp my-auto max-h-[92dvh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
         <div className="flex items-center justify-between pb-3 border-b border-[#E5E5EA]">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-2xl bg-white border border-[#E5E5EA] flex items-center justify-center">
-              <ListMusic className="w-5 h-5 text-[#D4A017]" />
+              <ListMusic className="w-5 h-5 text-[#FA243C]" />
             </div>
             <div>
-              <h3 className="font-heading font-bold text-lg text-white">Add to Playlist</h3>
+              <h3 className="font-heading font-bold text-lg text-[#1D1D1F]">Add to Playlist</h3>
               <p className="text-xs text-[#86868B] truncate max-w-[220px]">
                 {track.titleEnglish} • {track.titleTelugu}
               </p>
@@ -68,7 +68,7 @@ export const AddToPlaylistModal: React.FC<AddToPlaylistModalProps> = ({
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-full text-[#86868B] hover:text-white hover:bg-[#F2F2F7] transition-colors"
+            className="p-1.5 rounded-full text-[#86868B] hover:text-[#FA243C] hover:bg-[#F2F2F7] transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -76,7 +76,7 @@ export const AddToPlaylistModal: React.FC<AddToPlaylistModalProps> = ({
 
         {/* Feedback message */}
         {feedback && (
-          <div className="p-2.5 rounded-xl bg-[#FA243C]/20 border border-[#E5E5EA] text-xs text-[#FA243C] text-center animate-fadeIn font-semibold">
+          <div className="p-2.5 rounded-xl bg-[#FA243C]/10 border border-[#FA243C]/30 text-xs text-[#FA243C] text-center animate-fadeIn font-semibold">
             {feedback}
           </div>
         )}
@@ -96,13 +96,13 @@ export const AddToPlaylistModal: React.FC<AddToPlaylistModalProps> = ({
                   onClick={() => handleToggleTrack(pl.id, inPlaylist)}
                   className={`flex items-center justify-between p-3 rounded-2xl cursor-pointer transition-all border ${
                     inPlaylist
-                      ? 'bg-[#F2F2F7] border-[#D4A017]/60 text-white shadow-md'
-                      : 'bg-[#F5F5F7] border-[#E5E5EA] text-[#FFFFFF] hover:bg-[#F2F2F7]'
+                      ? 'bg-[#FEE2E2] border-[#FA243C] text-[#FA243C] shadow-sm font-semibold'
+                      : 'bg-white border-[#E5E5EA] text-[#1D1D1F] hover:bg-[#F5F5F7]'
                   }`}
                 >
                   <div className="flex items-center gap-3 min-w-0">
                     <div className="w-9 h-9 rounded-xl bg-white border border-[#E5E5EA] flex items-center justify-center shrink-0">
-                      <Music className="w-4 h-4 text-[#D4A017]" />
+                      <Music className="w-4 h-4 text-[#FA243C]" />
                     </div>
                     <div className="min-w-0">
                       <p className="font-semibold text-xs truncate">{pl.name}</p>
@@ -115,8 +115,8 @@ export const AddToPlaylistModal: React.FC<AddToPlaylistModalProps> = ({
                   <div
                     className={`w-6 h-6 rounded-full flex items-center justify-center border transition-all ${
                       inPlaylist
-                        ? 'bg-[#D4A017] border-[#D4A017] text-[#0E0305]'
-                        : 'border-[#E2CBD0]/40 text-transparent hover:border-white'
+                        ? 'bg-[#FA243C] border-[#FA243C] text-white'
+                        : 'border-[#E5E5EA] text-transparent hover:border-[#FA243C]'
                     }`}
                   >
                     <Check className="w-3.5 h-3.5 stroke-[3]" />
@@ -136,13 +136,13 @@ export const AddToPlaylistModal: React.FC<AddToPlaylistModalProps> = ({
               value={newTitle}
               onChange={(e) => setNewTitle(e.target.value)}
               placeholder="e.g. Morning Worship, Choir Songs..."
-              className="w-full px-4 py-2.5 rounded-xl bg-white border border-[#E5E5EA] text-xs text-white placeholder-[#E2CBD0]/60 focus:outline-none focus:border-[#D4A017]"
+              className="w-full px-4 py-2.5 rounded-xl bg-white border border-[#E5E5EA] text-xs text-[#1D1D1F] placeholder-[#86868B] focus:outline-none focus:border-[#FA243C]"
             />
             <div className="flex items-center justify-end gap-2">
               <button
                 type="button"
                 onClick={() => setShowCreate(false)}
-                className="px-3 py-1.5 rounded-xl text-xs text-[#86868B] hover:text-white"
+                className="px-3 py-1.5 rounded-xl text-xs text-[#86868B] hover:text-[#FA243C]"
               >
                 Cancel
               </button>
@@ -158,7 +158,7 @@ export const AddToPlaylistModal: React.FC<AddToPlaylistModalProps> = ({
         ) : (
           <button
             onClick={() => setShowCreate(true)}
-            className="w-full py-2.5 rounded-2xl border border-dashed border-[#FA243C]/50 hover:border-[#D4A017] text-xs font-semibold text-[#FA243C] hover:text-white hover:bg-[#F2F2F7]/40 flex items-center justify-center gap-2 transition-all"
+            className="w-full py-2.5 rounded-2xl border border-dashed border-[#FA243C]/50 hover:border-[#FA243C] text-xs font-semibold text-[#FA243C] hover:bg-[#FEE2E2]/40 flex items-center justify-center gap-2 transition-all"
           >
             <Plus className="w-4 h-4" />
             <span>Create New Playlist</span>
@@ -168,7 +168,7 @@ export const AddToPlaylistModal: React.FC<AddToPlaylistModalProps> = ({
         <div className="pt-2">
           <button
             onClick={onClose}
-            className="w-full py-2.5 rounded-xl bg-[#F5F5F7] hover:bg-[#F2F2F7] text-xs font-semibold text-[#86868B] hover:text-white transition-colors"
+            className="w-full py-2.5 rounded-xl bg-white hover:bg-[#F2F2F7] border border-[#E5E5EA] text-xs font-semibold text-[#86868B] hover:text-[#1D1D1F] transition-colors"
           >
             Done
           </button>

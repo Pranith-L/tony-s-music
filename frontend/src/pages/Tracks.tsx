@@ -235,12 +235,12 @@ export const TracksPage: React.FC = () => {
             value={searchQuery}
             onChange={(e) => handleSearchChange(e.target.value)}
             placeholder="Search backing tracks (e.g. Nee Prema, 001)..."
-            className="w-full pl-11 pr-10 py-3 rounded-2xl bg-[#F5F5F7] border border-[#E5E5EA] text-xs sm:text-sm text-[#FFFFFF] placeholder-[#E2CBD0]/60 focus:outline-none focus:border-[#D4A017] shadow-inner"
+            className="w-full pl-11 pr-10 py-3 rounded-2xl bg-[#F5F5F7] border border-[#E5E5EA] text-xs sm:text-sm text-[#1D1D1F] placeholder-[#86868B] focus:outline-none focus:border-[#FA243C] shadow-inner"
           />
           {searchQuery && (
             <button
               onClick={() => handleSearchChange('')}
-              className="absolute right-3.5 top-1/2 -translate-y-1/2 p-1 text-[#86868B] hover:text-[#FFFFFF]"
+              className="absolute right-3.5 top-1/2 -translate-y-1/2 p-1 text-[#86868B] hover:text-[#FA243C]"
             >
               <X className="w-3.5 h-3.5" />
             </button>
@@ -318,17 +318,17 @@ export const TracksPage: React.FC = () => {
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center gap-2">
                         <h4
-                          className={`text-sm sm:text-base font-semibold truncate ${
-                            isCurrent ? 'text-[#D4A017]' : 'text-[#FFFFFF]'
+                          className={`text-sm sm:text-base font-semibold truncate transition-colors ${
+                            isCurrent ? 'text-[#FA243C]' : 'text-[#1D1D1F] group-hover:text-[#FA243C]'
                           }`}
                         >
                           {track.titleEnglish}
                         </h4>
-                        <span className="hidden sm:inline-block px-2 py-0.5 rounded text-[10px] font-mono bg-[#F5F5F7] text-[#86868B] border border-white/10 shrink-0">
+                        <span className="hidden sm:inline-block px-2 py-0.5 rounded text-[10px] font-mono bg-[#F5F5F7] text-[#86868B] border border-[#E5E5EA] shrink-0">
                           Studio Track
                         </span>
                       </div>
-                      <p className="font-telugu text-xs sm:text-sm text-[#D4A017] truncate">
+                      <p className="font-telugu text-xs sm:text-sm text-[#86868B] group-hover:text-[#48484A] truncate">
                         {track.titleTelugu}
                       </p>
                       <p className="text-[10px] text-[#86868B] truncate">
@@ -340,12 +340,12 @@ export const TracksPage: React.FC = () => {
                   {/* Right: Preview badge, Buy / Download action, Duration */}
                   <div className="flex items-center gap-2 sm:gap-3 shrink-0 ml-3">
                     {unlocked ? (
-                      <span className="hidden sm:flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold bg-[#FA243C]/30 text-[#FA243C] border border-[#FA243C]/50 shadow-sm">
-                        <CheckCircle2 className="w-3 h-3 text-[#39A8CE]" />
+                      <span className="hidden sm:flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold bg-[#FA243C]/10 text-[#FA243C] border border-[#FA243C]/25 shadow-sm">
+                        <CheckCircle2 className="w-3 h-3 text-[#FA243C]" />
                         <span className="hidden sm:inline">Full Track</span> Unlocked
                       </span>
                     ) : (
-                      <span className="hidden sm:flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-mono font-semibold bg-amber-500/15 text-amber-300 border border-amber-500/30">
+                      <span className="hidden sm:flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-mono font-semibold bg-amber-50 text-amber-800 border border-amber-200">
                         <Lock className="w-3 h-3" />
                         30s Preview
                       </span>
@@ -358,7 +358,7 @@ export const TracksPage: React.FC = () => {
                           e.stopPropagation();
                           handleDownload(track);
                         }}
-                        className="hidden sm:flex px-3 py-1.5 rounded-xl text-xs font-semibold bg-[#FA243C]/20 hover:bg-[#FA243C] text-white border border-[#E5E5EA] transition-all items-center gap-1.5 shadow-sm"
+                        className="hidden sm:flex px-3 py-1.5 rounded-xl text-xs font-semibold bg-[#FA243C] hover:bg-[#FA243C]/90 text-white border border-[#FA243C] transition-all items-center gap-1.5 shadow-sm"
                         title="Download Studio WAV"
                       >
                         <Download className="w-3.5 h-3.5" />
@@ -371,10 +371,10 @@ export const TracksPage: React.FC = () => {
                           handleBuyTrack(track);
                         }}
                         disabled={isPurchasing}
-                        className="hidden sm:flex px-3.5 py-1.5 rounded-xl text-xs font-bold bg-gradient-to-r from-[#D4A017] to-[#E8DCB8] text-[#0E0305] hover:opacity-90 transition-all items-center gap-1.5 shadow-md active:scale-95"
+                        className="hidden sm:flex px-3.5 py-1.5 rounded-xl text-xs font-bold bg-gradient-to-r from-[#FC3C44] to-[#FA243C] text-white hover:opacity-95 transition-all items-center gap-1.5 shadow-sm active:scale-95"
                         title="Buy Full Studio Track for ₹99"
                       >
-                        <Sparkles className="w-3.5 h-3.5 text-[#0E0305]" />
+                        <Sparkles className="w-3.5 h-3.5 text-white" />
                         <span>{isPurchasing ? 'Processing...' : 'Buy • ₹99'}</span>
                       </button>
                     )}
@@ -386,11 +386,11 @@ export const TracksPage: React.FC = () => {
                         toggleLikeTrack(track.id);
                       }}
                       className={`p-1.5 transition-colors hidden sm:block ${
-                        liked ? '!opacity-100 text-[#D4A017]' : 'text-[#86868B] hover:text-[#FFFFFF]'
+                        liked ? '!opacity-100 text-[#FA243C]' : 'text-[#86868B] hover:text-[#FA243C]'
                       }`}
                       title={liked ? 'Liked' : 'Like'}
                     >
-                      <Heart className={`w-4 h-4 ${liked ? 'fill-[#D4A017]' : ''}`} />
+                      <Heart className={`w-4 h-4 ${liked ? 'fill-[#FA243C] text-[#FA243C]' : ''}`} />
                     </button>
 
                     <span className="font-mono text-xs text-[#86868B] pr-1 hidden sm:inline">

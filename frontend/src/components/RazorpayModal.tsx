@@ -121,10 +121,10 @@ export const RazorpayModal: React.FC<RazorpayModalProps> = ({
         {/* Order Summary Pill */}
         <div className="p-4 bg-[#F5F5F7] border-b border-[#E5E5EA] flex items-center justify-between shrink-0">
           <div className="min-w-0 pr-3">
-            <div className="text-[10px] font-mono uppercase tracking-wider text-[#D4A017] font-semibold">
+            <div className="text-[10px] font-mono uppercase tracking-wider text-[#FA243C] font-semibold">
               {isSubscription ? 'One-Time Lifetime Membership' : 'Studio Backing Track (Minus-One)'}
             </div>
-            <h4 className="text-sm sm:text-base font-bold text-[#FFFFFF] truncate">
+            <h4 className="text-sm sm:text-base font-bold text-[#1D1D1F] truncate">
               {itemTitle}
             </h4>
             {itemSubtitle && (
@@ -135,7 +135,7 @@ export const RazorpayModal: React.FC<RazorpayModalProps> = ({
           </div>
           <div className="text-right shrink-0">
             <span className="text-xs text-[#86868B] block">Amount to Pay</span>
-            <span className="text-xl sm:text-2xl font-bold font-mono text-[#FFFFFF]">
+            <span className="text-xl sm:text-2xl font-bold font-mono text-[#1D1D1F]">
               ₹{amountRupees}
             </span>
           </div>
@@ -147,10 +147,10 @@ export const RazorpayModal: React.FC<RazorpayModalProps> = ({
             <div className="py-12 text-center space-y-4">
               <div className="w-12 h-12 border-3 border-[#FA243C] border-t-transparent rounded-full animate-spin mx-auto" />
               <div className="space-y-1">
-                <h4 className="font-heading font-bold text-base text-[#FFFFFF]">
+                <h4 className="font-heading font-bold text-base text-[#1D1D1F]">
                   Processing Razorpay Payment
                 </h4>
-                <p className="text-xs text-[#D4A017] font-mono animate-pulse">
+                <p className="text-xs text-[#FA243C] font-mono animate-pulse">
                   {statusText}
                 </p>
               </div>
@@ -163,11 +163,11 @@ export const RazorpayModal: React.FC<RazorpayModalProps> = ({
                   onClick={() => setSelectedMethod('UPI')}
                   className={`p-3 rounded-2xl border flex flex-col items-center gap-1.5 transition-all ${
                     selectedMethod === 'UPI'
-                      ? 'bg-[#FA243C]/20 border-[#FA243C] text-[#FFFFFF] shadow-md'
-                      : 'bg-[#F5F5F7]/60 border-[#E5E5EA] text-[#86868B] hover:bg-[#F5F5F7]'
+                      ? 'bg-[#FA243C]/10 border-[#FA243C] text-[#FA243C] shadow-sm font-bold'
+                      : 'bg-white border-[#E5E5EA] text-[#86868B] hover:bg-[#F5F5F7]'
                   }`}
                 >
-                  <Smartphone className="w-5 h-5 text-[#D4A017]" />
+                  <Smartphone className="w-5 h-5 text-[#FA243C]" />
                   <span className="text-xs font-semibold">UPI / QR</span>
                 </button>
 
@@ -176,11 +176,11 @@ export const RazorpayModal: React.FC<RazorpayModalProps> = ({
                   onClick={() => setSelectedMethod('CARD')}
                   className={`p-3 rounded-2xl border flex flex-col items-center gap-1.5 transition-all ${
                     selectedMethod === 'CARD'
-                      ? 'bg-[#FA243C]/20 border-[#FA243C] text-[#FFFFFF] shadow-md'
-                      : 'bg-[#F5F5F7]/60 border-[#E5E5EA] text-[#86868B] hover:bg-[#F5F5F7]'
+                      ? 'bg-[#FA243C]/10 border-[#FA243C] text-[#FA243C] shadow-sm font-bold'
+                      : 'bg-white border-[#E5E5EA] text-[#86868B] hover:bg-[#F5F5F7]'
                   }`}
                 >
-                  <CreditCard className="w-5 h-5 text-[#D4A017]" />
+                  <CreditCard className="w-5 h-5 text-[#FA243C]" />
                   <span className="text-xs font-semibold">Cards</span>
                 </button>
 
@@ -189,11 +189,11 @@ export const RazorpayModal: React.FC<RazorpayModalProps> = ({
                   onClick={() => setSelectedMethod('NETBANKING')}
                   className={`p-3 rounded-2xl border flex flex-col items-center gap-1.5 transition-all ${
                     selectedMethod === 'NETBANKING'
-                      ? 'bg-[#FA243C]/20 border-[#FA243C] text-[#FFFFFF] shadow-md'
-                      : 'bg-[#F5F5F7]/60 border-[#E5E5EA] text-[#86868B] hover:bg-[#F5F5F7]'
+                      ? 'bg-[#FA243C]/10 border-[#FA243C] text-[#FA243C] shadow-sm font-bold'
+                      : 'bg-white border-[#E5E5EA] text-[#86868B] hover:bg-[#F5F5F7]'
                   }`}
                 >
-                  <Building className="w-5 h-5 text-[#D4A017]" />
+                  <Building className="w-5 h-5 text-[#FA243C]" />
                   <span className="text-xs font-semibold">NetBanking</span>
                 </button>
               </div>
@@ -216,7 +216,7 @@ export const RazorpayModal: React.FC<RazorpayModalProps> = ({
                       value={upiId}
                       onChange={(e) => setUpiId(e.target.value)}
                       placeholder="e.g. mobile@okaxis, user@upi"
-                      className="w-full bg-white border border-[#E5E5EA] rounded-xl px-3.5 py-2 text-xs sm:text-sm text-[#FFFFFF] focus:outline-none focus:border-[#D4A017]"
+                      className="w-full bg-white border border-[#E5E5EA] rounded-xl px-3.5 py-2 text-xs sm:text-sm text-[#1D1D1F] focus:outline-none focus:border-[#FA243C]"
                     />
                   </div>
 
@@ -237,20 +237,20 @@ export const RazorpayModal: React.FC<RazorpayModalProps> = ({
                     <input
                       type="text"
                       placeholder="4111 2222 3333 4444"
-                      className="w-full bg-white border border-[#E5E5EA] rounded-xl px-3.5 py-2 text-xs text-[#FFFFFF] focus:outline-none focus:border-[#D4A017]"
+                      className="w-full bg-white border border-[#E5E5EA] rounded-xl px-3.5 py-2 text-xs text-[#1D1D1F] focus:outline-none focus:border-[#FA243C]"
                     />
                   </div>
                   <div className="grid grid-cols-2 gap-2">
                     <input
                       type="text"
                       placeholder="MM/YY"
-                      className="bg-white border border-[#E5E5EA] rounded-xl px-3.5 py-2 text-xs text-[#FFFFFF] focus:outline-none focus:border-[#D4A017]"
+                      className="bg-white border border-[#E5E5EA] rounded-xl px-3.5 py-2 text-xs text-[#1D1D1F] focus:outline-none focus:border-[#FA243C]"
                     />
                     <input
                       type="password"
                       maxLength={4}
                       placeholder="CVV"
-                      className="bg-white border border-[#E5E5EA] rounded-xl px-3.5 py-2 text-xs text-[#FFFFFF] focus:outline-none focus:border-[#D4A017]"
+                      className="bg-white border border-[#E5E5EA] rounded-xl px-3.5 py-2 text-xs text-[#1D1D1F] focus:outline-none focus:border-[#FA243C]"
                     />
                   </div>
                 </div>
@@ -261,10 +261,10 @@ export const RazorpayModal: React.FC<RazorpayModalProps> = ({
                 <div className="p-4 rounded-2xl bg-[#F5F5F7] border border-[#E5E5EA] space-y-2">
                   <label className="text-[11px] text-[#86868B] block">Select Popular Bank</label>
                   <div className="grid grid-cols-2 gap-2 text-xs">
-                    <button type="button" className="p-2 rounded-xl bg-white border border-[#E5E5EA] text-left text-[#FFFFFF] hover:border-[#D4A017]">HDFC Bank</button>
-                    <button type="button" className="p-2 rounded-xl bg-white border border-[#E5E5EA] text-left text-[#FFFFFF] hover:border-[#D4A017]">State Bank of India</button>
-                    <button type="button" className="p-2 rounded-xl bg-white border border-[#E5E5EA] text-left text-[#FFFFFF] hover:border-[#D4A017]">ICICI Bank</button>
-                    <button type="button" className="p-2 rounded-xl bg-white border border-[#E5E5EA] text-left text-[#FFFFFF] hover:border-[#D4A017]">Axis Bank</button>
+                    <button type="button" className="p-2 rounded-xl bg-white border border-[#E5E5EA] text-left text-[#1D1D1F] hover:border-[#FA243C]">HDFC Bank</button>
+                    <button type="button" className="p-2 rounded-xl bg-white border border-[#E5E5EA] text-left text-[#1D1D1F] hover:border-[#FA243C]">State Bank of India</button>
+                    <button type="button" className="p-2 rounded-xl bg-white border border-[#E5E5EA] text-left text-[#1D1D1F] hover:border-[#FA243C]">ICICI Bank</button>
+                    <button type="button" className="p-2 rounded-xl bg-white border border-[#E5E5EA] text-left text-[#1D1D1F] hover:border-[#FA243C]">Axis Bank</button>
                   </div>
                 </div>
               )}

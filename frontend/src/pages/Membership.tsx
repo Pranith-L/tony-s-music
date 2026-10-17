@@ -133,7 +133,7 @@ export const MembershipPage: React.FC = () => {
       {/* 3 Tier Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 items-stretch">
         {/* Tier 1: Free Public Streaming */}
-        <div className="rounded-3xl p-6 sm:p-8 flex flex-col justify-between bg-white border border-white/10 shadow-lg">
+        <div className="rounded-3xl p-6 sm:p-8 flex flex-col justify-between bg-white border border-[#E5E5EA] shadow-md">
           <div className="space-y-6">
             <div>
               <h3 className="text-xl font-heading text-[#1D1D1F] font-semibold">
@@ -175,7 +175,7 @@ export const MembershipPage: React.FC = () => {
           <div className="pt-8">
             <button
               onClick={() => navigate('/music')}
-              className="w-full py-3 rounded-full bg-[#F5F5F7] border border-white/10 text-xs uppercase tracking-wider font-semibold text-[#1D1D1F] hover:text-[#D4A017] hover:border-[#D4A017]/40 transition-colors"
+              className="w-full py-3 rounded-full bg-[#F5F5F7] border border-[#E5E5EA] text-xs uppercase tracking-wider font-semibold text-[#1D1D1F] hover:text-[#FA243C] hover:border-[#FA243C]/40 transition-colors"
             >
               Start Free Listening
             </button>
@@ -255,7 +255,7 @@ export const MembershipPage: React.FC = () => {
         </div>
 
         {/* Tier 3: Individual Backing Track Purchases */}
-        <div className="rounded-3xl p-6 sm:p-8 flex flex-col justify-between bg-white border border-white/10 shadow-lg">
+        <div className="rounded-3xl p-6 sm:p-8 flex flex-col justify-between bg-white border border-[#E5E5EA] shadow-md">
           <div className="space-y-6">
             <div>
               <h3 className="text-xl font-heading text-[#1D1D1F] font-semibold">
