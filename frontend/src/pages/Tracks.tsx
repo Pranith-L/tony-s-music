@@ -117,7 +117,7 @@ export const TracksPage: React.FC = () => {
 
     setPurchasingTrackId(track.id);
     try {
-      const order = await api.payments.createOrder(track.id);
+      const order = await api.payments.createOrder(track.id, track.slug);
       setRazorpayOrder({
         orderId: order.orderId,
         amount: order.amount || 9900,

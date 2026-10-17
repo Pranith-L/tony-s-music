@@ -319,11 +319,11 @@ export const api = {
 
   // Payments & Subscriptions
   payments: {
-    async createOrder(trackId: string) {
+    async createOrder(trackId: string, slug?: string) {
       const res = await fetch(`${API_BASE}/payments/create-order`, {
         method: 'POST',
         headers: getAuthHeaders(),
-        body: JSON.stringify({ trackId }),
+        body: JSON.stringify({ trackId, slug }),
       });
       return handleResponse<{
         orderId: string;

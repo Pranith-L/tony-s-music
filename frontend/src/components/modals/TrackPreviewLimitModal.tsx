@@ -51,7 +51,7 @@ export const TrackPreviewLimitModal: React.FC<TrackPreviewLimitModalProps> = ({
     setPurchasing(true);
     setErrorMsg(null);
     try {
-      const order = await api.payments.createOrder(track.id);
+      const order = await api.payments.createOrder(track.id, track.slug);
       setRazorpayOrder({
         orderId: order.orderId,
         amount: order.amount || 9900,
@@ -94,7 +94,7 @@ export const TrackPreviewLimitModal: React.FC<TrackPreviewLimitModalProps> = ({
       <div
         id="preview-limit-modal-backdrop"
         onClick={onClose}
-        className="fixed inset-0 z-[200] w-screen h-screen min-h-[100dvh] bg-black/60 backdrop-blur-2xl flex items-center justify-center p-3 sm:p-6 overflow-y-auto animate-fadeIn"
+        className="fixed inset-0 z-[9999] w-screen h-screen min-h-[100dvh] bg-black/92 sm:bg-black/88 backdrop-blur-2xl flex items-center justify-center p-3 sm:p-6 overflow-y-auto animate-fadeIn"
       >
         <div
           id="preview-limit-modal-dialog"

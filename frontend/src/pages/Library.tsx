@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import { createPortal } from 'react-dom';
 import {
   ListMusic,
   Plus,
@@ -275,58 +276,64 @@ export const LibraryPage: React.FC = () => {
                   </p>
                 </div>
 
-                {/* Playlist Action Toolbar - fully aligned & wrapped on mobile */}
-                <div className="flex flex-wrap items-center gap-2 sm:gap-2.5 w-full md:w-auto pt-3 md:pt-0">
-                  <div className="flex items-center gap-2 flex-1 sm:flex-initial">
-                    <button
-                      onClick={() => handlePlayPlaylist(playlistTracks, false)}
-                      disabled={playlistTracks.length === 0}
-                      className="flex-1 sm:flex-initial px-4 sm:px-5 py-3 rounded-2xl bg-gradient-to-tr from-[#FC3C44] to-[#FA243C] text-xs font-bold text-white hover:brightness-110 flex items-center justify-center gap-2 shadow-lg disabled:opacity-40 min-w-[110px]"
-                    >
-                      <Play className="w-4 h-4 fill-current" />
-                      <span>Play All</span>
-                    </button>
+                {/* Playlist Action Toolbar: Circular round play button so all actions fit cleanly */}
+                <div className="flex items-center gap-2 sm:gap-2.5 w-full sm:w-auto pt-2 sm:pt-0 shrink-0">
+                  {/* Round Play All Button */}
+                  <button
+                    onClick={() => handlePlayPlaylist(playlistTracks, false)}
+                    disabled={playlistTracks.length === 0}
+                    className="w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-gradient-to-tr from-[#FC3C44] to-[#FA243C] text-white hover:scale-105 active:scale-95 flex items-center justify-center shadow-lg hover:shadow-red-500/30 transition-all shrink-0 disabled:opacity-40"
+                    title="Play All"
+                    aria-label="Play All"
+                  >
+                    <Play className="w-5 h-5 fill-current ml-0.5" />
+                  </button>
 
-                    <button
-                      onClick={() => handlePlayPlaylist(playlistTracks, true)}
-                      disabled={playlistTracks.length === 0}
-                      className="p-3 rounded-2xl bg-[#F5F5F7] border border-[#E5E5EA] text-[#86868B] hover:text-[#FA243C] hover:bg-[#FEE2E2] transition-colors disabled:opacity-40"
-                      title="Shuffle Play"
-                    >
-                      <Shuffle className="w-4 h-4" />
-                    </button>
-                  </div>
+                  {/* Round Shuffle Button */}
+                  <button
+                    onClick={() => handlePlayPlaylist(playlistTracks, true)}
+                    disabled={playlistTracks.length === 0}
+                    className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-[#F5F5F7] dark:bg-[#202023] border border-[#E5E5EA] dark:border-[#27272A] text-[#86868B] hover:text-[#FA243C] hover:bg-[#FEE2E2] dark:hover:bg-white/10 flex items-center justify-center transition-all shrink-0 disabled:opacity-40"
+                    title="Shuffle Play"
+                    aria-label="Shuffle Play"
+                  >
+                    <Shuffle className="w-4 h-4" />
+                  </button>
 
-                  <div className="flex items-center gap-2 shrink-0">
-                    <button
-                      onClick={() => setShowAddSongsModal(true)}
-                      className="px-3.5 py-3 rounded-2xl bg-[#F5F5F7] border border-[#FA243C]/30 text-xs font-bold text-[#FA243C] hover:text-white hover:bg-[#FA243C] flex items-center gap-1.5 transition-colors"
-                    >
-                      <Plus className="w-4 h-4" />
-                      <span>Add Songs</span>
-                    </button>
+                  {/* Add Songs Pill Button */}
+                  <button
+                    onClick={() => setShowAddSongsModal(true)}
+                    className="h-10 sm:h-11 px-3.5 sm:px-4 rounded-full bg-[#F5F5F7] dark:bg-[#202023] border border-[#FA243C]/40 text-xs font-bold text-[#FA243C] hover:text-white hover:bg-[#FA243C] flex items-center gap-1.5 transition-all shrink-0"
+                    title="Add Songs to Playlist"
+                  >
+                    <Plus className="w-4 h-4" />
+                    <span>Add Songs</span>
+                  </button>
 
-                    <button
-                      onClick={() => {
-                        setEditingPlaylist(selectedPlaylist);
-                        setEditName(selectedPlaylist.name);
-                        setEditDesc(selectedPlaylist.description || '');
-                      }}
-                      className="p-3 rounded-2xl bg-[#F5F5F7] border border-[#E5E5EA] text-[#86868B] hover:text-[#FA243C] hover:bg-[#FEE2E2] transition-colors"
-                      title="Edit Playlist Details"
-                    >
-                      <Edit2 className="w-4 h-4" />
-                    </button>
+                  {/* Round Edit Button */}
+                  <button
+                    onClick={() => {
+                      setEditingPlaylist(selectedPlaylist);
+                      setEditName(selectedPlaylist.name);
+                      setEditDesc(selectedPlaylist.description || '');
+                    }}
+                    className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-[#F5F5F7] dark:bg-[#202023] border border-[#E5E5EA] dark:border-[#27272A] text-[#86868B] hover:text-[#FA243C] hover:bg-[#FEE2E2] dark:hover:bg-white/10 flex items-center justify-center transition-all shrink-0"
+                    title="Edit Playlist Details"
+                    aria-label="Edit Playlist Details"
+                  >
+                    <Edit2 className="w-4 h-4" />
+                  </button>
 
-                    <button
-                      type="button"
-                      onClick={() => setPlaylistToDelete(selectedPlaylist)}
-                      className="p-3 rounded-2xl bg-[#F5F5F7] border border-rose-300 text-rose-600 hover:text-white hover:bg-rose-500 transition-colors"
-                      title="Delete Playlist"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
-                  </div>
+                  {/* Round Delete Button */}
+                  <button
+                    type="button"
+                    onClick={() => setPlaylistToDelete(selectedPlaylist)}
+                    className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-[#F5F5F7] dark:bg-[#202023] border border-rose-300 dark:border-rose-900/40 text-rose-600 dark:text-rose-400 hover:text-white hover:bg-rose-500 transition-all flex items-center justify-center shrink-0"
+                    title="Delete Playlist"
+                    aria-label="Delete Playlist"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
                 </div>
               </div>
 
@@ -721,344 +728,352 @@ export const LibraryPage: React.FC = () => {
       )}
 
       {/* ================= MODAL: CREATE PLAYLIST ================= */}
-      {showCreateModal && (
-        <div
-          className="fixed inset-0 z-[200] w-screen h-screen min-h-[100dvh] bg-black/60 backdrop-blur-2xl flex items-center justify-center p-4 animate-fadeIn overflow-y-auto"
-          onClick={() => setShowCreateModal(false)}
-        >
+      {showCreateModal &&
+        createPortal(
           <div
-            className="w-full max-w-md bg-[#F5F5F7] border border-[#E5E5EA] rounded-3xl p-6 sm:p-7 shadow-2xl text-[#1D1D1F] space-y-5 animate-scaleUp my-auto max-h-[92dvh] overflow-y-auto"
-            onClick={(e) => e.stopPropagation()}
+            className="fixed inset-0 z-[9999] w-screen h-screen min-h-[100dvh] bg-black/92 sm:bg-black/88 backdrop-blur-2xl flex items-center justify-center p-4 animate-fadeIn overflow-y-auto"
+            onClick={() => setShowCreateModal(false)}
           >
-            <div className="flex items-center justify-between pb-3 border-b border-[#E5E5EA]">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-2xl bg-[#F2F2F7] border border-[#E5E5EA] flex items-center justify-center">
-                  <ListMusic className="w-5 h-5 text-[#FA243C]" />
+            <div
+              className="w-full max-w-md bg-[#F5F5F7] dark:bg-[#18181B] border border-[#E5E5EA] dark:border-[#27272A] rounded-3xl p-6 sm:p-7 shadow-2xl text-[#1D1D1F] dark:text-white space-y-5 animate-scaleUp my-auto max-h-[92dvh] overflow-y-auto"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex items-center justify-between pb-3 border-b border-[#E5E5EA] dark:border-[#27272A]">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-2xl bg-[#F2F2F7] dark:bg-white/5 border border-[#E5E5EA] dark:border-white/10 flex items-center justify-center">
+                    <ListMusic className="w-5 h-5 text-[#FA243C]" />
+                  </div>
+                  <div>
+                    <h3 className="font-heading font-bold text-lg text-[#1D1D1F] dark:text-white">Create New Playlist</h3>
+                    <p className="text-xs text-[#86868B]">కొత్త ప్లేలిస్ట్‌ను ప్రారంభించండి</p>
+                  </div>
                 </div>
-                <div>
-                  <h3 className="font-heading font-bold text-lg text-[#1D1D1F]">Create New Playlist</h3>
-                  <p className="text-xs text-[#86868B]">కొత్త ప్లేలిస్ట్‌ను ప్రారంభించండి</p>
-                </div>
-              </div>
-              <button
-                onClick={() => setShowCreateModal(false)}
-                className="p-1.5 rounded-full text-[#86868B] hover:text-[#FA243C] hover:bg-[#FEE2E2]"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            <form onSubmit={handleCreateSubmit} className="space-y-4">
-              <div>
-                <label className="block text-xs font-semibold text-[#86868B] mb-1.5">
-                  Playlist Title *
-                </label>
-                <input
-                  type="text"
-                  autoFocus
-                  required
-                  value={newPlaylistName}
-                  onChange={(e) => setNewPlaylistName(e.target.value)}
-                  placeholder="e.g. Sunday Morning Hymns, Prayer Sanctuary..."
-                  className="w-full px-4 py-3 rounded-2xl bg-white border border-[#E5E5EA] text-sm text-[#1D1D1F] placeholder-[#86868B] focus:outline-none focus:border-[#FA243C]"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-semibold text-[#86868B] mb-1.5">
-                  Description (Optional)
-                </label>
-                <textarea
-                  rows={2}
-                  value={newPlaylistDesc}
-                  onChange={(e) => setNewPlaylistDesc(e.target.value)}
-                  placeholder="A short note about the theme of this playlist..."
-                  className="w-full px-4 py-2.5 rounded-2xl bg-white border border-[#E5E5EA] text-xs text-[#1D1D1F] placeholder-[#86868B] focus:outline-none focus:border-[#FA243C] resize-none"
-                />
-              </div>
-
-              {/* Suggestions */}
-              <div>
-                <p className="text-[11px] text-[#86868B] mb-2">Suggestions:</p>
-                <div className="flex flex-wrap gap-1.5">
-                  {['Morning Worship', 'Sunday Choir', 'Quiet Devotion', 'Fast & Praise'].map(
-                    (tag) => (
-                      <button
-                        key={tag}
-                        type="button"
-                        onClick={() => setNewPlaylistName(tag)}
-                        className="px-2.5 py-1 rounded-xl bg-[#F5F5F7] border border-[#E5E5EA] text-[11px] text-[#FA243C] hover:border-[#FA243C]"
-                      >
-                        + {tag}
-                      </button>
-                    )
-                  )}
-                </div>
-              </div>
-
-              <div className="flex items-center justify-end gap-3 pt-2">
                 <button
-                  type="button"
                   onClick={() => setShowCreateModal(false)}
-                  className="px-4 py-2.5 rounded-xl text-xs text-[#86868B] hover:text-[#FA243C]"
+                  className="p-1.5 rounded-full text-[#86868B] hover:text-[#FA243C] hover:bg-[#FEE2E2] dark:hover:bg-white/10 transition-colors"
                 >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  disabled={!newPlaylistName.trim()}
-                  className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#FC3C44] to-[#FA243C] text-xs font-bold text-white hover:brightness-110 disabled:opacity-50 shadow-md"
-                >
-                  Create Playlist
+                  <X className="w-5 h-5" />
                 </button>
               </div>
-            </form>
-          </div>
-        </div>
-      )}
+
+              <form onSubmit={handleCreateSubmit} className="space-y-4">
+                <div>
+                  <label className="block text-xs font-semibold text-[#86868B] mb-1.5">
+                    Playlist Title *
+                  </label>
+                  <input
+                    type="text"
+                    autoFocus
+                    required
+                    value={newPlaylistName}
+                    onChange={(e) => setNewPlaylistName(e.target.value)}
+                    placeholder="e.g. Sunday Morning Hymns, Prayer Sanctuary..."
+                    className="w-full px-4 py-3 rounded-2xl bg-white dark:bg-[#121214] border border-[#E5E5EA] dark:border-[#27272A] text-sm text-[#1D1D1F] dark:text-white placeholder-[#86868B] focus:outline-none focus:border-[#FA243C]"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-[#86868B] mb-1.5">
+                    Description (Optional)
+                  </label>
+                  <textarea
+                    rows={2}
+                    value={newPlaylistDesc}
+                    onChange={(e) => setNewPlaylistDesc(e.target.value)}
+                    placeholder="A short note about the theme of this playlist..."
+                    className="w-full px-4 py-2.5 rounded-2xl bg-white dark:bg-[#121214] border border-[#E5E5EA] dark:border-[#27272A] text-xs text-[#1D1D1F] dark:text-white placeholder-[#86868B] focus:outline-none focus:border-[#FA243C] resize-none"
+                  />
+                </div>
+
+                {/* Suggestions */}
+                <div>
+                  <p className="text-[11px] text-[#86868B] mb-2">Suggestions:</p>
+                  <div className="flex flex-wrap gap-1.5">
+                    {['Morning Worship', 'Sunday Choir', 'Quiet Devotion', 'Fast & Praise'].map(
+                      (tag) => (
+                        <button
+                          key={tag}
+                          type="button"
+                          onClick={() => setNewPlaylistName(tag)}
+                          className="px-2.5 py-1 rounded-xl bg-white dark:bg-white/5 border border-[#E5E5EA] dark:border-white/10 text-[11px] text-[#FA243C] hover:border-[#FA243C] transition-colors"
+                        >
+                          + {tag}
+                        </button>
+                      )
+                    )}
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-end gap-3 pt-2">
+                  <button
+                    type="button"
+                    onClick={() => setShowCreateModal(false)}
+                    className="px-4 py-2.5 rounded-xl text-xs text-[#86868B] hover:text-[#FA243C]"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={!newPlaylistName.trim()}
+                    className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#FC3C44] to-[#FA243C] text-xs font-bold text-white hover:brightness-110 disabled:opacity-50 shadow-md"
+                  >
+                    Create Playlist
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>,
+          document.body
+        )}
 
       {/* ================= MODAL: EDIT PLAYLIST ================= */}
-      {editingPlaylist && (
-        <div
-          className="fixed inset-0 z-[200] w-screen h-screen min-h-[100dvh] bg-black/60 backdrop-blur-2xl flex items-center justify-center p-4 animate-fadeIn overflow-y-auto"
-          onClick={() => setEditingPlaylist(null)}
-        >
+      {editingPlaylist &&
+        createPortal(
           <div
-            className="w-full max-w-md bg-[#F5F5F7] border border-[#E5E5EA] rounded-3xl p-6 sm:p-7 shadow-2xl text-[#1D1D1F] space-y-5 animate-scaleUp my-auto max-h-[92dvh] overflow-y-auto"
-            onClick={(e) => e.stopPropagation()}
+            className="fixed inset-0 z-[9999] w-screen h-screen min-h-[100dvh] bg-black/92 sm:bg-black/88 backdrop-blur-2xl flex items-center justify-center p-4 animate-fadeIn overflow-y-auto"
+            onClick={() => setEditingPlaylist(null)}
           >
-            <div className="flex items-center justify-between pb-3 border-b border-[#E5E5EA]">
-              <h3 className="font-heading font-bold text-lg text-[#1D1D1F]">Edit Playlist</h3>
-              <button
-                onClick={() => setEditingPlaylist(null)}
-                className="p-1.5 rounded-full text-[#86868B] hover:text-[#FA243C] hover:bg-[#FEE2E2]"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
+            <div
+              className="w-full max-w-md bg-[#F5F5F7] dark:bg-[#18181B] border border-[#E5E5EA] dark:border-[#27272A] rounded-3xl p-6 sm:p-7 shadow-2xl text-[#1D1D1F] dark:text-white space-y-5 animate-scaleUp my-auto max-h-[92dvh] overflow-y-auto"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex items-center justify-between pb-3 border-b border-[#E5E5EA] dark:border-[#27272A]">
+                <h3 className="font-heading font-bold text-lg text-[#1D1D1F] dark:text-white">Edit Playlist</h3>
+                <button
+                  onClick={() => setEditingPlaylist(null)}
+                  className="p-1.5 rounded-full text-[#86868B] hover:text-[#FA243C] hover:bg-[#FEE2E2] dark:hover:bg-white/10 transition-colors"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
 
-            <form onSubmit={handleEditSubmit} className="space-y-4">
-              <div>
-                <label className="block text-xs font-semibold text-[#86868B] mb-1.5">
-                  Playlist Title *
-                </label>
+              <form onSubmit={handleEditSubmit} className="space-y-4">
+                <div>
+                  <label className="block text-xs font-semibold text-[#86868B] mb-1.5">
+                    Playlist Title *
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={editName}
+                    onChange={(e) => setEditName(e.target.value)}
+                    className="w-full px-4 py-3 rounded-2xl bg-white dark:bg-[#121214] border border-[#E5E5EA] dark:border-[#27272A] text-sm text-[#1D1D1F] dark:text-white focus:outline-none focus:border-[#FA243C]"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-[#86868B] mb-1.5">
+                    Description
+                  </label>
+                  <textarea
+                    rows={2}
+                    value={editDesc}
+                    onChange={(e) => setEditDesc(e.target.value)}
+                    className="w-full px-4 py-2.5 rounded-2xl bg-white dark:bg-[#121214] border border-[#E5E5EA] dark:border-[#27272A] text-xs text-[#1D1D1F] dark:text-white focus:outline-none focus:border-[#FA243C] resize-none"
+                  />
+                </div>
+
+                <div className="flex items-center justify-end gap-3 pt-2">
+                  <button
+                    type="button"
+                    onClick={() => setEditingPlaylist(null)}
+                    className="px-4 py-2.5 rounded-xl text-xs text-[#86868B] hover:text-[#FA243C]"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={!editName.trim()}
+                    className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#FC3C44] to-[#FA243C] text-xs font-bold text-white hover:brightness-110 disabled:opacity-50"
+                  >
+                    Save Changes
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>,
+          document.body
+        )}
+
+      {/* ================= MODAL: ADD SONGS TO PLAYLIST ================= */}
+      {showAddSongsModal && selectedPlaylist &&
+        createPortal(
+          <div
+            className="fixed inset-0 z-[9999] w-screen h-screen min-h-[100dvh] bg-black/92 sm:bg-black/88 backdrop-blur-2xl flex items-center justify-center p-4 animate-fadeIn overflow-y-auto"
+            onClick={() => setShowAddSongsModal(false)}
+          >
+            <div
+              className="w-full max-w-xl bg-[#F5F5F7] dark:bg-[#18181B] border border-[#E5E5EA] dark:border-[#27272A] rounded-3xl p-5 sm:p-7 shadow-2xl text-[#1D1D1F] dark:text-white space-y-4 my-auto max-h-[88dvh] flex flex-col animate-scaleUp overflow-hidden"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex items-center justify-between pb-3 border-b border-[#E5E5EA] dark:border-[#27272A] shrink-0">
+                <div>
+                  <h3 className="font-heading font-bold text-lg text-[#1D1D1F] dark:text-white">Add Songs to Playlist</h3>
+                  <p className="text-xs text-[#86868B]">
+                    Adding to <strong className="text-[#FA243C]">{selectedPlaylist.name}</strong>
+                  </p>
+                </div>
+                <button
+                  onClick={() => setShowAddSongsModal(false)}
+                  className="p-1.5 rounded-full text-[#86868B] hover:text-[#FA243C] hover:bg-[#FEE2E2] dark:hover:bg-white/10 transition-colors"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              {/* Search Input */}
+              <div className="relative shrink-0">
+                <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#86868B]" />
                 <input
                   type="text"
-                  required
-                  value={editName}
-                  onChange={(e) => setEditName(e.target.value)}
-                  className="w-full px-4 py-3 rounded-2xl bg-white border border-[#E5E5EA] text-sm text-[#1D1D1F] focus:outline-none focus:border-[#FA243C]"
+                  value={searchSongQuery}
+                  onChange={(e) => setSearchSongQuery(e.target.value)}
+                  placeholder="Search by Telugu or English song name..."
+                  className="w-full pl-10 pr-4 py-2.5 rounded-2xl bg-white dark:bg-[#121214] border border-[#E5E5EA] dark:border-[#27272A] text-xs text-[#1D1D1F] dark:text-white placeholder-[#86868B] focus:outline-none focus:border-[#FA243C]"
                 />
               </div>
 
-              <div>
-                <label className="block text-xs font-semibold text-[#86868B] mb-1.5">
-                  Description
-                </label>
-                <textarea
-                  rows={2}
-                  value={editDesc}
-                  onChange={(e) => setEditDesc(e.target.value)}
-                  className="w-full px-4 py-2.5 rounded-2xl bg-white border border-[#E5E5EA] text-xs text-[#1D1D1F] focus:outline-none focus:border-[#FA243C] resize-none"
-                />
+              {/* Song Catalog List */}
+              <div className="flex-1 overflow-y-auto space-y-1.5 pr-1 divide-y divide-[#E5E5EA] dark:divide-[#27272A]">
+                {allTracks
+                  .filter((t) => {
+                    if (!searchSongQuery.trim()) return true;
+                    const q = searchSongQuery.toLowerCase();
+                    return (
+                      t.titleEnglish.toLowerCase().includes(q) ||
+                      t.titleTelugu.toLowerCase().includes(q)
+                    );
+                  })
+                  .map((track) => {
+                    const alreadyIn = isTrackInPlaylist(selectedPlaylist.id, track.id);
+
+                    return (
+                      <div
+                        key={track.id}
+                        className="pt-2 flex items-center justify-between gap-3 px-2 py-2 rounded-xl hover:bg-[#FEE2E2]/50 dark:hover:bg-white/5 transition-colors"
+                      >
+                        <div className="flex items-center gap-3 min-w-0 flex-1">
+                          <div className="w-10 h-10 rounded-xl overflow-hidden bg-[#F2F2F7] dark:bg-[#202023] shrink-0 border border-[#E5E5EA] dark:border-[#27272A]">
+                            <img
+                              src={track.coverImage || '/covers/001_prayermp3.jpg'}
+                              alt={track.titleEnglish}
+                              className="w-full h-full object-cover"
+                            />
+                          </div>
+                          <div className="min-w-0">
+                            <p className="font-semibold text-xs text-[#1D1D1F] dark:text-white truncate">
+                              {track.titleEnglish}
+                            </p>
+                            <p className="font-telugu text-[11px] text-[#86868B] truncate">
+                              {track.titleTelugu}
+                            </p>
+                          </div>
+                        </div>
+
+                        <button
+                          type="button"
+                          data-testid="modal-add-track-btn"
+                          onClick={() => {
+                            if (alreadyIn) {
+                              removeTrackFromPlaylist(selectedPlaylist.id, track.id);
+                            } else {
+                              addTrackToPlaylist(selectedPlaylist.id, track);
+                            }
+                          }}
+                          className={`px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all ${
+                            alreadyIn
+                              ? 'bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30'
+                              : 'bg-[#FA243C] text-white hover:bg-[#D71A30]'
+                          }`}
+                        >
+                          {alreadyIn ? (
+                            <>
+                              <Check className="w-3.5 h-3.5" />
+                              <span>Added</span>
+                            </>
+                          ) : (
+                            <>
+                              <Plus className="w-3.5 h-3.5" />
+                              <span>Add</span>
+                            </>
+                          )}
+                        </button>
+                      </div>
+                    );
+                  })}
               </div>
+
+              <div className="pt-2 border-t border-[#E5E5EA] dark:border-[#27272A] shrink-0">
+                <button
+                  onClick={() => setShowAddSongsModal(false)}
+                  className="w-full py-2.5 rounded-xl bg-white dark:bg-[#121214] border border-[#E5E5EA] dark:border-[#27272A] hover:bg-[#FEE2E2] dark:hover:bg-white/10 text-xs font-bold text-[#1D1D1F] dark:text-white hover:text-[#FA243C] transition-colors"
+                >
+                  Done
+                </button>
+              </div>
+            </div>
+          </div>,
+          document.body
+        )}
+
+      {/* ================= MODAL: DELETE PLAYLIST CONFIRMATION ================= */}
+      {playlistToDelete &&
+        createPortal(
+          <div
+            className="fixed inset-0 z-[9999] w-screen h-screen min-h-[100dvh] bg-black/92 sm:bg-black/88 backdrop-blur-2xl flex items-center justify-center p-4 animate-fadeIn overflow-y-auto"
+            onClick={() => setPlaylistToDelete(null)}
+          >
+            <div
+              className="w-full max-w-md bg-[#F5F5F7] dark:bg-[#18181B] border border-[#E5E5EA] dark:border-[#27272A] rounded-3xl p-6 sm:p-7 shadow-2xl text-[#1D1D1F] dark:text-white space-y-4 animate-scaleUp my-auto"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex items-center gap-3.5 pb-3 border-b border-[#E5E5EA] dark:border-[#27272A]">
+                <div className="w-12 h-12 rounded-2xl bg-rose-100 dark:bg-rose-900/30 text-rose-600 dark:text-rose-400 flex items-center justify-center shrink-0 border border-rose-200 dark:border-rose-800/40">
+                  <Trash2 className="w-6 h-6" />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <h3 className="font-heading font-bold text-lg text-[#1D1D1F] dark:text-white">Delete Playlist?</h3>
+                  <p className="text-xs text-[#86868B]">ఈ ప్లేలిస్ట్‌ను తొలగించాలా?</p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setPlaylistToDelete(null)}
+                  className="p-1.5 rounded-full text-[#86868B] hover:text-rose-600 hover:bg-[#FEE2E2] dark:hover:bg-white/10 transition-colors"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              <p className="text-xs sm:text-sm text-[#86868B] dark:text-zinc-300 leading-relaxed">
+                Are you sure you want to delete <strong className="text-[#1D1D1F] dark:text-white font-bold">"{playlistToDelete.name}"</strong>? This will remove the playlist from your sanctuary. (Original catalog songs will remain unaffected.)
+              </p>
 
               <div className="flex items-center justify-end gap-3 pt-2">
                 <button
                   type="button"
-                  onClick={() => setEditingPlaylist(null)}
-                  className="px-4 py-2.5 rounded-xl text-xs text-[#86868B] hover:text-[#FA243C]"
+                  onClick={() => setPlaylistToDelete(null)}
+                  className="px-4 py-2.5 rounded-xl text-xs font-semibold text-[#86868B] hover:text-[#1D1D1F] dark:hover:text-white hover:bg-white dark:hover:bg-white/5 transition-colors"
                 >
                   Cancel
                 </button>
                 <button
-                  type="submit"
-                  disabled={!editName.trim()}
-                  className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#FC3C44] to-[#FA243C] text-xs font-bold text-white hover:brightness-110 disabled:opacity-50"
+                  type="button"
+                  onClick={() => {
+                    deletePlaylist(playlistToDelete.id);
+                    if (selectedPlaylistId === playlistToDelete.id) {
+                      setSelectedPlaylistId(null);
+                    }
+                    setPlaylistToDelete(null);
+                  }}
+                  className="px-5 py-2.5 rounded-xl text-xs font-bold text-white bg-rose-600 hover:bg-rose-700 transition-colors shadow-md shadow-rose-600/30"
                 >
-                  Save Changes
+                  Yes, Delete Playlist
                 </button>
               </div>
-            </form>
-          </div>
-        </div>
-      )}
-
-      {/* ================= MODAL: ADD SONGS TO PLAYLIST ================= */}
-      {showAddSongsModal && selectedPlaylist && (
-        <div
-          className="fixed inset-0 z-[200] w-screen h-screen min-h-[100dvh] bg-black/60 backdrop-blur-2xl flex items-center justify-center p-4 animate-fadeIn overflow-y-auto"
-          onClick={() => setShowAddSongsModal(false)}
-        >
-          <div
-            className="w-full max-w-xl bg-[#F5F5F7] border border-[#E5E5EA] rounded-3xl p-6 sm:p-7 shadow-2xl text-[#1D1D1F] space-y-4 my-auto max-h-[88dvh] flex flex-col animate-scaleUp overflow-hidden"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="flex items-center justify-between pb-3 border-b border-[#E5E5EA] shrink-0">
-              <div>
-                <h3 className="font-heading font-bold text-lg text-[#1D1D1F]">Add Songs to Playlist</h3>
-                <p className="text-xs text-[#86868B]">
-                  Adding to <strong className="text-[#FA243C]">{selectedPlaylist.name}</strong>
-                </p>
-              </div>
-              <button
-                onClick={() => setShowAddSongsModal(false)}
-                className="p-1.5 rounded-full text-[#86868B] hover:text-[#FA243C] hover:bg-[#FEE2E2]"
-              >
-                <X className="w-5 h-5" />
-              </button>
             </div>
-
-            {/* Search Input */}
-            <div className="relative shrink-0">
-              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#86868B]" />
-              <input
-                type="text"
-                value={searchSongQuery}
-                onChange={(e) => setSearchSongQuery(e.target.value)}
-                placeholder="Search by Telugu or English song name..."
-                className="w-full pl-10 pr-4 py-2.5 rounded-2xl bg-white border border-[#E5E5EA] text-xs text-[#1D1D1F] placeholder-[#86868B] focus:outline-none focus:border-[#FA243C]"
-              />
-            </div>
-
-            {/* Song Catalog List */}
-            <div className="flex-1 overflow-y-auto space-y-1.5 pr-1 divide-y divide-[#E5E5EA]">
-              {allTracks
-                .filter((t) => {
-                  if (!searchSongQuery.trim()) return true;
-                  const q = searchSongQuery.toLowerCase();
-                  return (
-                    t.titleEnglish.toLowerCase().includes(q) ||
-                    t.titleTelugu.toLowerCase().includes(q)
-                  );
-                })
-                .map((track) => {
-                  const alreadyIn = isTrackInPlaylist(selectedPlaylist.id, track.id);
-
-                  return (
-                    <div
-                      key={track.id}
-                      className="pt-2 flex items-center justify-between gap-3 px-2 py-2 rounded-xl hover:bg-[#FEE2E2]/50 transition-colors"
-                    >
-                      <div className="flex items-center gap-3 min-w-0 flex-1">
-                        <div className="w-10 h-10 rounded-xl overflow-hidden bg-[#F2F2F7] shrink-0 border border-[#E5E5EA]">
-                          <img
-                            src={track.coverImage || '/covers/001_prayermp3.jpg'}
-                            alt={track.titleEnglish}
-                            className="w-full h-full object-cover"
-                          />
-                        </div>
-                        <div className="min-w-0">
-                          <p className="font-semibold text-xs text-[#1D1D1F] truncate">
-                            {track.titleEnglish}
-                          </p>
-                          <p className="font-telugu text-[11px] text-[#86868B] truncate">
-                            {track.titleTelugu}
-                          </p>
-                        </div>
-                      </div>
-
-                      <button
-                        type="button"
-                        data-testid="modal-add-track-btn"
-                        onClick={() => {
-                          if (alreadyIn) {
-                            removeTrackFromPlaylist(selectedPlaylist.id, track.id);
-                          } else {
-                            addTrackToPlaylist(selectedPlaylist.id, track);
-                          }
-                        }}
-                        className={`px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all ${
-                          alreadyIn
-                            ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
-                            : 'bg-[#FA243C] text-white hover:bg-[#D71A30]'
-                        }`}
-                      >
-                        {alreadyIn ? (
-                          <>
-                            <Check className="w-3.5 h-3.5" />
-                            <span>Added</span>
-                          </>
-                        ) : (
-                          <>
-                            <Plus className="w-3.5 h-3.5" />
-                            <span>Add</span>
-                          </>
-                        )}
-                      </button>
-                    </div>
-                  );
-                })}
-            </div>
-
-            <div className="pt-2 border-t border-[#E5E5EA] shrink-0">
-              <button
-                onClick={() => setShowAddSongsModal(false)}
-                className="w-full py-2.5 rounded-xl bg-[#F5F5F7] hover:bg-[#FEE2E2] text-xs font-bold text-[#1D1D1F] hover:text-[#FA243C] transition-colors"
-              >
-                Done
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* ================= MODAL: DELETE PLAYLIST CONFIRMATION ================= */}
-      {playlistToDelete && (
-        <div
-          className="fixed inset-0 z-[200] w-screen h-screen min-h-[100dvh] bg-black/60 backdrop-blur-2xl flex items-center justify-center p-4 animate-fadeIn overflow-y-auto"
-          onClick={() => setPlaylistToDelete(null)}
-        >
-          <div
-            className="w-full max-w-md bg-[#F5F5F7] border border-[#E5E5EA] rounded-3xl p-6 sm:p-7 shadow-2xl text-[#1D1D1F] space-y-4 animate-scaleUp my-auto"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="flex items-center gap-3.5 pb-3 border-b border-[#E5E5EA]">
-              <div className="w-12 h-12 rounded-2xl bg-rose-100 text-rose-600 flex items-center justify-center shrink-0 border border-rose-200">
-                <Trash2 className="w-6 h-6" />
-              </div>
-              <div className="min-w-0 flex-1">
-                <h3 className="font-heading font-bold text-lg text-[#1D1D1F]">Delete Playlist?</h3>
-                <p className="text-xs text-[#86868B]">ఈ ప్లేలిస్ట్‌ను తొలగించాలా?</p>
-              </div>
-              <button
-                type="button"
-                onClick={() => setPlaylistToDelete(null)}
-                className="p-1.5 rounded-full text-[#86868B] hover:text-rose-600 hover:bg-[#FEE2E2] transition-colors"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            <p className="text-xs sm:text-sm text-[#86868B] leading-relaxed">
-              Are you sure you want to delete <strong className="text-[#1D1D1F] font-bold">"{playlistToDelete.name}"</strong>? This will remove the playlist from your sanctuary. (Original catalog songs will remain unaffected.)
-            </p>
-
-            <div className="flex items-center justify-end gap-3 pt-2">
-              <button
-                type="button"
-                onClick={() => setPlaylistToDelete(null)}
-                className="px-4 py-2.5 rounded-xl text-xs font-semibold text-[#86868B] hover:text-[#1D1D1F] hover:bg-white transition-colors"
-              >
-                Cancel
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  deletePlaylist(playlistToDelete.id);
-                  if (selectedPlaylistId === playlistToDelete.id) {
-                    setSelectedPlaylistId(null);
-                  }
-                  setPlaylistToDelete(null);
-                }}
-                className="px-5 py-2.5 rounded-xl text-xs font-bold text-white bg-rose-600 hover:bg-rose-700 transition-colors shadow-md shadow-rose-600/30"
-              >
-                Yes, Delete Playlist
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+          </div>,
+          document.body
+        )}
     </div>
   );
 };

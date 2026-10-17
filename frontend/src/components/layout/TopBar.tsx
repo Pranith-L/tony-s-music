@@ -78,48 +78,44 @@ export const TopBar: React.FC<TopBarProps> = ({ onToggleMobileMenu }) => {
   ];
 
   return (
-    <header className="sticky top-0 z-20 w-full bg-white/95 backdrop-blur-xl border-b border-[#E5E5EA] px-3 sm:px-6 py-2 sm:py-2.5 flex flex-col gap-1.5 sm:gap-2">
-      {/* Top Main Row */}
-      <div className="flex items-center justify-between gap-2 sm:gap-3 w-full">
-        {/* Left: Brand Monogram & Search Bar */}
-        <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
-          {/* Mobile Brand Monogram */}
-          <Link to="/" className="md:hidden flex items-center gap-1 shrink-0">
-            <span className="font-heading text-sm sm:text-base font-bold text-[#1D1D1F] dark:text-white tracking-tight">
-              TONY'S <span className="text-[#D4A017]">MUSIC</span>
-            </span>
-          </Link>
+    <header className="sticky top-0 z-20 w-full bg-white/95 dark:bg-[#121214]/95 backdrop-blur-xl border-b border-[#E5E5EA] dark:border-[#27272A] px-3 sm:px-6 py-2 sm:py-2.5 flex flex-col gap-1.5 sm:gap-2">
+      {/* Top Main Row - Balanced Equal Spacing for Brand, Search, and Profile */}
+      <div className="flex items-center justify-between gap-3 sm:gap-4 w-full">
+        {/* Mobile Brand Monogram */}
+        <Link to="/" className="md:hidden flex items-center shrink-0">
+          <span className="font-heading text-sm sm:text-base font-bold text-[#1D1D1F] dark:text-white tracking-tight whitespace-nowrap">
+            TONY'S <span className="text-[#D4A017]">MUSIC</span>
+          </span>
+        </Link>
 
-
-          {/* Search Input */}
-          <form
-            onSubmit={handleSearchSubmit}
-            className="relative flex items-center flex-1 min-w-0 max-w-[170px] xs:max-w-[210px] sm:max-w-xs md:max-w-sm lg:w-96"
-          >
-            <div className="absolute left-2.5 sm:left-3 pointer-events-none text-[#FA243C]">
-              <Search className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-            </div>
-            <input
-              type="text"
-              placeholder="Search..."
-              value={searchQuery}
-              onChange={(e) => handleSearchChange(e.target.value)}
-              className="w-full bg-[#F2F2F7] hover:bg-[#FFFFFF] focus:bg-[#FFFFFF] text-xs sm:text-sm text-[#1D1D1F] placeholder-[#E2CBD0]/60 rounded-full pl-8 sm:pl-9 pr-7 sm:pr-8 py-1.5 sm:py-2 border border-[#E5E5EA] focus:border-[#D4A017] focus:outline-none transition-all shadow-inner"
-            />
-            {searchQuery && (
-              <button
-                type="button"
-                onClick={clearSearch}
-                className="absolute right-2 text-[#86868B] hover:text-[#1D1D1F]"
-              >
-                <X className="w-3.5 h-3.5" />
-              </button>
-            )}
-          </form>
-        </div>
+        {/* Search Input - Expands evenly in the center with equal gaps */}
+        <form
+          onSubmit={handleSearchSubmit}
+          className="relative flex items-center flex-1 min-w-0 max-w-sm md:max-w-md lg:w-96"
+        >
+          <div className="absolute left-2.5 sm:left-3 pointer-events-none text-[#FA243C]">
+            <Search className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+          </div>
+          <input
+            type="text"
+            placeholder="Search..."
+            value={searchQuery}
+            onChange={(e) => handleSearchChange(e.target.value)}
+            className="w-full bg-[#F2F2F7] dark:bg-[#1C1C1E] hover:bg-white dark:hover:bg-[#252528] focus:bg-white dark:focus:bg-[#252528] text-xs sm:text-sm text-[#1D1D1F] dark:text-white placeholder-[#86868B] dark:placeholder-[#A1A1AA] rounded-full pl-8 sm:pl-9 pr-7 sm:pr-8 py-1.5 sm:py-2 border border-[#E5E5EA] dark:border-[#2C2C2E] focus:border-[#D4A017] focus:outline-none transition-all shadow-inner"
+          />
+          {searchQuery && (
+            <button
+              type="button"
+              onClick={clearSearch}
+              className="absolute right-2 text-[#86868B] hover:text-[#1D1D1F] dark:hover:text-white"
+            >
+              <X className="w-3.5 h-3.5" />
+            </button>
+          )}
+        </form>
 
         {/* Right: Quick Action & Profile Pill */}
-        <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
+        <div className="flex items-center gap-2 sm:gap-2.5 shrink-0">
           {/* Light / Dark Mode Toggle (Desktop only, mobile automatically follows phone OS setting) */}
           <ThemeToggle className="hidden md:inline-flex" />
 
