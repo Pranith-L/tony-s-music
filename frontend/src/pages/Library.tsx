@@ -3,6 +3,7 @@ import {
   ListMusic,
   Plus,
   Play,
+  Pause,
   Shuffle,
   Trash2,
   Edit2,
@@ -39,6 +40,7 @@ export const LibraryPage: React.FC = () => {
 
   const {
     playTrack,
+    playOrToggleTrack,
     currentTrack,
     isPlaying,
     isLiked,
@@ -50,6 +52,9 @@ export const LibraryPage: React.FC = () => {
   const [selectedPlaylistId, setSelectedPlaylistId] = useState<string | null>(null);
   const [allTracks, setAllTracks] = useState<Track[]>([]);
   const [isLoadingTracks, setIsLoadingTracks] = useState(false);
+
+  // Delete Playlist confirmation modal state
+  const [playlistToDelete, setPlaylistToDelete] = useState<Playlist | null>(null);
 
   // New Playlist Modal state
   const [showCreateModal, setShowCreateModal] = useState(false);
@@ -239,7 +244,7 @@ export const LibraryPage: React.FC = () => {
               </button>
 
               {/* Playlist Billboard */}
-              <div className="rounded-3xl p-6 sm:p-8 bg-white border border-[#E5E5EA] shadow-apple-card flex flex-col md:flex-row gap-6 items-start md:items-end">
+              <div className="rounded-3xl p-4 sm:p-8 bg-white border border-[#E5E5EA] shadow-apple-card flex flex-col md:flex-row gap-5 sm:gap-6 items-start md:items-end">
                 <div className="w-32 h-32 sm:w-44 sm:h-44 rounded-2xl overflow-hidden bg-gradient-to-tr from-[#FFF0F2] via-white to-red-100 border border-[#E5E5EA] shadow-md flex items-center justify-center shrink-0">
                   {selectedPlaylist.coverImage ? (
                     <img
@@ -252,7 +257,7 @@ export const LibraryPage: React.FC = () => {
                   )}
                 </div>
 
-                <div className="space-y-2 min-w-0 flex-1">
+                <div className="space-y-1.5 sm:space-y-2 min-w-0 flex-1 w-full">
                   <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-[#D4A017]">
                     Devotional Playlist
                   </span>
@@ -260,68 +265,68 @@ export const LibraryPage: React.FC = () => {
                     {selectedPlaylist.name}
                   </h2>
                   {selectedPlaylist.description && (
-                    <p className="text-xs sm:text-sm text-[#86868B] max-w-2xl">
+                    <p className="text-xs sm:text-sm text-[#86868B] max-w-2xl line-clamp-2 sm:line-clamp-none">
                       {selectedPlaylist.description}
                     </p>
                   )}
-                  <p className="text-xs text-[#86868B]/80 pt-1">
+                  <p className="text-xs text-[#86868B]/80 pt-0.5">
                     Created by <strong className="text-[#1D1D1F] font-semibold">{user?.name || 'You'}</strong> •{' '}
                     {playlistTracks.length} {playlistTracks.length === 1 ? 'song' : 'songs'}
                   </p>
                 </div>
 
-                {/* Playlist Action Toolbar */}
-                <div className="flex items-center gap-2.5 shrink-0 w-full sm:w-auto pt-2 sm:pt-0">
-                  <button
-                    onClick={() => handlePlayPlaylist(playlistTracks, false)}
-                    disabled={playlistTracks.length === 0}
-                    className="flex-1 sm:flex-initial px-5 py-3 rounded-2xl bg-gradient-to-tr from-[#FC3C44] to-[#FA243C] text-xs font-bold text-white hover:brightness-110 flex items-center justify-center gap-2 shadow-lg disabled:opacity-40"
-                  >
-                    <Play className="w-4 h-4 fill-current" />
-                    <span>Play All</span>
-                  </button>
+                {/* Playlist Action Toolbar - fully aligned & wrapped on mobile */}
+                <div className="flex flex-wrap items-center gap-2 sm:gap-2.5 w-full md:w-auto pt-3 md:pt-0">
+                  <div className="flex items-center gap-2 flex-1 sm:flex-initial">
+                    <button
+                      onClick={() => handlePlayPlaylist(playlistTracks, false)}
+                      disabled={playlistTracks.length === 0}
+                      className="flex-1 sm:flex-initial px-4 sm:px-5 py-3 rounded-2xl bg-gradient-to-tr from-[#FC3C44] to-[#FA243C] text-xs font-bold text-white hover:brightness-110 flex items-center justify-center gap-2 shadow-lg disabled:opacity-40 min-w-[110px]"
+                    >
+                      <Play className="w-4 h-4 fill-current" />
+                      <span>Play All</span>
+                    </button>
 
-                  <button
-                    onClick={() => handlePlayPlaylist(playlistTracks, true)}
-                    disabled={playlistTracks.length === 0}
-                    className="p-3 rounded-2xl bg-[#F5F5F7] border border-[#E5E5EA] text-[#86868B] hover:text-[#FA243C] hover:bg-[#FEE2E2] transition-colors disabled:opacity-40"
-                    title="Shuffle Play"
-                  >
-                    <Shuffle className="w-4 h-4" />
-                  </button>
+                    <button
+                      onClick={() => handlePlayPlaylist(playlistTracks, true)}
+                      disabled={playlistTracks.length === 0}
+                      className="p-3 rounded-2xl bg-[#F5F5F7] border border-[#E5E5EA] text-[#86868B] hover:text-[#FA243C] hover:bg-[#FEE2E2] transition-colors disabled:opacity-40"
+                      title="Shuffle Play"
+                    >
+                      <Shuffle className="w-4 h-4" />
+                    </button>
+                  </div>
 
-                  <button
-                    onClick={() => setShowAddSongsModal(true)}
-                    className="px-3.5 py-3 rounded-2xl bg-[#F5F5F7] border border-[#FA243C]/30 text-xs font-bold text-[#FA243C] hover:text-white hover:bg-[#FA243C] flex items-center gap-1.5 transition-colors"
-                  >
-                    <Plus className="w-4 h-4" />
-                    <span>Add Songs</span>
-                  </button>
+                  <div className="flex items-center gap-2 shrink-0">
+                    <button
+                      onClick={() => setShowAddSongsModal(true)}
+                      className="px-3.5 py-3 rounded-2xl bg-[#F5F5F7] border border-[#FA243C]/30 text-xs font-bold text-[#FA243C] hover:text-white hover:bg-[#FA243C] flex items-center gap-1.5 transition-colors"
+                    >
+                      <Plus className="w-4 h-4" />
+                      <span>Add Songs</span>
+                    </button>
 
-                  <button
-                    onClick={() => {
-                      setEditingPlaylist(selectedPlaylist);
-                      setEditName(selectedPlaylist.name);
-                      setEditDesc(selectedPlaylist.description || '');
-                    }}
-                    className="p-3 rounded-2xl bg-[#F5F5F7] border border-[#E5E5EA] text-[#86868B] hover:text-[#FA243C] hover:bg-[#FEE2E2] transition-colors"
-                    title="Edit Playlist Details"
-                  >
-                    <Edit2 className="w-4 h-4" />
-                  </button>
+                    <button
+                      onClick={() => {
+                        setEditingPlaylist(selectedPlaylist);
+                        setEditName(selectedPlaylist.name);
+                        setEditDesc(selectedPlaylist.description || '');
+                      }}
+                      className="p-3 rounded-2xl bg-[#F5F5F7] border border-[#E5E5EA] text-[#86868B] hover:text-[#FA243C] hover:bg-[#FEE2E2] transition-colors"
+                      title="Edit Playlist Details"
+                    >
+                      <Edit2 className="w-4 h-4" />
+                    </button>
 
-                  <button
-                    onClick={() => {
-                      if (confirm(`Are you sure you want to delete "${selectedPlaylist.name}"?`)) {
-                        deletePlaylist(selectedPlaylist.id);
-                        setSelectedPlaylistId(null);
-                      }
-                    }}
-                    className="p-3 rounded-2xl bg-[#F5F5F7] border border-rose-300 text-rose-600 hover:text-white hover:bg-rose-500 transition-colors"
-                    title="Delete Playlist"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
+                    <button
+                      type="button"
+                      onClick={() => setPlaylistToDelete(selectedPlaylist)}
+                      className="p-3 rounded-2xl bg-[#F5F5F7] border border-rose-300 text-rose-600 hover:text-white hover:bg-rose-500 transition-colors"
+                      title="Delete Playlist"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
                 </div>
               </div>
 
@@ -351,7 +356,7 @@ export const LibraryPage: React.FC = () => {
                       return (
                         <div
                           key={track.id}
-                          onClick={() => playTrack(track, playlistTracks)}
+                          onClick={() => playOrToggleTrack(track, playlistTracks)}
                           className={`group flex items-center justify-between px-4 py-3 sm:px-6 sm:py-3.5 hover:bg-[#FEE2E2]/70 transition-colors cursor-pointer ${
                             isCurrent ? 'bg-[#FEE2E2]/90' : ''
                           }`}
@@ -375,6 +380,17 @@ export const LibraryPage: React.FC = () => {
                                 alt={track.titleEnglish}
                                 className="w-full h-full object-cover"
                               />
+                              <div
+                                className={`absolute inset-0 bg-black/45 flex items-center justify-center transition-all ${
+                                  isThisPlaying ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
+                                }`}
+                              >
+                                {isThisPlaying ? (
+                                  <Pause className="w-4 h-4 text-white fill-current" />
+                                ) : (
+                                  <Play className="w-4 h-4 text-white fill-current ml-0.5" />
+                                )}
+                              </div>
                             </div>
 
                             <div className="min-w-0 flex-1 pr-2">
@@ -456,6 +472,19 @@ export const LibraryPage: React.FC = () => {
                         <Play className="w-5 h-5 fill-current ml-0.5" />
                       </div>
                     </div>
+
+                    {/* Delete Button on Card */}
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setPlaylistToDelete(pl);
+                      }}
+                      className="absolute top-2.5 right-2.5 p-2 rounded-full bg-black/60 hover:bg-rose-600 text-white backdrop-blur-md opacity-0 group-hover:opacity-100 transition-all z-10 shadow-md"
+                      title="Delete Playlist"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
                   </div>
 
                   <div className="space-y-1 min-w-0">
@@ -515,14 +544,22 @@ export const LibraryPage: React.FC = () => {
                   return (
                     <div
                       key={track.id}
-                      onClick={() => playTrack(track, userLikedTracks)}
+                      onClick={() => playOrToggleTrack(track, userLikedTracks)}
                       className={`group flex items-center justify-between px-4 py-3 sm:px-6 sm:py-3.5 hover:bg-[#FEE2E2]/70 transition-colors cursor-pointer ${
                         isCurrent ? 'bg-[#FEE2E2]/90' : ''
                       }`}
                     >
                       <div className="flex items-center gap-3 sm:gap-4 min-w-0 flex-1">
                         <span className="font-mono text-xs text-[#86868B] w-5 text-center shrink-0">
-                          {idx + 1}
+                          {isThisPlaying ? (
+                            <div className="flex items-end justify-center gap-0.5 h-3.5">
+                              <span className="w-0.5 bg-[#D4A017] rounded-full wave-bar-1" />
+                              <span className="w-0.5 bg-[#D4A017] rounded-full wave-bar-2" />
+                              <span className="w-0.5 bg-[#D4A017] rounded-full wave-bar-3" />
+                            </div>
+                          ) : (
+                            idx + 1
+                          )}
                         </span>
 
                         <div className="relative w-11 h-11 rounded-xl overflow-hidden bg-[#F2F2F7] shrink-0 border border-[#E5E5EA]">
@@ -531,6 +568,17 @@ export const LibraryPage: React.FC = () => {
                             alt={track.titleEnglish}
                             className="w-full h-full object-cover"
                           />
+                          <div
+                            className={`absolute inset-0 bg-black/45 flex items-center justify-center transition-all ${
+                              isThisPlaying ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
+                            }`}
+                          >
+                            {isThisPlaying ? (
+                              <Pause className="w-4 h-4 text-white fill-current" />
+                            ) : (
+                              <Play className="w-4 h-4 text-white fill-current ml-0.5" />
+                            )}
+                          </div>
                         </div>
 
                         <div className="min-w-0 flex-1 pr-2">
@@ -601,18 +649,27 @@ export const LibraryPage: React.FC = () => {
               <div className="divide-y divide-[#FA243C]/10">
                 {userPurchasedTracks.map((track, idx) => {
                   const isCurrent = currentTrack?.id === track.id;
+                  const isThisPlaying = isCurrent && isPlaying;
 
                   return (
                     <div
                       key={track.id}
-                      onClick={() => playTrack(track, userPurchasedTracks)}
+                      onClick={() => playOrToggleTrack(track, userPurchasedTracks)}
                       className={`group flex items-center justify-between px-4 py-3 sm:px-6 sm:py-3.5 hover:bg-[#FEE2E2]/70 transition-colors cursor-pointer ${
                         isCurrent ? 'bg-[#FEE2E2]/90' : ''
                       }`}
                     >
                       <div className="flex items-center gap-3 sm:gap-4 min-w-0 flex-1">
                         <span className="font-mono text-xs text-[#86868B] w-5 text-center shrink-0">
-                          {idx + 1}
+                          {isThisPlaying ? (
+                            <div className="flex items-end justify-center gap-0.5 h-3.5">
+                              <span className="w-0.5 bg-[#D4A017] rounded-full wave-bar-1" />
+                              <span className="w-0.5 bg-[#D4A017] rounded-full wave-bar-2" />
+                              <span className="w-0.5 bg-[#D4A017] rounded-full wave-bar-3" />
+                            </div>
+                          ) : (
+                            idx + 1
+                          )}
                         </span>
 
                         <div className="relative w-11 h-11 rounded-xl overflow-hidden bg-[#F2F2F7] shrink-0 border border-[#E5E5EA]">
@@ -621,6 +678,17 @@ export const LibraryPage: React.FC = () => {
                             alt={track.titleEnglish}
                             className="w-full h-full object-cover"
                           />
+                          <div
+                            className={`absolute inset-0 bg-black/45 flex items-center justify-center transition-all ${
+                              isThisPlaying ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
+                            }`}
+                          >
+                            {isThisPlaying ? (
+                              <Pause className="w-4 h-4 text-white fill-current" />
+                            ) : (
+                              <Play className="w-4 h-4 text-white fill-current ml-0.5" />
+                            )}
+                          </div>
                         </div>
 
                         <div className="min-w-0 flex-1 pr-2">
@@ -929,6 +997,63 @@ export const LibraryPage: React.FC = () => {
                 className="w-full py-2.5 rounded-xl bg-[#F5F5F7] hover:bg-[#FEE2E2] text-xs font-bold text-[#1D1D1F] hover:text-[#FA243C] transition-colors"
               >
                 Done
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ================= MODAL: DELETE PLAYLIST CONFIRMATION ================= */}
+      {playlistToDelete && (
+        <div
+          className="fixed inset-0 z-[200] w-screen h-screen min-h-[100dvh] bg-black/60 backdrop-blur-2xl flex items-center justify-center p-4 animate-fadeIn overflow-y-auto"
+          onClick={() => setPlaylistToDelete(null)}
+        >
+          <div
+            className="w-full max-w-md bg-[#F5F5F7] border border-[#E5E5EA] rounded-3xl p-6 sm:p-7 shadow-2xl text-[#1D1D1F] space-y-4 animate-scaleUp my-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center gap-3.5 pb-3 border-b border-[#E5E5EA]">
+              <div className="w-12 h-12 rounded-2xl bg-rose-100 text-rose-600 flex items-center justify-center shrink-0 border border-rose-200">
+                <Trash2 className="w-6 h-6" />
+              </div>
+              <div className="min-w-0 flex-1">
+                <h3 className="font-heading font-bold text-lg text-[#1D1D1F]">Delete Playlist?</h3>
+                <p className="text-xs text-[#86868B]">ఈ ప్లేలిస్ట్‌ను తొలగించాలా?</p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setPlaylistToDelete(null)}
+                className="p-1.5 rounded-full text-[#86868B] hover:text-rose-600 hover:bg-[#FEE2E2] transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <p className="text-xs sm:text-sm text-[#86868B] leading-relaxed">
+              Are you sure you want to delete <strong className="text-[#1D1D1F] font-bold">"{playlistToDelete.name}"</strong>? This will remove the playlist from your sanctuary. (Original catalog songs will remain unaffected.)
+            </p>
+
+            <div className="flex items-center justify-end gap-3 pt-2">
+              <button
+                type="button"
+                onClick={() => setPlaylistToDelete(null)}
+                className="px-4 py-2.5 rounded-xl text-xs font-semibold text-[#86868B] hover:text-[#1D1D1F] hover:bg-white transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  deletePlaylist(playlistToDelete.id);
+                  if (selectedPlaylistId === playlistToDelete.id) {
+                    setSelectedPlaylistId(null);
+                  }
+                  setPlaylistToDelete(null);
+                }}
+                className="px-5 py-2.5 rounded-xl text-xs font-bold text-white bg-rose-600 hover:bg-rose-700 transition-colors shadow-md shadow-rose-600/30"
+              >
+                Yes, Delete Playlist
               </button>
             </div>
           </div>

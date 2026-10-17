@@ -31,21 +31,14 @@ export const PlaylistProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const [playlists, setPlaylists] = useState<Playlist[]>(() => {
     try {
       const saved = localStorage.getItem(storageKey);
-      if (saved) return JSON.parse(saved);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        return Array.isArray(parsed) ? parsed.filter((p: Playlist) => p.id !== 'pl-worship-favorites') : [];
+      }
     } catch (e) {
       console.error('Failed to load playlists', e);
     }
-    // Default initial worship playlist for a great first-time experience
-    return [
-      {
-        id: 'pl-worship-favorites',
-        name: 'Daily Worship & Prayer',
-        description: 'Uplifting Telugu devotional hymns and prayers by Rev. Tony Prakash.',
-        createdAt: new Date().toISOString(),
-        trackIds: ['001-prayer', '002-stotram'],
-        coverImage: '/tony_avatar_cutout.png',
-      },
-    ];
+    return [];
   });
 
   // Re-load playlists whenever user changes (login/logout)
@@ -54,23 +47,16 @@ export const PlaylistProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       const key = `tony_user_playlists_${user?.id || 'guest'}`;
       const saved = localStorage.getItem(key);
       if (saved) {
-        setPlaylists(JSON.parse(saved));
+        const parsed = JSON.parse(saved);
+        setPlaylists(Array.isArray(parsed) ? parsed.filter((p: Playlist) => p.id !== 'pl-worship-favorites') : []);
       } else {
-        // If logged-in user has no saved playlists yet, import guest playlists or provide default
+        // If logged-in user has no saved playlists yet, import guest playlists (if any) or start fresh
         const guestSaved = localStorage.getItem('tony_user_playlists_guest');
         if (guestSaved && user) {
-          setPlaylists(JSON.parse(guestSaved));
+          const parsed = JSON.parse(guestSaved);
+          setPlaylists(Array.isArray(parsed) ? parsed.filter((p: Playlist) => p.id !== 'pl-worship-favorites') : []);
         } else {
-          setPlaylists([
-            {
-              id: 'pl-worship-favorites',
-              name: 'Daily Worship & Prayer',
-              description: 'Uplifting Telugu devotional hymns and prayers by Rev. Tony Prakash.',
-              createdAt: new Date().toISOString(),
-              trackIds: ['001-prayer', '002-stotram'],
-              coverImage: '/tony_avatar_cutout.png',
-            },
-          ]);
+          setPlaylists([]);
         }
       }
     } catch (e) {
@@ -101,7 +87,15 @@ export const PlaylistProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   };
 
   const deletePlaylist = (playlistId: string) => {
-    setPlaylists((prev) => prev.filter((p) => p.id !== playlistId));
+    setPlaylists((prev) => {
+      const updated = prev.filter((p) => p.id !== playlistId);
+      try {
+        localStorage.setItem(storageKey, JSON.stringify(updated));
+      } catch (e) {
+        console.error('Failed to delete playlist from storage', e);
+      }
+      return updated;
+    });
   };
 
   const updatePlaylist = (playlistId: string, name: string, description?: string) => {

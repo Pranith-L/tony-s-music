@@ -39,6 +39,7 @@ interface PlayerContextType {
 
   // Actions
   playTrack: (track: Track, newQueue?: Track[]) => void;
+  playOrToggleTrack: (track: Track, newQueue?: Track[]) => void;
   togglePlay: () => void;
   pause: () => void;
   seek: (time: number) => void;
@@ -294,6 +295,14 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       });
   };
 
+  const playOrToggleTrack = (track: Track, newQueue?: Track[]) => {
+    if (currentTrack?.id === track.id) {
+      togglePlay();
+    } else {
+      playTrack(track, newQueue);
+    }
+  };
+
   const togglePlay = () => {
     if (!audioRef.current) return;
     if (!currentTrack && queue.length > 0) {
@@ -519,6 +528,7 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         setShowPreviewLimitModal,
         setShowSkipLimitModal,
         playTrack,
+        playOrToggleTrack,
         togglePlay,
         pause,
         seek,

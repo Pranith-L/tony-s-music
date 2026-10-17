@@ -38,7 +38,7 @@ export const MusicPage: React.FC = () => {
   const [activeCategory, setActiveCategory] = useState<string>('ALL');
   const [sortBy, setSortBy] = useState<'ORDER' | 'POPULAR' | 'NEWEST'>('ORDER');
 
-  const { currentTrack, isPlaying, playTrack, isLiked, toggleLikeTrack, likedTrackIds } =
+  const { currentTrack, isPlaying, playTrack, playOrToggleTrack, isLiked, toggleLikeTrack, likedTrackIds } =
     usePlayer();
   const { isSubscriber } = useAuth();
 
@@ -322,7 +322,7 @@ export const MusicPage: React.FC = () => {
                 return (
                   <div
                     key={track.id}
-                    onClick={() => playTrack(track, sortedTracks)}
+                    onClick={() => playOrToggleTrack(track, sortedTracks)}
                     className={`group relative flex items-center justify-between px-4 py-3 sm:py-3.5 hover:bg-[#FEE2E2]/70 dark:hover:bg-white/[0.06] transition-colors cursor-pointer ${
                       isCurrent
                         ? 'bg-[#FEE2E2]/90 dark:bg-[#FA243C]/20 border-l-4 border-l-[#FA243C]'
@@ -350,8 +350,16 @@ export const MusicPage: React.FC = () => {
                           alt={track.titleEnglish}
                           className="w-full h-full object-cover"
                         />
-                        <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                          <Play className="w-4 h-4 text-[#FFFFFF] fill-current" />
+                        <div
+                          className={`absolute inset-0 bg-black/45 flex items-center justify-center transition-all ${
+                            isThisPlaying ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
+                          }`}
+                        >
+                          {isThisPlaying ? (
+                            <Pause className="w-4 h-4 sm:w-5 sm:h-5 text-white fill-current" />
+                          ) : (
+                            <Play className="w-4 h-4 sm:w-5 sm:h-5 text-white fill-current ml-0.5" />
+                          )}
                         </div>
                       </div>
 

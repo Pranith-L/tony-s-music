@@ -36,6 +36,7 @@ export const Home: React.FC = () => {
     currentTrack,
     isPlaying,
     playTrack,
+    playOrToggleTrack,
     togglePlay,
     isLiked,
     toggleLikeTrack,
@@ -406,7 +407,7 @@ export const Home: React.FC = () => {
               return (
                 <div
                   key={track.id}
-                  onClick={() => playTrack(track, popularTracks)}
+                  onClick={() => playOrToggleTrack(track, popularTracks)}
                   className={`group flex items-center justify-between px-4 py-3 sm:py-3.5 hover:bg-[#FEE2E2]/70 transition-colors cursor-pointer ${
                     isCurrent ? 'bg-[#FEE2E2]/90' : ''
                   }`}
@@ -432,8 +433,16 @@ export const Home: React.FC = () => {
                         alt={track.titleEnglish}
                         className="w-full h-full object-cover"
                       />
-                      <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                        <Play className="w-4 h-4 text-[#FFFFFF] fill-current" />
+                      <div
+                        className={`absolute inset-0 bg-black/45 flex items-center justify-center transition-all ${
+                          isThisPlaying ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
+                        }`}
+                      >
+                        {isThisPlaying ? (
+                          <Pause className="w-4 h-4 text-white fill-current" />
+                        ) : (
+                          <Play className="w-4 h-4 text-white fill-current ml-0.5" />
+                        )}
                       </div>
                     </div>
 
@@ -543,7 +552,7 @@ export const Home: React.FC = () => {
             return (
               <div
                 key={track.id}
-                onClick={() => playTrack(track, studioBackingTracks)}
+                onClick={() => playOrToggleTrack(track, studioBackingTracks)}
                 className="group p-3 rounded-2xl bg-[#F5F5F7]/80 hover:bg-[#FEE2E2] border border-[#D4A017]/30 hover:border-[#D4A017]/50 transition-all duration-300 cursor-pointer shadow-lg space-y-2 flex flex-col justify-between"
               >
                 <div className="relative aspect-square rounded-xl overflow-hidden bg-[#F2F2F7] border border-[#D4A017]/20">
@@ -552,8 +561,16 @@ export const Home: React.FC = () => {
                     alt={track.titleEnglish}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
-                  <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                    <Play className="w-6 h-6 text-[#FFFFFF] fill-current" />
+                  <div
+                    className={`absolute inset-0 bg-black/45 flex items-center justify-center transition-all ${
+                      isThisPlaying ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
+                    }`}
+                  >
+                    {isThisPlaying ? (
+                      <Pause className="w-6 h-6 text-white fill-current" />
+                    ) : (
+                      <Play className="w-6 h-6 text-white fill-current ml-0.5" />
+                    )}
                   </div>
                   <span className="absolute top-2 left-2 px-1.5 py-0.5 rounded text-[9px] font-mono font-bold bg-black/70 text-amber-300 border border-amber-400/30">
                     30s

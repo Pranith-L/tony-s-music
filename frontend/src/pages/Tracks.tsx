@@ -41,6 +41,7 @@ export const TracksPage: React.FC = () => {
     currentTrack,
     isPlaying,
     playTrack,
+    playOrToggleTrack,
     togglePlay,
     isLiked,
     toggleLikeTrack,
@@ -280,7 +281,7 @@ export const TracksPage: React.FC = () => {
               return (
                 <div
                   key={track.id}
-                  onClick={() => playTrack(track, sortedTracks)}
+                  onClick={() => playOrToggleTrack(track, sortedTracks)}
                   className={`group relative flex items-center justify-between px-4 py-3.5 sm:px-6 sm:py-4 hover:bg-[#FEE2E2]/80 dark:hover:bg-white/[0.06] transition-colors cursor-pointer ${
                     isCurrent ? 'bg-[#FEE2E2]/95 dark:bg-[#FA243C]/20 border-l-4 border-[#D4A017]' : ''
                   }`}
@@ -306,11 +307,15 @@ export const TracksPage: React.FC = () => {
                         alt={track.titleEnglish}
                         className="w-full h-full object-cover"
                       />
-                      <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                      <div
+                        className={`absolute inset-0 bg-black/45 flex items-center justify-center transition-all ${
+                          isThisPlaying ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
+                        }`}
+                      >
                         {isThisPlaying ? (
-                          <Pause className="w-5 h-5 text-[#FFFFFF] fill-current" />
+                          <Pause className="w-5 h-5 text-white fill-current" />
                         ) : (
-                          <Play className="w-5 h-5 text-[#FFFFFF] fill-current ml-0.5" />
+                          <Play className="w-5 h-5 text-white fill-current ml-0.5" />
                         )}
                       </div>
                     </div>

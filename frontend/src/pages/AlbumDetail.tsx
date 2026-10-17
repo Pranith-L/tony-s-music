@@ -200,17 +200,22 @@ export const AlbumDetailPage: React.FC = () => {
               >
                 <div className="col-span-2 sm:col-span-1 flex items-center justify-center">
                   {isThisPlaying ? (
-                    <div className="flex items-center gap-0.5">
-                      <div className="w-0.5 bg-[#FA243C] rounded-full wave-bar-1" />
-                      <div className="w-0.5 bg-[#D4A017] rounded-full wave-bar-2" />
-                      <div className="w-0.5 bg-[#FA243C] rounded-full wave-bar-3" />
-                    </div>
+                    <>
+                      <div className="flex items-center gap-0.5 group-hover:hidden">
+                        <div className="w-0.5 bg-[#FA243C] rounded-full wave-bar-1" />
+                        <div className="w-0.5 bg-[#D4A017] rounded-full wave-bar-2" />
+                        <div className="w-0.5 bg-[#FA243C] rounded-full wave-bar-3" />
+                      </div>
+                      <Pause className="w-4 h-4 text-[#FA243C] hidden group-hover:block fill-current" />
+                    </>
                   ) : (
-                    <span className="font-mono text-xs text-[#86868B] group-hover:hidden">
-                      {String(idx + 1).padStart(2, '0')}
-                    </span>
+                    <>
+                      <span className="font-mono text-xs text-[#86868B] group-hover:hidden">
+                        {String(idx + 1).padStart(2, '0')}
+                      </span>
+                      <Play className="w-4 h-4 text-[#FA243C] hidden group-hover:block fill-current ml-0.5" />
+                    </>
                   )}
-                  <Play className="w-4 h-4 text-[#FFFFFF] hidden group-hover:block fill-current ml-0.5" />
                 </div>
 
                 <div className="col-span-8 sm:col-span-7 min-w-0">
