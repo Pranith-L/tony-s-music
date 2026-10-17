@@ -180,20 +180,20 @@ export const LibraryPage: React.FC = () => {
       </div>
 
       {/* 2. Library Tabs */}
-      <div className="flex items-center gap-2 border-b border-[#E5E5EA] pb-3">
+      <div className="flex items-center gap-2 border-b border-[#E5E5EA] dark:border-[#27272A] pb-3 overflow-x-auto no-scrollbar scroll-smooth">
         <button
           onClick={() => {
             setActiveTab('playlists');
             setSelectedPlaylistId(null);
           }}
-          className={`px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 transition-all ${
+          className={`px-3.5 py-2 sm:px-4 sm:py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 sm:gap-2 transition-all shrink-0 whitespace-nowrap ${
             activeTab === 'playlists'
               ? 'bg-[#FA243C] text-white shadow-sm'
-              : 'text-[#86868B] hover:text-[#1D1D1F] hover:bg-[#F2F2F7]'
+              : 'text-[#86868B] dark:text-[#A1A1AA] hover:text-[#1D1D1F] dark:hover:text-white hover:bg-[#F2F2F7] dark:hover:bg-white/5'
           }`}
         >
-          <ListMusic className="w-4 h-4" />
-          <span>Playlists ({playlists.length})</span>
+          <ListMusic className="w-4 h-4 shrink-0" />
+          <span className="whitespace-nowrap">Playlists ({playlists.length})</span>
         </button>
 
         <button
@@ -201,14 +201,14 @@ export const LibraryPage: React.FC = () => {
             setActiveTab('liked');
             setSelectedPlaylistId(null);
           }}
-          className={`px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 transition-all ${
+          className={`px-3.5 py-2 sm:px-4 sm:py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 sm:gap-2 transition-all shrink-0 whitespace-nowrap ${
             activeTab === 'liked'
               ? 'bg-[#FA243C] text-white shadow-sm'
-              : 'text-[#86868B] hover:text-[#1D1D1F] hover:bg-[#F2F2F7]'
+              : 'text-[#86868B] dark:text-[#A1A1AA] hover:text-[#1D1D1F] dark:hover:text-white hover:bg-[#F2F2F7] dark:hover:bg-white/5'
           }`}
         >
-          <Heart className="w-4 h-4 text-[#D4A017]" />
-          <span>Liked Songs ({userLikedTracks.length})</span>
+          <Heart className="w-4 h-4 text-[#D4A017] shrink-0" />
+          <span className="whitespace-nowrap">Liked Songs ({userLikedTracks.length})</span>
         </button>
 
         <button
@@ -216,14 +216,14 @@ export const LibraryPage: React.FC = () => {
             setActiveTab('purchased');
             setSelectedPlaylistId(null);
           }}
-          className={`px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 transition-all ${
+          className={`px-3.5 py-2 sm:px-4 sm:py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 sm:gap-2 transition-all shrink-0 whitespace-nowrap ${
             activeTab === 'purchased'
               ? 'bg-[#FA243C] text-white shadow-sm'
-              : 'text-[#86868B] hover:text-[#1D1D1F] hover:bg-[#F2F2F7]'
+              : 'text-[#86868B] dark:text-[#A1A1AA] hover:text-[#1D1D1F] dark:hover:text-white hover:bg-[#F2F2F7] dark:hover:bg-white/5'
           }`}
         >
-          <Disc3 className="w-4 h-4 text-[#D4A017]" />
-          <span>Purchased Tracks ({userPurchasedTracks.length})</span>
+          <Disc3 className="w-4 h-4 text-[#D4A017] shrink-0" />
+          <span className="whitespace-nowrap">Purchased Tracks ({userPurchasedTracks.length})</span>
         </button>
       </div>
 
@@ -364,8 +364,10 @@ export const LibraryPage: React.FC = () => {
                         <div
                           key={track.id}
                           onClick={() => playOrToggleTrack(track, playlistTracks)}
-                          className={`group flex items-center justify-between px-4 py-3 sm:px-6 sm:py-3.5 hover:bg-[#FEE2E2]/70 transition-colors cursor-pointer ${
-                            isCurrent ? 'bg-[#FEE2E2]/90' : ''
+                          className={`group flex items-center justify-between px-3.5 py-3 sm:px-6 sm:py-3.5 transition-all cursor-pointer ${
+                            isCurrent
+                              ? 'bg-[#FA243C]/10 dark:bg-[#FA243C]/20 border-l-4 border-l-[#FA243C]'
+                              : 'hover:bg-[#F2F2F7] dark:hover:bg-white/5'
                           }`}
                         >
                           <div className="flex items-center gap-3 sm:gap-4 min-w-0 flex-1">
@@ -381,7 +383,7 @@ export const LibraryPage: React.FC = () => {
                               )}
                             </span>
 
-                            <div className="relative w-11 h-11 rounded-xl overflow-hidden bg-[#F2F2F7] shrink-0 border border-[#E5E5EA]">
+                            <div className="relative w-11 h-11 rounded-xl overflow-hidden bg-[#F2F2F7] dark:bg-[#202023] shrink-0 border border-[#E5E5EA] dark:border-[#27272A]">
                               <img
                                 src={track.coverImage || '/covers/001_prayermp3.jpg'}
                                 alt={track.titleEnglish}
@@ -402,20 +404,32 @@ export const LibraryPage: React.FC = () => {
 
                             <div className="min-w-0 flex-1 pr-2">
                               <h4
-                                className={`text-sm font-semibold truncate transition-colors ${
-                                  isCurrent ? 'text-[#FA243C]' : 'text-[#1D1D1F] group-hover:text-[#FA243C]'
+                                className={`text-sm font-bold truncate transition-colors ${
+                                  isCurrent
+                                    ? 'text-[#FA243C] dark:text-[#FF455A]'
+                                    : 'text-[#1D1D1F] dark:text-white group-hover:text-[#FA243C]'
                                 }`}
                               >
                                 {track.titleEnglish}
                               </h4>
-                              <p className="font-telugu text-xs text-[#86868B] group-hover:text-[#48484A] truncate mt-0.5">
+                              <p
+                                className={`font-telugu text-xs truncate mt-0.5 transition-colors ${
+                                  isCurrent
+                                    ? 'text-[#D4A017] dark:text-[#E5B842] font-semibold'
+                                    : 'text-[#86868B] dark:text-[#A1A1AA] group-hover:text-[#48484A] dark:group-hover:text-zinc-300'
+                                }`}
+                              >
                                 {track.titleTelugu}
                               </p>
                             </div>
                           </div>
 
                           <div className="flex items-center gap-2 shrink-0">
-                            <span className="font-mono text-xs text-[#86868B] hidden sm:inline-block px-2">
+                            <span
+                              className={`font-mono text-xs hidden sm:inline-block px-2 ${
+                                isCurrent ? 'text-[#FA243C] font-semibold' : 'text-[#86868B] dark:text-[#A1A1AA]'
+                              }`}
+                            >
                               {track.duration}
                             </span>
 
@@ -425,7 +439,7 @@ export const LibraryPage: React.FC = () => {
                                 e.stopPropagation();
                                 removeTrackFromPlaylist(selectedPlaylist.id, track.id);
                               }}
-                              className="p-1.5 rounded-full text-[#86868B] hover:text-rose-400 hover:bg-white transition-colors"
+                              className="p-1.5 rounded-full text-[#86868B] hover:text-rose-500 hover:bg-white dark:hover:bg-white/10 transition-colors"
                               title="Remove from playlist"
                             >
                               <Trash2 className="w-4 h-4" />
@@ -552,8 +566,10 @@ export const LibraryPage: React.FC = () => {
                     <div
                       key={track.id}
                       onClick={() => playOrToggleTrack(track, userLikedTracks)}
-                      className={`group flex items-center justify-between px-4 py-3 sm:px-6 sm:py-3.5 hover:bg-[#FEE2E2]/70 transition-colors cursor-pointer ${
-                        isCurrent ? 'bg-[#FEE2E2]/90' : ''
+                      className={`group flex items-center justify-between px-3.5 py-3 sm:px-6 sm:py-3.5 transition-all cursor-pointer ${
+                        isCurrent
+                          ? 'bg-[#FA243C]/10 dark:bg-[#FA243C]/20 border-l-4 border-l-[#FA243C]'
+                          : 'hover:bg-[#F2F2F7] dark:hover:bg-white/5'
                       }`}
                     >
                       <div className="flex items-center gap-3 sm:gap-4 min-w-0 flex-1">
@@ -569,7 +585,7 @@ export const LibraryPage: React.FC = () => {
                           )}
                         </span>
 
-                        <div className="relative w-11 h-11 rounded-xl overflow-hidden bg-[#F2F2F7] shrink-0 border border-[#E5E5EA]">
+                        <div className="relative w-11 h-11 rounded-xl overflow-hidden bg-[#F2F2F7] dark:bg-[#202023] shrink-0 border border-[#E5E5EA] dark:border-[#27272A]">
                           <img
                             src={track.coverImage || '/covers/001_prayermp3.jpg'}
                             alt={track.titleEnglish}
@@ -590,20 +606,32 @@ export const LibraryPage: React.FC = () => {
 
                         <div className="min-w-0 flex-1 pr-2">
                           <h4
-                            className={`text-sm font-semibold truncate transition-colors ${
-                              isCurrent ? 'text-[#FA243C]' : 'text-[#1D1D1F] group-hover:text-[#FA243C]'
+                            className={`text-sm font-bold truncate transition-colors ${
+                              isCurrent
+                                ? 'text-[#FA243C] dark:text-[#FF455A]'
+                                : 'text-[#1D1D1F] dark:text-white group-hover:text-[#FA243C]'
                             }`}
                           >
                             {track.titleEnglish}
                           </h4>
-                          <p className="font-telugu text-xs text-[#86868B] group-hover:text-[#48484A] truncate mt-0.5">
+                          <p
+                            className={`font-telugu text-xs truncate mt-0.5 transition-colors ${
+                              isCurrent
+                                ? 'text-[#D4A017] dark:text-[#E5B842] font-semibold'
+                                : 'text-[#86868B] dark:text-[#A1A1AA] group-hover:text-[#48484A] dark:group-hover:text-zinc-300'
+                            }`}
+                          >
                             {track.titleTelugu}
                           </p>
                         </div>
                       </div>
 
                       <div className="flex items-center gap-2 shrink-0">
-                        <span className="font-mono text-xs text-[#86868B] hidden sm:inline-block px-2">
+                        <span
+                          className={`font-mono text-xs hidden sm:inline-block px-2 ${
+                            isCurrent ? 'text-[#FA243C] font-semibold' : 'text-[#86868B] dark:text-[#A1A1AA]'
+                          }`}
+                        >
                           {track.duration}
                         </span>
                         <TrackActionMenu track={track} />
@@ -662,8 +690,10 @@ export const LibraryPage: React.FC = () => {
                     <div
                       key={track.id}
                       onClick={() => playOrToggleTrack(track, userPurchasedTracks)}
-                      className={`group flex items-center justify-between px-4 py-3 sm:px-6 sm:py-3.5 hover:bg-[#FEE2E2]/70 transition-colors cursor-pointer ${
-                        isCurrent ? 'bg-[#FEE2E2]/90' : ''
+                      className={`group flex items-center justify-between px-3.5 py-3 sm:px-6 sm:py-3.5 transition-all cursor-pointer ${
+                        isCurrent
+                          ? 'bg-[#FA243C]/10 dark:bg-[#FA243C]/20 border-l-4 border-l-[#FA243C]'
+                          : 'hover:bg-[#F2F2F7] dark:hover:bg-white/5'
                       }`}
                     >
                       <div className="flex items-center gap-3 sm:gap-4 min-w-0 flex-1">
@@ -679,7 +709,7 @@ export const LibraryPage: React.FC = () => {
                           )}
                         </span>
 
-                        <div className="relative w-11 h-11 rounded-xl overflow-hidden bg-[#F2F2F7] shrink-0 border border-[#E5E5EA]">
+                        <div className="relative w-11 h-11 rounded-xl overflow-hidden bg-[#F2F2F7] dark:bg-[#202023] shrink-0 border border-[#E5E5EA] dark:border-[#27272A]">
                           <img
                             src={track.coverImage || '/dad_white_suit.jpg'}
                             alt={track.titleEnglish}
@@ -700,20 +730,28 @@ export const LibraryPage: React.FC = () => {
 
                         <div className="min-w-0 flex-1 pr-2">
                           <h4
-                            className={`text-sm font-semibold truncate transition-colors ${
-                              isCurrent ? 'text-[#FA243C]' : 'text-[#1D1D1F] group-hover:text-[#FA243C]'
+                            className={`text-sm font-bold truncate transition-colors ${
+                              isCurrent
+                                ? 'text-[#FA243C] dark:text-[#FF455A]'
+                                : 'text-[#1D1D1F] dark:text-white group-hover:text-[#FA243C]'
                             }`}
                           >
                             {track.titleEnglish}
                           </h4>
-                          <p className="font-telugu text-xs text-[#86868B] group-hover:text-[#48484A] truncate mt-0.5">
+                          <p
+                            className={`font-telugu text-xs truncate mt-0.5 transition-colors ${
+                              isCurrent
+                                ? 'text-[#D4A017] dark:text-[#E5B842] font-semibold'
+                                : 'text-[#86868B] dark:text-[#A1A1AA] group-hover:text-[#48484A] dark:group-hover:text-zinc-300'
+                            }`}
+                          >
                             {track.titleTelugu}
                           </p>
                         </div>
                       </div>
 
                       <div className="flex items-center gap-2 shrink-0">
-                        <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
+                        <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-medium bg-emerald-50 dark:bg-emerald-950/30 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800/40">
                           Full Access
                         </span>
                         <TrackActionMenu track={track} />

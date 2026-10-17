@@ -93,9 +93,9 @@ export const VideosPage: React.FC = () => {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div className="space-y-2">
-          <div className="inline-flex items-center gap-2 text-xs uppercase tracking-widest text-[#D4A017] font-semibold font-mono">
-            <Youtube className="w-4 h-4 text-red-500 fill-current" />
-            <span>@TonyPrakashOfficial • Official YouTube Channel</span>
+          <div className="inline-flex items-center gap-1.5 sm:gap-2 text-[10px] sm:text-xs uppercase tracking-wider sm:tracking-widest text-[#D4A017] font-semibold font-mono whitespace-nowrap overflow-hidden">
+            <Youtube className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-red-500 fill-current shrink-0" />
+            <span className="whitespace-nowrap truncate">@TonyPrakashOfficial • Official YouTube Channel</span>
           </div>
           <h1 className="text-3xl sm:text-4xl font-heading font-bold text-[#1D1D1F]">
             Official Worship & Devotional Videos

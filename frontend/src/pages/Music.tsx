@@ -323,10 +323,10 @@ export const MusicPage: React.FC = () => {
                   <div
                     key={track.id}
                     onClick={() => playOrToggleTrack(track, sortedTracks)}
-                    className={`group relative flex items-center justify-between px-4 py-3 sm:py-3.5 hover:bg-[#FEE2E2]/70 dark:hover:bg-white/[0.06] transition-colors cursor-pointer ${
+                    className={`group relative flex items-center justify-between px-3.5 py-3 sm:py-3.5 transition-all cursor-pointer ${
                       isCurrent
-                        ? 'bg-[#FEE2E2]/90 dark:bg-[#FA243C]/20 border-l-4 border-l-[#FA243C]'
-                        : ''
+                        ? 'bg-[#FA243C]/10 dark:bg-[#FA243C]/20 border-l-4 border-l-[#FA243C]'
+                        : 'hover:bg-[#F2F2F7] dark:hover:bg-white/5'
                     }`}
                   >
                     {/* Left: Index & Art & Title */}

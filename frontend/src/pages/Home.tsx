@@ -178,10 +178,10 @@ export const Home: React.FC = () => {
           </div>
           <Link
             to="/music"
-            className="text-xs font-semibold text-[#FA243C] hover:underline flex items-center gap-1"
+            className="text-[11px] sm:text-xs font-semibold text-[#FA243C] hover:underline flex items-center gap-1 shrink-0 whitespace-nowrap ml-2"
           >
-            <span>View all 125 tracks</span>
-            <ChevronRight className="w-4 h-4" />
+            <span className="whitespace-nowrap">View all 125 tracks</span>
+            <ChevronRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
           </Link>
         </div>
 
@@ -408,8 +408,10 @@ export const Home: React.FC = () => {
                 <div
                   key={track.id}
                   onClick={() => playOrToggleTrack(track, popularTracks)}
-                  className={`group flex items-center justify-between px-4 py-3 sm:py-3.5 hover:bg-[#FEE2E2]/70 transition-colors cursor-pointer ${
-                    isCurrent ? 'bg-[#FEE2E2]/90' : ''
+                  className={`group flex items-center justify-between px-3.5 py-3 sm:py-3.5 transition-all cursor-pointer ${
+                    isCurrent
+                      ? 'bg-[#FA243C]/10 dark:bg-[#FA243C]/20 border-l-4 border-l-[#FA243C]'
+                      : 'hover:bg-[#F2F2F7] dark:hover:bg-white/5'
                   }`}
                 >
                   {/* Left: Index & Art & Title */}

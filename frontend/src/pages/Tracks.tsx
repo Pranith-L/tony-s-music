@@ -183,12 +183,12 @@ export const TracksPage: React.FC = () => {
         
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="space-y-3 max-w-3xl">
-            <div className="flex items-center gap-2.5">
-              <span className="px-3 py-1 rounded-full text-[11px] font-mono font-bold tracking-widest uppercase bg-[#D4A017]/15 text-[#D4A017] border border-[#D4A017]/30 flex items-center gap-1.5">
-                <Disc3 className="w-3.5 h-3.5 text-[#D4A017]" />
-                57 Studio Backing Tracks
+            <div className="flex items-center gap-2 sm:gap-2.5 flex-wrap sm:flex-nowrap">
+              <span className="px-2.5 sm:px-3 py-1 rounded-full text-[10px] sm:text-[11px] font-mono font-bold tracking-wider sm:tracking-widest uppercase bg-[#D4A017]/15 text-[#D4A017] border border-[#D4A017]/30 flex items-center gap-1.5 whitespace-nowrap shrink-0">
+                <Disc3 className="w-3.5 h-3.5 text-[#D4A017] shrink-0" />
+                <span className="whitespace-nowrap">57 Studio Backing Tracks</span>
               </span>
-              <span className="px-2.5 py-1 rounded-full text-[11px] font-mono font-bold bg-[#FA243C]/10 text-[#FA243C] border border-[#FA243C]/20">
+              <span className="px-2 sm:px-2.5 py-1 rounded-full text-[10px] sm:text-[11px] font-mono font-bold bg-[#FA243C]/10 text-[#FA243C] border border-[#FA243C]/20 whitespace-nowrap shrink-0">
                 ₹99 / Track
               </span>
             </div>
@@ -282,8 +282,10 @@ export const TracksPage: React.FC = () => {
                 <div
                   key={track.id}
                   onClick={() => playOrToggleTrack(track, sortedTracks)}
-                  className={`group relative flex items-center justify-between px-4 py-3.5 sm:px-6 sm:py-4 hover:bg-[#FEE2E2]/80 dark:hover:bg-white/[0.06] transition-colors cursor-pointer ${
-                    isCurrent ? 'bg-[#FEE2E2]/95 dark:bg-[#FA243C]/20 border-l-4 border-[#D4A017]' : ''
+                  className={`group relative flex items-center justify-between px-3.5 py-3.5 sm:px-6 sm:py-4 transition-all cursor-pointer ${
+                    isCurrent
+                      ? 'bg-[#FA243C]/10 dark:bg-[#FA243C]/20 border-l-4 border-l-[#FA243C]'
+                      : 'hover:bg-[#F2F2F7] dark:hover:bg-white/5'
                   }`}
                 >
                   {/* Left: Index, Album Artwork, Title */}

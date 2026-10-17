@@ -194,8 +194,8 @@ export const AlbumDetailPage: React.FC = () => {
                   if (currentTrack?.id === track.id) togglePlay();
                   else playTrack(track, tracks);
                 }}
-                className={`group grid grid-cols-12 gap-3 sm:gap-4 px-3 sm:px-4 py-3 items-center hover:bg-[#FEE2E2]/80 transition-colors cursor-pointer ${
-                  currentTrack?.id === track.id ? 'bg-[#FA243C]/15' : ''
+                className={`group grid grid-cols-12 gap-3 sm:gap-4 px-3 sm:px-4 py-3 items-center transition-all cursor-pointer ${
+                  currentTrack?.id === track.id ? 'bg-[#FA243C]/10 dark:bg-[#FA243C]/20 border-l-4 border-l-[#FA243C]' : 'hover:bg-[#F2F2F7] dark:hover:bg-white/5'
                 }`}
               >
                 <div className="col-span-2 sm:col-span-1 flex items-center justify-center">
