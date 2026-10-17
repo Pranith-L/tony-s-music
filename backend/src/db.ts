@@ -12,7 +12,7 @@ export async function getMongoDb() {
     await mongoClient.connect();
     isConnected = true;
   }
-  return mongoClient.db('tony_prakash_music');
+  return mongoClient.db() || mongoClient.db('tony_prakash_music');
 }
 
 export interface UserDoc {

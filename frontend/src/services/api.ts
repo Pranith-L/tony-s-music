@@ -1,7 +1,7 @@
 import { User, Track, Album, Video, Booking, AdminStats, Purchase } from '../types/index.js';
 import { MOCK_TRACKS, MOCK_ALBUMS, MOCK_VIDEOS } from './mockData.js';
 
-const API_BASE = '/api';
+const API_BASE = (import.meta as any).env?.VITE_API_URL || '/api';
 
 function getAuthHeaders(): HeadersInit {
   const token = localStorage.getItem('tony_prakash_token');
