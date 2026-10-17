@@ -85,6 +85,7 @@ app.get('/api/health', (_req, res) => {
 
 // Mount Routes
 app.use('/api/auth', authRoutes);
+app.use('/auth', authRoutes); // Supports Google OAuth callback without /api prefix
 app.use('/api/tracks', trackRoutes);
 app.use('/api/albums', albumRoutes);
 app.use('/api/videos', videoRoutes);
