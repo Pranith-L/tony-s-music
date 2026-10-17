@@ -1,6 +1,7 @@
 import passport from 'passport';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import { prisma } from './prisma.js';
+import { findOrCreateGoogleUser } from './db.js';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -30,38 +31,14 @@ if (GOOGLE_CLIENT_ID && GOOGLE_CLIENT_SECRET) {
           const avatar = profile.photos?.[0]?.value;
           const googleId = profile.id;
 
-          let user: any = await prisma.user.findUnique({
-            where: { email },
+          const safeUser = await findOrCreateGoogleUser({
+            email,
+            name,
+            avatar,
+            googleId,
           });
 
-          if (!user) {
-            user = await (prisma.user as any).create({
-              data: {
-                email,
-                name,
-                avatar,
-                googleId,
-                provider: 'GOOGLE',
-                role: 'USER',
-              },
-            });
-          } else if (googleId && !user.googleId) {
-            user = await (prisma.user as any).update({
-              where: { id: user.id },
-              data: {
-                googleId,
-                avatar: avatar || user.avatar,
-              },
-            });
-          }
-
-          return done(null, {
-            id: user.id,
-            email: user.email,
-            name: user.name,
-            role: user.role,
-            avatar: user.avatar,
-          });
+          return done(null, safeUser);
         } catch (error) {
           console.error('Passport Google Strategy error:', error);
           return done(error as Error, undefined);

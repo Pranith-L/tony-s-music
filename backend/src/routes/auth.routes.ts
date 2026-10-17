@@ -4,6 +4,7 @@ import jwt from 'jsonwebtoken';
 import { prisma } from '../prisma.js';
 import { generateToken, authenticateUser, AuthRequest } from '../middleware/auth.js';
 import passport from '../passport.js';
+import { findOrCreateGoogleUser, createLocalUser } from '../db.js';
 
 const router = Router();
 
@@ -26,22 +27,11 @@ router.post('/register', async (req, res: Response) => {
     const salt = await bcrypt.genSalt(10);
     const passwordHash = await bcrypt.hash(password, salt);
 
-    const user = await prisma.user.create({
-      data: {
-        email: email.toLowerCase().trim(),
-        passwordHash,
-        name: name.trim(),
-        phone: phone?.trim(),
-        role: 'USER',
-      },
-      select: {
-        id: true,
-        email: true,
-        name: true,
-        phone: true,
-        role: true,
-        createdAt: true,
-      },
+    const user = await createLocalUser({
+      email,
+      passwordHash,
+      name,
+      phone,
     });
 
     const token = generateToken(user);
@@ -383,37 +373,12 @@ router.post('/google/code', async (req, res: Response) => {
       return;
     }
 
-    const normalizedEmail = email.toLowerCase().trim();
-    let user: any = await prisma.user.findUnique({ where: { email: normalizedEmail } });
-
-    if (!user) {
-      user = await (prisma.user as any).create({
-        data: {
-          email: normalizedEmail,
-          name: name || 'Google User',
-          avatar,
-          googleId,
-          provider: 'GOOGLE',
-          role: 'USER',
-        },
-      });
-    } else if (googleId && !user.googleId) {
-      user = await (prisma.user as any).update({
-        where: { id: user.id },
-        data: {
-          googleId,
-          avatar: avatar || user.avatar,
-        },
-      });
-    }
-
-    const safeUser = {
-      id: user.id,
-      email: user.email,
-      name: user.name,
-      role: user.role,
-      avatar: user.avatar,
-    };
+    const safeUser = await findOrCreateGoogleUser({
+      email,
+      name: name || 'Google User',
+      avatar,
+      googleId,
+    });
 
     const token = generateToken(safeUser);
     res.cookie('token', token, {
@@ -464,37 +429,12 @@ router.post('/google', async (req, res: Response) => {
       return;
     }
 
-    const normalizedEmail = email.toLowerCase().trim();
-    let user: any = await prisma.user.findUnique({ where: { email: normalizedEmail } });
-
-    if (!user) {
-      user = await (prisma.user as any).create({
-        data: {
-          email: normalizedEmail,
-          name: name || 'Google User',
-          avatar,
-          googleId,
-          provider: 'GOOGLE',
-          role: 'USER',
-        },
-      });
-    } else if (googleId && !user.googleId) {
-      user = await (prisma.user as any).update({
-        where: { id: user.id },
-        data: {
-          googleId,
-          avatar: avatar || user.avatar,
-        },
-      });
-    }
-
-    const safeUser = {
-      id: user.id,
-      email: user.email,
-      name: user.name,
-      role: user.role,
-      avatar: user.avatar,
-    };
+    const safeUser = await findOrCreateGoogleUser({
+      email,
+      name: name || 'Google User',
+      avatar,
+      googleId,
+    });
 
     const token = generateToken(safeUser);
     res.cookie('token', token, {
