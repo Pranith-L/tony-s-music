@@ -256,18 +256,18 @@ export const TracksPage: React.FC = () => {
       </div>
 
       {/* 3. Backing Tracks List */}
-      <div className="bg-[#F5F5F7]/60 rounded-3xl border border-[#E5E5EA] shadow-2xl">
-        <div className="divide-y divide-[#FA243C]/10">
+      <div className="bg-white dark:bg-[#141416] rounded-3xl border border-[#E5E5EA] dark:border-[#27272A] shadow-xl dark:shadow-2xl overflow-hidden transition-colors">
+        <div className="divide-y divide-[#E5E5EA]/70 dark:divide-[#27272A]">
           {isLoading ? (
             <div className="p-16 text-center space-y-3">
               <div className="w-8 h-8 border-2 border-[#D4A017] border-t-transparent rounded-full animate-spin mx-auto" />
-              <p className="text-xs text-[#86868B]">Loading studio backing tracks...</p>
+              <p className="text-xs text-[#86868B] dark:text-[#A1A1AA]">Loading studio backing tracks...</p>
             </div>
           ) : sortedTracks.length === 0 ? (
             <div className="p-16 text-center space-y-3">
               <Disc3 className="w-12 h-12 text-[#86868B]/40 mx-auto" />
-              <h4 className="text-base font-semibold text-[#1D1D1F]">No backing tracks found</h4>
-              <p className="text-xs text-[#86868B]">Try checking your search terms.</p>
+              <h4 className="text-base font-semibold text-[#1D1D1F] dark:text-white">No backing tracks found</h4>
+              <p className="text-xs text-[#86868B] dark:text-[#A1A1AA]">Try checking your search terms.</p>
             </div>
           ) : (
             sortedTracks.map((track, idx) => {
@@ -281,13 +281,13 @@ export const TracksPage: React.FC = () => {
                 <div
                   key={track.id}
                   onClick={() => playTrack(track, sortedTracks)}
-                  className={`group relative flex items-center justify-between px-4 py-3.5 sm:px-6 sm:py-4 hover:bg-[#FEE2E2]/80 transition-colors cursor-pointer first:rounded-t-3xl last:rounded-b-3xl ${
-                    isCurrent ? 'bg-[#FEE2E2]/95 border-l-4 border-[#D4A017]' : ''
+                  className={`group relative flex items-center justify-between px-4 py-3.5 sm:px-6 sm:py-4 hover:bg-[#FEE2E2]/80 dark:hover:bg-white/[0.06] transition-colors cursor-pointer ${
+                    isCurrent ? 'bg-[#FEE2E2]/95 dark:bg-[#FA243C]/20 border-l-4 border-[#D4A017]' : ''
                   }`}
                 >
                   {/* Left: Index, Album Artwork, Title */}
                   <div className="flex items-center gap-3.5 sm:gap-4 min-w-0 flex-1">
-                    <span className="font-mono text-xs text-[#86868B] w-6 text-center shrink-0">
+                    <span className="font-mono text-xs text-[#86868B] dark:text-[#A1A1AA] font-bold w-6 text-center shrink-0">
                       {isThisPlaying ? (
                         <div className="flex items-end justify-center gap-0.5 h-3.5">
                           <span className="w-0.5 bg-[#D4A017] rounded-full wave-bar-1" />
@@ -300,7 +300,7 @@ export const TracksPage: React.FC = () => {
                       )}
                     </span>
 
-                    <div className="relative w-12 h-12 sm:w-14 sm:h-14 rounded-xl overflow-hidden bg-[#F2F2F7] shrink-0 border border-[#D4A017]/30 shadow-md">
+                    <div className="relative w-12 h-12 sm:w-14 sm:h-14 rounded-xl overflow-hidden bg-[#F2F2F7] dark:bg-[#202023] shrink-0 border border-[#D4A017]/30 shadow-md">
                       <img
                         src={track.coverImage || '/covers/001_prayermp3.jpg'}
                         alt={track.titleEnglish}
@@ -318,20 +318,20 @@ export const TracksPage: React.FC = () => {
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center gap-2">
                         <h4
-                          className={`text-sm sm:text-base font-semibold truncate transition-colors ${
-                            isCurrent ? 'text-[#FA243C]' : 'text-[#1D1D1F] group-hover:text-[#FA243C]'
+                          className={`text-sm sm:text-base font-bold truncate transition-colors ${
+                            isCurrent ? 'text-[#FA243C]' : 'text-[#1D1D1F] dark:text-white group-hover:text-[#FA243C]'
                           }`}
                         >
                           {track.titleEnglish}
                         </h4>
-                        <span className="hidden sm:inline-block px-2 py-0.5 rounded text-[10px] font-mono bg-[#F5F5F7] text-[#86868B] border border-[#E5E5EA] shrink-0">
+                        <span className="hidden sm:inline-block px-2 py-0.5 rounded text-[10px] font-mono bg-[#F5F5F7] dark:bg-[#202023] text-[#86868B] dark:text-[#A1A1AA] border border-[#E5E5EA] dark:border-[#27272A] shrink-0">
                           Studio Track
                         </span>
                       </div>
-                      <p className="font-telugu text-xs sm:text-sm text-[#86868B] group-hover:text-[#48484A] truncate">
+                      <p className="font-telugu text-xs sm:text-sm text-[#D4A017] dark:text-[#F5D77F] font-semibold group-hover:text-[#48484A] dark:group-hover:text-white truncate">
                         {track.titleTelugu}
                       </p>
-                      <p className="text-[10px] text-[#86868B] truncate">
+                      <p className="text-[10px] sm:text-xs text-[#86868B] dark:text-[#A1A1AA] truncate">
                         Rev. Tony Prakash • Minus-One Instrumental
                       </p>
                     </div>

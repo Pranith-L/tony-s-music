@@ -303,13 +303,13 @@ export const MusicPage: React.FC = () => {
           )}
         </div>
 
-        <div className="bg-[#F5F5F7]/60 rounded-2xl border border-[#E5E5EA] shadow-lg">
-          <div className="divide-y divide-[#FA243C]/10">
+        <div className="bg-white dark:bg-[#141416] rounded-2xl border border-[#E5E5EA] dark:border-[#27272A] shadow-md dark:shadow-2xl overflow-hidden transition-colors">
+          <div className="divide-y divide-[#E5E5EA]/70 dark:divide-[#27272A]">
             {sortedTracks.length === 0 ? (
               <div className="p-12 text-center space-y-3">
                 <Music className="w-12 h-12 text-[#86868B]/40 mx-auto" />
-                <h4 className="text-base font-semibold text-[#1D1D1F]">No songs found</h4>
-                <p className="text-xs text-[#86868B]">
+                <h4 className="text-base font-semibold text-[#1D1D1F] dark:text-white">No songs found</h4>
+                <p className="text-xs text-[#86868B] dark:text-[#A1A1AA]">
                   Try adjusting your search terms or selecting another category.
                 </p>
               </div>
@@ -323,13 +323,15 @@ export const MusicPage: React.FC = () => {
                   <div
                     key={track.id}
                     onClick={() => playTrack(track, sortedTracks)}
-                    className={`group relative flex items-center justify-between px-4 py-3 sm:py-3.5 hover:bg-[#FEE2E2]/70 transition-colors cursor-pointer first:rounded-t-2xl last:rounded-b-2xl ${
-                      isCurrent ? 'bg-[#FEE2E2]/90' : ''
+                    className={`group relative flex items-center justify-between px-4 py-3 sm:py-3.5 hover:bg-[#FEE2E2]/70 dark:hover:bg-white/[0.06] transition-colors cursor-pointer ${
+                      isCurrent
+                        ? 'bg-[#FEE2E2]/90 dark:bg-[#FA243C]/20 border-l-4 border-l-[#FA243C]'
+                        : ''
                     }`}
                   >
                     {/* Left: Index & Art & Title */}
                     <div className="flex items-center gap-3 sm:gap-4 min-w-0 flex-1">
-                      <span className="font-mono text-xs text-[#86868B] w-5 sm:w-6 text-center shrink-0">
+                      <span className="font-mono text-xs text-[#86868B] dark:text-[#A1A1AA] font-bold w-5 sm:w-6 text-center shrink-0">
                         {isThisPlaying ? (
                           <div className="flex items-end justify-center gap-0.5 h-3.5">
                             <span className="w-0.5 bg-[#D4A017] rounded-full wave-bar-1" />
@@ -342,7 +344,7 @@ export const MusicPage: React.FC = () => {
                         )}
                       </span>
 
-                      <div className="relative w-11 h-11 sm:w-12 sm:h-12 rounded-xl overflow-hidden bg-[#F2F2F7] shrink-0 border border-[#E5E5EA] shadow-sm">
+                      <div className="relative w-11 h-11 sm:w-12 sm:h-12 rounded-xl overflow-hidden bg-[#F2F2F7] dark:bg-[#202023] shrink-0 border border-[#E5E5EA] dark:border-[#27272A] shadow-sm">
                         <img
                           src={track.coverImage || '/covers/001_prayermp3.jpg'}
                           alt={track.titleEnglish}
@@ -355,16 +357,18 @@ export const MusicPage: React.FC = () => {
 
                       <div className="min-w-0 flex-1 pr-2">
                         <h4
-                          className={`text-sm sm:text-base font-semibold truncate leading-snug transition-colors ${
-                            isCurrent ? 'text-[#FA243C]' : 'text-[#1D1D1F] group-hover:text-[#FA243C]'
+                          className={`text-sm sm:text-base font-bold truncate leading-snug transition-colors ${
+                            isCurrent
+                              ? 'text-[#FA243C]'
+                              : 'text-[#1D1D1F] dark:text-white group-hover:text-[#FA243C]'
                           }`}
                         >
                           {track.titleEnglish}
                         </h4>
-                        <p className="font-telugu text-xs text-[#86868B] group-hover:text-[#48484A] truncate mt-0.5 leading-snug">
+                        <p className="font-telugu text-xs sm:text-sm text-[#D4A017] dark:text-[#F5D77F] font-semibold group-hover:text-[#FA243C] dark:group-hover:text-[#FA243C] truncate mt-0.5 leading-snug">
                           {track.titleTelugu}
                         </p>
-                        <p className="text-[10px] text-[#86868B] truncate hidden sm:block mt-0.5">
+                        <p className="text-[10px] sm:text-xs text-[#86868B] dark:text-[#A1A1AA] truncate hidden sm:block mt-0.5">
                           Rev. Tony Prakash • Devotional Sanctuary
                         </p>
                       </div>
@@ -372,7 +376,7 @@ export const MusicPage: React.FC = () => {
 
                     {/* Right: Free Listening badge (desktop), Like, Duration, 3-dots Menu */}
                     <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0 ml-2">
-                      <span className="hidden md:inline-block px-2.5 py-0.5 rounded-full text-[10px] font-mono font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
+                      <span className="hidden md:inline-block px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800/60">
                         100% Free
                       </span>
 
@@ -383,7 +387,9 @@ export const MusicPage: React.FC = () => {
                           toggleLikeTrack(track.id);
                         }}
                         className={`p-1.5 transition-colors hidden sm:block ${
-                          liked ? '!opacity-100 text-[#FA243C]' : 'text-[#86868B] hover:text-[#FA243C]'
+                          liked
+                            ? '!opacity-100 text-[#FA243C]'
+                            : 'text-[#86868B] dark:text-[#A1A1AA] hover:text-[#FA243C]'
                         }`}
                         title={liked ? 'Liked' : 'Like'}
                       >
@@ -391,7 +397,7 @@ export const MusicPage: React.FC = () => {
                       </button>
 
                       {/* Duration */}
-                      <span className="font-mono text-xs text-[#86868B] hidden xs:inline-block px-1">
+                      <span className="font-mono text-xs text-[#86868B] dark:text-[#A1A1AA] font-medium hidden xs:inline-block px-1">
                         {track.duration}
                       </span>
 

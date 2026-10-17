@@ -143,8 +143,9 @@ html.dark {
   }
 
   .bg-\[\#F5F5F7\],
-  .bg-\[\#F5F5F7\]\/80 {
-    background-color: #0E0E10 !important;
+  .bg-\[\#F5F5F7\]\/80,
+  .bg-\[\#F5F5F7\]\/60 {
+    background-color: #141416 !important;
   }
 
   .bg-\[\#F2F2F7\] {
@@ -170,11 +171,26 @@ html.dark {
   /* 3. Typography Contrast */
   .text-\[\#1D1D1F\],
   .text-black {
-    color: #F4F4F5 !important;
+    color: #FFFFFF !important;
   }
 
   .text-\[\#86868B\] {
-    color: #A1A1AA !important;
+    color: #B4B4BC !important;
+  }
+
+  .text-\[\#48484A\] {
+    color: #D1D1D6 !important;
+  }
+
+  .font-telugu.text-\[\#86868B\] {
+    color: #F5D77F !important;
+  }
+
+  /* 100% Free and status badges */
+  .bg-emerald-50 {
+    background-color: rgba(16, 185, 129, 0.15) !important;
+    color: #34D399 !important;
+    border-color: rgba(16, 185, 129, 0.3) !important;
   }
 
   /* 4. Interactive Hovers */

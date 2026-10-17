@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Sparkles,
@@ -22,6 +22,13 @@ import { SEO } from '../components/SEO.js';
 export const MembershipPage: React.FC = () => {
   const { user, isSubscriber, refreshUser } = useAuth();
   const navigate = useNavigate();
+
+  // Always open page cleanly from the very top
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    const main = document.querySelector('main');
+    if (main) main.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+  }, []);
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
@@ -313,12 +320,15 @@ export const MembershipPage: React.FC = () => {
 
         <div className="space-y-3">
           {faqs.map((faq, i) => (
-            <div key={i} className="rounded-2xl p-5 bg-[#F5F5F7] border border-[#E5E5EA] space-y-2 shadow-sm">
-              <h4 className="text-sm font-semibold text-[#1D1D1F] flex items-center gap-2">
-                <HelpCircle className="w-4 h-4 text-[#D4A017] shrink-0" />
+            <div
+              key={i}
+              className="rounded-2xl p-5 sm:p-6 bg-white dark:bg-[#161618] border border-[#E5E5EA] dark:border-[#27272A] space-y-2 shadow-sm transition-colors"
+            >
+              <h4 className="text-sm sm:text-base font-bold text-[#1D1D1F] dark:text-[#FFFFFF] flex items-center gap-2.5">
+                <HelpCircle className="w-4 h-4 sm:w-5 sm:h-5 text-[#D4A017] shrink-0" />
                 <span>{faq.q}</span>
               </h4>
-              <p className="text-xs text-[#86868B] leading-relaxed pl-6">
+              <p className="text-xs sm:text-sm text-[#48484A] dark:text-[#D1D1D6] leading-relaxed pl-7 sm:pl-8 font-normal">
                 {faq.a}
               </p>
             </div>

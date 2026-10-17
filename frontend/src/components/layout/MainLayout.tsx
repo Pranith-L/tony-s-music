@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Sidebar } from './Sidebar.js';
 import { TopBar } from './TopBar.js';
 import { RightSidebar } from './RightSidebar.js';
@@ -33,6 +33,14 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
   const [mobileDrawerOpen, setMobileDrawerOpen] = useState<boolean>(false);
   const location = useLocation();
   const { user, isAdmin } = useAuth();
+  const mainScrollRef = useRef<HTMLElement>(null);
+
+  // Automatically reset scroll position to top whenever navigating to a new route
+  useEffect(() => {
+    if (mainScrollRef.current) {
+      mainScrollRef.current.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    }
+  }, [location.pathname]);
 
   return (
     <div className="flex h-screen h-[100dvh] w-screen overflow-hidden bg-[#F5F5F7] text-[#1D1D1F] font-sans selection:bg-[#FA243C] selection:text-[#1D1D1F]">
@@ -47,7 +55,10 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
         <TopBar onToggleMobileMenu={() => setMobileDrawerOpen(true)} />
 
         {/* Scrollable Page Content Area with overscroll containment */}
-        <main className="flex-1 overflow-y-auto overscroll-y-contain overflow-x-hidden pb-32 sm:pb-36 px-4 sm:px-6 lg:px-8 pt-4">
+        <main
+          ref={mainScrollRef}
+          className="flex-1 overflow-y-auto overscroll-y-contain overflow-x-hidden pb-32 sm:pb-36 px-4 sm:px-6 lg:px-8 pt-4"
+        >
           {children}
         </main>
       </div>

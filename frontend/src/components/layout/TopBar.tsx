@@ -8,13 +8,12 @@ import {
   Calendar,
   LogOut,
   Shield,
-  Menu,
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext.js';
 import { ThemeToggle } from '../common/ThemeToggle.js';
 
 interface TopBarProps {
-  onToggleMobileMenu: () => void;
+  onToggleMobileMenu?: () => void;
 }
 
 export const TopBar: React.FC<TopBarProps> = ({ onToggleMobileMenu }) => {
@@ -82,20 +81,11 @@ export const TopBar: React.FC<TopBarProps> = ({ onToggleMobileMenu }) => {
     <header className="sticky top-0 z-20 w-full bg-white/95 backdrop-blur-xl border-b border-[#E5E5EA] px-3 sm:px-6 py-2 sm:py-2.5 flex flex-col gap-1.5 sm:gap-2">
       {/* Top Main Row */}
       <div className="flex items-center justify-between gap-2 sm:gap-3 w-full">
-        {/* Left: Mobile Toggle & Desktop History Back/Forward */}
-        <div className="flex items-center gap-1.5 sm:gap-2 min-w-0 flex-1">
-          {/* Mobile Menu Button */}
-          <button
-            onClick={onToggleMobileMenu}
-            className="md:hidden w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-[#F2F2F7] border border-[#E5E5EA] text-[#1D1D1F] flex items-center justify-center hover:bg-[#FEE2E2] transition-colors shrink-0"
-            aria-label="Toggle menu"
-          >
-            <Menu className="w-4 h-4 sm:w-5 sm:h-5" />
-          </button>
-
+        {/* Left: Brand Monogram & Search Bar */}
+        <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
           {/* Mobile Brand Monogram */}
           <Link to="/" className="md:hidden flex items-center gap-1 shrink-0">
-            <span className="font-heading text-sm sm:text-base font-bold text-[#1D1D1F] tracking-tight">
+            <span className="font-heading text-sm sm:text-base font-bold text-[#1D1D1F] dark:text-white tracking-tight">
               TONY'S <span className="text-[#D4A017]">MUSIC</span>
             </span>
           </Link>
