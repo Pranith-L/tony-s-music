@@ -102,7 +102,7 @@ export const RazorpayModal: React.FC<RazorpayModalProps> = ({
                   256-bit SSL
                 </span>
               </div>
-              <p className="text-[11px] text-[#86868B]">
+              <p className="text-[11px] text-slate-300">
                 Official Payment Gateway for Rev. Tony Prakash
               </p>
             </div>
@@ -112,7 +112,7 @@ export const RazorpayModal: React.FC<RazorpayModalProps> = ({
             onClick={onClose}
             aria-label="Close payment gateway"
             title="Close payment gateway"
-            className="p-1.5 rounded-full bg-black/40 hover:bg-[#F2F2F7] text-[#86868B] hover:text-white transition-colors"
+            className="p-1.5 rounded-full bg-white/10 hover:bg-white/20 text-slate-200 hover:text-white transition-colors"
           >
             <X className="w-5 h-5 pointer-events-none" />
           </button>

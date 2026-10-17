@@ -267,10 +267,10 @@ export const MusicPage: React.FC = () => {
                 className={`relative overflow-hidden rounded-2xl p-4 sm:p-5 bg-gradient-to-br ${tile.bg} cursor-pointer group hover:scale-[1.02] transition-transform duration-300 border border-white/10 shadow-lg min-h-[120px] sm:min-h-[140px] flex flex-col justify-between`}
               >
                 <div>
-                  <h3 className="font-heading font-bold text-sm sm:text-base text-[#1D1D1F] group-hover:text-white">
+                  <h3 className="font-heading font-bold text-sm sm:text-base text-white">
                     {tile.title}
                   </h3>
-                  <p className="text-[10px] sm:text-xs text-white/80 line-clamp-2 mt-1">
+                  <p className="text-[10px] sm:text-xs text-white/90 line-clamp-2 mt-1">
                     {tile.subtitle}
                   </p>
                 </div>

@@ -68,7 +68,7 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
 
       {/* 7. Mobile Drawer Overlay for full navigation */}
       {mobileDrawerOpen && (
-        <div className="md:hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-md flex flex-col animate-fadeIn">
+        <div className="md:hidden fixed inset-0 z-50 bg-[#F5F5F7] flex flex-col animate-fadeIn">
           <div className="p-4 flex items-center justify-between border-b border-[#E5E5EA] bg-white">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-[#22070D] via-[#D71A30] to-[#FA243C] border border-[#D4A017] overflow-hidden flex items-center justify-center">
@@ -79,13 +79,13 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
                 />
               </div>
               <div>
-                <span className="font-heading font-bold text-sm text-[#FFFFFF]">TONY'S MUSIC</span>
-                <p className="font-telugu text-[10px] text-[#D4A017]">టోనీ ప్రకాష్ భక్తి గీతాలు</p>
+                <span className="font-heading font-bold text-sm text-[#1D1D1F]">TONY'S MUSIC</span>
+                <p className="font-telugu text-[10px] text-[#FA243C] font-semibold">టోనీ ప్రకాష్ భక్తి గీతాలు</p>
               </div>
             </div>
             <button
               onClick={() => setMobileDrawerOpen(false)}
-              className="p-2 text-[#86868B] hover:text-[#FFFFFF]"
+              className="p-2 text-[#86868B] hover:text-[#1D1D1F]"
             >
               <X className="w-5 h-5" />
             </button>
@@ -197,7 +197,7 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
                 <Link
                   to="/account"
                   onClick={() => setMobileDrawerOpen(false)}
-                  className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-[#FFFFFF]"
+                  className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-[#1D1D1F] hover:bg-[#F2F2F7]"
                 >
                   <User className="w-4 h-4 text-[#FA243C]" />
                   <span>My Account ({user.name})</span>
@@ -206,7 +206,7 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
                 <Link
                   to="/auth"
                   onClick={() => setMobileDrawerOpen(false)}
-                  className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-[#D4A017]"
+                  className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-[#FA243C] hover:bg-[#F2F2F7]"
                 >
                   <User className="w-4 h-4" />
                   <span>Log In / Register</span>
@@ -217,7 +217,7 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
                 <Link
                   to="/admin"
                   onClick={() => setMobileDrawerOpen(false)}
-                  className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-[#D4AF37]"
+                  className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-[#FA243C] hover:bg-[#F2F2F7]"
                 >
                   <Shield className="w-4 h-4" />
                   <span>Admin Dashboard</span>

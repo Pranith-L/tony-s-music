@@ -250,7 +250,7 @@ export const TracksPage: React.FC = () => {
         {/* Track Count */}
         <div className="flex items-center justify-between sm:justify-end w-full sm:w-auto gap-4">
           <span className="text-xs text-[#86868B] font-mono">
-            Showing <strong className="text-white">{sortedTracks.length}</strong> Studio Tracks
+            Showing <strong className="text-[#1D1D1F]">{sortedTracks.length}</strong> Studio Tracks
           </span>
         </div>
       </div>

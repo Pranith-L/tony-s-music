@@ -73,36 +73,36 @@ export const FullscreenPlayer: React.FC = () => {
   return (
     <div
       data-testid="fullscreen-player-modal"
-      className="fixed inset-0 z-50 bg-white text-[#FFFFFF] flex flex-col justify-between overflow-hidden animate-fadeIn select-none"
+      className="fixed inset-0 z-50 bg-[#F5F5F7] text-[#1D1D1F] flex flex-col justify-between overflow-hidden animate-fadeIn select-none"
     >
       {/* Dynamic Ambient Background Glow */}
-      <div className="absolute inset-0 pointer-events-none opacity-25">
+      <div className="absolute inset-0 pointer-events-none opacity-20">
         <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-96 h-96 bg-[#FA243C] rounded-full blur-[140px]" />
-        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-[#D4A017] rounded-full blur-[120px]" />
+        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-[#FA243C] rounded-full blur-[120px]" />
       </div>
 
       {/* Top Bar: Close / Minimize + Track Type info */}
-      <div className="relative z-10 px-4 sm:px-8 py-3 sm:py-4 flex items-center justify-between border-b border-[#E5E5EA] bg-white/60 backdrop-blur-md shrink-0">
+      <div className="relative z-10 px-4 sm:px-8 py-3 sm:py-4 flex items-center justify-between border-b border-[#E5E5EA] bg-white/80 backdrop-blur-md shrink-0">
         <button
           onClick={toggleFullscreenPlayer}
-          className="p-1.5 sm:p-2 rounded-full hover:bg-[#F2F2F7] text-[#86868B] hover:text-[#FFFFFF] transition-colors"
+          className="p-1.5 sm:p-2 rounded-full hover:bg-[#F2F2F7] text-[#86868B] hover:text-[#FA243C] transition-colors"
           title="Minimize player"
         >
           <ChevronDown className="w-6 h-6" />
         </button>
 
         <div className="text-center">
-          <p className="text-[10px] sm:text-xs font-mono uppercase tracking-widest text-[#D4A017]">
+          <p className="text-[10px] sm:text-xs font-mono uppercase tracking-widest text-[#FA243C] font-semibold">
             {currentTrack.isTrack ? 'Studio Backing Track' : 'Devotional Vocal Sanctuary'}
           </p>
-          <p className="font-heading text-xs sm:text-sm text-[#FFFFFF] font-bold">
+          <p className="font-heading text-xs sm:text-sm text-[#1D1D1F] font-bold">
             Rev. Tony Prakash
           </p>
         </div>
 
         <button
           onClick={toggleFullscreenPlayer}
-          className="p-1.5 sm:p-2 rounded-full hover:bg-[#F2F2F7] text-[#86868B] hover:text-[#FFFFFF] transition-colors"
+          className="p-1.5 sm:p-2 rounded-full hover:bg-[#F2F2F7] text-[#86868B] hover:text-[#FA243C] transition-colors"
           title="Close player"
         >
           <X className="w-5 h-5" />
@@ -113,7 +113,7 @@ export const FullscreenPlayer: React.FC = () => {
       <div className="relative z-10 flex-1 min-h-0 flex flex-col md:flex-row items-center justify-center p-3 sm:p-6 lg:p-10 gap-4 sm:gap-8 overflow-y-auto max-w-6xl mx-auto w-full">
         {/* Left: Album Artwork Container */}
         <div className="flex flex-col items-center justify-center max-w-xs sm:max-w-md w-full shrink-0">
-          <div className="relative aspect-square w-44 xs:w-52 sm:w-72 md:w-80 lg:w-96 rounded-2xl sm:rounded-3xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.8)] border border-[#E5E5EA] group">
+          <div className="relative aspect-square w-44 xs:w-52 sm:w-72 md:w-80 lg:w-96 rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl border border-[#E5E5EA] group">
             <img
               src={currentTrack.coverImage || '/covers/001_prayermp3.jpg'}
               alt={currentTrack.titleEnglish}
@@ -121,8 +121,8 @@ export const FullscreenPlayer: React.FC = () => {
             />
             {isPlaying && (
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex items-end p-4 pointer-events-none">
-                <div className="flex items-center gap-1.5 text-xs text-[#D4A017] font-mono">
-                  <Sparkles className="w-3.5 h-3.5 text-[#D4A017] animate-pulse" />
+                <div className="flex items-center gap-1.5 text-xs text-white font-mono">
+                  <Sparkles className="w-3.5 h-3.5 text-[#FA243C] animate-pulse" />
                   <span>Now Playing • Live Audio Stream</span>
                 </div>
               </div>
@@ -131,10 +131,10 @@ export const FullscreenPlayer: React.FC = () => {
 
           {/* Song Info Right Under Artwork (Essential for compact mobile screens) */}
           <div className="w-full text-center mt-3 sm:mt-4 space-y-1">
-            <h2 className="text-base sm:text-2xl font-bold text-[#FFFFFF] truncate px-2">
+            <h2 className="text-base sm:text-2xl font-bold text-[#1D1D1F] truncate px-2">
               {currentTrack.titleEnglish}
             </h2>
-            <p className="font-telugu text-sm sm:text-lg text-[#D4A017] truncate font-semibold">
+            <p className="font-telugu text-sm sm:text-lg text-[#86868B] truncate font-semibold">
               {currentTrack.titleTelugu}
             </p>
             <p className="text-xs text-[#86868B]">
@@ -145,21 +145,21 @@ export const FullscreenPlayer: React.FC = () => {
           {/* Mobile Lyrics Accordion Toggle */}
           <button
             onClick={() => setShowMobileLyrics(!showMobileLyrics)}
-            className="md:hidden mt-2 px-3 py-1 rounded-full bg-[#F5F5F7] border border-[#E5E5EA] text-[11px] text-[#86868B] hover:text-[#FFFFFF] flex items-center gap-1.5 transition-colors"
+            className="md:hidden mt-2 px-3 py-1 rounded-full bg-white border border-[#E5E5EA] text-[11px] text-[#86868B] hover:text-[#FA243C] flex items-center gap-1.5 transition-colors shadow-sm"
           >
-            <FileText className="w-3.5 h-3.5 text-[#D4A017]" />
+            <FileText className="w-3.5 h-3.5 text-[#FA243C]" />
             <span>{showMobileLyrics ? 'Hide Telugu Lyrics' : 'View Telugu Lyrics'}</span>
           </button>
         </div>
 
         {/* Right: Synced Lyrics Display */}
         <div
-          className={`flex-1 flex-col h-full max-h-[460px] bg-[#F5F5F7] backdrop-blur-md rounded-3xl border border-[#FA243C]/25 p-5 sm:p-6 overflow-hidden ${
+          className={`flex-1 flex-col h-full max-h-[460px] bg-white rounded-3xl border border-[#E5E5EA] p-5 sm:p-6 shadow-sm overflow-hidden ${
             showMobileLyrics ? 'flex w-full mt-2' : 'hidden md:flex'
           }`}
         >
           <div className="flex items-center justify-between border-b border-[#E5E5EA] pb-3 mb-4 shrink-0">
-            <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[#D4A017]">
+            <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[#FA243C]">
               <Music2 className="w-4 h-4" />
               <span>సాహిత్యం • Devotional Lyrics</span>
             </div>
@@ -170,7 +170,7 @@ export const FullscreenPlayer: React.FC = () => {
 
           <div className="flex-1 overflow-y-auto space-y-4 pr-2 text-center md:text-left">
             {currentTrack.lyricsTelugu ? (
-              <div className="space-y-4 font-telugu text-sm sm:text-base leading-relaxed text-[#FFFFFF]/90 whitespace-pre-line">
+              <div className="space-y-4 font-telugu text-sm sm:text-base leading-relaxed text-[#1D1D1F] whitespace-pre-line">
                 {currentTrack.lyricsTelugu}
               </div>
             ) : (
@@ -195,7 +195,7 @@ export const FullscreenPlayer: React.FC = () => {
               const pos = (e.clientX - rect.left) / rect.width;
               seek(pos * duration);
             }}
-            className="h-2 bg-white rounded-full cursor-pointer relative overflow-hidden group"
+            className="h-2 bg-[#E5E5EA] rounded-full cursor-pointer relative overflow-hidden group"
           >
             <div
               className="h-full bg-gradient-to-r from-[#FA243C] to-[#D4A017] rounded-full"
@@ -214,7 +214,7 @@ export const FullscreenPlayer: React.FC = () => {
           <button
             onClick={() => toggleLikeTrack(currentTrack.id)}
             className={`p-2 rounded-full transition-transform hover:scale-110 ${
-              liked ? 'text-[#D4A017]' : 'text-[#86868B] hover:text-[#FFFFFF]'
+              liked ? 'text-[#D4A017]' : 'text-[#86868B] hover:text-[#1D1D1F]'
             }`}
             title={liked ? 'Liked' : 'Like'}
           >
@@ -226,7 +226,7 @@ export const FullscreenPlayer: React.FC = () => {
             <button
               onClick={toggleShuffle}
               className={`p-2 rounded-full transition-colors ${
-                shuffle ? 'text-[#FA243C]' : 'text-[#86868B] hover:text-[#FFFFFF]'
+                shuffle ? 'text-[#FA243C]' : 'text-[#86868B] hover:text-[#1D1D1F]'
               }`}
               title="Shuffle"
             >
@@ -235,7 +235,7 @@ export const FullscreenPlayer: React.FC = () => {
 
             <button
               onClick={playPrev}
-              className="p-2 text-[#86868B] hover:text-[#FFFFFF] transition-colors"
+              className="p-2 text-[#86868B] hover:text-[#1D1D1F] transition-colors"
               title="Previous"
             >
               <SkipBack className="w-6 sm:w-7 h-6 sm:h-7 fill-current" />
@@ -243,7 +243,7 @@ export const FullscreenPlayer: React.FC = () => {
 
             <button
               onClick={togglePlay}
-              className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-gradient-to-tr from-[#FC3C44] to-[#FA243C] text-[#FFFFFF] flex items-center justify-center shadow-[0_0_30px_rgba(27,124,157,0.7)] border-2 border-[#D4A017]/40 hover:scale-105 active:scale-95 transition-all"
+              className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-gradient-to-tr from-[#FC3C44] to-[#FA243C] text-white flex items-center justify-center shadow-[0_4px_16px_rgba(250,36,60,0.35)] hover:scale-105 active:scale-95 transition-all"
               title={isPlaying ? 'Pause' : 'Play'}
             >
               {isPlaying ? (
@@ -255,7 +255,7 @@ export const FullscreenPlayer: React.FC = () => {
 
             <button
               onClick={playNext}
-              className="p-2 text-[#86868B] hover:text-[#FFFFFF] transition-colors"
+              className="p-2 text-[#86868B] hover:text-[#1D1D1F] transition-colors"
               title="Next"
             >
               <SkipForward className="w-6 sm:w-7 h-6 sm:h-7 fill-current" />
@@ -264,7 +264,7 @@ export const FullscreenPlayer: React.FC = () => {
             <button
               onClick={toggleRepeat}
               className={`p-2 rounded-full transition-colors ${
-                repeatMode !== 'off' ? 'text-[#FA243C]' : 'text-[#86868B] hover:text-[#FFFFFF]'
+                repeatMode !== 'off' ? 'text-[#FA243C]' : 'text-[#86868B] hover:text-[#1D1D1F]'
               }`}
               title="Repeat"
             >
@@ -279,8 +279,8 @@ export const FullscreenPlayer: React.FC = () => {
           {/* Volume Slider (Desktop) or Audio Indicator (Mobile) */}
           <div className="flex items-center justify-end w-10 lg:w-32">
             <div className="hidden lg:flex items-center gap-2 w-full">
-              <button onClick={toggleMute} className="text-[#86868B] hover:text-[#FFFFFF]">
-                {isMuted ? <VolumeX className="w-5 h-5 text-red-400" /> : <Volume2 className="w-5 h-5" />}
+              <button onClick={toggleMute} className="text-[#86868B] hover:text-[#1D1D1F]">
+                {isMuted ? <VolumeX className="w-5 h-5 text-red-500" /> : <Volume2 className="w-5 h-5" />}
               </button>
               <input
                 type="range"
@@ -289,15 +289,15 @@ export const FullscreenPlayer: React.FC = () => {
                 step="0.01"
                 value={isMuted ? 0 : volume}
                 onChange={(e) => setVolumeLevel(parseFloat(e.target.value))}
-                className="w-full h-1 bg-white accent-[#FA243C] rounded-full"
+                className="w-full h-1 bg-[#E5E5EA] accent-[#FA243C] rounded-full"
               />
             </div>
             <button
               onClick={toggleMute}
-              className="lg:hidden p-2 text-[#86868B] hover:text-[#FFFFFF]"
+              className="lg:hidden p-2 text-[#86868B] hover:text-[#1D1D1F]"
               title="Mute/Unmute"
             >
-              {isMuted ? <VolumeX className="w-5 h-5 text-red-400" /> : <Volume2 className="w-5 h-5" />}
+              {isMuted ? <VolumeX className="w-5 h-5 text-red-500" /> : <Volume2 className="w-5 h-5" />}
             </button>
           </div>
         </div>

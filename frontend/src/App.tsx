@@ -21,10 +21,10 @@ import { AuthPage } from './pages/Auth.js';
 import { AdminDashboard } from './pages/admin/AdminDashboard.js';
 
 const NotFound: React.FC = () => (
-  <div className="py-24 text-center px-6 text-[#FFFFFF]">
-    <div className="max-w-md mx-auto rounded-3xl p-10 bg-[#F5F5F7] border border-[#E5E5EA] space-y-4 shadow-2xl">
-      <span className="text-4xl font-serif text-[#D4A017]">404</span>
-      <h2 className="text-2xl font-heading">Page Not Found</h2>
+  <div className="py-24 text-center px-6 text-[#1D1D1F]">
+    <div className="max-w-md mx-auto rounded-3xl p-10 bg-white border border-[#E5E5EA] space-y-4 shadow-xl">
+      <span className="text-4xl font-serif text-[#FA243C]">404</span>
+      <h2 className="text-2xl font-heading font-bold text-[#1D1D1F]">Page Not Found</h2>
       <p className="text-xs text-[#86868B]">
         The devotional song or page you requested does not exist or may have been moved.
       </p>

@@ -225,8 +225,8 @@ export const MembershipPage: React.FC = () => {
                 <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
                 <span>Lifetime Validity (100 Years) • No Renewals</span>
               </li>
-              <li className="flex items-center gap-2.5 text-[#86868B]">
-                <Disc3 className="w-4 h-4 text-[#86868B] shrink-0" />
+              <li className="flex items-center gap-2.5 text-gray-300">
+                <Disc3 className="w-4 h-4 text-gray-400 shrink-0" />
                 <span>Karaoke Backing Tracks Sold Separately (₹99/Track)</span>
               </li>
             </ul>
@@ -248,7 +248,7 @@ export const MembershipPage: React.FC = () => {
                 {isLoading ? 'Processing...' : 'Get Lifetime Pass • ₹299 (One-Time)'}
               </button>
             )}
-            <p className="text-[10px] text-[#86868B] text-center mt-2.5 font-mono">
+            <p className="text-[10px] text-gray-400 text-center mt-2.5 font-mono">
               Single payment of ₹299 (29,900 paise). Secure Razorpay integration.
             </p>
           </div>

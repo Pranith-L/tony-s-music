@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { PrismaClient } from '@prisma/client';
+import { MongoClient } from 'mongodb';
 import bcrypt from 'bcryptjs';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -10,29 +11,31 @@ const __dirname = path.dirname(__filename);
 const prisma = new PrismaClient();
 
 async function main() {
-  console.log('Seeding Tony Prakash Official database...');
+  console.log('Seeding Tony Prakash Official database into local MongoDB...');
 
-  // 1. Clear existing seedable tables safely
-  await prisma.entitlement.deleteMany({});
-  await prisma.purchase.deleteMany({});
-  await prisma.subscription.deleteMany({});
-  await prisma.booking.deleteMany({});
-  await prisma.track.deleteMany({});
-  await prisma.album.deleteMany({});
-  await prisma.video.deleteMany({});
-  await prisma.siteSetting.deleteMany({});
-  await prisma.user.deleteMany({});
+  // 1. Clear existing seedable collections safely using native MongoDB driver (no replica set transaction requirement)
+  const mongoClient = new MongoClient('mongodb://127.0.0.1:27017');
+  await mongoClient.connect();
+  const db = mongoClient.db('tony_prakash_music');
+  const collections = await db.listCollections().toArray();
+  for (const c of collections) {
+    if (!c.name.startsWith('system.')) {
+      await db.collection(c.name).deleteMany({});
+    }
+  }
+  await mongoClient.close();
+  console.log('Cleared existing collections cleanly.');
 
-  // 2. Create Users (Admin & Sample Member)
+  // 2. Create Official Admin User
   const salt = await bcrypt.genSalt(10);
-  const adminPasswordHash = await bcrypt.hash('SacredLight2026!', salt);
+  const adminPasswordHash = await bcrypt.hash('Tonyprakash@admin', salt);
   const memberPasswordHash = await bcrypt.hash('Worship2026!', salt);
 
   const admin = await prisma.user.create({
     data: {
-      email: 'admin@tonyprakash.com',
+      email: 'Tonyprakash.l@admin.in',
       passwordHash: adminPasswordHash,
-      name: 'Tony Prakash Admin',
+      name: 'Rev. Tony Prakash',
       phone: '+919440000000',
       role: 'ADMIN',
     },

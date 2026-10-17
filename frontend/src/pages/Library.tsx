@@ -265,7 +265,7 @@ export const LibraryPage: React.FC = () => {
                     </p>
                   )}
                   <p className="text-xs text-[#86868B]/80 pt-1">
-                    Created by <strong className="text-white">{user?.name || 'You'}</strong> •{' '}
+                    Created by <strong className="text-[#1D1D1F] font-semibold">{user?.name || 'You'}</strong> •{' '}
                     {playlistTracks.length} {playlistTracks.length === 1 ? 'song' : 'songs'}
                   </p>
                 </div>
@@ -284,7 +284,7 @@ export const LibraryPage: React.FC = () => {
                   <button
                     onClick={() => handlePlayPlaylist(playlistTracks, true)}
                     disabled={playlistTracks.length === 0}
-                    className="p-3 rounded-2xl bg-[#F5F5F7] border border-[#E5E5EA] text-[#86868B] hover:text-white hover:bg-[#FEE2E2] transition-colors disabled:opacity-40"
+                    className="p-3 rounded-2xl bg-[#F5F5F7] border border-[#E5E5EA] text-[#86868B] hover:text-[#FA243C] hover:bg-[#FEE2E2] transition-colors disabled:opacity-40"
                     title="Shuffle Play"
                   >
                     <Shuffle className="w-4 h-4" />
@@ -292,9 +292,9 @@ export const LibraryPage: React.FC = () => {
 
                   <button
                     onClick={() => setShowAddSongsModal(true)}
-                    className="px-3.5 py-3 rounded-2xl bg-[#F5F5F7] border border-[#D4A017]/40 text-xs font-bold text-[#D4A017] hover:text-white hover:bg-[#FEE2E2] flex items-center gap-1.5 transition-colors"
+                    className="px-3.5 py-3 rounded-2xl bg-[#F5F5F7] border border-[#FA243C]/30 text-xs font-bold text-[#FA243C] hover:text-white hover:bg-[#FA243C] flex items-center gap-1.5 transition-colors"
                   >
-                    <Plus className="w-4 h-4 text-[#D4A017]" />
+                    <Plus className="w-4 h-4" />
                     <span>Add Songs</span>
                   </button>
 
@@ -304,7 +304,7 @@ export const LibraryPage: React.FC = () => {
                       setEditName(selectedPlaylist.name);
                       setEditDesc(selectedPlaylist.description || '');
                     }}
-                    className="p-3 rounded-2xl bg-[#F5F5F7] border border-[#E5E5EA] text-[#86868B] hover:text-white hover:bg-[#FEE2E2] transition-colors"
+                    className="p-3 rounded-2xl bg-[#F5F5F7] border border-[#E5E5EA] text-[#86868B] hover:text-[#FA243C] hover:bg-[#FEE2E2] transition-colors"
                     title="Edit Playlist Details"
                   >
                     <Edit2 className="w-4 h-4" />
@@ -317,7 +317,7 @@ export const LibraryPage: React.FC = () => {
                         setSelectedPlaylistId(null);
                       }
                     }}
-                    className="p-3 rounded-2xl bg-[#F5F5F7] border border-rose-500/30 text-rose-400 hover:text-white hover:bg-rose-500/20 transition-colors"
+                    className="p-3 rounded-2xl bg-[#F5F5F7] border border-rose-300 text-rose-600 hover:text-white hover:bg-rose-500 transition-colors"
                     title="Delete Playlist"
                   >
                     <Trash2 className="w-4 h-4" />
@@ -429,7 +429,7 @@ export const LibraryPage: React.FC = () => {
                   <Plus className="w-7 h-7" />
                 </div>
                 <div>
-                  <h4 className="font-bold text-sm text-[#1D1D1F] group-hover:text-white">
+                  <h4 className="font-bold text-sm text-[#1D1D1F] group-hover:text-[#FA243C] transition-colors">
                     Create Playlist
                   </h4>
                   <p className="text-[11px] text-[#86868B] mt-1">కొత్త ప్లేలిస్ట్ తయారుచేయండి</p>
@@ -926,7 +926,7 @@ export const LibraryPage: React.FC = () => {
             <div className="pt-2 border-t border-[#E5E5EA] shrink-0">
               <button
                 onClick={() => setShowAddSongsModal(false)}
-                className="w-full py-2.5 rounded-xl bg-[#F5F5F7] hover:bg-[#FEE2E2] text-xs font-semibold text-white transition-colors"
+                className="w-full py-2.5 rounded-xl bg-[#F5F5F7] hover:bg-[#FEE2E2] text-xs font-bold text-[#1D1D1F] hover:text-[#FA243C] transition-colors"
               >
                 Done
               </button>
