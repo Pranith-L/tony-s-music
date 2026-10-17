@@ -74,7 +74,7 @@ export const TopBar: React.FC<TopBarProps> = ({ onToggleMobileMenu }) => {
     { label: 'My Library', te: 'నా లైబ్రరీ', path: '/library' },
     { label: 'Albums', te: 'ఆల్బమ్‌లు', path: '/albums' },
     { label: 'Live Videos', te: 'వీడియోలు', path: '/videos' },
-    { label: "One-Time Pass (₹299)", te: 'లైఫ్‌టైమ్ పాస్', path: '/membership' },
+    { label: "One-Time Pass (₹299)", te: 'లైఫ్‌టైమ్ పాస్', path: '/membership', hideOnMobile: true },
   ];
 
   return (
@@ -226,6 +226,8 @@ export const TopBar: React.FC<TopBarProps> = ({ onToggleMobileMenu }) => {
               key={tab.path}
               to={tab.path}
               className={`px-3.5 py-1 rounded-full text-xs font-semibold whitespace-nowrap transition-all shrink-0 ${
+                (tab as any).hideOnMobile ? 'hidden md:inline-flex' : 'inline-flex'
+              } items-center ${
                 isActive
                   ? 'bg-[#FA243C] text-white shadow-[0_0_15px_rgba(250,36,60,0.2)] border border-[#D4A017]/40'
                   : 'bg-[#F2F2F7] hover:bg-[#FEE2E2] text-[#86868B] hover:text-[#1D1D1F] border border-[#E5E5EA]'

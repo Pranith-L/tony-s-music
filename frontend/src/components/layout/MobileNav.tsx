@@ -8,6 +8,7 @@ import {
   Play,
   Pause,
   Heart,
+  Crown,
 } from 'lucide-react';
 import { usePlayer } from '../../context/PlayerContext.js';
 
@@ -92,8 +93,8 @@ export const MobileNav: React.FC = () => {
         </div>
       )}
 
-      {/* 2. Mobile 4-Tab Bottom Navigation Bar */}
-      <nav className="bg-white/95 backdrop-blur-2xl border-t border-[#E5E5EA] px-4 pt-2 pb-2.5 pb-[max(0.625rem,env(safe-area-inset-bottom))] flex items-center justify-around">
+      {/* 2. Mobile 5-Tab Bottom Navigation Bar */}
+      <nav className="bg-white/95 backdrop-blur-2xl border-t border-[#E5E5EA] px-2 pt-2 pb-2.5 pb-[max(0.625rem,env(safe-area-inset-bottom))] flex items-center justify-around">
         <Link
           to="/"
           className={`flex flex-col items-center gap-1 text-[10px] font-semibold transition-colors ${
@@ -124,6 +125,18 @@ export const MobileNav: React.FC = () => {
         >
           <Library className="w-5 h-5" />
           <span>Library</span>
+        </Link>
+
+        <Link
+          to="/membership"
+          className={`flex flex-col items-center gap-1 text-[10px] font-semibold transition-colors ${
+            location.pathname === '/membership'
+              ? 'text-[#D4A017]'
+              : 'text-[#86868B] hover:text-[#D4A017]'
+          }`}
+        >
+          <Crown className={`w-5 h-5 ${location.pathname === '/membership' ? 'text-[#D4A017]' : 'text-[#86868B]'}`} />
+          <span>Premium</span>
         </Link>
 
         <Link
