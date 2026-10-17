@@ -63,6 +63,10 @@ export const VideosPage: React.FC = () => {
       const matchesCat =
         selectedCategory === 'All Videos' ||
         (v.category && v.category.toLowerCase() === selectedCategory.toLowerCase()) ||
+        (selectedCategory === 'Live Worship' &&
+          ((v.category && v.category.toLowerCase().includes('live')) ||
+           v.title.toLowerCase().includes('live') ||
+           (v.description && v.description.toLowerCase().includes('live')))) ||
         (selectedCategory === 'Devotional Release' && (!v.category || v.category === 'Devotional Release'));
 
       return matchesSearch && matchesCat;

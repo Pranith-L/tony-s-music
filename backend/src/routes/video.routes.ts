@@ -4,15 +4,48 @@ import { authenticateUser, requireAdmin, AuthRequest } from '../middleware/auth.
 
 const router = Router();
 
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+let cachedTonyVideos: any[] = [];
+try {
+  const possiblePaths = [
+    path.resolve(__dirname, '../tonyVideos.json'),
+    path.resolve(__dirname, '../../frontend/src/services/tonyVideos.json'),
+    path.resolve(process.cwd(), 'frontend/src/services/tonyVideos.json'),
+  ];
+  for (const p of possiblePaths) {
+    if (fs.existsSync(p)) {
+      cachedTonyVideos = JSON.parse(fs.readFileSync(p, 'utf-8'));
+      break;
+    }
+  }
+} catch (e) {
+  console.warn('Could not load tonyVideos.json:', e);
+}
+
 // Public: List videos
 router.get('/', async (_req, res: Response) => {
   try {
+    if (cachedTonyVideos.length > 0) {
+      res.json(cachedTonyVideos);
+      return;
+    }
+
     const videos = await prisma.video.findMany({
       where: { status: 'PUBLISHED' },
       orderBy: [{ isFeatured: 'desc' }, { orderIndex: 'asc' }, { createdAt: 'desc' }],
     });
     res.json(videos);
   } catch (error) {
+    if (cachedTonyVideos.length > 0) {
+      res.json(cachedTonyVideos);
+      return;
+    }
     console.error('Error fetching videos:', error);
     res.status(500).json({ error: 'Failed to fetch videos' });
   }

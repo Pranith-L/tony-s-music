@@ -412,8 +412,8 @@ export const Home: React.FC = () => {
                   }`}
                 >
                   {/* Left: Index & Art & Title */}
-                  <div className="flex items-center gap-3.5 sm:gap-4 min-w-0 flex-1">
-                    <span className={`font-mono text-xs w-5 text-center shrink-0 ${isCurrent ? 'text-[#FA243C] font-bold' : 'text-[#86868B]'}`}>
+                  <div className="flex items-center gap-2.5 sm:gap-4 min-w-0 flex-1">
+                    <span className={`font-mono text-xs w-4 sm:w-5 text-center shrink-0 ${isCurrent ? 'text-[#FA243C] font-bold' : 'text-[#86868B]'}`}>
                       {isThisPlaying ? (
                         <div className="flex items-end justify-center gap-0.5 h-3.5">
                           <span className="w-0.5 bg-[#FA243C] rounded-full wave-bar-1" />
@@ -426,7 +426,7 @@ export const Home: React.FC = () => {
                       )}
                     </span>
 
-                    <div className="relative w-11 h-11 sm:w-12 sm:h-12 rounded-lg overflow-hidden bg-[#F2F2F7] shrink-0 border border-[#E5E5EA] shadow-sm">
+                    <div className="relative w-10 h-10 sm:w-12 sm:h-12 rounded-lg overflow-hidden bg-[#F2F2F7] shrink-0 border border-[#E5E5EA] shadow-sm">
                       <img
                         src={track.coverImage || '/covers/001_prayermp3.jpg'}
                         alt={track.titleEnglish}
@@ -437,25 +437,25 @@ export const Home: React.FC = () => {
                       </div>
                     </div>
 
-                    <div className="min-w-0 flex-1">
-                      <div className="flex items-center gap-2">
-                        <h4
-                          className={`text-sm sm:text-base font-semibold truncate transition-colors ${
-                            isCurrent ? 'text-[#FA243C]' : 'text-[#1D1D1F] group-hover:text-[#FA243C]'
-                          }`}
-                        >
-                          {track.titleEnglish}
-                        </h4>
-                      </div>
-                      <p className="font-telugu text-xs text-[#86868B] group-hover:text-[#48484A] truncate">
+                    {/* Song Titles - prominent and visible on mobile */}
+                    <div className="min-w-0 flex-1 pr-1 sm:pr-2">
+                      <h4
+                        className={`text-xs sm:text-base font-bold truncate transition-colors ${
+                          isCurrent ? 'text-[#FA243C]' : 'text-[#1D1D1F] group-hover:text-[#FA243C]'
+                        }`}
+                        title={track.titleEnglish}
+                      >
+                        {track.titleEnglish}
+                      </h4>
+                      <p className="font-telugu text-[11px] sm:text-xs text-[#86868B] group-hover:text-[#48484A] truncate mt-0.5">
                         {track.titleTelugu}
                       </p>
                     </div>
                   </div>
 
-                  {/* Right: Free Listening Badge, VIP Download, Like, Lyrics, Duration */}
-                  <div className="flex items-center gap-2 sm:gap-3 shrink-0 ml-3">
-                    <span className="hidden sm:inline-block px-2 py-0.5 rounded-full text-[10px] font-mono font-medium bg-emerald-50 text-emerald-700 border border-emerald-200 shadow-sm">
+                  {/* Right: Actions */}
+                  <div className="flex items-center gap-1.5 sm:gap-3 shrink-0 ml-2">
+                    <span className="hidden md:inline-block px-2 py-0.5 rounded-full text-[10px] font-mono font-medium bg-emerald-50 text-emerald-700 border border-emerald-200 shadow-sm">
                       Free Listening
                     </span>
 
@@ -464,7 +464,7 @@ export const Home: React.FC = () => {
                         e.stopPropagation();
                         setSelectedTrack(track);
                       }}
-                      className="px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-[#FA243C]/10 text-[#FA243C] border border-[#FA243C]/25 hover:bg-[#FA243C] hover:text-white transition-colors cursor-pointer shrink-0 shadow-sm"
+                      className="hidden sm:inline-block px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-[#FA243C]/10 text-[#FA243C] border border-[#FA243C]/25 hover:bg-[#FA243C] hover:text-white transition-colors cursor-pointer shrink-0 shadow-sm"
                       title="Download requires Tony's VIP Lifetime Pass (₹299)"
                     >
                       VIP Pass • ₹299
@@ -475,7 +475,7 @@ export const Home: React.FC = () => {
                         e.stopPropagation();
                         toggleLikeTrack(track.id);
                       }}
-                      className={`p-1.5 transition-colors opacity-0 group-hover:opacity-100 ${
+                      className={`hidden sm:flex p-1.5 transition-colors opacity-0 group-hover:opacity-100 ${
                         liked ? '!opacity-100 text-[#FA243C]' : 'text-[#86868B] hover:text-[#FA243C]'
                       }`}
                       title={liked ? 'Liked' : 'Like'}
@@ -488,13 +488,13 @@ export const Home: React.FC = () => {
                         e.stopPropagation();
                         setSelectedTrack(track);
                       }}
-                      className="p-1.5 text-[#86868B] hover:text-[#FA243C] transition-colors opacity-0 group-hover:opacity-100"
+                      className="hidden sm:flex p-1.5 text-[#86868B] hover:text-[#FA243C] transition-colors opacity-0 group-hover:opacity-100"
                       title="View Lyrics (సాహిత్యం) & Download"
                     >
                       <FileText className="w-4 h-4" />
                     </button>
 
-                    <span className="font-mono text-xs text-[#86868B] group-hover:text-[#1D1D1F] pr-1">
+                    <span className="font-mono text-[11px] sm:text-xs text-[#86868B] group-hover:text-[#1D1D1F] pr-1 w-9 text-right shrink-0">
                       {track.duration}
                     </span>
                   </div>
