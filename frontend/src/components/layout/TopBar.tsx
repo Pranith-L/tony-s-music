@@ -11,6 +11,7 @@ import {
   Menu,
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext.js';
+import { ThemeToggle } from '../common/ThemeToggle.js';
 
 interface TopBarProps {
   onToggleMobileMenu: () => void;
@@ -128,7 +129,10 @@ export const TopBar: React.FC<TopBarProps> = ({ onToggleMobileMenu }) => {
         </div>
 
         {/* Right: Quick Action & Profile Pill */}
-        <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
+        <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
+          {/* Light / Dark Mode Toggle */}
+          <ThemeToggle />
+
           {/* Bookings / Ministry CTA (Desktop) */}
           <Link
             to="/bookings"

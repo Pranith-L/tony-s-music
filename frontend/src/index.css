@@ -43,6 +43,32 @@
   --song-theme-glow: rgba(250, 36, 60, 0.35);
 }
 
+/* Apple Music Dark Theme System Tokens */
+.dark {
+  --apple-red: #FA243C;
+  --apple-red-hover: #D71A30;
+  --apple-red-light: rgba(250, 36, 60, 0.15);
+  --apple-canvas: #0E0E10;
+  --apple-subtle: #121214;
+  --apple-surface: #18181B;
+  --apple-surface-hover: #202023;
+  --apple-border: #27272A;
+  --apple-border-light: rgba(255, 255, 255, 0.08);
+  --apple-text-primary: #F4F4F5;
+  --apple-text-secondary: #A1A1AA;
+  --apple-text-tertiary: #71717A;
+  --apple-accent-gold: #F5D77F;
+
+  /* Backward-compatible variables */
+  --bg-gray: #0E0E10;
+  --surface: #18181B;
+  --text: #F4F4F5;
+  --color-midnight: #0E0E10;
+  --color-espresso: #121214;
+  --color-ivory: #F4F4F5;
+  --color-charcoal: #202023;
+}
+
 @layer base {
   html, body, #root {
     height: 100%;
@@ -57,6 +83,11 @@
   html {
     scroll-behavior: smooth;
     color-scheme: light;
+    transition: color-scheme 0.25s ease;
+  }
+
+  html.dark {
+    color-scheme: dark;
   }
 
   body {
@@ -67,6 +98,12 @@
     position: relative;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    transition: background-color 0.25s ease, color 0.25s ease;
+  }
+
+  html.dark body {
+    background-color: #0E0E10;
+    color: #F4F4F5;
   }
 
   h1, h2, h3, .font-heading {
@@ -74,11 +111,137 @@
     letter-spacing: -0.02em;
     color: #1D1D1F;
     font-weight: 700;
+    transition: color 0.25s ease;
+  }
+
+  html.dark h1,
+  html.dark h2,
+  html.dark h3,
+  html.dark .font-heading {
+    color: #F4F4F5;
   }
 
   .font-telugu {
     font-family: 'Noto Serif Telugu', -apple-system, BlinkMacSystemFont, serif;
     line-height: 1.5;
+  }
+}
+
+/* ============================================================
+   APPLE MUSIC DARK THEME HIGH-FIDELITY OVERRIDES
+   ============================================================ */
+html.dark {
+  /* 1. Surfaces & Backgrounds */
+  .bg-white,
+  .bg-\[\#FFFFFF\] {
+    background-color: #18181B !important;
+  }
+
+  .bg-white\/95,
+  .bg-white\/92 {
+    background-color: rgba(20, 20, 23, 0.94) !important;
+  }
+
+  .bg-\[\#F5F5F7\],
+  .bg-\[\#F5F5F7\]\/80 {
+    background-color: #0E0E10 !important;
+  }
+
+  .bg-\[\#F2F2F7\] {
+    background-color: #202023 !important;
+  }
+
+  .bg-gray-50,
+  .bg-gray-100 {
+    background-color: #1C1C1E !important;
+  }
+
+  .bg-gray-100\/95 {
+    background-color: rgba(28, 28, 30, 0.95) !important;
+  }
+
+  /* 2. Borders & Hairlines */
+  .border-\[\#E5E5EA\],
+  .border-gray-100,
+  .border-gray-200 {
+    border-color: #27272A !important;
+  }
+
+  /* 3. Typography Contrast */
+  .text-\[\#1D1D1F\],
+  .text-black {
+    color: #F4F4F5 !important;
+  }
+
+  .text-\[\#86868B\] {
+    color: #A1A1AA !important;
+  }
+
+  /* 4. Interactive Hovers */
+  .hover\:bg-\[\#F2F2F7\]:hover {
+    background-color: #27272A !important;
+  }
+
+  .hover\:bg-\[\#F5F5F7\]:hover {
+    background-color: #202023 !important;
+  }
+
+  .hover\:bg-\[\#FEE2E2\]:hover {
+    background-color: rgba(250, 36, 60, 0.22) !important;
+  }
+
+  .hover\:text-\[\#1D1D1F\]:hover {
+    color: #FFFFFF !important;
+  }
+
+  /* 5. Inputs, Textareas, Selects */
+  input:not([type="checkbox"]):not([type="radio"]),
+  textarea,
+  select {
+    background-color: #18181B !important;
+    border-color: #27272A !important;
+    color: #F4F4F5 !important;
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    color: #71717A !important;
+  }
+
+  /* 6. Editorial Cards */
+  .editorial-card {
+    background: #18181B !important;
+    border-color: #27272A !important;
+    box-shadow: 0 4px 24px -2px rgba(0, 0, 0, 0.5) !important;
+  }
+
+  .editorial-card:hover {
+    border-color: rgba(250, 36, 60, 0.45) !important;
+    background: #202023 !important;
+    box-shadow: 0 12px 32px -4px rgba(0, 0, 0, 0.7) !important;
+  }
+
+  /* 7. Home Artist Hero Banner */
+  .bg-gradient-to-r.from-red-50\/60 {
+    background-image: linear-gradient(135deg, rgba(250, 36, 60, 0.15) 0%, #161618 50%, rgba(212, 160, 23, 0.12) 100%) !important;
+    border-color: #27272A !important;
+  }
+
+  /* 8. Shadows in Dark Mode */
+  .shadow-sm,
+  .shadow-md,
+  .shadow-lg,
+  .shadow-xl,
+  .shadow-2xl {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5) !important;
+  }
+
+  /* 9. Scrollbar */
+  ::-webkit-scrollbar-thumb {
+    background: #3F3F46;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #FA243C;
   }
 }
 

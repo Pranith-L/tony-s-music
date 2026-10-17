@@ -22,6 +22,7 @@ import { usePlayer } from '../../context/PlayerContext.js';
 import { useAuth } from '../../context/AuthContext.js';
 import { usePlaylists } from '../../context/PlaylistContext.js';
 import { MOCK_ALBUMS } from '../../services/mockData.js';
+import { ThemeToggle } from '../common/ThemeToggle.js';
 
 interface SidebarProps {
   collapsed: boolean;
@@ -298,8 +299,9 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed, onToggleCollapse })
         </div>
 
         {/* Bottom Pinned Ministry Card - Sleek Inline Fit */}
+        {/* Bottom Pinned Ministry Card & Theme Switcher - Sleek Inline Fit */}
         {!collapsed && (
-          <div className="p-2 border-t border-[#E5E5EA] bg-white shrink-0">
+          <div className="p-2 border-t border-[#E5E5EA] bg-white shrink-0 space-y-1.5">
             <div className="p-2 rounded-xl bg-[#F5F5F7] border border-[#E5E5EA] flex items-center justify-between gap-2 shadow-sm">
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-1 text-[11px] text-[#D4A017] font-semibold">
@@ -318,13 +320,20 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed, onToggleCollapse })
                 <span>Book</span>
               </Link>
             </div>
+
+            {/* Quick Appearance Switcher */}
+            <div className="px-2.5 py-1 rounded-xl bg-[#F5F5F7] border border-[#E5E5EA] flex items-center justify-between">
+              <span className="text-[10px] font-semibold text-[#86868B] uppercase tracking-wider">Appearance</span>
+              <ThemeToggle />
+            </div>
           </div>
         )}
       </div>
 
       {/* Collapse/Expand Toggle Button at bottom if collapsed */}
       {collapsed && (
-        <div className="p-3 flex justify-center border-t border-[#E5E5EA]">
+        <div className="p-3 flex flex-col items-center gap-2 border-t border-[#E5E5EA]">
+          <ThemeToggle />
           <button
             onClick={onToggleCollapse}
             className="w-9 h-9 rounded-xl bg-[#F5F5F7] hover:bg-[#F2F2F7] text-[#86868B] hover:text-[#1D1D1F] flex items-center justify-center transition-colors border border-[#E5E5EA]"
