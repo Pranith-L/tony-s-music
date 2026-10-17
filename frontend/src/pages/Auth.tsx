@@ -15,7 +15,7 @@ declare global {
 export const AuthPage: React.FC = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const { login, register, adminLogin, loginWithGoogle } = useAuth();
+  const { login, register, adminLogin, setAuthToken } = useAuth();
 
   const redirectPath = searchParams.get('redirect') || '/account';
 
@@ -48,108 +48,38 @@ export const AuthPage: React.FC = () => {
   const [oauthStatus, setOauthStatus] = useState<string | null>(null);
   const [showForgotNotice, setShowForgotNotice] = useState(false);
 
-  // Initialize Google Identity Services
+  // Handle callback return from traditional Passport Google OAuth
   useEffect(() => {
-    const googleClientId =
-      (import.meta as any).env?.VITE_GOOGLE_CLIENT_ID ||
-      '987654321000-tonyprakashofficialmusicplatform.apps.googleusercontent.com';
+    const oauth = searchParams.get('oauth');
+    const token = searchParams.get('token');
+    const error = searchParams.get('error');
 
-    if (!document.getElementById('google-gsi-client')) {
-      const script = document.createElement('script');
-      script.id = 'google-gsi-client';
-      script.src = 'https://accounts.google.com/gsi/client';
-      script.async = true;
-      script.defer = true;
-      script.onload = () => {
-        if (window.google?.accounts?.id) {
-          window.google.accounts.id.initialize({
-            client_id: googleClientId,
-            callback: handleGoogleCredentialResponse,
-            auto_select: false,
-            cancel_on_tap_outside: true,
-          });
-        }
-      };
-      document.body.appendChild(script);
-    } else if (window.google?.accounts?.id) {
-      window.google.accounts.id.initialize({
-        client_id: googleClientId,
-        callback: handleGoogleCredentialResponse,
-        auto_select: false,
-        cancel_on_tap_outside: true,
-      });
-    }
-  }, []);
-
-  const handleGoogleCredentialResponse = async (response: any) => {
-    setIsLoading(true);
-    setErrorMsg(null);
-    setOauthStatus('Connecting with Google...');
-    try {
-      await loginWithGoogle({ credential: response.credential });
-      navigate(redirectPath);
-    } catch (err: any) {
-      setErrorMsg(err.message || 'Google sign-in failed. Please try again.');
-    } finally {
-      setIsLoading(false);
-      setOauthStatus(null);
-    }
-  };
-
-  const handleGoogleClick = () => {
-    if (window.google?.accounts?.id) {
-      window.google.accounts.id.prompt((notification: any) => {
-        if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
-          triggerGoogleMockOrRedirect();
-        }
-      });
-    } else {
-      triggerGoogleMockOrRedirect();
-    }
-  };
-
-  const triggerGoogleMockOrRedirect = async () => {
-    setIsLoading(true);
-    setErrorMsg(null);
-    setOauthStatus('Authenticating with Google Account...');
-    try {
-      const mockGoogleUser = {
-        email: 'worship.listener@gmail.com',
-        name: 'Worship Listener (Google)',
-        picture: 'https://lh3.googleusercontent.com/a/default-user=s96-c',
-        sub: 'google_user_' + Date.now(),
-      };
-      await loginWithGoogle({ userInfo: mockGoogleUser });
-      navigate(redirectPath);
-    } catch (err: any) {
-      setErrorMsg(err.message || 'Google authentication failed.');
-    } finally {
-      setIsLoading(false);
-      setOauthStatus(null);
-    }
-  };
-
-
-  const handleAppleClick = () => {
-    setIsLoading(true);
-    setErrorMsg(null);
-    setOauthStatus('Connecting with Apple ID...');
-    setTimeout(() => {
-      // Mock Apple OAuth sign-in flow
-      loginWithGoogle({
-        userInfo: {
-          email: 'worship.apple@icloud.com',
-          name: 'Apple ID Worshipper',
-          sub: 'apple_user_' + Date.now(),
-        },
-      })
-        .then(() => navigate(redirectPath))
-        .catch((err) => setErrorMsg(err.message || 'Apple authentication failed.'))
+    if (oauth === 'success' && token) {
+      setIsLoading(true);
+      setOauthStatus('Signing in with Google Account...');
+      setAuthToken(token)
+        .then(() => {
+          navigate(redirectPath, { replace: true });
+        })
+        .catch((err) => {
+          console.error('Session establishment error:', err);
+          setErrorMsg('Authentication succeeded but session could not be established.');
+        })
         .finally(() => {
           setIsLoading(false);
           setOauthStatus(null);
         });
-    }, 600);
+    } else if (error) {
+      setErrorMsg('Google Sign-In failed or was cancelled. Please verify your Google Console settings.');
+    }
+  }, [searchParams, redirectPath, navigate, setAuthToken]);
+
+  const handleGoogleClick = () => {
+    setIsLoading(true);
+    setErrorMsg(null);
+    setOauthStatus('Redirecting to Google Sign-In...');
+    // Traditional Passport Google OAuth initiation endpoint on backend
+    window.location.href = 'http://localhost:5000/api/auth/google';
   };
 
   const handleSubmit = async (e: React.FormEvent) => {

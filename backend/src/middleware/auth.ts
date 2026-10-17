@@ -9,6 +9,13 @@ export interface AuthenticatedUser {
   email: string;
   name: string;
   role: string;
+  avatar?: string | null;
+}
+
+declare global {
+  namespace Express {
+    interface User extends AuthenticatedUser {}
+  }
 }
 
 export interface AuthRequest extends Request {

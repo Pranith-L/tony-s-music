@@ -15,6 +15,7 @@ interface AuthContextType {
   register: (name: string, email: string, password: string, phone?: string) => Promise<void>;
   logout: () => Promise<void>;
   refreshUser: () => Promise<void>;
+  setAuthToken: (token: string) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -106,6 +107,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
+  const setAuthToken = async (newToken: string) => {
+    localStorage.setItem('tony_prakash_token', newToken);
+    setToken(newToken);
+    await refreshUser();
+  };
+
   const isAdmin = user?.role === 'ADMIN';
   const isSubscriber = Boolean(user?.isSubscriberActive);
 
@@ -124,6 +131,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         register,
         logout,
         refreshUser,
+        setAuthToken,
       }}
     >
       {children}

@@ -3,6 +3,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { prisma } from '../prisma.js';
 import { generateToken, authenticateUser, AuthRequest } from '../middleware/auth.js';
+import passport from '../passport.js';
 
 const router = Router();
 
@@ -271,7 +272,54 @@ router.get('/me', authenticateUser, async (req: AuthRequest, res: Response) => {
   }
 });
 
-// Google OAuth verification & sign-in
+// Traditional Passport Google OAuth redirect endpoint
+router.get('/google', (req, res, next) => {
+  passport.authenticate('google', {
+    scope: ['profile', 'email'],
+    prompt: 'select_account',
+  })(req, res, next);
+});
+
+// Google OAuth callback endpoint
+router.get(
+  '/google/callback',
+  (req, res, next) => {
+    const clientUrl = process.env.CLIENT_URL || 'http://localhost:5173';
+    passport.authenticate('google', (err: any, user: any) => {
+      if (err || !user) {
+        console.error('Google OAuth callback error:', err);
+        return res.redirect(`${clientUrl}/auth?error=google_failed`);
+      }
+
+      req.logIn(user, (loginErr) => {
+        if (loginErr) {
+          console.error('Passport login error:', loginErr);
+          return res.redirect(`${clientUrl}/auth?error=login_failed`);
+        }
+
+        const safeUser = {
+          id: user.id,
+          email: user.email,
+          name: user.name,
+          role: user.role,
+          avatar: user.avatar,
+        };
+
+        const token = generateToken(safeUser);
+        res.cookie('token', token, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === 'production',
+          sameSite: 'lax',
+          maxAge: 7 * 24 * 60 * 60 * 1000,
+        });
+
+        return res.redirect(`${clientUrl}/auth?oauth=success&token=${token}`);
+      });
+    })(req, res, next);
+  }
+);
+
+// Google OAuth verification & sign-in (credential or token)
 router.post('/google', async (req, res: Response) => {
   try {
     const { credential, userInfo } = req.body;

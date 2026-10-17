@@ -3,7 +3,9 @@ import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import cookieParser from 'cookie-parser';
+import session from 'express-session';
 import dotenv from 'dotenv';
+import passport from './passport.js';
 
 import authRoutes from './routes/auth.routes.js';
 import trackRoutes from './routes/track.routes.js';
@@ -53,6 +55,23 @@ app.use(
   })
 );
 app.use(express.urlencoded({ extended: true }));
+
+// Express Session & Passport Middleware
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET || process.env.JWT_SECRET || 'tony_prakash_session_secret_2026',
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    },
+  })
+);
+app.use(passport.initialize());
+app.use(passport.session());
 
 // Health Check
 app.get('/api/health', (_req, res) => {
