@@ -99,7 +99,11 @@ export const AuthPage: React.FC = () => {
     setErrorMsg(null);
     setOauthStatus('Redirecting to Google Sign-In...');
     // Traditional Passport Google OAuth initiation endpoint on backend
-    const backendUrl = (import.meta as any).env?.VITE_BACKEND_URL || 'http://localhost:5000';
+    const rawApiUrl = (import.meta as any).env?.VITE_API_URL || '';
+    const backendUrl =
+      (import.meta as any).env?.VITE_BACKEND_URL ||
+      (rawApiUrl ? rawApiUrl.replace(/\/api\/?$/, '') : '') ||
+      'http://localhost:5000';
     window.location.href = `${backendUrl}/api/auth/google`;
   };
 
