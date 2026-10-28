@@ -17,6 +17,8 @@ import {
 import { useAuth } from '../context/AuthContext.js';
 import { api } from '../services/api.js';
 import { RazorpayModal } from '../components/RazorpayModal.js';
+import { PaymentsPausedModal } from '../components/PaymentsPausedModal.js';
+import { PAYMENTS_PAUSED } from '../config/payments.js';
 import { SEO } from '../components/SEO.js';
 
 export const MembershipPage: React.FC = () => {
@@ -33,6 +35,7 @@ export const MembershipPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [showPaymentsPausedModal, setShowPaymentsPausedModal] = useState<boolean>(false);
 
   const [razorpayOrder, setRazorpayOrder] = useState<{
     orderId: string;
@@ -40,6 +43,11 @@ export const MembershipPage: React.FC = () => {
   } | null>(null);
 
   const handleSubscribe = async () => {
+    if (PAYMENTS_PAUSED) {
+      setShowPaymentsPausedModal(true);
+      return;
+    }
+
     if (!user) {
       navigate('/auth?redirect=/membership');
       return;
@@ -136,6 +144,25 @@ export const MembershipPage: React.FC = () => {
       {errorMsg && (
         <div className="p-4 rounded-2xl bg-red-950/80 border border-red-500/40 text-red-200 text-xs text-center shadow-lg">
           {errorMsg}
+        </div>
+      )}
+
+      {/* Online Checkout Launching Soon / Free Songs Notice */}
+      {PAYMENTS_PAUSED && (
+        <div className="p-4 rounded-2xl bg-[#D4A017]/10 border border-[#D4A017]/30 text-xs text-center flex flex-col sm:flex-row items-center justify-between gap-3 shadow-sm">
+          <div className="flex items-center gap-2.5 text-left">
+            <Sparkles className="w-4 h-4 text-[#D4A017] shrink-0" />
+            <div>
+              <span className="font-bold text-[#D4A017] block sm:inline">All 68 Devotional Songs are 100% Free to Stream! </span>
+              <span className="text-gray-400 text-[11px]">Online pass checkout is launching soon. For early VIP access, connect directly with Rev. Tony Prakash.</span>
+            </div>
+          </div>
+          <button
+            onClick={() => setShowPaymentsPausedModal(true)}
+            className="px-4 py-2 rounded-xl bg-[#D4A017] hover:bg-[#E8DCB8] text-[#0E0305] text-[11px] font-bold uppercase tracking-wider shrink-0 transition-colors"
+          >
+            Direct Access Info
+          </button>
         </div>
       )}
 
@@ -335,6 +362,15 @@ export const MembershipPage: React.FC = () => {
           ))}
         </div>
       </div>
+
+      {/* Payments Paused / Launching Soon Modal */}
+      <PaymentsPausedModal
+        isOpen={showPaymentsPausedModal}
+        onClose={() => setShowPaymentsPausedModal(false)}
+        itemTitle="Tony's One-Time VIP Lifetime Pass"
+        itemType="pass"
+        price="₹299"
+      />
 
       {/* Razorpay Gateway Modal */}
       {razorpayOrder && (

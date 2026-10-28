@@ -24,6 +24,8 @@ import { useAuth } from '../context/AuthContext.js';
 import { LyricsModal } from '../components/LyricsModal.js';
 import { TrackActionMenu } from '../components/layout/TrackActionMenu.js';
 import { RazorpayModal } from '../components/RazorpayModal.js';
+import { PaymentsPausedModal } from '../components/PaymentsPausedModal.js';
+import { PAYMENTS_PAUSED } from '../config/payments.js';
 import { SEO } from '../components/SEO.js';
 
 export const TracksPage: React.FC = () => {
@@ -33,6 +35,7 @@ export const TracksPage: React.FC = () => {
   const [selectedTrack, setSelectedTrack] = useState<Track | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [purchasingTrackId, setPurchasingTrackId] = useState<string | null>(null);
+  const [pausedModalTrack, setPausedModalTrack] = useState<Track | null>(null);
 
   const [searchQuery, setSearchQuery] = useState<string>(searchParams.get('search') || '');
   const [sortBy, setSortBy] = useState<'ORDER' | 'POPULAR' | 'NEWEST'>('ORDER');
@@ -110,6 +113,11 @@ export const TracksPage: React.FC = () => {
   } | null>(null);
 
   const handleBuyTrack = async (track: Track) => {
+    if (PAYMENTS_PAUSED) {
+      setPausedModalTrack(track);
+      return;
+    }
+
     if (!user) {
       navigate(`/auth?redirect=${encodeURIComponent('/tracks')}`);
       return;
@@ -420,6 +428,15 @@ export const TracksPage: React.FC = () => {
       {selectedTrack && (
         <LyricsModal track={selectedTrack} onClose={() => setSelectedTrack(null)} />
       )}
+
+      {/* Online Checkout Launching Soon Modal */}
+      <PaymentsPausedModal
+        isOpen={Boolean(pausedModalTrack)}
+        onClose={() => setPausedModalTrack(null)}
+        itemTitle={pausedModalTrack?.titleEnglish || 'Studio Minus-One Track'}
+        itemType="track"
+        price="₹99"
+      />
 
       {/* Razorpay Gateway Modal */}
       {razorpayOrder && (

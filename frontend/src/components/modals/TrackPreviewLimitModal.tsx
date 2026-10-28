@@ -6,6 +6,8 @@ import { useAuth } from '../../context/AuthContext.js';
 import { api } from '../../services/api.js';
 import { useNavigate } from 'react-router-dom';
 import { RazorpayModal } from '../RazorpayModal.js';
+import { PaymentsPausedModal } from '../PaymentsPausedModal.js';
+import { PAYMENTS_PAUSED } from '../../config/payments.js';
 
 interface TrackPreviewLimitModalProps {
   track: Track | null;
@@ -22,6 +24,7 @@ export const TrackPreviewLimitModal: React.FC<TrackPreviewLimitModalProps> = ({
   const navigate = useNavigate();
   const [purchasing, setPurchasing] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [showPausedModal, setShowPausedModal] = useState(false);
 
   // Razorpay Gateway State
   const [razorpayOrder, setRazorpayOrder] = useState<{
@@ -42,6 +45,11 @@ export const TrackPreviewLimitModal: React.FC<TrackPreviewLimitModalProps> = ({
   if (!track) return null;
 
   const handleBuyTrack = async () => {
+    if (PAYMENTS_PAUSED) {
+      setShowPausedModal(true);
+      return;
+    }
+
     if (!user) {
       navigate(`/auth?redirect=${encodeURIComponent(window.location.pathname)}`);
       onClose();
@@ -212,6 +220,15 @@ export const TrackPreviewLimitModal: React.FC<TrackPreviewLimitModalProps> = ({
           </div>
         </div>
       </div>
+
+      {/* Payments Paused / Launching Soon Modal */}
+      <PaymentsPausedModal
+        isOpen={showPausedModal}
+        onClose={() => setShowPausedModal(false)}
+        itemTitle={track.titleEnglish}
+        itemType="track"
+        price="₹99"
+      />
 
       {/* Razorpay Gateway Modal */}
       {razorpayOrder && (

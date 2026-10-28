@@ -1,3 +1,5 @@
+import { PAYMENTS_PAUSED } from '../config/payments.js';
+
 // Razorpay Standard Web Checkout Integration Service
 
 export interface RazorpayPaymentSuccessResponse {
@@ -43,6 +45,10 @@ export function loadRazorpayScript(): Promise<boolean> {
 }
 
 export async function openRazorpayCheckout(options: RazorpayCheckoutOptions): Promise<void> {
+  if (PAYMENTS_PAUSED) {
+    throw new Error('Online checkout is currently paused while live payment gateway is being finalized.');
+  }
+
   const loaded = await loadRazorpayScript();
   if (!loaded || !window.Razorpay) {
     throw new Error('Razorpay SDK failed to load. Please check your internet connection.');

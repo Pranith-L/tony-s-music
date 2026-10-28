@@ -12,6 +12,8 @@ import {
   RefreshCw,
 } from 'lucide-react';
 import { openRazorpayCheckout, RazorpayPaymentSuccessResponse } from '../services/razorpay';
+import { PAYMENTS_PAUSED } from '../config/payments.js';
+import { PaymentsPausedModal } from './PaymentsPausedModal.js';
 
 export interface RazorpayModalProps {
   isOpen: boolean;
@@ -96,6 +98,7 @@ export const RazorpayModal: React.FC<RazorpayModalProps> = ({
 
   // Auto-trigger Razorpay modal on mount
   useEffect(() => {
+    if (PAYMENTS_PAUSED) return;
     if (isOpen && orderId && !hasAutoOpened.current) {
       hasAutoOpened.current = true;
       const timer = setTimeout(() => {
@@ -106,6 +109,18 @@ export const RazorpayModal: React.FC<RazorpayModalProps> = ({
   }, [isOpen, orderId]);
 
   if (!isOpen) return null;
+
+  if (PAYMENTS_PAUSED) {
+    return (
+      <PaymentsPausedModal
+        isOpen={isOpen}
+        onClose={onClose}
+        itemTitle={itemTitle}
+        itemType={isSubscription ? 'pass' : 'track'}
+        price={`₹${amountRupees}`}
+      />
+    );
+  }
 
   return createPortal(
     <div

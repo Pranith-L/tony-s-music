@@ -23,6 +23,23 @@ const razorpayClient = new Razorpay({
   key_secret: RAZORPAY_KEY_SECRET,
 });
 
+// Flag to pause test mode transactions until live production credentials are ready
+const PAYMENTS_PAUSED = process.env.PAYMENTS_PAUSED !== 'false'; // paused by default
+
+/**
+ * Endpoint: GET /api/status & GET /api/payments/status
+ * Returns current payment gateway status
+ */
+router.get('/status', (req, res) => {
+  res.json({
+    paymentsPaused: PAYMENTS_PAUSED,
+    isTestMode: false,
+    message: PAYMENTS_PAUSED
+      ? 'Online checkout is temporarily paused while live payment gateway is being finalized.'
+      : 'Online checkout is active.',
+  });
+});
+
 // Helper to ensure user exists in Supabase PostgreSQL (Prisma) before creating payment records
 async function ensureSupabaseUser(user: { id: string; email: string; name?: string; role?: string }): Promise<string> {
   const normalizedEmail = user.email.toLowerCase().trim();
@@ -71,6 +88,13 @@ function verifySignature(orderId: string, paymentId: string, signature: string):
  */
 router.post('/create-order', optionalAuth, async (req: AuthRequest, res: Response) => {
   try {
+    if (PAYMENTS_PAUSED) {
+      res.status(503).json({
+        error: 'Online checkout is temporarily paused while our live payment gateway is being finalized. Please check back soon or contact Rev. Tony Prakash directly at +91 9841345007.',
+        paymentsPaused: true,
+      });
+      return;
+    }
     const { trackId, slug, currency = 'INR', notes = {} } = req.body;
     let rawAmount = req.body.amount;
 
@@ -199,6 +223,13 @@ router.post('/create-order', optionalAuth, async (req: AuthRequest, res: Respons
  */
 router.post('/create-subscription', authenticateUser, async (req: AuthRequest, res: Response) => {
   try {
+    if (PAYMENTS_PAUSED) {
+      res.status(503).json({
+        error: 'Online pass activation is temporarily paused while our live payment gateway is being finalized. Please check back soon or contact Rev. Tony Prakash directly at +91 9841345007.',
+        paymentsPaused: true,
+      });
+      return;
+    }
     const userId = await ensureSupabaseUser(req.user!);
     const amountPaise = 29900; // One-Time Lifetime Pass: ₹299 (29,900 paise)
     const receipt = `rcpt_sub_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
@@ -274,6 +305,14 @@ router.post('/create-subscription', authenticateUser, async (req: AuthRequest, r
  */
 router.post('/verify-payment', optionalAuth, async (req: AuthRequest, res: Response) => {
   try {
+    if (PAYMENTS_PAUSED) {
+      res.status(503).json({
+        error: 'Online checkout is temporarily paused while our live payment gateway is being finalized.',
+        paymentsPaused: true,
+        success: false,
+      });
+      return;
+    }
     const orderId = req.body.order_id || req.body.razorpay_order_id;
     const paymentId = req.body.payment_id || req.body.razorpay_payment_id;
     const signature = req.body.signature || req.body.razorpay_signature;
@@ -390,6 +429,14 @@ router.post('/verify-payment', optionalAuth, async (req: AuthRequest, res: Respo
  */
 router.post('/verify-order', authenticateUser, async (req: AuthRequest, res: Response) => {
   try {
+    if (PAYMENTS_PAUSED) {
+      res.status(503).json({
+        error: 'Online checkout is temporarily paused while our live payment gateway is being finalized.',
+        paymentsPaused: true,
+        success: false,
+      });
+      return;
+    }
     const orderId = req.body.razorpay_order_id || req.body.order_id;
     const paymentId = req.body.razorpay_payment_id || req.body.payment_id;
     const signature = req.body.razorpay_signature || req.body.signature;
@@ -486,6 +533,14 @@ router.post('/verify-order', authenticateUser, async (req: AuthRequest, res: Res
  */
 router.post('/verify-subscription', authenticateUser, async (req: AuthRequest, res: Response) => {
   try {
+    if (PAYMENTS_PAUSED) {
+      res.status(503).json({
+        error: 'Online checkout is temporarily paused while our live payment gateway is being finalized.',
+        paymentsPaused: true,
+        success: false,
+      });
+      return;
+    }
     const orderId = req.body.subscriptionId || req.body.razorpay_order_id || req.body.order_id;
     const paymentId = req.body.paymentId || req.body.razorpay_payment_id || req.body.payment_id;
     const signature = req.body.razorpay_signature || req.body.signature;

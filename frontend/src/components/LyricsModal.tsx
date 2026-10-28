@@ -6,6 +6,8 @@ import { usePlayer } from '../context/PlayerContext.js';
 import { useAuth } from '../context/AuthContext.js';
 import { api } from '../services/api.js';
 import { RazorpayModal } from './RazorpayModal.js';
+import { PaymentsPausedModal } from './PaymentsPausedModal.js';
+import { PAYMENTS_PAUSED } from '../config/payments.js';
 
 interface LyricsModalProps {
   track: Track | null;
@@ -20,6 +22,7 @@ export const LyricsModal: React.FC<LyricsModalProps> = ({ track, onClose }) => {
   const [purchaseSuccess, setPurchaseSuccess] = useState(false);
   const [showRazorpay, setShowRazorpay] = useState(false);
   const [razorpayOrder, setRazorpayOrder] = useState<any>(null);
+  const [showPausedModal, setShowPausedModal] = useState(false);
 
   if (!track) return null;
 
@@ -53,6 +56,10 @@ export const LyricsModal: React.FC<LyricsModalProps> = ({ track, onClose }) => {
   };
 
   const handleBuySingleTrack = async () => {
+    if (PAYMENTS_PAUSED) {
+      setShowPausedModal(true);
+      return;
+    }
     if (!user) {
       alert('Please sign in to purchase this backing track download.');
       return;
@@ -252,6 +259,15 @@ export const LyricsModal: React.FC<LyricsModalProps> = ({ track, onClose }) => {
             </a>
           </div>
         )}
+
+        {/* Launching Soon Modal */}
+        <PaymentsPausedModal
+          isOpen={showPausedModal}
+          onClose={() => setShowPausedModal(false)}
+          itemTitle={`Backing Track: ${track.titleEnglish}`}
+          itemType="track"
+          price="₹99"
+        />
 
         {/* Razorpay Checkout Modal for ₹99 track purchase */}
         {showRazorpay && razorpayOrder && (
