@@ -51,7 +51,7 @@ export const MembershipPage: React.FC = () => {
       const subOrder = await api.payments.createSubscription();
       setRazorpayOrder({
         orderId: subOrder.subscriptionId,
-        amount: subOrder.amount || 100,
+        amount: subOrder.amount || 29900,
       });
     } catch (err: any) {
       setErrorMsg(err.message || 'Payment initiation failed. Please try again.');
@@ -211,11 +211,8 @@ export const MembershipPage: React.FC = () => {
             </div>
 
             <div className="flex items-baseline gap-2">
-              <span className="text-4xl sm:text-5xl font-mono font-bold text-[#D4A017]">₹1</span>
-              <span className="text-xs line-through text-gray-400 font-mono">₹299</span>
-              <span className="text-[10px] font-mono uppercase tracking-wider text-emerald-400 font-bold px-2 py-0.5 rounded bg-emerald-500/20 border border-emerald-500/40">
-                TESTING MODE (₹1)
-              </span>
+              <span className="text-4xl sm:text-5xl font-mono font-bold text-[#D4A017]">₹299</span>
+              <span className="text-xs text-gray-400 font-mono">/ one-time payment</span>
             </div>
 
             <ul className="space-y-3 text-xs text-[#FFFFFF]">

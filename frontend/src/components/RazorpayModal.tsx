@@ -130,7 +130,7 @@ export const RazorpayModal: React.FC<RazorpayModalProps> = ({
                   Razorpay Secure Checkout
                 </span>
                 <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 border border-emerald-400/40 text-[10px] text-emerald-300 font-mono font-bold">
-                  TEST MODE
+                  100% SECURE
                 </span>
               </div>
               <p className="text-[11px] text-slate-300">

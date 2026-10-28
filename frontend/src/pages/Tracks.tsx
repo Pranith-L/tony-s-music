@@ -120,7 +120,7 @@ export const TracksPage: React.FC = () => {
       const order = await api.payments.createOrder(track.id, track.slug);
       setRazorpayOrder({
         orderId: order.orderId,
-        amount: order.amount || 100,
+        amount: order.amount || 9900,
         track,
       });
     } catch (err: any) {
@@ -208,7 +208,7 @@ export const TracksPage: React.FC = () => {
                 Studio Master Tracks
               </span>
               <span className="text-xs font-bold px-2.5 py-0.5 rounded bg-emerald-600 text-white font-mono">
-                ₹1 / TRACK (TESTING)
+                ₹99 / Track
               </span>
             </div>
             <p className="text-xs text-[#86868B]">

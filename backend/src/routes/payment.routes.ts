@@ -115,13 +115,13 @@ router.post('/create-order', optionalAuth, async (req: AuthRequest, res: Respons
         });
       }
 
-      // Default amount for track purchase: 100 paise (₹1 for testing purpose)
+      // Default amount for studio backing track purchase: 9900 paise (₹99)
       if (!rawAmount) {
-        rawAmount = 100;
+        rawAmount = track.downloadPricePaise || 9900;
       }
     }
 
-    const amountPaise = Number(rawAmount || 100);
+    const amountPaise = Number(rawAmount || 9900);
 
     // Validate amount >= 100 paise
     if (isNaN(amountPaise) || amountPaise < 100) {
@@ -195,12 +195,12 @@ router.post('/create-order', optionalAuth, async (req: AuthRequest, res: Respons
 
 /**
  * Endpoint: POST /api/create-subscription & POST /api/payments/create-subscription
- * Creates a Razorpay order for Tony's One-Time VIP Lifetime Pass (₹1 = 100 paise for testing)
+ * Creates a Razorpay order for Tony's One-Time VIP Lifetime Pass (₹299 = 29900 paise)
  */
 router.post('/create-subscription', authenticateUser, async (req: AuthRequest, res: Response) => {
   try {
     const userId = await ensureSupabaseUser(req.user!);
-    const amountPaise = 100; // Testing mode: ₹1 (100 paise)
+    const amountPaise = 29900; // One-Time Lifetime Pass: ₹299 (29,900 paise)
     const receipt = `rcpt_sub_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
 
     // Call official Razorpay Orders API
@@ -530,7 +530,7 @@ router.post('/verify-subscription', authenticateUser, async (req: AuthRequest, r
         data: {
           status: 'ACTIVE',
           razorpayPaymentId: paymentId,
-          amountPaise: 100,
+          amountPaise: 29900,
           currentPeriodStart: startDate,
           currentPeriodEnd: endDate,
         },
@@ -542,7 +542,7 @@ router.post('/verify-subscription', authenticateUser, async (req: AuthRequest, r
           userId,
           planName: "Tony's VIP Lifetime Pass",
           status: 'ACTIVE',
-          amountPaise: 100,
+          amountPaise: 29900,
           currentPeriodStart: startDate,
           currentPeriodEnd: endDate,
           razorpaySubscriptionId: orderId,
