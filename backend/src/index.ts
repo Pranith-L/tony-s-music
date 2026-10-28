@@ -91,6 +91,7 @@ app.use('/api/albums', albumRoutes);
 app.use('/api/videos', videoRoutes);
 app.use('/api/bookings', bookingRoutes);
 app.use('/api/payments', paymentRoutes);
+app.use('/api', paymentRoutes);
 app.use('/api/downloads', downloadRoutes);
 app.use('/api/admin', adminRoutes);
 

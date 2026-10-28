@@ -120,7 +120,7 @@ export const TracksPage: React.FC = () => {
       const order = await api.payments.createOrder(track.id, track.slug);
       setRazorpayOrder({
         orderId: order.orderId,
-        amount: order.amount || 9900,
+        amount: order.amount || 100,
         track,
       });
     } catch (err: any) {
@@ -133,8 +133,7 @@ export const TracksPage: React.FC = () => {
   const handleRazorpaySuccess = async (paymentData: {
     razorpay_order_id: string;
     razorpay_payment_id: string;
-    razorpay_signature?: string;
-    isTestConfirm?: boolean;
+    razorpay_signature: string;
   }) => {
     if (!razorpayOrder) return;
     try {
@@ -142,16 +141,14 @@ export const TracksPage: React.FC = () => {
         razorpay_order_id: paymentData.razorpay_order_id,
         razorpay_payment_id: paymentData.razorpay_payment_id,
         razorpay_signature: paymentData.razorpay_signature,
-        isTestConfirm: paymentData.isTestConfirm ?? true,
       });
 
       if (verified.success) {
         await refreshUser();
-        playTrack(razorpayOrder.track);
-        setRazorpayOrder(null);
       }
     } catch (err: any) {
       alert(err.message || 'Payment verification failed');
+      throw err;
     }
   };
 
@@ -210,8 +207,8 @@ export const TracksPage: React.FC = () => {
               <span className="text-xs font-mono uppercase tracking-wider text-[#D4A017] font-bold">
                 Studio Master Tracks
               </span>
-              <span className="text-xs font-bold px-2.5 py-0.5 rounded bg-[#D4A017] text-white">
-                ₹99 / TRACK
+              <span className="text-xs font-bold px-2.5 py-0.5 rounded bg-emerald-600 text-white font-mono">
+                ₹1 / TRACK (TESTING)
               </span>
             </div>
             <p className="text-xs text-[#86868B]">

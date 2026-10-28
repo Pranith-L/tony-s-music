@@ -8,5 +8,8 @@
     "build": "npm --prefix frontend run build",
     "backend": "npm --prefix backend run dev",
     "seed": "npm --prefix backend run prisma:seed"
+  },
+  "devDependencies": {
+    "playwright": "^1.64.1"
   }
 }

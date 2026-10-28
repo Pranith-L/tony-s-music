@@ -1,5 +1,7 @@
 import { Router, Response } from 'express';
+import { ObjectId } from 'mongodb';
 import { prisma } from '../prisma.js';
+import { getMongoDb } from '../db.js';
 import { authenticateUser, requireAdmin, AuthRequest } from '../middleware/auth.js';
 
 const router = Router();
@@ -105,28 +107,28 @@ router.get('/users', authenticateUser, requireAdmin, async (_req: AuthRequest, r
   }
 });
 
-// 3. Payment and subscription history audit
+// 3. Payment and subscription history audit (Handled 100% by Supabase PostgreSQL Database)
 router.get('/payments', authenticateUser, requireAdmin, async (_req: AuthRequest, res: Response) => {
   try {
     const purchases = await prisma.purchase.findMany({
       include: {
-        user: { select: { name: true, email: true } },
-        track: { select: { titleEnglish: true, titleTelugu: true } },
+        user: { select: { id: true, name: true, email: true, phone: true } },
+        track: { select: { id: true, titleEnglish: true, titleTelugu: true, slug: true } },
       },
       orderBy: { createdAt: 'desc' },
     });
 
     const subscriptions = await prisma.subscription.findMany({
       include: {
-        user: { select: { name: true, email: true } },
+        user: { select: { id: true, name: true, email: true, phone: true } },
       },
       orderBy: { createdAt: 'desc' },
     });
 
     res.json({ purchases, subscriptions });
   } catch (error) {
-    console.error('Error fetching payments:', error);
-    res.status(500).json({ error: 'Failed to fetch payment records' });
+    console.error('Error fetching payments from Supabase:', error);
+    res.status(500).json({ error: 'Failed to fetch payment records from Supabase database' });
   }
 });
 
@@ -161,6 +163,131 @@ router.put('/settings', authenticateUser, requireAdmin, async (req: AuthRequest,
   } catch (error) {
     console.error('Error updating settings:', error);
     res.status(500).json({ error: 'Failed to update settings' });
+  }
+});
+
+// 5. Approve pending UPI payment (Purchase or Subscription)
+router.post('/approve-payment', authenticateUser, requireAdmin, async (req: AuthRequest, res: Response) => {
+  try {
+    const { type, id } = req.body;
+
+    if (!id || !['PURCHASE', 'SUBSCRIPTION'].includes(type)) {
+      res.status(400).json({ error: 'Valid payment type (PURCHASE or SUBSCRIPTION) and record ID are required.' });
+      return;
+    }
+
+    if (type === 'PURCHASE') {
+      const purchase = await prisma.purchase.findUnique({
+        where: { id },
+        include: { track: true, user: true },
+      });
+
+      if (!purchase) {
+        res.status(404).json({ error: 'Purchase record not found in Supabase database' });
+        return;
+      }
+
+      // Update purchase status to SUCCESS in Supabase
+      await prisma.purchase.update({
+        where: { id: purchase.id },
+        data: { status: 'SUCCESS' },
+      });
+
+      // Unlock Entitlement in Supabase PostgreSQL
+      await prisma.entitlement.upsert({
+        where: {
+          userId_trackId_entitlementType: {
+            userId: purchase.userId,
+            trackId: purchase.trackId,
+            entitlementType: 'PURCHASE',
+          },
+        },
+        update: {},
+        create: {
+          userId: purchase.userId,
+          trackId: purchase.trackId,
+          entitlementType: 'PURCHASE',
+        },
+      });
+
+      res.json({
+        success: true,
+        message: `Approved track purchase of "${purchase.track?.titleEnglish || 'Studio Track'}" for ${purchase.user?.name || purchase.user?.email || 'customer'}.`,
+      });
+      return;
+    }
+
+    if (type === 'SUBSCRIPTION') {
+      const subscription = await prisma.subscription.findUnique({
+        where: { id },
+        include: { user: true },
+      });
+
+      if (!subscription) {
+        res.status(404).json({ error: 'Subscription record not found in Supabase database' });
+        return;
+      }
+
+      // Update subscription status to ACTIVE in Supabase PostgreSQL
+      await prisma.subscription.update({
+        where: { id: subscription.id },
+        data: { status: 'ACTIVE' },
+      });
+
+      res.json({
+        success: true,
+        message: `Approved Tony's VIP Lifetime Pass for ${subscription.user?.name || subscription.user?.email || 'member'}.`,
+      });
+      return;
+    }
+  } catch (error) {
+    console.error('Error approving payment in Supabase:', error);
+    res.status(500).json({ error: 'Failed to approve payment in Supabase database' });
+  }
+});
+
+// 6. Reject pending UPI payment (Handled fully by Supabase Database)
+router.post('/reject-payment', authenticateUser, requireAdmin, async (req: AuthRequest, res: Response) => {
+  try {
+    const { type, id } = req.body;
+
+    if (!id || !['PURCHASE', 'SUBSCRIPTION'].includes(type)) {
+      res.status(400).json({ error: 'Valid payment type and record ID are required.' });
+      return;
+    }
+
+    if (type === 'PURCHASE') {
+      const purchase = await prisma.purchase.findUnique({ where: { id } });
+      if (purchase) {
+        await prisma.purchase.update({
+          where: { id },
+          data: { status: 'FAILED' },
+        });
+        await prisma.entitlement.deleteMany({
+          where: {
+            userId: purchase.userId,
+            trackId: purchase.trackId,
+            entitlementType: 'PURCHASE',
+          },
+        });
+      }
+
+      res.json({ success: true, message: 'Track purchase verification rejected in Supabase database.' });
+      return;
+    }
+
+    if (type === 'SUBSCRIPTION') {
+      await prisma.subscription.update({
+        where: { id },
+        data: { status: 'REJECTED' },
+      });
+
+      res.json({ success: true, message: 'Lifetime Pass subscription verification rejected in Supabase database.' });
+      return;
+    }
+  } catch (error) {
+    console.error('Error rejecting payment:', error);
+    res.status(500).json({ error: 'Failed to reject payment' });
   }
 });
 

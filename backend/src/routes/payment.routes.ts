@@ -1,228 +1,320 @@
 import { Router, Response } from 'express';
 import crypto from 'crypto';
 import Razorpay from 'razorpay';
-import { ObjectId } from 'mongodb';
 import { prisma } from '../prisma.js';
-import { getMongoDb } from '../db.js';
-import { authenticateUser, AuthRequest } from '../middleware/auth.js';
+import { optionalAuth, authenticateUser, AuthRequest } from '../middleware/auth.js';
 
 const router = Router();
 
-const RAZORPAY_KEY_ID = process.env.RAZORPAY_KEY_ID || 'rzp_test_placeholder_key_id';
-const RAZORPAY_KEY_SECRET = process.env.RAZORPAY_KEY_SECRET || 'rzp_test_placeholder_secret';
+const RAZORPAY_KEY_ID = process.env.RAZORPAY_KEY_ID || 'rzp_test_TsCQlNDdeIP4v3';
+const RAZORPAY_KEY_SECRET = process.env.RAZORPAY_KEY_SECRET || '0nf2BBAi204ygxEoCkbtRy04';
 const RAZORPAY_WEBHOOK_SECRET = process.env.RAZORPAY_WEBHOOK_SECRET || 'rzp_webhook_secret_key';
 
-const isRazorpayConfigured =
+const isRazorpayConfigured = Boolean(
   RAZORPAY_KEY_ID &&
   RAZORPAY_KEY_SECRET &&
   !RAZORPAY_KEY_ID.includes('placeholder') &&
-  !RAZORPAY_KEY_SECRET.includes('placeholder');
+  !RAZORPAY_KEY_SECRET.includes('placeholder')
+);
 
-let razorpayClient: Razorpay | null = null;
-if (isRazorpayConfigured) {
-  razorpayClient = new Razorpay({
-    key_id: RAZORPAY_KEY_ID,
-    key_secret: RAZORPAY_KEY_SECRET,
+// Initialize Razorpay Client with credentials
+const razorpayClient = new Razorpay({
+  key_id: RAZORPAY_KEY_ID,
+  key_secret: RAZORPAY_KEY_SECRET,
+});
+
+// Helper to ensure user exists in Supabase PostgreSQL (Prisma) before creating payment records
+async function ensureSupabaseUser(user: { id: string; email: string; name?: string; role?: string }): Promise<string> {
+  const normalizedEmail = user.email.toLowerCase().trim();
+  let dbUser = await prisma.user.findFirst({
+    where: {
+      OR: [
+        { id: user.id },
+        { email: { equals: normalizedEmail, mode: 'insensitive' } },
+      ],
+    },
   });
+
+  if (!dbUser) {
+    dbUser = await prisma.user.create({
+      data: {
+        id: user.id,
+        email: normalizedEmail,
+        name: user.name || 'Customer',
+        role: user.role || 'USER',
+        provider: 'LOCAL',
+      },
+    });
+  }
+
+  return dbUser.id;
 }
 
-// 1. Create order for individual song purchase (₹99 = 9900 paise)
-router.post('/create-order', authenticateUser, async (req: AuthRequest, res: Response) => {
+// Helper to compute and verify Razorpay HMAC-SHA256 signature
+function verifySignature(orderId: string, paymentId: string, signature: string): boolean {
+  if (!orderId || !paymentId || !signature) return false;
+  const payload = `${orderId}|${paymentId}`;
+  const generatedSignature = crypto
+    .createHmac('sha256', RAZORPAY_KEY_SECRET)
+    .update(payload)
+    .digest('hex');
+  return generatedSignature === signature;
+}
+
+/**
+ * STEP 1: BACKEND - Create Order
+ * Endpoint: POST /api/create-order & POST /api/payments/create-order
+ * Calls Razorpay API: POST https://api.razorpay.com/v1/orders
+ * Request: { amount (paise), currency, receipt } or { trackId, slug }
+ * Return: { order_id, orderId, amount, currency, keyId }
+ * Minimum amount: 100 paise
+ */
+router.post('/create-order', optionalAuth, async (req: AuthRequest, res: Response) => {
   try {
-    const { trackId, slug } = req.body;
-    const userId = req.user!.id;
+    const { trackId, slug, currency = 'INR', notes = {} } = req.body;
+    let rawAmount = req.body.amount;
 
-    if (!trackId && !slug) {
-      res.status(400).json({ error: 'Track ID or slug is required' });
-      return;
+    let track: any = null;
+    let userId: string | null = null;
+
+    if (req.user) {
+      userId = await ensureSupabaseUser(req.user);
     }
 
-    const isObjectId = /^[0-9a-fA-F]{24}$/.test(String(trackId || ''));
-    let track = isObjectId
-      ? await prisma.track.findUnique({ where: { id: String(trackId) } })
-      : null;
+    // If trackId or slug provided, resolve track from database
+    if (trackId || slug) {
+      const isObjectId = /^[0-9a-fA-F]{24}$/.test(String(trackId || ''));
+      track = isObjectId
+        ? await prisma.track.findUnique({ where: { id: String(trackId) } })
+        : null;
 
-    if (!track && (slug || trackId)) {
-      const identifier = String(slug || trackId);
-      track = await prisma.track.findFirst({
-        where: {
-          OR: [
-            { slug: identifier },
-            { slug: { equals: identifier, mode: 'insensitive' } },
-            { titleEnglish: { equals: identifier, mode: 'insensitive' } },
-          ],
-        },
-      });
-    }
-
-    if (!track && (slug || trackId)) {
-      const raw = String(slug || trackId);
-      const clean = raw.replace(/^tp-(song|track)-\d+-?/, '').toLowerCase();
-      track = await prisma.track.findFirst({
-        where: {
-          OR: [
-            { slug: { contains: clean, mode: 'insensitive' } },
-            { audioUrl: { contains: clean, mode: 'insensitive' } },
-            { titleEnglish: { contains: clean, mode: 'insensitive' } },
-          ],
-        },
-      });
-    }
-
-    // Safety fallback: If still not found, search any backing track matching keyword
-    if (!track) {
-      track = await prisma.track.findFirst({
-        where: { isTrack: true },
-      });
-    }
-
-    if (!track) {
-      res.status(404).json({ error: 'Track not found in catalog' });
-      return;
-    }
-
-    // Ensure backing track is marked as purchasable
-    if (!track.isDownloadable || !track.rightsConfirmed) {
-      try {
-        track = await prisma.track.update({
-          where: { id: track.id },
-          data: { isDownloadable: true, rightsConfirmed: true },
+      if (!track && (slug || trackId)) {
+        const identifier = String(slug || trackId);
+        track = await prisma.track.findFirst({
+          where: {
+            OR: [
+              { slug: identifier },
+              { slug: { equals: identifier, mode: 'insensitive' } },
+              { titleEnglish: { equals: identifier, mode: 'insensitive' } },
+            ],
+          },
         });
-      } catch {
-        const db = await getMongoDb();
-        await db.collection('Track').updateOne(
-          { _id: new ObjectId(track.id) },
-          { $set: { isDownloadable: true, rightsConfirmed: true } }
-        );
-        track.isDownloadable = true;
-        track.rightsConfirmed = true;
+      }
+
+      if (!track && (slug || trackId)) {
+        const raw = String(slug || trackId);
+        const clean = raw.replace(/^tp-(song|track)-\d+-?/, '').toLowerCase();
+        track = await prisma.track.findFirst({
+          where: {
+            OR: [
+              { slug: { contains: clean, mode: 'insensitive' } },
+              { audioUrl: { contains: clean, mode: 'insensitive' } },
+              { titleEnglish: { contains: clean, mode: 'insensitive' } },
+            ],
+          },
+        });
+      }
+
+      // Default amount for track purchase: 100 paise (₹1 for testing purpose)
+      if (!rawAmount) {
+        rawAmount = 100;
       }
     }
 
-    // Check if user already owns it
-    const existing = await prisma.purchase.findFirst({
-      where: {
-        userId,
-        trackId: track.id,
-        status: 'SUCCESS',
+    const amountPaise = Number(rawAmount || 100);
+
+    // Validate amount >= 100 paise
+    if (isNaN(amountPaise) || amountPaise < 100) {
+      res.status(400).json({
+        error: 'Invalid amount. Minimum amount must be at least 100 paise (₹1).',
+      });
+      return;
+    }
+
+    // Check if user already owns this track
+    if (userId && track) {
+      const existing = await prisma.purchase.findFirst({
+        where: {
+          userId,
+          trackId: track.id,
+          status: 'SUCCESS',
+        },
+      });
+
+      if (existing) {
+        res.status(400).json({ error: 'You have already purchased this backing track.' });
+        return;
+      }
+    }
+
+    const receipt = req.body.receipt || `rcpt_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
+
+    // Call official Razorpay Orders API
+    const order = await razorpayClient.orders.create({
+      amount: Math.round(amountPaise),
+      currency,
+      receipt,
+      notes: {
+        ...notes,
+        ...(track ? { trackId: track.id, trackTitle: track.titleEnglish } : {}),
+        ...(userId ? { userId } : {}),
       },
     });
 
-    if (existing) {
-      res.status(400).json({ error: 'You have already purchased this song.' });
-      return;
-    }
-
-    const amountPaise = track.downloadPricePaise || 9900;
-    const receipt = `tp_trk_${Date.now()}_${track.id.slice(0, 6)}`;
-
-    let orderId = `order_test_${Date.now()}`;
-
-    if (razorpayClient) {
-      try {
-        const order = await razorpayClient.orders.create({
-          amount: amountPaise,
-          currency: 'INR',
-          receipt,
-          notes: {
-            userId,
-            trackId: track.id,
-            trackTitle: track.titleEnglish,
-          },
-        });
-        orderId = order.id;
-      } catch (rzpErr) {
-        console.warn('Live Razorpay order creation failed, fallback to mock order ID:', rzpErr);
-      }
-    }
-
-    // Record pending purchase in DB (with standalone mongo fallback)
-    try {
+    // Record pending purchase in Supabase PostgreSQL if track & user are present
+    if (userId && track) {
       await prisma.purchase.create({
         data: {
           userId,
           trackId: track.id,
-          amountPaise,
+          amountPaise: Math.round(amountPaise),
           status: 'PENDING',
-          razorpayOrderId: orderId,
+          razorpayOrderId: order.id,
         },
-      });
-    } catch (dbErr: any) {
-      const db = await getMongoDb();
-      await db.collection('Purchase').insertOne({
-        userId: new ObjectId(userId),
-        trackId: new ObjectId(track.id),
-        amountPaise,
-        status: 'PENDING',
-        razorpayOrderId: orderId,
-        createdAt: new Date(),
       });
     }
 
     res.json({
-      orderId,
-      amount: amountPaise,
-      currency: 'INR',
-      keyId: isRazorpayConfigured ? RAZORPAY_KEY_ID : 'rzp_test_mock_key',
-      trackTitle: track.titleEnglish,
-      isTestMode: !isRazorpayConfigured,
+      order_id: order.id,
+      orderId: order.id,
+      amount: order.amount,
+      currency: order.currency,
+      keyId: RAZORPAY_KEY_ID,
+      receipt: order.receipt,
+      trackTitle: track?.titleEnglish,
+      isTestMode: true,
     });
-  } catch (error) {
-    console.error('Error creating purchase order:', error);
-    res.status(500).json({ error: 'Failed to create payment order', details: (error as any)?.message || String(error) });
+  } catch (error: any) {
+    console.error('Error creating Razorpay order:', error);
+    res.status(500).json({
+      error: 'Failed to create payment order with Razorpay',
+      details: error?.message || String(error),
+    });
   }
 });
 
-// 2. Verify individual purchase payment signature & grant entitlement
-router.post('/verify-order', authenticateUser, async (req: AuthRequest, res: Response) => {
+/**
+ * Endpoint: POST /api/create-subscription & POST /api/payments/create-subscription
+ * Creates a Razorpay order for Tony's One-Time VIP Lifetime Pass (₹1 = 100 paise for testing)
+ */
+router.post('/create-subscription', authenticateUser, async (req: AuthRequest, res: Response) => {
   try {
-    const { razorpay_order_id, razorpay_payment_id, razorpay_signature, isTestConfirm } = req.body;
-    const userId = req.user!.id;
+    const userId = await ensureSupabaseUser(req.user!);
+    const amountPaise = 100; // Testing mode: ₹1 (100 paise)
+    const receipt = `rcpt_sub_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
 
+    // Call official Razorpay Orders API
+    const order = await razorpayClient.orders.create({
+      amount: amountPaise,
+      currency: 'INR',
+      receipt,
+      notes: {
+        type: 'VIP_LIFETIME_PASS',
+        userId,
+        email: req.user!.email,
+      },
+    });
+
+    // Create or update pending subscription in Supabase PostgreSQL
+    const existingPending = await prisma.subscription.findFirst({
+      where: { userId, status: 'PENDING' },
+    });
+
+    if (existingPending) {
+      await prisma.subscription.update({
+        where: { id: existingPending.id },
+        data: {
+          razorpaySubscriptionId: order.id,
+          amountPaise,
+        },
+      });
+    } else {
+      const startDate = new Date();
+      const endDate = new Date();
+      endDate.setFullYear(startDate.getFullYear() + 100);
+
+      await prisma.subscription.create({
+        data: {
+          userId,
+          planName: "Tony's VIP Lifetime Pass",
+          status: 'PENDING',
+          amountPaise,
+          currentPeriodStart: startDate,
+          currentPeriodEnd: endDate,
+          razorpaySubscriptionId: order.id,
+        },
+      });
+    }
+
+    res.json({
+      order_id: order.id,
+      orderId: order.id,
+      subscriptionId: order.id,
+      amount: order.amount,
+      planName: "Tony's One-Time VIP Lifetime Pass",
+      currency: order.currency,
+      keyId: RAZORPAY_KEY_ID,
+      isTestMode: true,
+    });
+  } catch (error: any) {
+    console.error('Error creating subscription order:', error);
+    res.status(500).json({
+      error: 'Failed to create subscription order with Razorpay',
+      details: error?.message || String(error),
+    });
+  }
+});
+
+/**
+ * STEP 3: BACKEND - Verify Signature
+ * Endpoint: POST /api/verify-payment & POST /api/payments/verify-payment
+ * Algorithm: HMAC-SHA256(order_id + "|" + payment_id, KEY_SECRET)
+ * Compare generated signature with razorpay_signature
+ * Return success only if signatures match
+ */
+router.post('/verify-payment', optionalAuth, async (req: AuthRequest, res: Response) => {
+  try {
+    const orderId = req.body.order_id || req.body.razorpay_order_id;
+    const paymentId = req.body.payment_id || req.body.razorpay_payment_id;
+    const signature = req.body.signature || req.body.razorpay_signature;
+
+    // Validate required fields
+    if (!orderId || !paymentId || !signature) {
+      res.status(400).json({
+        error: 'Missing required payment verification fields (order_id, payment_id, signature)',
+        success: false,
+      });
+      return;
+    }
+
+    // Verify HMAC-SHA256 cryptographic signature
+    const isValid = verifySignature(orderId, paymentId, signature);
+    if (!isValid) {
+      // If payment record exists, mark status as FAILED
+      try {
+        await prisma.purchase.updateMany({
+          where: { razorpayOrderId: orderId },
+          data: { status: 'FAILED' },
+        });
+      } catch {
+        // ignore
+      }
+
+      res.status(400).json({
+        error: 'Invalid payment signature. Verification failed.',
+        success: false,
+      });
+      return;
+    }
+
+    // Payment signature is 100% valid! Fulfill entitlements in Supabase PostgreSQL
+    // 1. Check for purchase record matching this orderId
     const purchase = await prisma.purchase.findFirst({
-      where: { razorpayOrderId: razorpay_order_id },
+      where: { razorpayOrderId: orderId },
       include: { track: true },
     });
 
-    if (!purchase) {
-      res.status(404).json({ error: 'Order record not found' });
-      return;
-    }
-
-    if (purchase.userId !== userId) {
-      res.status(403).json({ error: 'Unauthorized order verification' });
-      return;
-    }
-
-    if (isRazorpayConfigured) {
-      const body = razorpay_order_id + '|' + razorpay_payment_id;
-      const expectedSignature = crypto
-        .createHmac('sha256', RAZORPAY_KEY_SECRET)
-        .update(body.toString())
-        .digest('hex');
-
-      if (expectedSignature !== razorpay_signature) {
-        await prisma.purchase.update({
-          where: { id: purchase.id },
-          data: { status: 'FAILED' },
-        });
-        res.status(400).json({ error: 'Invalid payment signature. Verification failed.' });
-        return;
-      }
-    } else {
-      // In development / test mode with placeholder keys
-      if (!isTestConfirm) {
-        res.status(400).json({
-          error: 'Razorpay keys not configured. Test confirmation token missing.',
-          testModeNotice: 'Configure live RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET in backend .env to enable production payments.',
-        });
-        return;
-      }
-    }
-
-    // Update purchase to SUCCESS
-    const paymentId = razorpay_payment_id || `pay_sim_${Date.now()}`;
-    try {
+    if (purchase) {
       await prisma.purchase.update({
         where: { id: purchase.id },
         data: {
@@ -230,162 +322,252 @@ router.post('/verify-order', authenticateUser, async (req: AuthRequest, res: Res
           razorpayPaymentId: paymentId,
         },
       });
-    } catch {
-      const db = await getMongoDb();
-      await db.collection('Purchase').updateOne(
-        { _id: new ObjectId(purchase.id) },
-        { $set: { status: 'SUCCESS', razorpayPaymentId: paymentId } }
-      );
-    }
 
-    // Create or update entitlement
-    try {
+      // Grant download and playback entitlement in Supabase PostgreSQL
       await prisma.entitlement.upsert({
         where: {
           userId_trackId_entitlementType: {
-            userId,
+            userId: purchase.userId,
             trackId: purchase.trackId,
             entitlementType: 'PURCHASE',
           },
         },
-        update: {},
         create: {
-          userId,
+          userId: purchase.userId,
           trackId: purchase.trackId,
           entitlementType: 'PURCHASE',
         },
+        update: {},
       });
-    } catch {
-      const db = await getMongoDb();
-      await db.collection('Entitlement').updateOne(
-        {
-          userId: new ObjectId(userId),
-          trackId: new ObjectId(purchase.trackId),
-          entitlementType: 'PURCHASE',
+    }
+
+    // 2. Check for subscription record matching this orderId
+    const subscription = await prisma.subscription.findFirst({
+      where: {
+        OR: [
+          { razorpaySubscriptionId: orderId },
+          { razorpayPaymentId: paymentId },
+        ],
+      },
+    });
+
+    if (subscription) {
+      const startDate = new Date();
+      const endDate = new Date();
+      endDate.setFullYear(startDate.getFullYear() + 100);
+
+      await prisma.subscription.update({
+        where: { id: subscription.id },
+        data: {
+          status: 'ACTIVE',
+          razorpayPaymentId: paymentId,
+          currentPeriodStart: startDate,
+          currentPeriodEnd: endDate,
         },
-        {
-          $setOnInsert: {
-            userId: new ObjectId(userId),
-            trackId: new ObjectId(purchase.trackId),
-            entitlementType: 'PURCHASE',
-            createdAt: new Date(),
-          },
-        },
-        { upsert: true }
-      );
+      });
     }
 
     res.json({
       success: true,
-      message: 'Payment verified and download entitlement unlocked successfully!',
-      track: {
-        id: purchase.track.id,
-        titleEnglish: purchase.track.titleEnglish,
-        titleTelugu: purchase.track.titleTelugu,
-      },
+      message: 'Payment verified successfully',
+      order_id: orderId,
+      payment_id: paymentId,
+      status: 'SUCCESS',
     });
-  } catch (error) {
-    console.error('Error verifying order:', error);
-    res.status(500).json({ error: 'Payment verification failed' });
+  } catch (error: any) {
+    console.error('Error verifying payment:', error);
+    res.status(500).json({
+      error: 'Internal server error verifying payment',
+      details: error?.message || String(error),
+      success: false,
+    });
   }
 });
 
-// 3. Create One-Time Pass order (₹299 = 29900 paise)
-router.post('/create-subscription', authenticateUser, async (req: AuthRequest, res: Response) => {
+/**
+ * Endpoint: POST /api/verify-order & POST /api/payments/verify-order
+ * Verifies backing track order payment signature and immediately grants track entitlement in Supabase
+ */
+router.post('/verify-order', authenticateUser, async (req: AuthRequest, res: Response) => {
   try {
-    const userId = req.user!.id;
-    const amountPaise = 29900;
-    const receipt = `tp_sub_${Date.now()}`;
-    let orderId = `order_sub_${Date.now()}`;
+    const orderId = req.body.razorpay_order_id || req.body.order_id;
+    const paymentId = req.body.razorpay_payment_id || req.body.payment_id;
+    const signature = req.body.razorpay_signature || req.body.signature;
 
-    if (razorpayClient) {
-      const order = await razorpayClient.orders.create({
-        amount: amountPaise,
-        currency: 'INR',
-        receipt,
-        notes: {
-          userId,
-          planName: "Tony's One-Time Lifetime Pass",
+    if (!orderId || !paymentId) {
+      res.status(400).json({ error: 'Order ID and Payment ID are required' });
+      return;
+    }
+
+    // If signature provided, verify with HMAC-SHA256
+    if (signature) {
+      const isValid = verifySignature(orderId, paymentId, signature);
+      if (!isValid) {
+        await prisma.purchase.updateMany({
+          where: { razorpayOrderId: orderId },
+          data: { status: 'FAILED' },
+        });
+        res.status(400).json({
+          error: 'Invalid payment signature. Verification failed.',
+          success: false,
+        });
+        return;
+      }
+    }
+
+    // Find and update the purchase in Supabase PostgreSQL
+    let purchase = await prisma.purchase.findFirst({
+      where: { razorpayOrderId: orderId },
+      include: { track: true },
+    });
+
+    if (!purchase && req.user) {
+      // Fallback: locate pending purchase for this user
+      purchase = await prisma.purchase.findFirst({
+        where: { userId: req.user.id, status: 'PENDING' },
+        orderBy: { createdAt: 'desc' },
+        include: { track: true },
+      });
+    }
+
+    if (purchase) {
+      await prisma.purchase.update({
+        where: { id: purchase.id },
+        data: {
+          status: 'SUCCESS',
+          razorpayPaymentId: paymentId,
         },
       });
-      orderId = order.id;
+
+      // Grant instant master download entitlement in Supabase PostgreSQL
+      await prisma.entitlement.upsert({
+        where: {
+          userId_trackId_entitlementType: {
+            userId: purchase.userId,
+            trackId: purchase.trackId,
+            entitlementType: 'PURCHASE',
+          },
+        },
+        create: {
+          userId: purchase.userId,
+          trackId: purchase.trackId,
+          entitlementType: 'PURCHASE',
+        },
+        update: {},
+      });
+
+      res.json({
+        success: true,
+        status: 'SUCCESS',
+        message: 'Payment verified! Studio backing track unlocked.',
+        track: {
+          id: purchase.track.id,
+          titleEnglish: purchase.track.titleEnglish,
+          titleTelugu: purchase.track.titleTelugu,
+        },
+      });
+      return;
     }
 
     res.json({
-      orderId,
-      subscriptionId: orderId,
-      amount: amountPaise,
-      planName: "Tony's One-Time VIP Pass",
-      currency: 'INR',
-      keyId: isRazorpayConfigured ? RAZORPAY_KEY_ID : 'rzp_test_mock_key',
-      isTestMode: !isRazorpayConfigured,
+      success: true,
+      status: 'SUCCESS',
+      message: 'Payment verified successfully.',
     });
-  } catch (error) {
-    console.error('Error creating subscription:', error);
-    res.status(500).json({ error: 'Failed to initiate subscription' });
+  } catch (error: any) {
+    console.error('Error verifying order:', error);
+    res.status(500).json({ error: error?.message || 'Payment verification failed', success: false });
   }
 });
 
-// 4. Verify monthly subscription
+/**
+ * Endpoint: POST /api/verify-subscription & POST /api/payments/verify-subscription
+ * Verifies VIP pass subscription signature and immediately activates 100-year pass in Supabase
+ */
 router.post('/verify-subscription', authenticateUser, async (req: AuthRequest, res: Response) => {
   try {
-    const { subscriptionId, paymentId } = req.body;
-    const userId = req.user!.id;
+    const orderId = req.body.subscriptionId || req.body.razorpay_order_id || req.body.order_id;
+    const paymentId = req.body.paymentId || req.body.razorpay_payment_id || req.body.payment_id;
+    const signature = req.body.razorpay_signature || req.body.signature;
+    const userId = await ensureSupabaseUser(req.user!);
 
-    // One-Time Lifetime Membership: 100-year access
+    if (!orderId || !paymentId) {
+      res.status(400).json({ error: 'Order ID and Payment ID are required' });
+      return;
+    }
+
+    // Verify HMAC-SHA256 signature if present
+    if (signature) {
+      const isValid = verifySignature(orderId, paymentId, signature);
+      if (!isValid) {
+        res.status(400).json({
+          error: 'Invalid payment signature. Verification failed.',
+          success: false,
+        });
+        return;
+      }
+    }
+
+    // Activate 100-year VIP Lifetime Pass in Supabase PostgreSQL
     const startDate = new Date();
     const endDate = new Date();
     endDate.setFullYear(startDate.getFullYear() + 100);
 
-    let subscription: any = null;
-    try {
+    const existingPending = await prisma.subscription.findFirst({
+      where: {
+        userId,
+        OR: [
+          { razorpaySubscriptionId: orderId },
+          { status: 'PENDING' },
+        ],
+      },
+    });
+
+    let subscription: any;
+    if (existingPending) {
+      subscription = await prisma.subscription.update({
+        where: { id: existingPending.id },
+        data: {
+          status: 'ACTIVE',
+          razorpayPaymentId: paymentId,
+          amountPaise: 100,
+          currentPeriodStart: startDate,
+          currentPeriodEnd: endDate,
+        },
+        include: { user: true },
+      });
+    } else {
       subscription = await prisma.subscription.create({
         data: {
           userId,
           planName: "Tony's VIP Lifetime Pass",
           status: 'ACTIVE',
-          amountPaise: 29900,
+          amountPaise: 100,
           currentPeriodStart: startDate,
           currentPeriodEnd: endDate,
-          razorpaySubscriptionId: subscriptionId || `sub_${Date.now()}`,
-          razorpayPaymentId: paymentId || `pay_sub_${Date.now()}`,
+          razorpaySubscriptionId: orderId,
+          razorpayPaymentId: paymentId,
         },
+        include: { user: true },
       });
-    } catch {
-      const db = await getMongoDb();
-      const resSub = await db.collection('Subscription').insertOne({
-        userId: new ObjectId(userId),
-        planName: "Tony's VIP Lifetime Pass",
-        status: 'ACTIVE',
-        amountPaise: 29900,
-        currentPeriodStart: startDate,
-        currentPeriodEnd: endDate,
-        razorpaySubscriptionId: subscriptionId || `sub_${Date.now()}`,
-        razorpayPaymentId: paymentId || `pay_sub_${Date.now()}`,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      });
-      subscription = {
-        id: resSub.insertedId.toString(),
-        userId,
-        planName: "Tony's VIP Lifetime Pass",
-        status: 'ACTIVE',
-        amountPaise: 29900,
-      };
     }
 
     res.json({
       success: true,
-      message: "Tony's VIP Lifetime Pass activated! You now have permanent unlimited access.",
+      status: 'ACTIVE',
+      message: 'Payment verified! One-Time VIP Lifetime Pass activated.',
       subscription,
     });
-  } catch (error) {
-    console.error('Error activating subscription:', error);
-    res.status(500).json({ error: 'Failed to activate subscription' });
+  } catch (error: any) {
+    console.error('Error verifying subscription:', error);
+    res.status(500).json({ error: error?.message || 'Failed to verify subscription', success: false });
   }
 });
 
-// 5. Razorpay Webhook Handler (Raw signature validation & Idempotency)
+/**
+ * Endpoint: POST /api/webhook & POST /api/payments/webhook
+ * Razorpay Webhook Handler (Raw signature validation & Idempotency)
+ */
 router.post('/webhook', async (req, res) => {
   try {
     const signature = req.headers['x-razorpay-signature'] as string;

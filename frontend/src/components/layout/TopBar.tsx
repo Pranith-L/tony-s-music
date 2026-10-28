@@ -8,6 +8,7 @@ import {
   Calendar,
   LogOut,
   Shield,
+  ShieldCheck,
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext.js';
 import { ThemeToggle } from '../common/ThemeToggle.js';
@@ -82,10 +83,29 @@ export const TopBar: React.FC<TopBarProps> = ({ onToggleMobileMenu }) => {
       {/* Top Main Row - Balanced Equal Spacing for Brand, Search, and Profile */}
       <div className="flex items-center justify-between gap-3 sm:gap-4 w-full">
         {/* Mobile Brand Monogram */}
-        <Link to="/" className="md:hidden flex items-center shrink-0">
-          <span className="font-heading text-sm sm:text-base font-bold text-[#1D1D1F] dark:text-white tracking-tight whitespace-nowrap">
-            TONY'S <span className="text-[#D4A017]">MUSIC</span>
-          </span>
+        <Link to="/" className="md:hidden flex items-center gap-2 shrink-0" title="Tony's Music">
+          <div className="w-9 h-9 rounded-xl overflow-hidden flex items-center justify-center bg-white dark:bg-[#18181B] border border-[#D4A017]/40 shadow-sm">
+            <img
+              src="/tony_avatar_cutout.png"
+              alt="Rev. Tony Prakash"
+              className="w-full h-full object-cover object-center"
+            />
+          </div>
+          <div className="h-8 flex items-center gap-1">
+            <img
+              src="/branding/brand_wordmark_light.png"
+              alt="Tony's Music"
+              className="h-8 w-auto max-w-[150px] object-contain block dark:hidden drop-shadow-sm"
+            />
+            <img
+              src="/branding/brand_wordmark_dark.png"
+              alt="Tony's Music"
+              className="h-8 w-auto max-w-[150px] object-contain hidden dark:block drop-shadow-[0_2px_12px_rgba(250,36,60,0.25)]"
+            />
+            <span title="Verified Devotional Music Platform">
+              <ShieldCheck className="w-3.5 h-3.5 text-[#D4A017] shrink-0" />
+            </span>
+          </div>
         </Link>
 
         {/* Search Input - Expands evenly in the center with equal gaps */}

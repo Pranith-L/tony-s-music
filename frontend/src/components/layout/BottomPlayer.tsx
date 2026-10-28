@@ -125,9 +125,9 @@ export const BottomPlayer: React.FC = () => {
         <div className="flex items-center gap-3 sm:gap-3.5 min-w-0 w-[30%] sm:w-[28%] lg:w-[24%]">
           {/* Track Cover Thumbnail */}
           <div
-            onClick={handleNowPlayingToggle}
+            onClick={toggleFullscreenPlayer}
             className="relative w-12 h-12 sm:w-14 sm:h-14 rounded-xl overflow-hidden bg-gray-100 border border-[#E5E5EA] shrink-0 shadow-md group cursor-pointer"
-            title="Toggle Now Playing view"
+            title="Open Fullscreen Player with Live Lyrics & Dynamic Colors"
           >
             <img
               src={currentTrack.coverImage || '/covers/001_prayermp3.jpg'}
@@ -149,7 +149,8 @@ export const BottomPlayer: React.FC = () => {
             <div className="flex items-center gap-2">
               <span
                 className="text-xs sm:text-sm font-semibold text-[#1D1D1F] truncate leading-tight hover:underline cursor-pointer"
-                onClick={handleNowPlayingToggle}
+                onClick={toggleFullscreenPlayer}
+                title="Open Fullscreen Player"
               >
                 {currentTrack.titleEnglish}
               </span>

@@ -338,7 +338,7 @@ export const LibraryPage: React.FC = () => {
               </div>
 
               {/* Playlist Tracks Table */}
-              <div className="bg-[#F5F5F7]/60 rounded-3xl border border-[#E5E5EA] shadow-xl overflow-hidden">
+              <div className="bg-[#F5F5F7]/60 dark:bg-[#1C1C1E]/60 rounded-3xl border border-[#E5E5EA] dark:border-[#2C2C2E] shadow-xl overflow-hidden">
                 {playlistTracks.length === 0 ? (
                   <div className="py-16 text-center space-y-4 px-4">
                     <Music className="w-12 h-12 text-[#86868B]/40 mx-auto" />
@@ -541,7 +541,7 @@ export const LibraryPage: React.FC = () => {
             )}
           </div>
 
-          <div className="bg-[#F5F5F7]/60 rounded-3xl border border-[#E5E5EA] shadow-xl overflow-hidden">
+          <div className="bg-[#F5F5F7]/60 dark:bg-[#1C1C1E]/60 rounded-3xl border border-[#E5E5EA] dark:border-[#2C2C2E] shadow-xl overflow-hidden">
             {userLikedTracks.length === 0 ? (
               <div className="py-16 text-center space-y-3 px-4">
                 <Heart className="w-12 h-12 text-[#86868B]/30 mx-auto" />
@@ -663,7 +663,7 @@ export const LibraryPage: React.FC = () => {
             )}
           </div>
 
-          <div className="bg-[#F5F5F7]/60 rounded-3xl border border-[#E5E5EA] shadow-xl overflow-hidden">
+          <div className="bg-[#F5F5F7]/60 dark:bg-[#1C1C1E]/60 rounded-3xl border border-[#E5E5EA] dark:border-[#2C2C2E] shadow-xl overflow-hidden">
             {userPurchasedTracks.length === 0 ? (
               <div className="py-16 text-center space-y-3 px-4">
                 <Disc3 className="w-12 h-12 text-[#86868B]/30 mx-auto" />

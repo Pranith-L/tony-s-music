@@ -19,6 +19,7 @@ import {
   Library,
   Music,
   ListMusic,
+  ShieldCheck,
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext.js';
 import { useAnalytics } from '../../hooks/useAnalytics.js';
@@ -82,16 +83,27 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
         <div className="md:hidden fixed inset-0 z-50 bg-[#F5F5F7] flex flex-col animate-fadeIn">
           <div className="p-4 flex items-center justify-between border-b border-[#E5E5EA] bg-white">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-[#22070D] via-[#D71A30] to-[#FA243C] border border-[#D4A017] overflow-hidden flex items-center justify-center">
+              <div className="w-10 h-10 rounded-xl border border-[#D4A017]/40 dark:border-[#D4A017]/40 overflow-hidden flex items-center justify-center bg-white dark:bg-[#18181B] shadow-sm">
                 <img
                   src="/tony_avatar_cutout.png"
-                  alt="Tony Prakash"
+                  alt="Rev. Tony Prakash"
                   className="w-full h-full object-cover object-center"
                 />
               </div>
-              <div>
-                <span className="font-heading font-bold text-sm text-[#1D1D1F]">TONY'S MUSIC</span>
-                <p className="font-telugu text-[10px] text-[#FA243C] font-semibold">టోనీ ప్రకాష్ భక్తి గీతాలు</p>
+              <div className="flex items-center gap-1">
+                <img
+                  src="/branding/brand_wordmark_light.png"
+                  alt="Tony's Music"
+                  className="h-7 w-auto max-w-[150px] object-contain block dark:hidden"
+                />
+                <img
+                  src="/branding/brand_wordmark_dark.png"
+                  alt="Tony's Music"
+                  className="h-7 w-auto max-w-[150px] object-contain hidden dark:block"
+                />
+                <span title="Verified Devotional Music Platform">
+                  <ShieldCheck className="w-3.5 h-3.5 text-[#D4A017] shrink-0" />
+                </span>
               </div>
             </div>
             <button

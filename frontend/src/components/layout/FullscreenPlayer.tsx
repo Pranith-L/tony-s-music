@@ -74,7 +74,7 @@ export const FullscreenPlayer: React.FC = () => {
   return (
     <div
       data-testid="fullscreen-player-modal"
-      className="fixed inset-0 z-50 bg-[#F5F5F7] text-[#1D1D1F] flex flex-col justify-between overflow-hidden animate-fadeIn select-none h-full h-[100dvh]"
+      className="fullscreen-player-modal fixed inset-0 z-50 bg-[#F5F5F7] text-[#0F172A] flex flex-col justify-between overflow-hidden animate-fadeIn select-none h-full h-[100dvh]"
     >
       {/* Dynamic Ambient Background Glow matching Song/Album Cover Colors */}
       <div
@@ -100,7 +100,7 @@ export const FullscreenPlayer: React.FC = () => {
       <div className="relative z-10 px-4 sm:px-8 py-2.5 sm:py-3.5 flex items-center justify-between border-b border-[#E5E5EA] bg-white/75 backdrop-blur-xl shrink-0">
         <button
           onClick={toggleFullscreenPlayer}
-          className="p-1.5 sm:p-2 rounded-full hover:bg-[#F2F2F7] text-[#86868B] hover:text-[#1D1D1F] transition-colors"
+          className="fullscreen-control-icon p-1.5 sm:p-2 rounded-full hover:bg-black/5 transition-colors"
           title="Minimize player"
         >
           <ChevronDown className="w-5 sm:w-6 h-5 sm:h-6" />
@@ -113,14 +113,14 @@ export const FullscreenPlayer: React.FC = () => {
           >
             {currentTrack.isTrack ? 'Studio Backing Track' : 'Devotional Vocal Sanctuary'}
           </p>
-          <p className="font-heading text-xs sm:text-sm text-[#1D1D1F] font-bold">
+          <p className="fullscreen-top-artist font-heading text-xs sm:text-sm font-bold">
             Rev. Tony Prakash
           </p>
         </div>
 
         <button
           onClick={toggleFullscreenPlayer}
-          className="p-1.5 sm:p-2 rounded-full hover:bg-[#F2F2F7] text-[#86868B] hover:text-[#1D1D1F] transition-colors"
+          className="fullscreen-control-icon p-1.5 sm:p-2 rounded-full hover:bg-black/5 transition-colors"
           title="Close player"
         >
           <X className="w-5 h-5" />
@@ -158,7 +158,7 @@ export const FullscreenPlayer: React.FC = () => {
 
           {/* Song Info Right Under Artwork */}
           <div className="w-full text-center mt-2.5 sm:mt-3 space-y-0.5 sm:space-y-1">
-            <h2 className="text-sm sm:text-xl font-bold text-[#1D1D1F] truncate px-2">
+            <h2 className="fullscreen-track-title text-sm sm:text-xl font-bold truncate px-2">
               {currentTrack.titleEnglish}
             </h2>
             <p
@@ -167,7 +167,7 @@ export const FullscreenPlayer: React.FC = () => {
             >
               {currentTrack.titleTelugu}
             </p>
-            <p className="text-[11px] text-[#86868B] truncate">
+            <p className="fullscreen-track-meta text-[11px] truncate font-medium">
               {currentTrack.singer || 'Rev. Tony Prakash'} • {currentTrack.category || 'Worship'}
             </p>
           </div>
@@ -175,7 +175,7 @@ export const FullscreenPlayer: React.FC = () => {
           {/* Mobile Lyrics Accordion Toggle */}
           <button
             onClick={() => setShowMobileLyrics(!showMobileLyrics)}
-            className="md:hidden mt-2 px-3 py-1 rounded-full bg-white/90 border border-[#E5E5EA] text-[11px] text-[#86868B] flex items-center gap-1.5 transition-colors shadow-sm"
+            className="fullscreen-lyrics-toggle md:hidden mt-2 px-3 py-1 rounded-full border border-[#E5E5EA] text-[11px] flex items-center gap-1.5 transition-colors shadow-sm"
           >
             <FileText className="w-3.5 h-3.5" style={{ color: songTheme.primary }} />
             <span>{showMobileLyrics ? 'Hide Telugu Lyrics' : 'View Telugu Lyrics'}</span>
@@ -197,7 +197,7 @@ export const FullscreenPlayer: React.FC = () => {
               <Music2 className="w-4 h-4" />
               <span>సాహిత్యం • Devotional Lyrics</span>
             </div>
-            <span className="text-[11px] font-mono text-[#86868B]">
+            <span className="fullscreen-composer-text text-[11px] font-mono">
               Composer: {currentTrack.composer || 'Rev. Tony Prakash'}
             </span>
           </div>
@@ -205,11 +205,11 @@ export const FullscreenPlayer: React.FC = () => {
           {/* Scrollable lyrics with invisible scrollbar */}
           <div className="flex-1 min-h-0 overflow-y-auto space-y-4 pr-1 text-center md:text-left no-scrollbar scrollbar-none [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
             {currentTrack.lyricsTelugu ? (
-              <div className="space-y-4 font-telugu text-sm sm:text-base leading-relaxed text-[#1D1D1F] whitespace-pre-line">
+              <div className="fullscreen-lyrics-content space-y-4 font-telugu text-sm sm:text-base leading-relaxed whitespace-pre-line">
                 {currentTrack.lyricsTelugu}
               </div>
             ) : (
-              <div className="h-full flex flex-col items-center justify-center text-center text-[#86868B] space-y-2 py-8">
+              <div className="fullscreen-lyrics-empty h-full flex flex-col items-center justify-center text-center space-y-2 py-8">
                 <Music2 className="w-8 h-8 opacity-40" />
                 <p className="text-xs">
                   Instrumental / Studio Minus-One Backing Track. Sing along with the choir backing!
@@ -240,9 +240,9 @@ export const FullscreenPlayer: React.FC = () => {
               }}
             />
           </div>
-          <div className="flex justify-between text-[11px] font-mono text-[#86868B]">
-            <span>{formatSeconds(currentTime)}</span>
-            <span>{formatSeconds(duration)}</span>
+          <div className="flex justify-between text-[11px] font-mono">
+            <span className="fullscreen-timestamp">{formatSeconds(currentTime)}</span>
+            <span className="fullscreen-timestamp">{formatSeconds(duration)}</span>
           </div>
         </div>
 
@@ -252,7 +252,7 @@ export const FullscreenPlayer: React.FC = () => {
           <button
             onClick={() => toggleLikeTrack(currentTrack.id)}
             className="p-2 rounded-full transition-transform hover:scale-110"
-            style={{ color: liked ? songTheme.primary : '#86868B' }}
+            style={{ color: liked ? songTheme.primary : '#475569' }}
             title={liked ? 'Liked' : 'Like'}
           >
             <Heart className={`w-5 sm:w-6 h-5 sm:h-6 ${liked ? 'fill-current' : ''}`} />
@@ -263,7 +263,7 @@ export const FullscreenPlayer: React.FC = () => {
             <button
               onClick={toggleShuffle}
               className="p-2 rounded-full transition-colors"
-              style={{ color: shuffle ? songTheme.primary : '#86868B' }}
+              style={{ color: shuffle ? songTheme.primary : '#475569' }}
               title="Shuffle"
             >
               <Shuffle className="w-4 sm:w-5 h-4 sm:h-5" />
@@ -271,7 +271,7 @@ export const FullscreenPlayer: React.FC = () => {
 
             <button
               onClick={playPrev}
-              className="p-2 text-[#86868B] hover:text-[#1D1D1F] transition-colors"
+              className="fullscreen-control-icon p-2 transition-colors"
               title="Previous"
             >
               <SkipBack className="w-6 sm:w-7 h-6 sm:h-7 fill-current" />
@@ -295,7 +295,7 @@ export const FullscreenPlayer: React.FC = () => {
 
             <button
               onClick={playNext}
-              className="p-2 text-[#86868B] hover:text-[#1D1D1F] transition-colors"
+              className="fullscreen-control-icon p-2 transition-colors"
               title="Next"
             >
               <SkipForward className="w-6 sm:w-7 h-6 sm:h-7 fill-current" />
@@ -304,7 +304,7 @@ export const FullscreenPlayer: React.FC = () => {
             <button
               onClick={toggleRepeat}
               className="p-2 rounded-full transition-colors"
-              style={{ color: repeatMode !== 'off' ? songTheme.primary : '#86868B' }}
+              style={{ color: repeatMode !== 'off' ? songTheme.primary : '#475569' }}
               title="Repeat"
             >
               {repeatMode === 'one' ? (
@@ -318,7 +318,7 @@ export const FullscreenPlayer: React.FC = () => {
           {/* Volume Slider (Desktop) or Audio Indicator (Mobile) */}
           <div className="flex items-center justify-end w-10 lg:w-32">
             <div className="hidden lg:flex items-center gap-2 w-full">
-              <button onClick={toggleMute} className="text-[#86868B] hover:text-[#1D1D1F]">
+              <button onClick={toggleMute} className="fullscreen-control-icon p-1 transition-colors">
                 {isMuted ? <VolumeX className="w-5 h-5 text-red-500" /> : <Volume2 className="w-5 h-5" />}
               </button>
               <input
@@ -328,13 +328,13 @@ export const FullscreenPlayer: React.FC = () => {
                 step="0.01"
                 value={isMuted ? 0 : volume}
                 onChange={(e) => setVolumeLevel(parseFloat(e.target.value))}
-                className="w-full h-1 bg-[#E5E5EA] rounded-full"
+                className="w-full h-1 bg-[#CBD5E1] rounded-full"
                 style={{ accentColor: songTheme.primary }}
               />
             </div>
             <button
               onClick={toggleMute}
-              className="lg:hidden p-2 text-[#86868B] hover:text-[#1D1D1F]"
+              className="lg:hidden p-2 fullscreen-control-icon transition-colors"
               title="Mute/Unmute"
             >
               {isMuted ? <VolumeX className="w-5 h-5 text-red-500" /> : <Volume2 className="w-5 h-5" />}

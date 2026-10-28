@@ -267,16 +267,28 @@ export const Home: React.FC = () => {
         <div className="relative p-6 sm:p-10 lg:p-12 flex flex-col md:flex-row items-center justify-between gap-8">
           <div className="space-y-4 max-w-2xl text-center md:text-left z-10">
             {/* Brand Monogram Crest */}
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-[#D4A017]/40 text-[#D4A017] text-xs font-mono uppercase tracking-widest shadow-sm">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white dark:bg-[#1C1C1E] border border-[#D4A017]/40 text-[#D4A017] text-xs font-mono uppercase tracking-widest shadow-sm">
               <Sparkles className="w-3.5 h-3.5 text-[#D4AF37]" />
-              <span>TONY'S MUSIC • OFFICIAL DEVOTIONAL HUB</span>
+              <span>TONY'S MUSIC • OFFICIAL DEVOTIONAL SANCTUARY</span>
             </div>
 
-            <div className="space-y-2">
-              <h1 className="text-3xl sm:text-5xl lg:text-6xl font-heading font-black text-[#1D1D1F] tracking-tight">
-                Rev. Tony Prakash
-              </h1>
-              <p className="font-telugu text-lg sm:text-2xl text-[#D4A017] font-semibold leading-relaxed">
+            <div className="space-y-3">
+              {/* English Handwritten Pastoral Signature with Cross & Dove */}
+              <div className="relative inline-block max-w-[340px] sm:max-w-[480px] lg:max-w-[560px]">
+                <img
+                  src="/branding/signature_english_light.png"
+                  alt="Rev. Tony Prakash"
+                  className="w-full h-auto max-h-20 sm:max-h-28 lg:max-h-36 object-contain mx-auto md:mx-0 drop-shadow-sm block dark:hidden"
+                />
+                <img
+                  src="/branding/signature_english_dark.png"
+                  alt="Rev. Tony Prakash"
+                  className="w-full h-auto max-h-20 sm:max-h-28 lg:max-h-36 object-contain mx-auto md:mx-0 drop-shadow-[0_4px_24px_rgba(212,175,55,0.25)] hidden dark:block"
+                />
+                <h1 className="sr-only">Rev. Tony Prakash</h1>
+              </div>
+
+              <p className="font-telugu text-base sm:text-lg text-[#D4A017] font-semibold leading-relaxed">
                 దైవజనులు టోనీ ప్రకాష్ గారి దివ్య ఆత్మీయ గీతాల భాండాగారం
               </p>
             </div>
@@ -746,16 +758,16 @@ export const Home: React.FC = () => {
       </section>
 
       {/* ================= 6. ABOUT MINISTRY SPOTLIGHT ================= */}
-      <section className="rounded-3xl p-6 sm:p-10 bg-gradient-to-r from-[#FFF0F2] via-white to-[#F5F5F7] border border-[#E5E5EA] shadow-apple-card flex flex-col md:flex-row items-center justify-between gap-6">
+      <section className="spotlight-ministry-card rounded-3xl p-6 sm:p-10 bg-gradient-to-r from-[#FFF0F2] via-white to-[#F5F5F7] border border-[#E5E5EA] shadow-apple-card flex flex-col md:flex-row items-center justify-between gap-6">
         <div className="space-y-3 max-w-2xl">
           <div className="inline-flex items-center gap-2 text-xs font-mono uppercase text-[#FA243C] font-semibold">
             <Sparkles className="w-4 h-4 text-[#D4A017]" />
             <span>Ministry Calling & Vision</span>
           </div>
-          <h3 className="text-2xl sm:text-3xl font-heading font-bold text-[#1D1D1F]">
+          <h3 className="spotlight-title text-2xl sm:text-3xl font-heading font-bold text-slate-950">
             Singing For the Glory of the King of Kings
           </h3>
-          <p className="text-xs sm:text-sm text-[#86868B] leading-relaxed">
+          <p className="spotlight-desc text-xs sm:text-sm text-slate-700 leading-relaxed">
             Rev. Tony Prakash has committed over three decades of divine service, touching millions through Telugu gospel hymns, soul-stirring worship, and biblical preaching. Join Tony's VIP Ministry Membership for full access or get studio backing tracks for your church.
           </p>
         </div>
@@ -769,7 +781,7 @@ export const Home: React.FC = () => {
           </Link>
           <Link
             to="/about"
-            className="px-6 py-3 rounded-full bg-white hover:bg-[#F2F2F7] border border-[#E5E5EA] text-[#1D1D1F] text-xs font-bold uppercase tracking-wider text-center transition-colors shadow-sm"
+            className="spotlight-story-btn px-6 py-3 rounded-full bg-white hover:bg-[#F2F2F7] border border-[#E5E5EA] text-[#1D1D1F] text-xs font-bold uppercase tracking-wider text-center transition-colors shadow-sm"
           >
             Read Ministry Story
           </Link>

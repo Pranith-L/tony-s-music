@@ -52,33 +52,35 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed, onToggleCollapse })
       }`}
     >
       {/* 1. App Header / Brand Crest */}
-      <div className="py-2.5 px-3.5 flex items-center justify-between border-b border-[#E5E5EA] bg-gradient-to-b from-[#1A060A]/40 to-transparent">
+      <div className="py-2.5 px-3 flex items-center justify-between border-b border-[#E5E5EA] dark:border-white/10 bg-white/60 dark:bg-black/20 backdrop-blur-sm">
         <Link
           to="/"
-          className={`flex items-center gap-2.5 group transition-transform ${collapsed ? 'justify-center w-full' : ''}`}
+          className={`flex items-center gap-2.5 group transition-transform ${collapsed ? 'justify-center w-full' : 'flex-1 min-w-0'}`}
           title="Tony's Music • Rev. Tony Prakash"
         >
-          <div className="relative w-9 h-9 rounded-xl border border-[#E5E5EA] flex items-center justify-center group-hover:scale-105 transition-transform overflow-hidden shrink-0 shadow-sm bg-white">
+          <div className="relative w-10 h-10 rounded-xl border border-[#D4A017]/40 dark:border-[#D4A017]/40 flex items-center justify-center group-hover:scale-105 transition-transform overflow-hidden shrink-0 shadow-sm bg-white dark:bg-[#18181B]">
             <img
               src="/tony_avatar_cutout.png"
-              alt="Tony Prakash"
+              alt="Rev. Tony Prakash"
               className="w-full h-full object-cover object-center"
             />
           </div>
 
           {!collapsed && (
-            <div className="min-w-0">
-              <div className="flex items-center gap-1.5">
-                <span className="font-heading text-lg font-bold tracking-tight text-[#1D1D1F] group-hover:text-[#FA243C] transition-colors truncate">
-                  TONY'S MUSIC
-                </span>
-                <span title="Verified Devotional Music Platform">
-                  <ShieldCheck className="w-3.5 h-3.5 text-[#D4A017] shrink-0" />
-                </span>
-              </div>
-              <p className="text-[9px] tracking-wider font-telugu text-[#FA243C] font-semibold truncate">
-                టోనీ ప్రకాష్ సంగీతం • Official Hub
-              </p>
+            <div className="min-w-0 flex-1 flex items-center gap-1.5">
+              <img
+                src="/branding/brand_wordmark_light.png"
+                alt="Tony's Music"
+                className="h-8 sm:h-9 w-auto max-w-[190px] object-contain object-left block dark:hidden"
+              />
+              <img
+                src="/branding/brand_wordmark_dark.png"
+                alt="Tony's Music"
+                className="h-8 sm:h-9 w-auto max-w-[190px] object-contain object-left hidden dark:block drop-shadow-[0_2px_10px_rgba(250,36,60,0.25)]"
+              />
+              <span title="Verified Devotional Music Platform">
+                <ShieldCheck className="w-4 h-4 text-[#D4A017] shrink-0" />
+              </span>
             </div>
           )}
         </Link>

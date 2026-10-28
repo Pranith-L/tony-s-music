@@ -161,6 +161,33 @@ html.dark {
     background-color: rgba(28, 28, 30, 0.95) !important;
   }
 
+  .bg-sacred-midnight {
+    background-color: #0E0E10 !important;
+  }
+
+  .bg-sacred-espresso {
+    background-color: #141416 !important;
+  }
+
+  .bg-sacred-charcoal {
+    background-color: #1C1C1E !important;
+  }
+
+  .bg-sacred-surface {
+    background-color: #202023 !important;
+  }
+
+  .sacred-glass {
+    background-color: #18181B !important;
+    border-color: #27272A !important;
+  }
+
+  .sacred-glass-glow {
+    background-color: #18181B !important;
+    border-color: #27272A !important;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.45) !important;
+  }
+
   /* 2. Borders & Hairlines */
   .border-\[\#E5E5EA\],
   .border-gray-100,
@@ -170,11 +197,13 @@ html.dark {
 
   /* 3. Typography Contrast */
   .text-\[\#1D1D1F\],
-  .text-black {
+  .text-black,
+  .text-sacred-ivory {
     color: #FFFFFF !important;
   }
 
-  .text-\[\#86868B\] {
+  .text-\[\#86868B\],
+  .text-sacred-ivoryMuted {
     color: #B4B4BC !important;
   }
 
@@ -347,3 +376,140 @@ html.dark {
 .wave-bar-2 { animation: soundPulse 1.2s ease-in-out infinite 0.15s; }
 .wave-bar-3 { animation: soundPulse 0.75s ease-in-out infinite 0.35s; }
 .wave-bar-4 { animation: soundPulse 1.05s ease-in-out infinite 0.1s; }
+
+/* About Page Portrait White Glassy Transparent Badge */
+.about-portrait-glass-badge {
+  background-color: rgba(255, 255, 255, 0.38) !important;
+  backdrop-filter: blur(10px) saturate(160%) !important;
+  -webkit-backdrop-filter: blur(10px) saturate(160%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.5) !important;
+  box-shadow: 0 10px 30px 0 rgba(0, 0, 0, 0.2) !important;
+}
+
+.about-portrait-glass-badge .badge-title {
+  color: #78350F !important;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.6);
+}
+
+.about-portrait-glass-badge .badge-subtitle {
+  color: #0F172A !important;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.6);
+}
+
+/* Home Page Spotlight Ministry Card - High-Contrast in Both Modes */
+html.dark .spotlight-ministry-card,
+.spotlight-ministry-card {
+  background: linear-gradient(to right, #FFF0F2, #FFFFFF, #F5F5F7) !important;
+  border-color: #E5E5EA !important;
+}
+
+html.dark .spotlight-ministry-card .spotlight-title,
+.spotlight-ministry-card .spotlight-title {
+  color: #0F172A !important;
+}
+
+html.dark .spotlight-ministry-card .spotlight-desc,
+.spotlight-ministry-card .spotlight-desc {
+  color: #334155 !important;
+}
+
+html.dark .spotlight-ministry-card .spotlight-story-btn,
+.spotlight-ministry-card .spotlight-story-btn {
+  background-color: #FFFFFF !important;
+  color: #0F172A !important;
+  border-color: #E5E5EA !important;
+}
+
+html.dark .spotlight-ministry-card .spotlight-story-btn:hover,
+.spotlight-ministry-card .spotlight-story-btn:hover {
+  background-color: #F2F2F7 !important;
+}
+
+/* ============================================================
+   FULLSCREEN PLAYER MODAL HIGH-CONTRAST VISIBILITY
+   Guarantees dark, crisp, visible text on the white glassy
+   player background in both Light and Dark mode.
+   ============================================================ */
+.fullscreen-player-modal,
+html.dark .fullscreen-player-modal,
+[data-testid="fullscreen-player-modal"],
+html.dark [data-testid="fullscreen-player-modal"] {
+  color: #0F172A !important;
+}
+
+.fullscreen-player-modal .fullscreen-top-artist,
+html.dark .fullscreen-player-modal .fullscreen-top-artist,
+[data-testid="fullscreen-player-modal"] .fullscreen-top-artist,
+html.dark [data-testid="fullscreen-player-modal"] .fullscreen-top-artist {
+  color: #0F172A !important;
+}
+
+.fullscreen-player-modal .fullscreen-track-title,
+html.dark .fullscreen-player-modal .fullscreen-track-title,
+[data-testid="fullscreen-player-modal"] .fullscreen-track-title,
+html.dark [data-testid="fullscreen-player-modal"] .fullscreen-track-title {
+  color: #0F172A !important;
+}
+
+.fullscreen-player-modal .fullscreen-track-meta,
+html.dark .fullscreen-player-modal .fullscreen-track-meta,
+[data-testid="fullscreen-player-modal"] .fullscreen-track-meta,
+html.dark [data-testid="fullscreen-player-modal"] .fullscreen-track-meta {
+  color: #475569 !important;
+}
+
+.fullscreen-player-modal .fullscreen-lyrics-toggle,
+html.dark .fullscreen-player-modal .fullscreen-lyrics-toggle,
+[data-testid="fullscreen-player-modal"] .fullscreen-lyrics-toggle,
+html.dark [data-testid="fullscreen-player-modal"] .fullscreen-lyrics-toggle {
+  color: #334155 !important;
+  border-color: #CBD5E1 !important;
+  background-color: rgba(255, 255, 255, 0.95) !important;
+}
+
+.fullscreen-player-modal .fullscreen-composer-text,
+html.dark .fullscreen-player-modal .fullscreen-composer-text,
+[data-testid="fullscreen-player-modal"] .fullscreen-composer-text,
+html.dark [data-testid="fullscreen-player-modal"] .fullscreen-composer-text {
+  color: #475569 !important;
+}
+
+.fullscreen-player-modal .fullscreen-lyrics-content,
+html.dark .fullscreen-player-modal .fullscreen-lyrics-content,
+[data-testid="fullscreen-player-modal"] .fullscreen-lyrics-content,
+html.dark [data-testid="fullscreen-player-modal"] .fullscreen-lyrics-content {
+  color: #0F172A !important;
+  font-weight: 500 !important;
+}
+
+.fullscreen-player-modal .fullscreen-lyrics-empty,
+html.dark .fullscreen-player-modal .fullscreen-lyrics-empty,
+[data-testid="fullscreen-player-modal"] .fullscreen-lyrics-empty,
+html.dark [data-testid="fullscreen-player-modal"] .fullscreen-lyrics-empty {
+  color: #64748B !important;
+}
+
+.fullscreen-player-modal .fullscreen-timestamp,
+html.dark .fullscreen-player-modal .fullscreen-timestamp,
+[data-testid="fullscreen-player-modal"] .fullscreen-timestamp,
+html.dark [data-testid="fullscreen-player-modal"] .fullscreen-timestamp {
+  color: #475569 !important;
+  font-weight: 600 !important;
+}
+
+.fullscreen-player-modal .fullscreen-control-icon,
+html.dark .fullscreen-player-modal .fullscreen-control-icon,
+[data-testid="fullscreen-player-modal"] .fullscreen-control-icon,
+html.dark [data-testid="fullscreen-player-modal"] .fullscreen-control-icon {
+  color: #475569 !important;
+}
+
+.fullscreen-player-modal .fullscreen-control-icon:hover,
+html.dark .fullscreen-player-modal .fullscreen-control-icon:hover,
+[data-testid="fullscreen-player-modal"] .fullscreen-control-icon:hover,
+html.dark [data-testid="fullscreen-player-modal"] .fullscreen-control-icon:hover {
+  color: #0F172A !important;
+}
+
+
+

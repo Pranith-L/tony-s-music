@@ -1,16 +1,17 @@
-// Prisma schema for Tony Prakash Official Music Platform (MongoDB)
+// Prisma schema for Tony Prakash Official Music Platform (Supabase PostgreSQL)
 
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "mongodb"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 model User {
-  id            String         @id @default(auto()) @map("_id") @db.ObjectId
+  id            String         @id @default(uuid())
   email         String         @unique
   passwordHash  String?
   name          String
@@ -26,11 +27,13 @@ model User {
   subscriptions Subscription[]
   purchases     Purchase[]
   entitlements  Entitlement[]
+  playlists     Playlist[]
+  likedTracks   LikedTrack[]
 }
 
 model Subscription {
-  id                     String    @id @default(auto()) @map("_id") @db.ObjectId
-  userId                 String    @db.ObjectId
+  id                     String    @id @default(uuid())
+  userId                 String
   user                   User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   planName               String    @default("Tony's VIP Pass")
   status                 String    @default("ACTIVE") // "ACTIVE" | "CANCELLED" | "EXPIRED" | "PENDING"
@@ -44,10 +47,10 @@ model Subscription {
 }
 
 model Purchase {
-  id                String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId            String   @db.ObjectId
+  id                String   @id @default(uuid())
+  userId            String
   user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  trackId           String   @db.ObjectId
+  trackId           String
   track             Track    @relation(fields: [trackId], references: [id], onDelete: Cascade)
   amountPaise       Int      @default(9900)
   status            String   @default("SUCCESS") // "SUCCESS" | "PENDING" | "FAILED"
@@ -57,11 +60,11 @@ model Purchase {
 }
 
 model Track {
-  id                 String        @id @default(auto()) @map("_id") @db.ObjectId
+  id                 String        @id @default(uuid())
   slug               String        @unique
   titleTelugu        String
   titleEnglish       String
-  albumId            String?       @db.ObjectId
+  albumId            String?
   album              Album?        @relation(fields: [albumId], references: [id], onDelete: SetNull)
   duration           String        @default("5:30")
   category           String        @default("Worship") // "Worship" | "Devotional" | "Praise" | "Gospel" | "Track"
@@ -75,8 +78,8 @@ model Track {
   audioUrl           String        // Public streaming URL or preview URL
   privateStorageKey  String?       // Protected storage identifier
   coverImage         String?
-  lyricsTelugu       String?
-  lyricsEnglish      String?
+  lyricsTelugu       String?       @db.Text
+  lyricsEnglish      String?       @db.Text
   composer           String        @default("Tony Prakash")
   lyricist           String        @default("Tony Prakash")
   singer             String        @default("Tony Prakash")
@@ -88,16 +91,18 @@ model Track {
 
   purchases          Purchase[]
   entitlements       Entitlement[]
+  playlistTracks     PlaylistTrack[]
+  likedBy            LikedTrack[]
 }
 
 model Album {
-  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  id           String   @id @default(uuid())
   slug         String   @unique
   titleTelugu  String
   titleEnglish String
   coverImage   String
   releaseYear  Int      @default(2024)
-  description  String?
+  description  String?  @db.Text
   isFeatured   Boolean  @default(false)
   status       String   @default("PUBLISHED") // "DRAFT" | "PUBLISHED" | "ARCHIVED"
   createdAt    DateTime @default(now())
@@ -107,10 +112,10 @@ model Album {
 }
 
 model Video {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  id          String   @id @default(uuid())
   youtubeId   String   @unique
   title       String
-  description String?
+  description String?  @db.Text
   thumbnail   String
   duration    String   @default("6:15")
   isFeatured  Boolean  @default(false)
@@ -121,7 +126,7 @@ model Video {
 }
 
 model Booking {
-  id               String   @id @default(auto()) @map("_id") @db.ObjectId
+  id               String   @id @default(uuid())
   referenceNo      String   @unique
   fullName         String
   email            String
@@ -133,19 +138,19 @@ model Booking {
   city             String
   venue            String?
   expectedAudience String?
-  message          String
+  message          String   @db.Text
   status           String   @default("NEW") // "NEW" | "CONTACTED" | "UNDER_DISCUSSION" | "CONFIRMED" | "COMPLETED" | "CANCELLED"
-  internalNotes    String?
+  internalNotes    String?  @db.Text
   consentGiven     Boolean  @default(true)
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 }
 
 model Entitlement {
-  id              String    @id @default(auto()) @map("_id") @db.ObjectId
-  userId          String    @db.ObjectId
+  id              String    @id @default(uuid())
+  userId          String
   user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  trackId         String    @db.ObjectId
+  trackId         String
   track           Track     @relation(fields: [trackId], references: [id], onDelete: Cascade)
   entitlementType String    // "PURCHASE" | "SUBSCRIPTION"
   validUntil      DateTime?
@@ -154,19 +159,54 @@ model Entitlement {
   @@unique([userId, trackId, entitlementType])
 }
 
+model Playlist {
+  id          String          @id @default(uuid())
+  name        String
+  userId      String
+  user        User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  coverImage  String?
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  tracks      PlaylistTrack[]
+}
+
+model PlaylistTrack {
+  id         String   @id @default(uuid())
+  playlistId String
+  playlist   Playlist @relation(fields: [playlistId], references: [id], onDelete: Cascade)
+  trackId    String
+  track      Track    @relation(fields: [trackId], references: [id], onDelete: Cascade)
+  orderIndex Int      @default(0)
+  createdAt  DateTime @default(now())
+
+  @@unique([playlistId, trackId])
+}
+
+model LikedTrack {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  trackId   String
+  track     Track    @relation(fields: [trackId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, trackId])
+}
+
 model WebhookEvent {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  id          String   @id @default(uuid())
   eventId     String   @unique
   eventType   String
-  payload     String
+  payload     String   @db.Text
   status      String   @default("PROCESSED")
   processedAt DateTime @default(now())
   createdAt   DateTime @default(now())
 }
 
 model SiteSetting {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  id        String   @id @default(uuid())
   key       String   @unique
-  value     String
+  value     String   @db.Text
   updatedAt DateTime @updatedAt
 }

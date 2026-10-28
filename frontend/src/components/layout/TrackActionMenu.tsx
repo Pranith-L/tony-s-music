@@ -1,8 +1,7 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useLayoutEffect } from 'react';
 import { createPortal } from 'react-dom';
 import {
   MoreVertical,
-  Play,
   ListPlus,
   ListStart,
   Heart,
@@ -15,7 +14,6 @@ import {
 } from 'lucide-react';
 import { Track } from '../../types/index.js';
 import { usePlayer } from '../../context/PlayerContext.js';
-import { useAuth } from '../../context/AuthContext.js';
 import { useNavigate } from 'react-router-dom';
 import { AddToPlaylistModal } from '../modals/AddToPlaylistModal.js';
 
@@ -37,9 +35,13 @@ export const TrackActionMenu: React.FC<TrackActionMenuProps> = ({
   const [isOpen, setIsOpen] = useState(false);
   const [copied, setCopied] = useState(false);
   const [showPlaylistModal, setShowPlaylistModal] = useState(false);
-  const [menuStyle, setMenuStyle] = useState<React.CSSProperties>({});
+  const [coords, setCoords] = useState<{ top: number; left: number }>({
+    top: 0,
+    left: 0,
+  });
+
   const buttonRef = useRef<HTMLButtonElement>(null);
-  const menuRef = useRef<HTMLDivElement>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
   const {
@@ -51,54 +53,74 @@ export const TrackActionMenu: React.FC<TrackActionMenuProps> = ({
     hasTrackAccess,
   } = usePlayer();
 
-  const { isSubscriber } = useAuth();
   const liked = isLiked(track.id);
   const isBacking = isBackingTrack(track);
   const unlocked = hasTrackAccess(track);
 
-  const updatePosition = () => {
+  const calculatePosition = () => {
     if (!buttonRef.current) return;
     const rect = buttonRef.current.getBoundingClientRect();
-    const menuWidth = 224; // 14rem = 224px
-    const estimatedMenuHeight = 340;
-    const padding = 12;
+    const dropdownEl = dropdownRef.current;
+    const menuHeight = dropdownEl?.offsetHeight || 290;
+    const menuWidth = dropdownEl?.offsetWidth || 224;
 
-    // Horizontal position: align with right edge of button, clamped to screen
-    let right = window.innerWidth - rect.right;
-    if (right < padding) right = padding;
-    if (right + menuWidth > window.innerWidth - padding) {
-      right = Math.max(padding, window.innerWidth - menuWidth - padding);
-    }
+    const TOP_BAR_HEIGHT = 65;
+    const BOTTOM_PLAYER_HEIGHT = 85;
 
-    const spaceBelow = window.innerHeight - rect.bottom;
-    const spaceAbove = rect.top;
+    const spaceAbove = rect.top - TOP_BAR_HEIGHT;
+    const spaceBelow = window.innerHeight - rect.bottom - BOTTOM_PLAYER_HEIGHT;
 
-    const style: React.CSSProperties = {
-      position: 'fixed',
-      right: `${Math.round(right)}px`,
-      width: '14rem',
-      maxWidth: `calc(100vw - 24px)`,
-      zIndex: 99999,
-    };
-
-    // If there is enough room below (at least 320px) OR if there's more room below than above:
-    if (spaceBelow >= estimatedMenuHeight || spaceBelow >= spaceAbove) {
-      style.top = `${Math.round(rect.bottom + 6)}px`;
-      style.maxHeight = `${Math.max(180, Math.round(spaceBelow - 16))}px`;
+    // Pick vertical direction:
+    // If not enough room above, open downward.
+    // If not enough room below, open upward.
+    // Otherwise open downward to avoid clipping track list headers.
+    let openAbove = false;
+    if (spaceAbove >= menuHeight && spaceBelow < menuHeight) {
+      openAbove = true;
+    } else if (spaceBelow >= menuHeight) {
+      openAbove = false;
     } else {
-      style.bottom = `${Math.round(window.innerHeight - rect.top + 6)}px`;
-      style.maxHeight = `${Math.max(180, Math.round(spaceAbove - 16))}px`;
+      openAbove = spaceAbove > spaceBelow;
     }
 
-    setMenuStyle(style);
+    let top = openAbove ? rect.top - menuHeight - 6 : rect.bottom + 6;
+
+    // Clamp top to viewport safe area (below top bar, above bottom player bar)
+    const minTop = TOP_BAR_HEIGHT + 6;
+    const maxTop = Math.max(minTop, window.innerHeight - BOTTOM_PLAYER_HEIGHT - menuHeight - 6);
+    top = Math.max(minTop, Math.min(top, maxTop));
+
+    // Align right edge of menu with right edge of button
+    let left = rect.right - menuWidth;
+    if (left < 10) left = 10;
+    if (left + menuWidth > window.innerWidth - 10) {
+      left = window.innerWidth - menuWidth - 10;
+    }
+
+    setCoords({ top, left });
   };
+
+  const handleToggle = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!isOpen) {
+      calculatePosition();
+      setIsOpen(true);
+    } else {
+      setIsOpen(false);
+    }
+  };
+
+  useLayoutEffect(() => {
+    if (isOpen) {
+      calculatePosition();
+    }
+  }, [isOpen]);
 
   useEffect(() => {
     if (!isOpen) return;
 
     const handleScrollOrResize = (e: Event) => {
-      // If the scroll happened inside the dropdown menu itself, don't close
-      if (menuRef.current && menuRef.current.contains(e.target as Node)) {
+      if (dropdownRef.current && dropdownRef.current.contains(e.target as Node)) {
         return;
       }
       setIsOpen(false);
@@ -131,19 +153,9 @@ export const TrackActionMenu: React.FC<TrackActionMenuProps> = ({
     }
   };
 
-  const handleToggle = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    if (!isOpen) {
-      updatePosition();
-      setIsOpen(true);
-    } else {
-      setIsOpen(false);
-    }
-  };
-
   return (
     <>
-      <div className={`relative inline-block ${className}`}>
+      <div className={`relative inline-flex items-center ${className}`}>
         <button
           ref={buttonRef}
           type="button"
@@ -157,34 +169,43 @@ export const TrackActionMenu: React.FC<TrackActionMenuProps> = ({
         </button>
       </div>
 
+      {/* Render Dropdown outside parent containers into body to guarantee zero clipping */}
       {isOpen &&
         createPortal(
           <>
-            {/* Backdrop overlay to capture all outside clicks/taps */}
+            {/* Backdrop click outside detector */}
             <div
-              className="fixed inset-0 z-[99998] bg-black/15 backdrop-blur-[0.5px] transition-opacity"
+              data-testid="track-action-backdrop"
+              className="fixed inset-0 z-[9998] bg-black/15 dark:bg-black/40 backdrop-blur-[0.5px]"
               onClick={(e) => {
                 e.stopPropagation();
                 setIsOpen(false);
               }}
-              onTouchStart={(e) => {
+              onContextMenu={(e) => {
                 e.stopPropagation();
                 setIsOpen(false);
               }}
             />
 
-            {/* Menu Popover - Rendered directly onto document.body to prevent clipping by overflow-hidden containers */}
+            {/* Floating Dropdown */}
             <div
-              ref={menuRef}
-              style={menuStyle}
+              ref={dropdownRef}
               data-testid="track-action-dropdown"
               onClick={(e) => e.stopPropagation()}
-              className="rounded-2xl bg-white/95 dark:bg-[#1C1C1E]/95 backdrop-blur-2xl border border-[#E5E5EA] dark:border-[#2C2C2E] shadow-2xl py-2 text-xs font-semibold text-[#1D1D1F] dark:text-white animate-fadeIn select-none overflow-y-auto"
+              style={{
+                top: `${coords.top}px`,
+                left: `${coords.left}px`,
+              }}
+              className="fixed z-[9999] w-56 rounded-2xl bg-white/95 dark:bg-[#1C1C1E]/95 backdrop-blur-2xl border border-[#E5E5EA] dark:border-[#2C2C2E] shadow-2xl py-2 text-xs font-semibold text-[#1D1D1F] dark:text-white animate-fadeIn select-none max-h-[min(380px,calc(100vh-160px))] overflow-y-auto"
             >
               {/* Quick Track Header */}
-              <div className="px-3 py-1.5 border-b border-[#E5E5EA] dark:border-[#2C2C2E] mb-1">
-                <p className="text-[11px] font-bold text-[#1D1D1F] dark:text-white truncate">{track.titleEnglish}</p>
-                <p className="font-telugu text-[10px] text-[#86868B] dark:text-[#A1A1AA] truncate">{track.titleTelugu}</p>
+              <div className="px-3.5 py-1.5 border-b border-[#E5E5EA] dark:border-[#2C2C2E] mb-1">
+                <p className="text-[11px] font-bold text-[#1D1D1F] dark:text-white truncate">
+                  {track.titleEnglish}
+                </p>
+                <p className="font-telugu text-[10px] text-[#86868B] dark:text-[#A1A1AA] truncate">
+                  {track.titleTelugu}
+                </p>
               </div>
 
               {/* Option: Play Next */}
@@ -235,11 +256,15 @@ export const TrackActionMenu: React.FC<TrackActionMenuProps> = ({
                 }}
                 className="w-full px-3.5 py-2 hover:bg-[#FEE2E2]/60 dark:hover:bg-white/10 flex items-center gap-2.5 text-[#1D1D1F] dark:text-zinc-200 transition-colors"
               >
-                <Heart className={`w-4 h-4 ${liked ? 'text-[#FA243C] fill-[#FA243C]' : 'text-[#86868B]'}`} />
+                <Heart
+                  className={`w-4 h-4 ${
+                    liked ? 'text-[#FA243C] fill-[#FA243C]' : 'text-[#86868B]'
+                  }`}
+                />
                 <span>{liked ? 'Remove from Liked' : 'Save to Liked Songs'}</span>
               </button>
 
-              {/* Option: Lyrics & Info */}
+              {/* Option: Lyrics & Devotional Info */}
               {onOpenLyrics && (
                 <button
                   type="button"

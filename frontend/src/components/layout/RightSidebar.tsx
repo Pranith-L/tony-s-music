@@ -112,21 +112,32 @@ export const RightSidebar: React.FC = () => {
             </div>
 
             {/* Quick Track Meta Details */}
-            <div className="p-3.5 rounded-2xl bg-[#F5F5F7]/70 border border-[#E5E5EA] space-y-2">
+            <div className="p-3.5 rounded-2xl bg-[#F5F5F7]/70 dark:bg-white/5 border border-[#E5E5EA] dark:border-white/10 space-y-2">
+              {(!currentTrack.lyricist || currentTrack.singer === currentTrack.lyricist || (!currentTrack.singer && !currentTrack.lyricist)) ? (
+                <div className="flex items-center justify-between text-xs">
+                  <span className="text-[#86868B] dark:text-stone-400">Composition & Vocals</span>
+                  <span className="font-semibold text-[#1D1D1F] dark:text-white">
+                    {currentTrack.singer || currentTrack.lyricist || 'Rev. Tony Prakash'}
+                  </span>
+                </div>
+              ) : (
+                <>
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="text-[#86868B] dark:text-stone-400">Singer / Lead</span>
+                    <span className="font-semibold text-[#1D1D1F] dark:text-white">
+                      {currentTrack.singer || 'Rev. Tony Prakash'}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="text-[#86868B] dark:text-stone-400">Lyrics & Tunes</span>
+                    <span className="font-semibold text-[#1D1D1F] dark:text-white">
+                      {currentTrack.lyricist}
+                    </span>
+                  </div>
+                </>
+              )}
               <div className="flex items-center justify-between text-xs">
-                <span className="text-[#86868B]">Singer / Lead</span>
-                <span className="font-semibold text-[#1D1D1F]">
-                  {currentTrack.singer || 'Rev. Tony Prakash'}
-                </span>
-              </div>
-              <div className="flex items-center justify-between text-xs">
-                <span className="text-[#86868B]">Lyrics & Tunes</span>
-                <span className="font-semibold text-[#1D1D1F]">
-                  {currentTrack.lyricist || 'Rev. Tony Prakash'}
-                </span>
-              </div>
-              <div className="flex items-center justify-between text-xs">
-                <span className="text-[#86868B]">Category & Year</span>
+                <span className="text-[#86868B] dark:text-stone-400">Category & Year</span>
                 <span className="font-semibold text-[#D4A017]">
                   {currentTrack.category} • {currentTrack.releaseYear}
                 </span>
@@ -134,32 +145,32 @@ export const RightSidebar: React.FC = () => {
             </div>
 
             {/* About the Artist Card */}
-            <div className="rounded-2xl bg-[#F5F5F7] border border-[#E5E5EA] overflow-hidden relative group">
-              <div className="h-28 overflow-hidden relative">
+            <div className="rounded-2xl bg-[#F5F5F7] dark:bg-[#18181B] border border-[#E5E5EA] dark:border-white/10 overflow-hidden relative group shadow-sm">
+              <div className="h-36 sm:h-40 overflow-hidden relative">
                 <img
-                  src="/dad_live.jpg"
+                  src="/dad_live_artist_card.jpg"
                   alt="Rev. Tony Prakash"
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#1A060A] via-[#1A060A]/40 to-transparent" />
-                <div className="absolute top-2 left-2 flex items-center gap-1.5 bg-white/80 backdrop-blur-md px-2.5 py-1 rounded-full border border-[#E5E5EA]">
+                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent" />
+                <div className="absolute top-2.5 left-2.5 flex items-center gap-1.5 bg-white/90 dark:bg-black/75 backdrop-blur-md px-2.5 py-1 rounded-full border border-black/10 dark:border-white/20 shadow-sm">
                   <ShieldCheck className="w-3.5 h-3.5 text-[#FA243C]" />
-                  <span className="text-[10px] font-mono text-[#1D1D1F] font-bold">Verified Artist</span>
+                  <span className="text-[10px] font-mono text-[#1D1D1F] dark:text-white font-bold">Verified Artist</span>
                 </div>
               </div>
 
               <div className="p-4 space-y-2">
                 <div className="flex items-center justify-between">
-                  <h4 className="font-heading text-lg font-bold text-[#1D1D1F]">Rev. Tony Prakash</h4>
-                  <span className="text-[10px] font-mono text-[#D4A017] bg-[#D4A017]/15 px-2 py-0.5 rounded-full">
+                  <h4 className="font-heading text-lg font-bold text-[#1D1D1F] dark:text-white">Rev. Tony Prakash</h4>
+                  <span className="text-[10px] font-mono text-[#D4A017] bg-[#D4A017]/15 px-2 py-0.5 rounded-full font-semibold">
                     30+ Years
                   </span>
                 </div>
-                <p className="text-xs text-[#86868B] leading-relaxed line-clamp-3">
+                <p className="text-xs text-[#86868B] dark:text-stone-300 leading-relaxed line-clamp-3">
                   Pioneer Telugu Christian gospel songwriter, pastor, and worship leader known for profound devotional classics including ‘శ్రీ యేసు నీ పాద సేవ’ and ‘అబ్రహాము దేవుడవు’.
                 </p>
-                <div className="pt-2 flex items-center justify-between text-xs text-[#1D1D1F]">
-                  <span className="text-[#86868B]">500,000+ Listeners</span>
+                <div className="pt-2 flex items-center justify-between text-xs text-[#1D1D1F] dark:text-white">
+                  <span className="text-[#86868B] dark:text-stone-400">500,000+ Listeners</span>
                   <a
                     href="/about"
                     className="text-[#FA243C] hover:underline flex items-center gap-1 text-[11px] font-semibold"

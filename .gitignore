@@ -21,6 +21,7 @@ dist/
 .env.*
 !.env.example
 backend/.env
+frontend/.env
 frontend/.env.local
 
 # Database & SQLite files

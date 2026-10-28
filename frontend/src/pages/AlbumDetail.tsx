@@ -105,7 +105,7 @@ export const AlbumDetailPage: React.FC = () => {
       </Link>
 
       {/* Album Billboard Header */}
-      <div className="relative rounded-3xl p-6 sm:p-8 bg-gradient-to-b from-[#FEE2E2]/60 via-[#F5F5F7] to-[#FFFFFF] border border-[#E5E5EA] grid grid-cols-1 md:grid-cols-12 gap-8 items-end shadow-sm">
+      <div className="relative rounded-3xl p-6 sm:p-8 bg-gradient-to-b from-[#FEE2E2]/60 via-[#F5F5F7] to-[#FFFFFF] dark:from-[#2A1518]/60 dark:via-[#18181B] dark:to-[#121214] border border-[#E5E5EA] dark:border-white/10 grid grid-cols-1 md:grid-cols-12 gap-8 items-end shadow-sm">
         {/* Cover Art */}
         <div className="md:col-span-4 lg:col-span-3">
           <div className="relative aspect-square rounded-2xl overflow-hidden bg-[#F2F2F7] border border-[#E5E5EA] shadow-xl">
@@ -123,27 +123,27 @@ export const AlbumDetailPage: React.FC = () => {
             Album • ఆల్బమ్
           </span>
 
-          <h1 className="text-3xl sm:text-5xl font-heading font-bold text-[#1D1D1F]">
+          <h1 className="text-3xl sm:text-5xl font-heading font-bold text-[#1D1D1F] dark:text-white">
             {album.titleTelugu}
           </h1>
-          <p className="text-xl sm:text-2xl text-[#86868B] font-heading font-normal">
+          <p className="text-xl sm:text-2xl text-[#86868B] dark:text-white/70 font-heading font-normal">
             {album.titleEnglish}
           </p>
 
-          <p className="text-xs sm:text-sm text-[#86868B] leading-relaxed max-w-2xl">
+          <p className="text-xs sm:text-sm text-[#86868B] dark:text-white/60 leading-relaxed max-w-2xl">
             {album.description}
           </p>
 
           {/* Artist Avatar & Stats Row */}
-          <div className="flex flex-wrap items-center gap-2 pt-2 text-xs text-[#1D1D1F]">
-            <div className="w-6 h-6 rounded-full overflow-hidden bg-[#F5F5F7] border border-[#E5E5EA] flex items-center justify-center">
+          <div className="flex flex-wrap items-center gap-2 pt-2 text-xs text-[#1D1D1F] dark:text-white/80">
+            <div className="w-6 h-6 rounded-full overflow-hidden bg-[#F5F5F7] dark:bg-[#18181B] border border-[#E5E5EA] dark:border-white/10 flex items-center justify-center">
               <img src="/tony_avatar_cutout.png" alt="Tony Prakash" className="w-full h-full object-cover object-center" />
             </div>
             <span className="font-bold">Rev. Tony Prakash</span>
             <span>•</span>
-            <span className="text-[#86868B]">{album.releaseYear}</span>
+            <span className="text-[#86868B] dark:text-white/50">{album.releaseYear}</span>
             <span>•</span>
-            <span className="text-[#86868B]">{tracks.length} songs</span>
+            <span className="text-[#86868B] dark:text-white/50">{tracks.length} songs</span>
           </div>
         </div>
       </div>
@@ -172,9 +172,9 @@ export const AlbumDetailPage: React.FC = () => {
       </div>
 
       {/* Tracklist Table */}
-      <div className="rounded-2xl bg-[#F5F5F7]/70 border border-[#E5E5EA] overflow-hidden">
+      <div className="rounded-2xl bg-[#F5F5F7]/70 dark:bg-[#18181B]/80 border border-[#E5E5EA] dark:border-white/10 overflow-hidden shadow-sm">
         {/* Table Header */}
-        <div className="hidden sm:grid grid-cols-12 gap-4 px-4 py-2.5 border-b border-[#E5E5EA] text-[11px] font-mono text-[#86868B] uppercase tracking-wider">
+        <div className="hidden sm:grid grid-cols-12 gap-4 px-4 py-2.5 border-b border-[#E5E5EA] dark:border-white/10 text-[11px] font-mono text-[#86868B] dark:text-white/50 uppercase tracking-wider">
           <div className="col-span-1 text-center">#</div>
           <div className="col-span-7">Title / కీర్తన</div>
           <div className="col-span-2 text-center">Category</div>
@@ -182,7 +182,7 @@ export const AlbumDetailPage: React.FC = () => {
         </div>
 
         {/* Rows */}
-        <div className="divide-y divide-[#FA243C]/10">
+        <div className="divide-y divide-[#FA243C]/10 dark:divide-white/5">
           {tracks.map((track, idx) => {
             const isThisPlaying = currentTrack?.id === track.id && isPlaying;
             const liked = isLiked(track.id);
@@ -210,7 +210,7 @@ export const AlbumDetailPage: React.FC = () => {
                     </>
                   ) : (
                     <>
-                      <span className="font-mono text-xs text-[#86868B] group-hover:hidden">
+                      <span className="font-mono text-xs text-[#86868B] dark:text-white/50 group-hover:hidden">
                         {String(idx + 1).padStart(2, '0')}
                       </span>
                       <Play className="w-4 h-4 text-[#FA243C] hidden group-hover:block fill-current ml-0.5" />
@@ -223,12 +223,12 @@ export const AlbumDetailPage: React.FC = () => {
                     className={`font-telugu text-sm font-semibold truncate leading-tight transition-colors ${
                       currentTrack?.id === track.id
                         ? 'text-[#FA243C]'
-                        : 'text-[#1D1D1F] group-hover:text-[#FA243C]'
+                        : 'text-[#1D1D1F] dark:text-white/90 group-hover:text-[#FA243C]'
                     }`}
                   >
                     {track.titleTelugu}
                   </p>
-                  <p className="text-[11px] text-[#86868B] truncate">
+                  <p className="text-[11px] text-[#86868B] dark:text-white/50 truncate">
                     {track.singer || 'Rev. Tony Prakash'} • {track.titleEnglish}
                   </p>
                 </div>

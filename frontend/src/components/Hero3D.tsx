@@ -108,15 +108,12 @@ export const Hero: React.FC = () => {
           {/* Regal Bilingual Typography Showcase */}
           <div className="space-y-4">
             
-            {/* 1. Telugu Name (Grand, Soulful, Calligraphic Serifs with Rev.) */}
+            {/* 1. Ministry Subtitle */}
             <div className="space-y-1.5 relative">
               <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-[0.22em] text-[#D4A017]">
                 <span>భక్తి గాన స్వరకర్త • గాయకుడు</span>
                 <span className="text-[#FFFFFF]">✦</span>
               </div>
-              <h1 className="font-telugu text-5xl sm:text-6xl xl:text-7xl font-bold tracking-tight leading-[1.1] text-transparent bg-clip-text bg-gradient-to-r from-[#FFFFFF] via-[#E8DCB8] to-[#D4A017] drop-shadow-[0_4px_30px_rgba(201,178,124,0.35)]">
-                రెవ. టోనీ ప్రకాష్
-              </h1>
             </div>
 
             {/* Elegant Ornamental Divider with Sacred Cross */}
@@ -130,14 +127,14 @@ export const Hero: React.FC = () => {
               <div className="flex-1 h-[1px] bg-gradient-to-r from-[#D4A017]/80 via-[#FA243C]/40 to-transparent" />
             </div>
 
-            {/* 2. English Name with Rev. in Title Case */}
-            <div>
-              <h2 className="font-heading text-4xl sm:text-5xl xl:text-6xl font-normal tracking-[0.06em] text-[#FFFFFF] leading-tight">
-                <span className="text-[#D4A017] font-serif italic text-2xl sm:text-4xl mr-2.5 normal-case font-normal">
-                  Rev.
-                </span>
-                <span className="gold-gradient-text font-medium uppercase">Tony Prakash</span>
-              </h2>
+            {/* 2. English Name Handwritten Signature */}
+            <div className="py-1">
+              <img
+                src="/branding/signature_english_dark.png"
+                alt="Rev. Tony Prakash"
+                className="w-full max-w-[420px] sm:max-w-[520px] h-auto max-h-24 sm:max-h-32 object-contain drop-shadow-[0_4px_30px_rgba(212,175,55,0.35)]"
+              />
+              <h2 className="sr-only">Rev. Tony Prakash</h2>
               <div className="flex flex-wrap items-center gap-2 text-xs sm:text-sm font-mono tracking-widest uppercase text-[#86868B] mt-1.5">
                 <span>Devotional Singer</span>
                 <span className="text-[#D4A017]">•</span>

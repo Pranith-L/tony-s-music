@@ -317,31 +317,32 @@ export const api = {
     },
   },
 
-  // Payments & Subscriptions
+  // Payments & Subscriptions (Razorpay Standard Web Checkout)
   payments: {
-    async createOrder(trackId: string, slug?: string) {
-      const res = await fetch(`${API_BASE}/payments/create-order`, {
+    async createOrder(trackId?: string, slug?: string, amount?: number) {
+      const res = await fetch(`${API_BASE}/create-order`, {
         method: 'POST',
         headers: getAuthHeaders(),
-        body: JSON.stringify({ trackId, slug }),
+        body: JSON.stringify({ trackId, slug, amount }),
       });
       return handleResponse<{
+        order_id: string;
         orderId: string;
         amount: number;
         currency: string;
         keyId: string;
-        trackTitle: string;
+        trackTitle?: string;
         isTestMode: boolean;
       }>(res);
     },
 
     async verifyOrder(data: {
       razorpay_order_id: string;
-      razorpay_payment_id?: string;
+      razorpay_payment_id: string;
       razorpay_signature?: string;
       isTestConfirm?: boolean;
     }) {
-      const res = await fetch(`${API_BASE}/payments/verify-order`, {
+      const res = await fetch(`${API_BASE}/verify-order`, {
         method: 'POST',
         headers: getAuthHeaders(),
         body: JSON.stringify(data),
@@ -350,11 +351,13 @@ export const api = {
     },
 
     async createSubscription() {
-      const res = await fetch(`${API_BASE}/payments/create-subscription`, {
+      const res = await fetch(`${API_BASE}/create-subscription`, {
         method: 'POST',
         headers: getAuthHeaders(),
       });
       return handleResponse<{
+        order_id: string;
+        orderId: string;
         subscriptionId: string;
         amount: number;
         planName: string;
@@ -364,13 +367,41 @@ export const api = {
       }>(res);
     },
 
-    async verifySubscription(data: { subscriptionId: string; paymentId?: string }) {
-      const res = await fetch(`${API_BASE}/payments/verify-subscription`, {
+    async verifySubscription(data: {
+      subscriptionId?: string;
+      paymentId?: string;
+      razorpay_order_id?: string;
+      razorpay_payment_id?: string;
+      razorpay_signature?: string;
+    }) {
+      const res = await fetch(`${API_BASE}/verify-subscription`, {
         method: 'POST',
         headers: getAuthHeaders(),
         body: JSON.stringify(data),
       });
       return handleResponse<{ success: boolean; message: string; subscription: any }>(res);
+    },
+
+    async verifyPayment(data: {
+      order_id?: string;
+      payment_id?: string;
+      signature?: string;
+      razorpay_order_id?: string;
+      razorpay_payment_id?: string;
+      razorpay_signature?: string;
+    }) {
+      const res = await fetch(`${API_BASE}/verify-payment`, {
+        method: 'POST',
+        headers: getAuthHeaders(),
+        body: JSON.stringify(data),
+      });
+      return handleResponse<{
+        success: boolean;
+        message: string;
+        order_id: string;
+        payment_id: string;
+        status: string;
+      }>(res);
     },
   },
 
@@ -423,6 +454,24 @@ export const api = {
         body: JSON.stringify(settings),
       });
       return handleResponse<{ message: string }>(res);
+    },
+
+    async approvePayment(data: { type: 'PURCHASE' | 'SUBSCRIPTION'; id: string }) {
+      const res = await fetch(`${API_BASE}/admin/approve-payment`, {
+        method: 'POST',
+        headers: getAuthHeaders(),
+        body: JSON.stringify(data),
+      });
+      return handleResponse<{ success: boolean; message: string }>(res);
+    },
+
+    async rejectPayment(data: { type: 'PURCHASE' | 'SUBSCRIPTION'; id: string }) {
+      const res = await fetch(`${API_BASE}/admin/reject-payment`, {
+        method: 'POST',
+        headers: getAuthHeaders(),
+        body: JSON.stringify(data),
+      });
+      return handleResponse<{ success: boolean; message: string }>(res);
     },
   },
 };

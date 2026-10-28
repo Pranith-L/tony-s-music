@@ -66,14 +66,12 @@ export const TrackPreviewLimitModal: React.FC<TrackPreviewLimitModalProps> = ({
   const handleRazorpaySuccess = async (paymentData: {
     razorpay_order_id: string;
     razorpay_payment_id: string;
-    razorpay_signature?: string;
-    isTestConfirm?: boolean;
+    razorpay_signature: string;
   }) => {
     const verified = await api.payments.verifyOrder({
       razorpay_order_id: paymentData.razorpay_order_id,
       razorpay_payment_id: paymentData.razorpay_payment_id,
       razorpay_signature: paymentData.razorpay_signature,
-      isTestConfirm: paymentData.isTestConfirm ?? true,
     });
 
     if (verified.success) {

@@ -284,6 +284,9 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     audioRef.current.src = track.audioUrl;
     audioRef.current.volume = isMuted ? 0 : volume;
 
+    // Automatically open Fullscreen Player to showcase the dynamic color changing experience
+    setIsFullscreenPlayer(true);
+
     audioRef.current
       .play()
       .then(() => {
@@ -298,6 +301,7 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const playOrToggleTrack = (track: Track, newQueue?: Track[]) => {
     if (currentTrack?.id === track.id) {
       togglePlay();
+      setIsFullscreenPlayer(true);
     } else {
       playTrack(track, newQueue);
     }

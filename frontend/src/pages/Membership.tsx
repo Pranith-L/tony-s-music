@@ -51,7 +51,7 @@ export const MembershipPage: React.FC = () => {
       const subOrder = await api.payments.createSubscription();
       setRazorpayOrder({
         orderId: subOrder.subscriptionId,
-        amount: subOrder.amount || 29900,
+        amount: subOrder.amount || 100,
       });
     } catch (err: any) {
       setErrorMsg(err.message || 'Payment initiation failed. Please try again.');
@@ -63,22 +63,24 @@ export const MembershipPage: React.FC = () => {
   const handleRazorpaySuccess = async (paymentData: {
     razorpay_order_id: string;
     razorpay_payment_id: string;
-    razorpay_signature?: string;
-    isTestConfirm?: boolean;
+    razorpay_signature: string;
   }) => {
     try {
       const verified = await api.payments.verifySubscription({
         subscriptionId: paymentData.razorpay_order_id,
         paymentId: paymentData.razorpay_payment_id,
+        razorpay_order_id: paymentData.razorpay_order_id,
+        razorpay_payment_id: paymentData.razorpay_payment_id,
+        razorpay_signature: paymentData.razorpay_signature,
       });
 
       if (verified.success) {
-        setSuccessMsg("Tony's One-Time VIP Lifetime Pass activated! Thank you for standing with Rev. Tony Prakash ministry.");
+        setSuccessMsg("Payment verified! Your One-Time Lifetime VIP Pass has been activated successfully.");
         await refreshUser();
-        setRazorpayOrder(null);
       }
     } catch (err: any) {
       setErrorMsg(err.message || 'Verification failed. Please contact support.');
+      throw err;
     }
   };
 
@@ -208,10 +210,11 @@ export const MembershipPage: React.FC = () => {
               </p>
             </div>
 
-            <div className="flex items-baseline gap-1.5">
-              <span className="text-4xl sm:text-5xl font-mono font-bold text-[#D4A017]">₹299</span>
-              <span className="text-xs font-mono uppercase tracking-wider text-[#D4A017] font-bold px-2 py-0.5 rounded bg-[#D4A017]/20 border border-[#D4A017]/40">
-                ONE-TIME ONLY
+            <div className="flex items-baseline gap-2">
+              <span className="text-4xl sm:text-5xl font-mono font-bold text-[#D4A017]">₹1</span>
+              <span className="text-xs line-through text-gray-400 font-mono">₹299</span>
+              <span className="text-[10px] font-mono uppercase tracking-wider text-emerald-400 font-bold px-2 py-0.5 rounded bg-emerald-500/20 border border-emerald-500/40">
+                TESTING MODE (₹1)
               </span>
             </div>
 

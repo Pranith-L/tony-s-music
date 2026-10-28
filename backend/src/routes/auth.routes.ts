@@ -63,17 +63,36 @@ router.post('/login', async (req, res: Response) => {
     }
 
     // Direct official admin login check
+    const normalizedEmail = email.toLowerCase().trim();
     if (
-      email.toLowerCase().trim() === 'tonyprakash.l@admin.in' &&
+      normalizedEmail === 'tonyprakash.l@admin.in' &&
       password === 'Tonyprakash@admin'
     ) {
-      const adminUser = {
-        id: '670e9a1f2b3c4d5e6f7a8b9c',
-        email: 'Tonyprakash.l@admin.in',
-        name: 'Rev. Tony Prakash (Official Admin)',
-        role: 'ADMIN',
+      let adminUser = await prisma.user.findFirst({
+        where: { email: { equals: normalizedEmail, mode: 'insensitive' } },
+      });
+
+      if (!adminUser) {
+        const salt = await bcrypt.genSalt(10);
+        const passwordHash = await bcrypt.hash('Tonyprakash@admin', salt);
+        adminUser = await prisma.user.create({
+          data: {
+            email: 'Tonyprakash.l@admin.in',
+            passwordHash,
+            name: 'Rev. Tony Prakash (Official Admin)',
+            role: 'ADMIN',
+          },
+        });
+      }
+
+      const safeUser = {
+        id: adminUser.id,
+        email: adminUser.email,
+        name: adminUser.name,
+        role: adminUser.role,
       };
-      const token = generateToken(adminUser);
+
+      const token = generateToken(safeUser);
       res.cookie('token', token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
@@ -82,13 +101,13 @@ router.post('/login', async (req, res: Response) => {
       });
       return res.json({
         message: 'Logged in successfully as Admin',
-        user: adminUser,
+        user: safeUser,
         token,
       });
     }
 
-    const user = await prisma.user.findUnique({
-      where: { email: email.toLowerCase().trim() },
+    const user = await prisma.user.findFirst({
+      where: { email: { equals: normalizedEmail, mode: 'insensitive' } },
     });
 
     if (!user) {
@@ -137,18 +156,38 @@ router.post('/admin-login', async (req, res: Response) => {
       return;
     }
 
+    const normalizedEmail = email.toLowerCase().trim();
+
     // Direct official admin authentication check
     if (
-      email.toLowerCase().trim() === 'tonyprakash.l@admin.in' &&
+      normalizedEmail === 'tonyprakash.l@admin.in' &&
       password === 'Tonyprakash@admin'
     ) {
-      const adminUser = {
-        id: '670e9a1f2b3c4d5e6f7a8b9c',
-        email: 'Tonyprakash.l@admin.in',
-        name: 'Rev. Tony Prakash (Official Admin)',
-        role: 'ADMIN',
+      let adminUser = await prisma.user.findFirst({
+        where: { email: { equals: normalizedEmail, mode: 'insensitive' } },
+      });
+
+      if (!adminUser) {
+        const salt = await bcrypt.genSalt(10);
+        const passwordHash = await bcrypt.hash('Tonyprakash@admin', salt);
+        adminUser = await prisma.user.create({
+          data: {
+            email: 'Tonyprakash.l@admin.in',
+            passwordHash,
+            name: 'Rev. Tony Prakash (Official Admin)',
+            role: 'ADMIN',
+          },
+        });
+      }
+
+      const safeUser = {
+        id: adminUser.id,
+        email: adminUser.email,
+        name: adminUser.name,
+        role: adminUser.role,
       };
-      const token = generateToken(adminUser);
+
+      const token = generateToken(safeUser);
       res.cookie('token', token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
@@ -157,13 +196,13 @@ router.post('/admin-login', async (req, res: Response) => {
       });
       return res.json({
         message: 'Admin access granted',
-        user: adminUser,
+        user: safeUser,
         token,
       });
     }
 
-    const user = await prisma.user.findUnique({
-      where: { email: email.toLowerCase().trim() },
+    const user = await prisma.user.findFirst({
+      where: { email: { equals: normalizedEmail, mode: 'insensitive' } },
     });
 
     if (!user || user.role !== 'ADMIN') {

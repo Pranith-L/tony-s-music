@@ -278,7 +278,7 @@ export const VideosPage: React.FC = () => {
                     loading="lazy"
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
-                  <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 flex items-center justify-center transition-colors">
+                  <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 flex items-center justify-center transition-colors pointer-events-none">
                     <div className="w-12 h-12 rounded-full bg-gradient-to-tr from-[#FC3C44] to-[#FA243C] text-white flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform border border-[#E5E5EA]">
                       <Play className="w-5 h-5 fill-current ml-0.5" />
                     </div>
