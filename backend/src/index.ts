@@ -133,7 +133,11 @@ app.use((err: any, _req: express.Request, res: express.Response, _next: express.
 });
 
 // Start Server
-app.listen(PORT, () => {
-  console.log(`✨ Tony's Music Server running on http://localhost:${PORT}`);
-  console.log(`🎵 Ready for Tony Prakash Official Music Platform`);
-});
+if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
+  app.listen(PORT, () => {
+    console.log(`✨ Tony's Music Server running on http://localhost:${PORT}`);
+    console.log(`🎵 Ready for Tony Prakash Official Music Platform`);
+  });
+}
+
+export default app;
