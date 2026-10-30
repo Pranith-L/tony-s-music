@@ -303,6 +303,11 @@ router.get('/me', authenticateUser, async (req: AuthRequest, res: Response) => {
 
 // Traditional Passport Google OAuth redirect endpoint
 router.get('/google', (req, res, next) => {
+  const clientUrl = process.env.CLIENT_URL || 'http://localhost:5173';
+  if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
+    console.warn('Google OAuth is not configured on this server (missing GOOGLE_CLIENT_ID/SECRET)');
+    return res.redirect(`${clientUrl}/auth?error=google_not_configured`);
+  }
   passport.authenticate('google', {
     scope: ['profile', 'email'],
     prompt: 'select_account',
@@ -314,6 +319,10 @@ router.get(
   '/google/callback',
   (req, res, next) => {
     const clientUrl = process.env.CLIENT_URL || 'http://localhost:5173';
+    if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
+      console.warn('Google OAuth is not configured on this server (missing GOOGLE_CLIENT_ID/SECRET)');
+      return res.redirect(`${clientUrl}/auth?error=google_not_configured`);
+    }
     passport.authenticate('google', (err: any, user: any) => {
       if (err || !user) {
         console.error('Google OAuth callback error:', err);
