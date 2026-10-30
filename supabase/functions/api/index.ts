@@ -159,22 +159,123 @@ Deno.serve(async (req: Request) => {
   }
 
   const url = new URL(req.url);
-  const path = url.pathname.replace(/^\/functions\/v1\/api/, '').replace(/^\/api/, '');
+  // Universal path matching: strips /functions/v1/<any-function-name> and optional /api prefix
+  const rawPath = url.pathname.replace(/^\/functions\/v1\/[^/]+/, '').replace(/^\/api/, '');
+  const path = rawPath.replace(/\/+$/, '') || '/';
 
-  // 1. Health check
-  if (path === '/health' || path === '') {
+  const hasCashfreeSig = req.headers.has('x-webhook-signature');
+  const contentType = req.headers.get('content-type') || '';
+
+  // 1. Instamojo Webhook (Direct path OR auto-detected by application/x-www-form-urlencoded POST)
+  if (
+    path.includes('/instamojo') ||
+    path.includes('/instamoj') ||
+    (!hasCashfreeSig && req.method === 'POST' && contentType.includes('application/x-www-form-urlencoded'))
+  ) {
+    try {
+      const formData = await req.formData();
+      const postData: Record<string, string> = {};
+      for (const [key, val] of formData.entries()) {
+        postData[key] = String(val);
+      }
+
+      if (postData.mac) {
+        const isValid = await verifyInstamojoMac(postData);
+        if (!isValid) {
+          return new Response(JSON.stringify({ error: 'Invalid Instamojo MAC signature' }), {
+            status: 403,
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          });
+        }
+
+        const paymentId = postData.payment_id;
+        const paymentRequestId = postData.payment_request_id;
+        const status = postData.status;
+        const eventId = `im_evt_${paymentId}_${status}`;
+
+        // Immediate 200 OK Response
+        if (status === 'Credit' && paymentRequestId) {
+          supabase
+            .from('PaymentTransaction')
+            .select('orderId')
+            .eq('gatewayOrderId', paymentRequestId)
+            .single()
+            .then(({ data }) => {
+              if (data?.orderId) {
+                fulfillOrder(data.orderId, 'INSTAMOJO', paymentRequestId, paymentId);
+              }
+            });
+        }
+
+        return new Response(JSON.stringify({ status: 'ok', eventId, received: true }), {
+          status: 200,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
+      }
+    } catch (err: any) {
+      return new Response(JSON.stringify({ error: err.message }), {
+        status: 500,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+  }
+
+  // 2. Cashfree Webhook
+  if (path.includes('/cashfree') || hasCashfreeSig) {
+    try {
+      const signature = req.headers.get('x-webhook-signature') || '';
+      const timestamp = req.headers.get('x-webhook-timestamp') || '';
+      const rawBody = await req.text();
+
+      const isValid = await verifyCashfreeSignature(signature, timestamp, rawBody);
+      if (!isValid) {
+        return new Response(JSON.stringify({ error: 'Invalid Cashfree signature' }), {
+          status: 400,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
+      }
+
+      const payload = JSON.parse(rawBody || '{}');
+      const eventType = payload.type || 'PAYMENT_WEBHOOK';
+      const data = payload.data || {};
+      const orderData = data.order || {};
+      const paymentData = data.payment || {};
+      const orderId = orderData.order_id;
+      const paymentId = paymentData.cf_payment_id || `cf_pay_${Date.now()}`;
+      const eventId = `cf_evt_${orderId}_${paymentId}_${eventType}`;
+
+      // Acknowledge Cashfree immediately with 200
+      if (orderId && (eventType === 'PAYMENT_SUCCESS_WEBHOOK' || paymentData.payment_status === 'SUCCESS')) {
+        fulfillOrder(orderId, 'CASHFREE', String(orderData.cf_order_id || ''), String(paymentId));
+      }
+
+      return new Response(JSON.stringify({ status: 'ok', eventId, received: true }), {
+        status: 200,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    } catch (err: any) {
+      return new Response(JSON.stringify({ error: err.message }), {
+        status: 500,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+  }
+
+  // 3. Health check or Root Ping
+  if (path === '/' || path === '/health' || path === '') {
     return new Response(
       JSON.stringify({
         status: 'online',
         service: 'Tony Prakash Music API (Supabase Edge Backend)',
+        function: 'hyper-responder',
         timestamp: new Date().toISOString(),
       }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
   }
 
-  // 2. Payments Config
-  if (path === '/payments/config') {
+  // 4. Payments Config
+  if (path.includes('/payments/config')) {
     return new Response(
       JSON.stringify({
         paymentsPaused: false,
@@ -194,8 +295,8 @@ Deno.serve(async (req: Request) => {
     );
   }
 
-  // 3. Create Unified Order
-  if (path === '/payments/create-unified-order' && req.method === 'POST') {
+  // 5. Create Unified Order
+  if (path.includes('/payments/create-unified-order') && req.method === 'POST') {
     try {
       const body = await req.json();
       const { itemType, trackId, gateway, customerName, customerEmail, customerPhone } = body;
@@ -243,7 +344,7 @@ Deno.serve(async (req: Request) => {
             },
             order_meta: {
               return_url: `https://tony-prakash-music.vercel.app/payment-return?order_id={order_id}&gateway=cashfree`,
-              notify_url: `https://mrehomunxqccvcwpkwxd.supabase.co/functions/v1/api/payments/cashfree-webhook`,
+              notify_url: `https://mrehomunxqccvcwpkwxd.supabase.co/functions/v1/hyper-responder/payments/cashfree-webhook`,
             },
             order_note: isVip ? "Tony's VIP Pass" : 'Studio Minus-One Track',
           }),
@@ -271,7 +372,7 @@ Deno.serve(async (req: Request) => {
           email: customerEmail || 'customer@tonyprakash.com',
           phone,
           redirect_url: `https://tony-prakash-music.vercel.app/payment-return?order_id=${encodeURIComponent(orderId)}&gateway=instamojo`,
-          webhook: `https://mrehomunxqccvcwpkwxd.supabase.co/functions/v1/api/payments/instamojo-webhook`,
+          webhook: `https://mrehomunxqccvcwpkwxd.supabase.co/functions/v1/hyper-responder/payments/instamojo-webhook`,
           allow_repeated_payments: 'false',
           send_email: 'false',
           send_sms: 'false',
@@ -315,98 +416,8 @@ Deno.serve(async (req: Request) => {
     }
   }
 
-  // 4. Cashfree Webhook
-  if (path.includes('/payments/cashfree-webhook') || path.includes('/payments/cashfree')) {
-    try {
-      const signature = req.headers.get('x-webhook-signature') || '';
-      const timestamp = req.headers.get('x-webhook-timestamp') || '';
-      const rawBody = await req.text();
-
-      const isValid = await verifyCashfreeSignature(signature, timestamp, rawBody);
-      if (!isValid) {
-        return new Response(JSON.stringify({ error: 'Invalid Cashfree signature' }), {
-          status: 400,
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        });
-      }
-
-      const payload = JSON.parse(rawBody || '{}');
-      const eventType = payload.type || 'PAYMENT_WEBHOOK';
-      const data = payload.data || {};
-      const orderData = data.order || {};
-      const paymentData = data.payment || {};
-      const orderId = orderData.order_id;
-      const paymentId = paymentData.cf_payment_id || `cf_pay_${Date.now()}`;
-      const eventId = `cf_evt_${orderId}_${paymentId}_${eventType}`;
-
-      // Acknowledge Cashfree immediately with 200
-      if (orderId && (eventType === 'PAYMENT_SUCCESS_WEBHOOK' || paymentData.payment_status === 'SUCCESS')) {
-        fulfillOrder(orderId, 'CASHFREE', String(orderData.cf_order_id || ''), String(paymentId));
-      }
-
-      return new Response(JSON.stringify({ status: 'ok', eventId, received: true }), {
-        status: 200,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      });
-    } catch (err: any) {
-      return new Response(JSON.stringify({ error: err.message }), {
-        status: 500,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      });
-    }
-  }
-
-  // 5. Instamojo Webhook
-  if (path.includes('/payments/instamojo-webhook') || path.includes('/payments/instamojo') || path.includes('/payments/instamoj')) {
-    try {
-      const formData = await req.formData();
-      const postData: Record<string, string> = {};
-      for (const [key, val] of formData.entries()) {
-        postData[key] = String(val);
-      }
-
-      const isValid = await verifyInstamojoMac(postData);
-      if (!isValid) {
-        return new Response(JSON.stringify({ error: 'Invalid Instamojo MAC signature' }), {
-          status: 403,
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        });
-      }
-
-      const paymentId = postData.payment_id;
-      const paymentRequestId = postData.payment_request_id;
-      const status = postData.status;
-      const eventId = `im_evt_${paymentId}_${status}`;
-
-      // Immediate 200 OK Response
-      if (status === 'Credit' && paymentRequestId) {
-        // Find order
-        supabase
-          .from('PaymentTransaction')
-          .select('orderId')
-          .eq('gatewayOrderId', paymentRequestId)
-          .single()
-          .then(({ data }) => {
-            if (data?.orderId) {
-              fulfillOrder(data.orderId, 'INSTAMOJO', paymentRequestId, paymentId);
-            }
-          });
-      }
-
-      return new Response(JSON.stringify({ status: 'ok', eventId, received: true }), {
-        status: 200,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      });
-    } catch (err: any) {
-      return new Response(JSON.stringify({ error: err.message }), {
-        status: 500,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      });
-    }
-  }
-
-  // 6. Verify Unified Payment (Polling from return page)
-  if (path === '/payments/verify-unified-payment' && req.method === 'POST') {
+  // 6. Verify Unified Payment
+  if (path.includes('/payments/verify-unified-payment') && req.method === 'POST') {
     try {
       const body = await req.json();
       const { orderId, gateway } = body;
@@ -441,9 +452,101 @@ Deno.serve(async (req: Request) => {
     }
   }
 
-  return new Response(JSON.stringify({ error: 'Endpoint not found' }), {
+  // 7. Order Status Lookup
+  if (path.includes('/payments/order/') && req.method === 'GET') {
+    try {
+      const orderId = path.split('/payments/order/')[1]?.replace(/\/+$/, '');
+      const { data: tx, error } = await supabase
+        .from('PaymentTransaction')
+        .select('*')
+        .eq('orderId', orderId)
+        .single();
+
+      if (!tx || error) {
+        return new Response(JSON.stringify({ error: 'Order not found' }), {
+          status: 404,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
+      }
+
+      return new Response(
+        JSON.stringify({
+          orderId: tx.orderId,
+          gateway: tx.gateway,
+          itemType: tx.itemType,
+          amountPaise: tx.amountPaise,
+          amountRupees: (tx.amountPaise || 0) / 100,
+          status: tx.status,
+          customerName: tx.customerName,
+          customerEmail: tx.customerEmail,
+          trackId: tx.trackId,
+          createdAt: tx.createdAt,
+        }),
+        { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    } catch (err: any) {
+      return new Response(JSON.stringify({ error: err.message }), {
+        status: 500,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+  }
+
+  // 8. Admin Payments Dashboard
+  if (path.includes('/admin/payments') && req.method === 'GET') {
+    try {
+      const { data: transactions } = await supabase
+        .from('PaymentTransaction')
+        .select('*')
+        .order('createdAt', { ascending: false });
+
+      const txList = transactions || [];
+      const successfulTx = txList.filter((t: any) => t.status === 'SUCCESS');
+      const pendingTx = txList.filter((t: any) => t.status === 'PENDING');
+      const failedTx = txList.filter((t: any) => t.status === 'FAILED' || t.status === 'CANCELLED');
+
+      const totalRevenuePaise = successfulTx.reduce((acc: number, t: any) => acc + (t.amountPaise || 0), 0);
+      const cashfreeSuccess = successfulTx.filter((t: any) => t.gateway === 'CASHFREE');
+      const instamojoSuccess = successfulTx.filter((t: any) => t.gateway === 'INSTAMOJO');
+
+      const summary = {
+        totalSuccessful: successfulTx.length,
+        totalRevenuePaise,
+        totalRevenueRupees: totalRevenuePaise / 100,
+        pendingPayments: pendingTx.length,
+        failedPayments: failedTx.length,
+        byGateway: {
+          cashfree: {
+            count: cashfreeSuccess.length,
+            revenueRupees: cashfreeSuccess.reduce((acc: number, t: any) => acc + (t.amountPaise || 0), 0) / 100,
+          },
+          instamojo: {
+            count: instamojoSuccess.length,
+            revenueRupees: instamojoSuccess.reduce((acc: number, t: any) => acc + (t.amountPaise || 0), 0) / 100,
+          },
+          razorpay: { count: 0, revenueRupees: 0 },
+        },
+      };
+
+      return new Response(
+        JSON.stringify({
+          summary,
+          transactions: txList,
+          purchases: [],
+          subscriptions: [],
+        }),
+        { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    } catch (err: any) {
+      return new Response(JSON.stringify({ error: err.message }), {
+        status: 500,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+  }
+
+  return new Response(JSON.stringify({ error: 'Endpoint not found', path }), {
     status: 404,
     headers: { ...corsHeaders, 'Content-Type': 'application/json' },
   });
 });
-
