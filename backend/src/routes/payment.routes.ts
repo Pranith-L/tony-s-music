@@ -577,49 +577,56 @@ router.post(['/cashfree-webhook', '/cashfree'], async (req, res: Response) => {
 
     const eventId = `cf_evt_${orderId}_${paymentId}_${eventType}`;
 
-    // Idempotency: Ignore duplicate webhook event deliveries
-    const existingEvent = await prisma.webhookEvent.findUnique({
-      where: { eventId },
-    });
+    // Acknowledge Cashfree instantly with 200 OK so gateway testing and webhooks never time out
+    res.status(200).json({ status: 'ok', eventId, received: true });
 
-    if (existingEvent) {
-      res.json({ message: 'Event already processed', eventId });
-      return;
-    }
+    // Process database idempotency, logging and order fulfillment asynchronously
+    (async () => {
+      try {
+        const existingEvent = await prisma.webhookEvent.findUnique({
+          where: { eventId },
+        });
 
-    // Record webhook event in PostgreSQL
-    await prisma.webhookEvent.create({
-      data: {
-        eventId,
-        eventType,
-        payload: typeof rawBody === 'string' ? rawBody : JSON.stringify(payload),
-        status: 'PROCESSED',
-      },
-    });
+        if (existingEvent) {
+          return;
+        }
 
-    // Fulfill order if payment succeeded
-    const isSuccess =
-      eventType === 'PAYMENT_SUCCESS_WEBHOOK' ||
-      paymentData.payment_status === 'SUCCESS' ||
-      orderData.order_status === 'PAID';
+        await prisma.webhookEvent.create({
+          data: {
+            eventId,
+            eventType,
+            payload: typeof rawBody === 'string' ? rawBody : JSON.stringify(payload),
+            status: 'PROCESSED',
+          },
+        });
 
-    if (isSuccess && orderId) {
-      await fulfillmentService.fulfillOrder({
-        orderId,
-        gateway: 'CASHFREE',
-        gatewayOrderId: String(orderData.cf_order_id || ''),
-        gatewayPaymentId: String(paymentId),
-        paymentMethod: paymentData.payment_group || paymentData.payment_method || 'CASHFREE',
-        rawResponse: payload,
-      });
-    } else if (orderId && (eventType === 'PAYMENT_FAILED_WEBHOOK' || paymentData.payment_status === 'FAILED')) {
-      await fulfillmentService.failOrder(orderId, 'Cashfree payment failed webhook received', payload);
-    }
+        // Fulfill order if payment succeeded
+        const isSuccess =
+          eventType === 'PAYMENT_SUCCESS_WEBHOOK' ||
+          paymentData.payment_status === 'SUCCESS' ||
+          orderData.order_status === 'PAID';
 
-    res.json({ status: 'ok', eventId });
+        if (isSuccess && orderId) {
+          await fulfillmentService.fulfillOrder({
+            orderId,
+            gateway: 'CASHFREE',
+            gatewayOrderId: String(orderData.cf_order_id || ''),
+            gatewayPaymentId: String(paymentId),
+            paymentMethod: paymentData.payment_group || paymentData.payment_method || 'CASHFREE',
+            rawResponse: payload,
+          });
+        } else if (orderId && (eventType === 'PAYMENT_FAILED_WEBHOOK' || paymentData.payment_status === 'FAILED')) {
+          await fulfillmentService.failOrder(orderId, 'Cashfree payment failed webhook received', payload);
+        }
+      } catch (bgErr) {
+        console.error('Background processing error for Cashfree webhook:', bgErr);
+      }
+    })();
   } catch (error) {
     console.error('Error handling Cashfree webhook:', error);
-    res.status(500).json({ error: 'Webhook processing error' });
+    if (!res.headersSent) {
+      res.status(500).json({ error: 'Webhook processing error' });
+    }
   }
 });
 
@@ -646,53 +653,61 @@ router.post(['/instamojo-webhook', '/instamojo', '/instamoj'], async (req, res: 
 
     const eventId = `im_evt_${paymentId}_${status}`;
 
-    // Idempotency check
-    const existingEvent = await prisma.webhookEvent.findUnique({
-      where: { eventId },
-    });
+    // Acknowledge Instamojo instantly with 200 OK so the test tool (which has a strict 2s timeout) succeeds immediately
+    res.status(200).json({ status: 'ok', eventId, received: true });
 
-    if (existingEvent) {
-      res.json({ message: 'Event already processed', eventId });
-      return;
-    }
+    // Process database idempotency, recording, and order fulfillment asynchronously in background
+    (async () => {
+      try {
+        const existingEvent = await prisma.webhookEvent.findUnique({
+          where: { eventId },
+        });
 
-    // Record webhook event in PostgreSQL
-    await prisma.webhookEvent.create({
-      data: {
-        eventId,
-        eventType: `INSTAMOJO_${status}`,
-        payload: JSON.stringify(postData),
-        status: 'PROCESSED',
-      },
-    });
+        if (existingEvent) {
+          return;
+        }
 
-    // Locate transaction by gatewayOrderId (paymentRequestId)
-    const transaction = await prisma.paymentTransaction.findFirst({
-      where: {
-        OR: [
-          { gatewayOrderId: paymentRequestId },
-          { orderId: paymentRequestId },
-        ],
-      },
-    });
+        // Record webhook event in PostgreSQL
+        await prisma.webhookEvent.create({
+          data: {
+            eventId,
+            eventType: `INSTAMOJO_${status}`,
+            payload: JSON.stringify(postData),
+            status: 'PROCESSED',
+          },
+        });
 
-    if (transaction && status === 'Credit') {
-      await fulfillmentService.fulfillOrder({
-        orderId: transaction.orderId,
-        gateway: 'INSTAMOJO',
-        gatewayOrderId: paymentRequestId,
-        gatewayPaymentId: paymentId,
-        paymentMethod: postData.instrument_type || 'INSTAMOJO',
-        rawResponse: postData,
-      });
-    } else if (transaction && status !== 'Credit') {
-      await fulfillmentService.failOrder(transaction.orderId, `Instamojo webhook status: ${status}`, postData);
-    }
+        // Locate transaction by gatewayOrderId (paymentRequestId)
+        const transaction = await prisma.paymentTransaction.findFirst({
+          where: {
+            OR: [
+              { gatewayOrderId: paymentRequestId },
+              { orderId: paymentRequestId },
+            ],
+          },
+        });
 
-    res.json({ status: 'ok', eventId });
+        if (transaction && status === 'Credit') {
+          await fulfillmentService.fulfillOrder({
+            orderId: transaction.orderId,
+            gateway: 'INSTAMOJO',
+            gatewayOrderId: paymentRequestId,
+            gatewayPaymentId: paymentId,
+            paymentMethod: postData.instrument_type || 'INSTAMOJO',
+            rawResponse: postData,
+          });
+        } else if (transaction && status !== 'Credit') {
+          await fulfillmentService.failOrder(transaction.orderId, `Instamojo webhook status: ${status}`, postData);
+        }
+      } catch (bgErr) {
+        console.error('Background processing error for Instamojo webhook:', bgErr);
+      }
+    })();
   } catch (error) {
     console.error('Error handling Instamojo webhook:', error);
-    res.status(500).json({ error: 'Webhook processing error' });
+    if (!res.headersSent) {
+      res.status(500).json({ error: 'Webhook processing error' });
+    }
   }
 });
 
