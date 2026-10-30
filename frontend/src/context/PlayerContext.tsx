@@ -5,6 +5,7 @@ import { useAuth } from './AuthContext.js';
 import { TrackPreviewLimitModal } from '../components/modals/TrackPreviewLimitModal.js';
 import { SkipLimitModal } from '../components/modals/SkipLimitModal.js';
 import { SongTheme, extractCoverTheme, applyGlobalSongTheme } from '../utils/themeEngine.js';
+import { devotionalSynthesizer } from '../services/audioSynthesizer.js';
 
 export type RepeatMode = 'off' | 'all' | 'one';
 export type RightSidebarTab = 'now-playing' | 'queue' | 'lyrics';
@@ -200,6 +201,40 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const previewDismissedTrackIdRef = useRef<string | null>(null);
+  const fallbackTimerRef = useRef<any>(null);
+
+  const startFallbackAudio = () => {
+    devotionalSynthesizer.setVolume(isMuted ? 0 : volume);
+    devotionalSynthesizer.start();
+
+    if (fallbackTimerRef.current) clearInterval(fallbackTimerRef.current);
+    fallbackTimerRef.current = setInterval(() => {
+      setCurrentTime((prev) => {
+        const next = prev + 1;
+        const current = currentTrackRef.current;
+        if (current && isBackingTrack(current) && !hasTrackAccess(current)) {
+          if (next >= 30 && previewDismissedTrackIdRef.current !== current.id) {
+            pause();
+            setShowPreviewLimitModal(true);
+            return 29.9;
+          }
+        }
+        if (next >= duration) {
+          advanceToNextTrack();
+          return 0;
+        }
+        return next;
+      });
+    }, 1000);
+  };
+
+  const stopFallbackAudio = () => {
+    devotionalSynthesizer.pause();
+    if (fallbackTimerRef.current) {
+      clearInterval(fallbackTimerRef.current);
+      fallbackTimerRef.current = null;
+    }
+  };
 
   useEffect(() => {
     try {
@@ -228,6 +263,7 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       if (current && isBackingTrack(current) && !hasTrackAccess(current)) {
         if (cur >= 30 && previewDismissedTrackIdRef.current !== current.id) {
           audio.pause();
+          stopFallbackAudio();
           audio.currentTime = 29.9;
           setCurrentTime(29.9);
           setIsPlaying(false);
@@ -253,7 +289,8 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     };
 
     const handleError = (e: any) => {
-      console.warn('Audio playback error (using simulated fallback if offline):', e);
+      console.warn('Audio stream fallback activated:', e);
+      startFallbackAudio();
     };
 
     audio.addEventListener('timeupdate', handleTimeUpdate);
@@ -263,6 +300,7 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
     return () => {
       audio.pause();
+      stopFallbackAudio();
       audio.removeEventListener('timeupdate', handleTimeUpdate);
       audio.removeEventListener('loadedmetadata', handleLoadedMetadata);
       audio.removeEventListener('ended', handleEnded);
@@ -273,6 +311,7 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const playTrack = (track: Track, newQueue?: Track[]) => {
     if (!audioRef.current) return;
     previewDismissedTrackIdRef.current = null;
+    stopFallbackAudio();
 
     if (newQueue && newQueue.length > 0) {
       setQueue(newQueue);
@@ -290,11 +329,13 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     audioRef.current
       .play()
       .then(() => {
+        stopFallbackAudio();
         setIsPlaying(true);
       })
       .catch((err) => {
-        console.warn('Audio playback warning:', err);
+        console.warn('Audio playback fallback initiated:', err);
         setIsPlaying(true);
+        startFallbackAudio();
       });
   };
 
@@ -327,20 +368,28 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
     if (isPlaying) {
       audioRef.current.pause();
+      stopFallbackAudio();
       setIsPlaying(false);
     } else {
       audioRef.current
         .play()
-        .then(() => setIsPlaying(true))
-        .catch(() => setIsPlaying(true));
+        .then(() => {
+          stopFallbackAudio();
+          setIsPlaying(true);
+        })
+        .catch(() => {
+          setIsPlaying(true);
+          startFallbackAudio();
+        });
     }
   };
 
   const pause = () => {
     if (audioRef.current) {
       audioRef.current.pause();
-      setIsPlaying(false);
     }
+    stopFallbackAudio();
+    setIsPlaying(false);
   };
 
   const seek = (time: number) => {
@@ -371,6 +420,7 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     if (audioRef.current) {
       audioRef.current.volume = clamped;
     }
+    devotionalSynthesizer.setVolume(clamped);
     if (clamped > 0 && isMuted) {
       setIsMuted(false);
     }
@@ -380,9 +430,11 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     if (!audioRef.current) return;
     if (isMuted) {
       audioRef.current.volume = volume;
+      devotionalSynthesizer.setVolume(volume);
       setIsMuted(false);
     } else {
       audioRef.current.volume = 0;
+      devotionalSynthesizer.setVolume(0);
       setIsMuted(true);
     }
   };

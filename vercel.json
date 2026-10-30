@@ -6,6 +6,10 @@
   "trailingSlash": false,
   "rewrites": [
     {
+      "source": "/api/(.*)",
+      "destination": "https://mrehomunxqccvcwpkwxd.supabase.co/functions/v1/hyper-responder/$1"
+    },
+    {
       "source": "/robots.txt",
       "destination": "/robots.txt"
     },
