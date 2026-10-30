@@ -1,9 +1,15 @@
+// @ts-nocheck
+declare const Deno: any;
+
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.48.1';
 import { crypto } from 'https://deno.land/std@0.224.0/crypto/mod.ts';
 
 // Initialize Supabase Client with Service Role Key for secure DB mutations
 const supabaseUrl = Deno.env.get('SUPABASE_URL') || 'https://mrehomunxqccvcwpkwxd.supabase.co';
-const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') || '';
+const supabaseServiceKey =
+  Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ||
+  Deno.env.get('SUPABASE_ANON_KEY') ||
+  'sb_publishable_o_zU6hleiM1JacijRPTTRA_aIJI7k_9';
 const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
 // CORS Headers
@@ -440,3 +446,4 @@ Deno.serve(async (req: Request) => {
     headers: { ...corsHeaders, 'Content-Type': 'application/json' },
   });
 });
+

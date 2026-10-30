@@ -15,6 +15,8 @@ node_modules/
 dist/
 */dist/
 .vercel/
+.temp/
+supabase/.temp/
 
 # Environment Variables & Secrets
 .env
