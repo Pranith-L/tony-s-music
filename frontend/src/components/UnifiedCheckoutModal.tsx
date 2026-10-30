@@ -441,3 +441,4 @@ export const UnifiedCheckoutModal: React.FC<UnifiedCheckoutModalProps> = ({
     document.body
   );
 };
+

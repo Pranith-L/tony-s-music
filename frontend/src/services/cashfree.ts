@@ -67,3 +67,4 @@ export async function openCashfreeCheckout(options: CashfreeCheckoutOptions): Pr
     redirectTarget: options.redirectTarget || '_modal',
   });
 }
+
