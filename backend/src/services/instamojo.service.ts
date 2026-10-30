@@ -35,11 +35,11 @@ export class InstamojoService {
   }
 
   public get apiKey(): string {
-    return process.env.INSTAMOJO_API_KEY || '';
+    return process.env.INSTAMOJO_API_KEY || (this.clientId.length === 32 ? this.clientId : '');
   }
 
   public get authToken(): string {
-    return process.env.INSTAMOJO_AUTH_TOKEN || '';
+    return process.env.INSTAMOJO_AUTH_TOKEN || (this.clientSecret.length === 32 ? this.clientSecret : '');
   }
 
   public get privateSalt(): string {
@@ -47,15 +47,18 @@ export class InstamojoService {
   }
 
   public get isConfigured(): boolean {
-    const hasV2 = Boolean(this.clientId && this.clientSecret && !this.clientId.includes('placeholder'));
+    const hasV2 = Boolean(this.clientId && this.clientSecret && !this.clientId.includes('placeholder') && this.clientId.length !== 32);
     const hasV1 = Boolean(this.apiKey && this.authToken && !this.apiKey.includes('placeholder'));
     return hasV2 || hasV1;
   }
 
   public get baseUrl(): string {
-    return this.isProduction
-      ? 'https://api.instamojo.com'
-      : 'https://test.instamojo.com';
+    if (this.isProduction) {
+      // Instamojo v1.1 endpoint is www.instamojo.com; v2 OAuth is api.instamojo.com
+      const useV2 = Boolean(this.clientId && this.clientSecret && this.clientId.length !== 32);
+      return useV2 ? 'https://api.instamojo.com' : 'https://www.instamojo.com';
+    }
+    return 'https://test.instamojo.com';
   }
 
   /**
@@ -107,12 +110,17 @@ export class InstamojoService {
       throw new Error('Instamojo is not configured on the server (missing Client ID/Secret or API Key).');
     }
 
+    let phone = params.phone ? params.phone.replace(/[^0-9]/g, '').slice(-10) : '';
+    if (!phone || phone.length !== 10 || /^(\d)\1{9}$/.test(phone)) {
+      phone = '9876543210';
+    }
+
     const payload: Record<string, any> = {
       amount: params.amount.toFixed(2),
       purpose: params.purpose.substring(0, 30),
       buyer_name: params.buyerName || 'Customer',
       email: params.email,
-      phone: params.phone ? params.phone.replace(/[^0-9]/g, '').slice(-10) : '9999999999',
+      phone,
       redirect_url: params.redirectUrl,
       webhook: params.webhookUrl || undefined,
       allow_repeated_payments: false,
@@ -123,8 +131,9 @@ export class InstamojoService {
     let response: any;
     let data: any;
 
-    // Use OAuth2 v2 if client_id/secret available, else v1.1
-    if (this.clientId && this.clientSecret) {
+    const useV1 = Boolean((this.apiKey && this.authToken) || (this.clientId.length === 32));
+
+    if (!useV1 && this.clientId && this.clientSecret) {
       const token = await this.getAccessToken();
       response = await fetch(`${this.baseUrl}/v2/payment_requests/`, {
         method: 'POST',
@@ -144,8 +153,8 @@ export class InstamojoService {
       response = await fetch(`${this.baseUrl}/api/1.1/payment-requests/`, {
         method: 'POST',
         headers: {
-          'X-Api-Key': this.apiKey,
-          'X-Auth-Token': this.authToken,
+          'X-Api-Key': this.apiKey || this.clientId,
+          'X-Auth-Token': this.authToken || this.clientSecret,
           'Content-Type': 'application/x-www-form-urlencoded',
         },
         body: formData.toString(),
@@ -177,7 +186,9 @@ export class InstamojoService {
     }
 
     let response: any;
-    if (this.clientId && this.clientSecret) {
+    const useV1 = Boolean((this.apiKey && this.authToken) || (this.clientId.length === 32));
+
+    if (!useV1 && this.clientId && this.clientSecret) {
       const token = await this.getAccessToken();
       response = await fetch(`${this.baseUrl}/v2/payment_requests/${encodeURIComponent(paymentRequestId)}/`, {
         method: 'GET',
@@ -189,8 +200,8 @@ export class InstamojoService {
       response = await fetch(`${this.baseUrl}/api/1.1/payment-requests/${encodeURIComponent(paymentRequestId)}/`, {
         method: 'GET',
         headers: {
-          'X-Api-Key': this.apiKey,
-          'X-Auth-Token': this.authToken,
+          'X-Api-Key': this.apiKey || this.clientId,
+          'X-Auth-Token': this.authToken || this.clientSecret,
         },
       });
     }
