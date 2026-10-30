@@ -20,6 +20,7 @@ import { MembershipPage } from './pages/Membership.js';
 import { AccountPage } from './pages/Account.js';
 import { AuthPage } from './pages/Auth.js';
 import { AdminDashboard } from './pages/admin/AdminDashboard.js';
+import { PaymentReturnPage } from './pages/PaymentReturn.js';
 
 const NotFound: React.FC = () => (
   <div className="py-24 text-center px-6 text-[#1D1D1F]">
@@ -58,6 +59,7 @@ export const App: React.FC = () => {
                   <Route path="/about" element={<AboutPage />} />
                   <Route path="/bookings" element={<BookingsPage />} />
                   <Route path="/membership" element={<MembershipPage />} />
+                  <Route path="/payment-return" element={<PaymentReturnPage />} />
                   <Route path="/account" element={<AccountPage />} />
                   <Route path="/auth" element={<AuthPage />} />
                   <Route path="/admin" element={<AdminDashboard />} />

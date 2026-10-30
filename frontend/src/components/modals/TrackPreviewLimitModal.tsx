@@ -5,9 +5,7 @@ import { Track } from '../../types/index.js';
 import { useAuth } from '../../context/AuthContext.js';
 import { api } from '../../services/api.js';
 import { useNavigate } from 'react-router-dom';
-import { RazorpayModal } from '../RazorpayModal.js';
-import { PaymentsPausedModal } from '../PaymentsPausedModal.js';
-import { PAYMENTS_PAUSED } from '../../config/payments.js';
+import { UnifiedCheckoutModal } from '../UnifiedCheckoutModal.js';
 
 interface TrackPreviewLimitModalProps {
   track: Track | null;
@@ -24,70 +22,22 @@ export const TrackPreviewLimitModal: React.FC<TrackPreviewLimitModalProps> = ({
   const navigate = useNavigate();
   const [purchasing, setPurchasing] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
-  const [showPausedModal, setShowPausedModal] = useState(false);
-
-  // Razorpay Gateway State
-  const [razorpayOrder, setRazorpayOrder] = useState<{
-    orderId: string;
-    amount: number;
-  } | null>(null);
+  const [showCheckout, setShowCheckout] = useState(false);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && track && !razorpayOrder) {
+      if (e.key === 'Escape' && track) {
         onClose();
       }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [track, onClose, razorpayOrder]);
+  }, [track, onClose]);
 
   if (!track) return null;
 
-  const handleBuyTrack = async () => {
-    if (PAYMENTS_PAUSED) {
-      setShowPausedModal(true);
-      return;
-    }
-
-    if (!user) {
-      navigate(`/auth?redirect=${encodeURIComponent(window.location.pathname)}`);
-      onClose();
-      return;
-    }
-
-    setPurchasing(true);
-    setErrorMsg(null);
-    try {
-      const order = await api.payments.createOrder(track.id, track.slug);
-      setRazorpayOrder({
-        orderId: order.orderId,
-        amount: order.amount || 9900,
-      });
-    } catch (err: any) {
-      setErrorMsg(err.message || 'Payment initiation failed. Please try again.');
-    } finally {
-      setPurchasing(false);
-    }
-  };
-
-  const handleRazorpaySuccess = async (paymentData: {
-    razorpay_order_id: string;
-    razorpay_payment_id: string;
-    razorpay_signature: string;
-  }) => {
-    const verified = await api.payments.verifyOrder({
-      razorpay_order_id: paymentData.razorpay_order_id,
-      razorpay_payment_id: paymentData.razorpay_payment_id,
-      razorpay_signature: paymentData.razorpay_signature,
-    });
-
-    if (verified.success) {
-      await refreshUser();
-      setRazorpayOrder(null);
-      if (onUnlocked) onUnlocked();
-      onClose();
-    }
+  const handleBuyTrack = () => {
+    setShowCheckout(true);
   };
 
   const handleGoMembership = () => {
@@ -221,30 +171,18 @@ export const TrackPreviewLimitModal: React.FC<TrackPreviewLimitModalProps> = ({
         </div>
       </div>
 
-      {/* Payments Paused / Launching Soon Modal */}
-      <PaymentsPausedModal
-        isOpen={showPausedModal}
-        onClose={() => setShowPausedModal(false)}
-        itemTitle={track.titleEnglish}
-        itemType="track"
-        price="₹99"
+      {/* Unified Secure Checkout Modal (Cashfree + Instamojo) */}
+      <UnifiedCheckoutModal
+        isOpen={showCheckout}
+        onClose={() => setShowCheckout(false)}
+        itemType="TRACK"
+        track={track}
+        onSuccess={() => {
+          refreshUser();
+          setShowCheckout(false);
+          if (onUnlocked) onUnlocked();
+        }}
       />
-
-      {/* Razorpay Gateway Modal */}
-      {razorpayOrder && (
-        <RazorpayModal
-          isOpen={true}
-          orderId={razorpayOrder.orderId}
-          amountPaise={razorpayOrder.amount}
-          itemTitle={track.titleEnglish}
-          itemSubtitle={`${track.titleTelugu} (Studio Minus-One Track)`}
-          isSubscription={false}
-          userEmail={user?.email}
-          userName={user?.name}
-          onSuccess={handleRazorpaySuccess}
-          onClose={() => setRazorpayOrder(null)}
-        />
-      )}
     </>,
     document.body
   );

@@ -38,7 +38,14 @@ export const AdminDashboard: React.FC = () => {
   const [videos, setVideos] = useState<Video[]>([]);
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [usersList, setUsersList] = useState<any[]>([]);
-  const [paymentsData, setPaymentsData] = useState<{ purchases: any[]; subscriptions: any[] }>({ purchases: [], subscriptions: [] });
+  const [paymentsData, setPaymentsData] = useState<{
+    summary?: any;
+    transactions?: any[];
+    purchases: any[];
+    subscriptions: any[];
+  }>({ purchases: [], subscriptions: [], transactions: [] });
+  const [paymentGatewayFilter, setPaymentGatewayFilter] = useState<'ALL' | 'CASHFREE' | 'INSTAMOJO'>('ALL');
+  const [paymentStatusFilter, setPaymentStatusFilter] = useState<'ALL' | 'SUCCESS' | 'PENDING' | 'FAILED'>('ALL');
   const [settings, setSettings] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
@@ -912,6 +919,248 @@ export const AdminDashboard: React.FC = () => {
                   <span className="font-semibold">{paymentActionMsg.text}</span>
                 </div>
               )}
+
+              {/* Real-time Payment Metrics Stat Cards */}
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                <div className="bg-white dark:bg-[#18181B] rounded-2xl p-4 sm:p-5 border border-[#E5E5EA] dark:border-[#27272A] shadow-apple-card space-y-1">
+                  <div className="flex items-center justify-between text-xs text-[#86868B] dark:text-[#A1A1AA]">
+                    <span className="font-semibold uppercase tracking-wider text-[10px]">Successful Payments</span>
+                    <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+                  </div>
+                  <div className="text-2xl sm:text-3xl font-heading font-bold text-[#1D1D1F] dark:text-white">
+                    {(paymentsData.summary?.totalSuccessful ?? ((paymentsData.purchases || []).filter((p: any) => p.status === 'SUCCESS').length + (paymentsData.subscriptions || []).filter((s: any) => s.status === 'ACTIVE').length)).toLocaleString()}
+                  </div>
+                  <p className="text-[11px] text-emerald-600 dark:text-emerald-400 font-medium">
+                    Verified Customer Purchases
+                  </p>
+                </div>
+
+                <div className="bg-white dark:bg-[#18181B] rounded-2xl p-4 sm:p-5 border border-[#E5E5EA] dark:border-[#27272A] shadow-apple-card space-y-1">
+                  <div className="flex items-center justify-between text-xs text-[#86868B] dark:text-[#A1A1AA]">
+                    <span className="font-semibold uppercase tracking-wider text-[10px]">Total Revenue</span>
+                    <Sparkles className="w-4 h-4 text-[#D4A017]" />
+                  </div>
+                  <div className="text-2xl sm:text-3xl font-heading font-bold text-[#D4A017]">
+                    ₹{(paymentsData.summary?.totalRevenueRupees ?? Math.floor(((paymentsData.purchases || []).filter((p: any) => p.status === 'SUCCESS').reduce((acc: number, p: any) => acc + p.amountPaise, 0) + (paymentsData.subscriptions || []).filter((s: any) => s.status === 'ACTIVE').reduce((acc: number, s: any) => acc + s.amountPaise, 0)) / 100)).toLocaleString('en-IN')}
+                  </div>
+                  <p className="text-[11px] text-[#86868B] dark:text-[#A1A1AA] font-mono">
+                    All Gateways & Passes
+                  </p>
+                </div>
+
+                <div className="bg-white dark:bg-[#18181B] rounded-2xl p-4 sm:p-5 border border-[#E5E5EA] dark:border-[#27272A] shadow-apple-card space-y-1">
+                  <div className="flex items-center justify-between text-xs text-[#86868B] dark:text-[#A1A1AA]">
+                    <span className="font-semibold uppercase tracking-wider text-[10px]">Pending Orders</span>
+                    <Clock className="w-4 h-4 text-amber-500" />
+                  </div>
+                  <div className="text-2xl sm:text-3xl font-heading font-bold text-amber-600 dark:text-amber-400">
+                    {paymentsData.summary?.pendingPayments ?? totalPending}
+                  </div>
+                  <p className="text-[11px] text-amber-600/80 dark:text-amber-400/80">
+                    Awaiting Completion
+                  </p>
+                </div>
+
+                <div className="bg-white dark:bg-[#18181B] rounded-2xl p-4 sm:p-5 border border-[#E5E5EA] dark:border-[#27272A] shadow-apple-card space-y-1">
+                  <div className="flex items-center justify-between text-xs text-[#86868B] dark:text-[#A1A1AA]">
+                    <span className="font-semibold uppercase tracking-wider text-[10px]">Failed / Cancelled</span>
+                    <AlertCircle className="w-4 h-4 text-red-500" />
+                  </div>
+                  <div className="text-2xl sm:text-3xl font-heading font-bold text-red-600 dark:text-red-400">
+                    {paymentsData.summary?.failedPayments ?? (paymentsData.purchases || []).filter((p: any) => p.status === 'FAILED').length}
+                  </div>
+                  <p className="text-[11px] text-red-500/80">
+                    Unsuccessful Attempts
+                  </p>
+                </div>
+              </div>
+
+              {/* Gateway Breakdown Cards */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="p-4 rounded-2xl bg-white dark:bg-[#18181B] border border-[#E5E5EA] dark:border-[#27272A] flex items-center justify-between shadow-apple-card">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center font-bold text-emerald-500 text-sm">
+                      CF
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-bold text-[#1D1D1F] dark:text-white">Cashfree Payments</h4>
+                      <p className="text-xs text-[#86868B] dark:text-[#A1A1AA]">UPI, Cards & Net Banking</p>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <span className="text-xs font-bold text-[#1D1D1F] dark:text-white block">
+                      {paymentsData.summary?.byGateway?.cashfree?.count || 0} Successful
+                    </span>
+                    <span className="text-xs font-mono font-bold text-[#D4A017]">
+                      ₹{(paymentsData.summary?.byGateway?.cashfree?.revenueRupees || 0).toLocaleString('en-IN')}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="p-4 rounded-2xl bg-white dark:bg-[#18181B] border border-[#E5E5EA] dark:border-[#27272A] flex items-center justify-between shadow-apple-card">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-blue-500/15 border border-blue-500/30 flex items-center justify-center font-bold text-blue-500 text-sm">
+                      IM
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-bold text-[#1D1D1F] dark:text-white">Instamojo</h4>
+                      <p className="text-xs text-[#86868B] dark:text-[#A1A1AA]">Payment Requests & Links</p>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <span className="text-xs font-bold text-[#1D1D1F] dark:text-white block">
+                      {paymentsData.summary?.byGateway?.instamojo?.count || 0} Successful
+                    </span>
+                    <span className="text-xs font-mono font-bold text-[#D4A017]">
+                      ₹{(paymentsData.summary?.byGateway?.instamojo?.revenueRupees || 0).toLocaleString('en-IN')}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Automated Gateway Transactions Ledger */}
+              <div className="bg-white dark:bg-[#18181B] rounded-3xl p-6 border border-[#E5E5EA] dark:border-[#27272A] shadow-apple-card space-y-4">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <div>
+                    <h3 className="text-sm font-bold text-[#1D1D1F] dark:text-white uppercase tracking-wider flex items-center gap-2">
+                      <span>Gateway Transactions Ledger</span>
+                      <span className="text-xs font-mono font-bold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-white/10 text-slate-700 dark:text-slate-300">
+                        {(paymentsData.transactions || []).length}
+                      </span>
+                    </h3>
+                    <p className="text-xs text-[#86868B] dark:text-[#A1A1AA]">
+                      Real-time payment history recorded from Cashfree & Instamojo webhooks & APIs.
+                    </p>
+                  </div>
+
+                  {/* Filters */}
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <select
+                      value={paymentGatewayFilter}
+                      onChange={(e) => setPaymentGatewayFilter(e.target.value as any)}
+                      className="px-3 py-1.5 rounded-xl bg-[#F2F2F7] dark:bg-[#202023] border border-[#E5E5EA] dark:border-[#27272A] text-xs font-medium text-[#1D1D1F] dark:text-white focus:outline-none"
+                    >
+                      <option value="ALL">All Gateways</option>
+                      <option value="CASHFREE">Cashfree</option>
+                      <option value="INSTAMOJO">Instamojo</option>
+                    </select>
+
+                    <select
+                      value={paymentStatusFilter}
+                      onChange={(e) => setPaymentStatusFilter(e.target.value as any)}
+                      className="px-3 py-1.5 rounded-xl bg-[#F2F2F7] dark:bg-[#202023] border border-[#E5E5EA] dark:border-[#27272A] text-xs font-medium text-[#1D1D1F] dark:text-white focus:outline-none"
+                    >
+                      <option value="ALL">All Statuses</option>
+                      <option value="SUCCESS">Successful</option>
+                      <option value="PENDING">Pending</option>
+                      <option value="FAILED">Failed</option>
+                    </select>
+                  </div>
+                </div>
+
+                {/* Transactions Table */}
+                <div className="overflow-x-auto border border-[#E5E5EA] dark:border-[#27272A] rounded-2xl">
+                  <table className="w-full text-left text-xs">
+                    <thead className="bg-[#F9F9FB] dark:bg-[#202023] text-[#86868B] dark:text-[#A1A1AA] font-mono uppercase text-[11px] tracking-wider border-b border-[#E5E5EA] dark:border-[#27272A]">
+                      <tr>
+                        <th className="p-3.5">Date & Time</th>
+                        <th className="p-3.5">Customer</th>
+                        <th className="p-3.5">Product</th>
+                        <th className="p-3.5">Gateway</th>
+                        <th className="p-3.5">Order / Gateway ID</th>
+                        <th className="p-3.5">Amount</th>
+                        <th className="p-3.5 text-right">Status</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-[#E5E5EA]/60 dark:divide-[#27272A]/60">
+                      {((paymentsData.transactions || [])
+                        .filter((t: any) => {
+                          const matchG = paymentGatewayFilter === 'ALL' || t.gateway === paymentGatewayFilter;
+                          const matchS = paymentStatusFilter === 'ALL' || t.status === paymentStatusFilter;
+                          return matchG && matchS;
+                        }))
+                        .length === 0 ? (
+                        <tr>
+                          <td colSpan={7} className="p-8 text-center text-[#86868B] dark:text-[#A1A1AA]">
+                            No transactions recorded yet matching this filter.
+                          </td>
+                        </tr>
+                      ) : (
+                        (paymentsData.transactions || [])
+                          .filter((t: any) => {
+                            const matchG = paymentGatewayFilter === 'ALL' || t.gateway === paymentGatewayFilter;
+                            const matchS = paymentStatusFilter === 'ALL' || t.status === paymentStatusFilter;
+                            return matchG && matchS;
+                          })
+                          .map((t: any) => (
+                            <tr key={t.id} className="hover:bg-[#F2F2F7] dark:hover:bg-white/[0.03] transition-colors">
+                              <td className="p-3.5 font-mono text-[11px] text-[#86868B] dark:text-[#A1A1AA]">
+                                {new Date(t.createdAt).toLocaleString()}
+                              </td>
+                              <td className="p-3.5">
+                                <div className="font-bold text-[#1D1D1F] dark:text-white">
+                                  {t.customerName || t.user?.name || 'Customer'}
+                                </div>
+                                <div className="text-[11px] text-[#86868B] dark:text-[#A1A1AA]">
+                                  {t.customerEmail || t.user?.email || 'N/A'} {t.customerPhone ? `• ${t.customerPhone}` : ''}
+                                </div>
+                              </td>
+                              <td className="p-3.5">
+                                <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase inline-block mb-0.5 ${
+                                  t.itemType === 'VIP_PASS'
+                                    ? 'bg-purple-500/15 text-purple-600 dark:text-purple-400 border border-purple-500/30'
+                                    : 'bg-blue-500/15 text-blue-600 dark:text-blue-400 border border-blue-500/30'
+                                }`}>
+                                  {t.itemType === 'VIP_PASS' ? 'VIP Lifetime Pass' : 'Studio Track'}
+                                </span>
+                                {t.track && (
+                                  <div className="font-semibold text-xs text-[#1D1D1F] dark:text-white truncate max-w-[180px]">
+                                    {t.track.titleEnglish}
+                                  </div>
+                                )}
+                              </td>
+                              <td className="p-3.5">
+                                <span className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold ${
+                                  t.gateway === 'CASHFREE'
+                                    ? 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30'
+                                    : t.gateway === 'INSTAMOJO'
+                                    ? 'bg-blue-500/15 text-blue-600 dark:text-blue-400 border border-blue-500/30'
+                                    : 'bg-gray-500/15 text-gray-600 dark:text-gray-400 border border-gray-500/30'
+                                }`}>
+                                  {t.gateway}
+                                </span>
+                              </td>
+                              <td className="p-3.5 font-mono text-[11px] space-y-0.5">
+                                <div className="text-[#1D1D1F] dark:text-white font-semibold truncate max-w-[150px]" title={t.orderId}>
+                                  {t.orderId}
+                                </div>
+                                {t.gatewayPaymentId && (
+                                  <div className="text-[#86868B] dark:text-[#A1A1AA] text-[10px] truncate max-w-[150px]" title={t.gatewayPaymentId}>
+                                    PayID: {t.gatewayPaymentId}
+                                  </div>
+                                )}
+                              </td>
+                              <td className="p-3.5 font-mono font-bold text-xs text-[#D4A017]">
+                                ₹{(t.amountPaise / 100).toFixed(0)}
+                              </td>
+                              <td className="p-3.5 text-right">
+                                <span className={`px-2.5 py-1 rounded-md text-[10px] font-mono font-bold ${
+                                  t.status === 'SUCCESS'
+                                    ? 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30'
+                                    : t.status === 'PENDING'
+                                    ? 'bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/30'
+                                    : 'bg-red-500/15 text-red-600 dark:text-red-400 border border-red-500/30'
+                                }`}>
+                                  {t.status}
+                                </span>
+                              </td>
+                            </tr>
+                          ))
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
 
               {/* Section 1: PENDING UPI VERIFICATIONS QUEUE */}
               <div className="bg-white dark:bg-[#18181B] rounded-3xl p-6 border border-[#E5E5EA] dark:border-[#27272A] shadow-apple-card space-y-4">

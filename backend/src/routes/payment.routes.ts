@@ -3,6 +3,9 @@ import crypto from 'crypto';
 import Razorpay from 'razorpay';
 import { prisma } from '../prisma.js';
 import { optionalAuth, authenticateUser, AuthRequest } from '../middleware/auth.js';
+import { cashfreeService } from '../services/cashfree.service.js';
+import { instamojoService } from '../services/instamojo.service.js';
+import { fulfillmentService } from '../services/fulfillment.service.js';
 
 const router = Router();
 
@@ -17,58 +20,32 @@ const isRazorpayConfigured = Boolean(
   !RAZORPAY_KEY_SECRET.includes('placeholder')
 );
 
-// Initialize Razorpay Client with credentials
 const razorpayClient = new Razorpay({
   key_id: RAZORPAY_KEY_ID,
   key_secret: RAZORPAY_KEY_SECRET,
 });
 
-// Flag to pause test mode transactions until live production credentials are ready
-const PAYMENTS_PAUSED = process.env.PAYMENTS_PAUSED !== 'false'; // paused by default
+// Server-wide payments pause toggle (defaults to false if any gateway is configured)
+const PAYMENTS_PAUSED = process.env.PAYMENTS_PAUSED === 'true';
 
-/**
- * Endpoint: GET /api/status & GET /api/payments/status
- * Returns current payment gateway status
- */
-router.get('/status', (req, res) => {
-  res.json({
-    paymentsPaused: PAYMENTS_PAUSED,
-    isTestMode: false,
-    message: PAYMENTS_PAUSED
-      ? 'Online checkout is temporarily paused while live payment gateway is being finalized.'
-      : 'Online checkout is active.',
-  });
-});
+// Fixed official prices (in Paise and Rupees)
+const VIP_PASS_AMOUNT_PAISE = 29900; // ₹299
+const VIP_PASS_AMOUNT_RUPEES = 299.00;
+const TRACK_AMOUNT_PAISE = 9900; // ₹99
+const TRACK_AMOUNT_RUPEES = 99.00;
 
-// Helper to ensure user exists in Supabase PostgreSQL (Prisma) before creating payment records
-async function ensureSupabaseUser(user: { id: string; email: string; name?: string; role?: string }): Promise<string> {
-  const normalizedEmail = user.email.toLowerCase().trim();
-  let dbUser = await prisma.user.findFirst({
-    where: {
-      OR: [
-        { id: user.id },
-        { email: { equals: normalizedEmail, mode: 'insensitive' } },
-      ],
-    },
-  });
-
-  if (!dbUser) {
-    dbUser = await prisma.user.create({
-      data: {
-        id: user.id,
-        email: normalizedEmail,
-        name: user.name || 'Customer',
-        role: user.role || 'USER',
-        provider: 'LOCAL',
-      },
-    });
-  }
-
-  return dbUser.id;
+function getClientUrl(): string {
+  return process.env.CLIENT_URL || 'https://tony-prakash-music.vercel.app';
 }
 
-// Helper to compute and verify Razorpay HMAC-SHA256 signature
-function verifySignature(orderId: string, paymentId: string, signature: string): boolean {
+function getBackendUrl(): string {
+  return process.env.BACKEND_URL || 'https://tony-prakash-api.vercel.app';
+}
+
+/**
+ * Helper to compute and verify Razorpay HMAC-SHA256 signature
+ */
+function verifyRazorpaySignature(orderId: string, paymentId: string, signature: string): boolean {
   if (!orderId || !paymentId || !signature) return false;
   const payload = `${orderId}|${paymentId}`;
   const generatedSignature = crypto
@@ -78,595 +55,723 @@ function verifySignature(orderId: string, paymentId: string, signature: string):
   return generatedSignature === signature;
 }
 
+// =========================================================================
+// 1. CONFIG & STATUS ENDPOINTS
+// =========================================================================
+
 /**
- * STEP 1: BACKEND - Create Order
- * Endpoint: POST /api/create-order & POST /api/payments/create-order
- * Calls Razorpay API: POST https://api.razorpay.com/v1/orders
- * Request: { amount (paise), currency, receipt } or { trackId, slug }
- * Return: { order_id, orderId, amount, currency, keyId }
- * Minimum amount: 100 paise
+ * GET /api/payments/config & GET /api/config
+ * Returns active gateway configurations and pricing
  */
-router.post('/create-order', optionalAuth, async (req: AuthRequest, res: Response) => {
+router.get('/config', (_req, res: Response) => {
+  res.json({
+    paymentsPaused: PAYMENTS_PAUSED,
+    gateways: {
+      cashfree: {
+        enabled: cashfreeService.isConfigured,
+        environment: cashfreeService.isProduction ? 'PRODUCTION' : 'SANDBOX',
+      },
+      instamojo: {
+        enabled: instamojoService.isConfigured,
+        environment: instamojoService.isProduction ? 'PRODUCTION' : 'SANDBOX',
+      },
+      razorpay: {
+        enabled: isRazorpayConfigured,
+        environment: 'TEST',
+      },
+    },
+    pricing: {
+      vipPassPaise: VIP_PASS_AMOUNT_PAISE,
+      vipPassRupees: VIP_PASS_AMOUNT_RUPEES,
+      trackPaise: TRACK_AMOUNT_PAISE,
+      trackRupees: TRACK_AMOUNT_RUPEES,
+    },
+  });
+});
+
+/**
+ * GET /api/payments/status & GET /api/status
+ */
+router.get('/status', (_req, res: Response) => {
+  res.json({
+    paymentsPaused: PAYMENTS_PAUSED,
+    cashfreeConfigured: cashfreeService.isConfigured,
+    instamojoConfigured: instamojoService.isConfigured,
+    message: PAYMENTS_PAUSED
+      ? 'Online checkout is temporarily paused.'
+      : 'Online checkout is active.',
+  });
+});
+
+// =========================================================================
+// 2. UNIFIED ORDER CREATION (CASHFREE + INSTAMOJO)
+// =========================================================================
+
+/**
+ * POST /api/payments/create-unified-order
+ * Body: { itemType: 'VIP_PASS' | 'TRACK', trackId?: string, gateway: 'CASHFREE' | 'INSTAMOJO' }
+ * Validates product IDs and prices against trusted server records.
+ */
+router.post('/create-unified-order', optionalAuth, async (req: AuthRequest, res: Response) => {
   try {
     if (PAYMENTS_PAUSED) {
       res.status(503).json({
-        error: 'Online checkout is temporarily paused while our live payment gateway is being finalized. Please check back soon or contact Rev. Tony Prakash directly at +91 9841345007.',
+        error: 'Online checkout is temporarily paused while live payment gateway is being finalized.',
         paymentsPaused: true,
       });
       return;
     }
-    const { trackId, slug, currency = 'INR', notes = {} } = req.body;
-    let rawAmount = req.body.amount;
 
-    let track: any = null;
+    const { itemType, trackId, slug, gateway = 'CASHFREE', customerName, customerEmail, customerPhone } = req.body;
+
+    if (itemType !== 'VIP_PASS' && itemType !== 'TRACK') {
+      res.status(400).json({ error: 'Invalid itemType. Must be VIP_PASS or TRACK.' });
+      return;
+    }
+
+    const selectedGateway = (gateway || 'CASHFREE').toUpperCase();
+    if (selectedGateway !== 'CASHFREE' && selectedGateway !== 'INSTAMOJO' && selectedGateway !== 'RAZORPAY') {
+      res.status(400).json({ error: 'Unsupported gateway. Must be CASHFREE or INSTAMOJO.' });
+      return;
+    }
+
+    // Resolve or create user in database
     let userId: string | null = null;
+    let userEmail = customerEmail;
+    let userName = customerName;
+    let userPhone = customerPhone;
 
     if (req.user) {
-      userId = await ensureSupabaseUser(req.user);
-    }
-
-    // If trackId or slug provided, resolve track from database
-    if (trackId || slug) {
-      const isObjectId = /^[0-9a-fA-F]{24}$/.test(String(trackId || ''));
-      track = isObjectId
-        ? await prisma.track.findUnique({ where: { id: String(trackId) } })
-        : null;
-
-      if (!track && (slug || trackId)) {
-        const identifier = String(slug || trackId);
-        track = await prisma.track.findFirst({
-          where: {
-            OR: [
-              { slug: identifier },
-              { slug: { equals: identifier, mode: 'insensitive' } },
-              { titleEnglish: { equals: identifier, mode: 'insensitive' } },
-            ],
-          },
-        });
-      }
-
-      if (!track && (slug || trackId)) {
-        const raw = String(slug || trackId);
-        const clean = raw.replace(/^tp-(song|track)-\d+-?/, '').toLowerCase();
-        track = await prisma.track.findFirst({
-          where: {
-            OR: [
-              { slug: { contains: clean, mode: 'insensitive' } },
-              { audioUrl: { contains: clean, mode: 'insensitive' } },
-              { titleEnglish: { contains: clean, mode: 'insensitive' } },
-            ],
-          },
-        });
-      }
-
-      // Default amount for studio backing track purchase: 9900 paise (₹99)
-      if (!rawAmount) {
-        rawAmount = track.downloadPricePaise || 9900;
-      }
-    }
-
-    const amountPaise = Number(rawAmount || 9900);
-
-    // Validate amount >= 100 paise
-    if (isNaN(amountPaise) || amountPaise < 100) {
-      res.status(400).json({
-        error: 'Invalid amount. Minimum amount must be at least 100 paise (₹1).',
+      userId = await fulfillmentService.ensureUser(req.user);
+      userEmail = req.user.email || userEmail;
+      userName = req.user.name || userName;
+      userPhone = (req.user as any)?.phone || userPhone;
+    } else if (userEmail) {
+      const guestId = `guest_${Date.now()}_${crypto.randomBytes(3).toString('hex')}`;
+      userId = await fulfillmentService.ensureUser({
+        id: guestId,
+        email: userEmail,
+        name: userName || 'Customer',
+        phone: userPhone,
       });
-      return;
     }
 
-    // Check if user already owns this track
-    if (userId && track) {
-      const existing = await prisma.purchase.findFirst({
-        where: {
-          userId,
-          trackId: track.id,
-          status: 'SUCCESS',
-        },
-      });
+    let track: any = null;
+    let amountPaise = VIP_PASS_AMOUNT_PAISE;
+    let amountRupees = VIP_PASS_AMOUNT_RUPEES;
+    let itemTitle = "Tony's One-Time VIP Lifetime Pass";
+    let itemDescription = 'Complete Devotional Songs Master Access (100 Years)';
 
-      if (existing) {
-        res.status(400).json({ error: 'You have already purchased this backing track.' });
+    if (itemType === 'TRACK') {
+      amountPaise = TRACK_AMOUNT_PAISE;
+      amountRupees = TRACK_AMOUNT_RUPEES;
+
+      if (!trackId && !slug) {
+        res.status(400).json({ error: 'trackId or slug is required for track purchase.' });
         return;
       }
-    }
 
-    const receipt = req.body.receipt || `rcpt_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
-
-    // Call official Razorpay Orders API
-    const order = await razorpayClient.orders.create({
-      amount: Math.round(amountPaise),
-      currency,
-      receipt,
-      notes: {
-        ...notes,
-        ...(track ? { trackId: track.id, trackTitle: track.titleEnglish } : {}),
-        ...(userId ? { userId } : {}),
-      },
-    });
-
-    // Record pending purchase in Supabase PostgreSQL if track & user are present
-    if (userId && track) {
-      await prisma.purchase.create({
-        data: {
-          userId,
-          trackId: track.id,
-          amountPaise: Math.round(amountPaise),
-          status: 'PENDING',
-          razorpayOrderId: order.id,
+      // Validate track ID against database
+      track = await prisma.track.findFirst({
+        where: {
+          OR: [
+            ...(trackId ? [{ id: String(trackId) }] : []),
+            ...(slug ? [{ slug: String(slug) }] : []),
+          ],
         },
       });
+
+      if (!track) {
+        res.status(404).json({ error: 'Selected track could not be found.' });
+        return;
+      }
+
+      itemTitle = `Backing Track: ${track.titleEnglish}`;
+      itemDescription = `Minus-One Studio Track (${track.titleTelugu})`;
+
+      // Check if user already owns this track
+      if (userId) {
+        const existingPurchase = await prisma.purchase.findFirst({
+          where: { userId, trackId: track.id, status: 'SUCCESS' },
+        });
+
+        if (existingPurchase) {
+          res.status(400).json({ error: 'You have already purchased this backing track.' });
+          return;
+        }
+      }
     }
 
-    res.json({
-      order_id: order.id,
-      orderId: order.id,
-      amount: order.amount,
-      currency: order.currency,
-      keyId: RAZORPAY_KEY_ID,
-      receipt: order.receipt,
-      trackTitle: track?.titleEnglish,
-      isTestMode: true,
-    });
-  } catch (error: any) {
-    console.error('Error creating Razorpay order:', error);
-    res.status(500).json({
-      error: 'Failed to create payment order with Razorpay',
-      details: error?.message || String(error),
-    });
-  }
-});
+    // Unique order ID
+    const orderId = `tp_${itemType.toLowerCase()}_${Date.now()}_${crypto.randomBytes(4).toString('hex')}`;
+    const clientUrl = getClientUrl();
+    const backendUrl = getBackendUrl();
 
-/**
- * Endpoint: POST /api/create-subscription & POST /api/payments/create-subscription
- * Creates a Razorpay order for Tony's One-Time VIP Lifetime Pass (₹299 = 29900 paise)
- */
-router.post('/create-subscription', authenticateUser, async (req: AuthRequest, res: Response) => {
-  try {
-    if (PAYMENTS_PAUSED) {
-      res.status(503).json({
-        error: 'Online pass activation is temporarily paused while our live payment gateway is being finalized. Please check back soon or contact Rev. Tony Prakash directly at +91 9841345007.',
-        paymentsPaused: true,
-      });
-      return;
-    }
-    const userId = await ensureSupabaseUser(req.user!);
-    const amountPaise = 29900; // One-Time Lifetime Pass: ₹299 (29,900 paise)
-    const receipt = `rcpt_sub_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
-
-    // Call official Razorpay Orders API
-    const order = await razorpayClient.orders.create({
-      amount: amountPaise,
-      currency: 'INR',
-      receipt,
-      notes: {
-        type: 'VIP_LIFETIME_PASS',
+    // 1. Create Pending Transaction Record in PostgreSQL
+    await prisma.paymentTransaction.create({
+      data: {
+        orderId,
+        gateway: selectedGateway,
         userId,
-        email: req.user!.email,
+        itemType,
+        trackId: track ? track.id : null,
+        amountPaise,
+        currency: 'INR',
+        status: 'PENDING',
+        customerName: userName || 'Customer',
+        customerEmail: userEmail || 'guest@tonyprakash.com',
+        customerPhone: userPhone || '9999999999',
       },
     });
 
-    // Create or update pending subscription in Supabase PostgreSQL
-    const existingPending = await prisma.subscription.findFirst({
-      where: { userId, status: 'PENDING' },
-    });
+    // 2. Gateway Order Creation
+    if (selectedGateway === 'CASHFREE') {
+      const returnUrl = `${clientUrl}/payment-return?order_id=${encodeURIComponent(orderId)}&gateway=cashfree`;
+      const notifyUrl = `${backendUrl}/api/payments/cashfree-webhook`;
 
-    if (existingPending) {
-      await prisma.subscription.update({
-        where: { id: existingPending.id },
-        data: {
-          razorpaySubscriptionId: order.id,
-          amountPaise,
-        },
-      });
-    } else {
-      const startDate = new Date();
-      const endDate = new Date();
-      endDate.setFullYear(startDate.getFullYear() + 100);
-
-      await prisma.subscription.create({
-        data: {
-          userId,
-          planName: "Tony's VIP Lifetime Pass",
-          status: 'PENDING',
-          amountPaise,
-          currentPeriodStart: startDate,
-          currentPeriodEnd: endDate,
-          razorpaySubscriptionId: order.id,
-        },
-      });
-    }
-
-    res.json({
-      order_id: order.id,
-      orderId: order.id,
-      subscriptionId: order.id,
-      amount: order.amount,
-      planName: "Tony's One-Time VIP Lifetime Pass",
-      currency: order.currency,
-      keyId: RAZORPAY_KEY_ID,
-      isTestMode: true,
-    });
-  } catch (error: any) {
-    console.error('Error creating subscription order:', error);
-    res.status(500).json({
-      error: 'Failed to create subscription order with Razorpay',
-      details: error?.message || String(error),
-    });
-  }
-});
-
-/**
- * STEP 3: BACKEND - Verify Signature
- * Endpoint: POST /api/verify-payment & POST /api/payments/verify-payment
- * Algorithm: HMAC-SHA256(order_id + "|" + payment_id, KEY_SECRET)
- * Compare generated signature with razorpay_signature
- * Return success only if signatures match
- */
-router.post('/verify-payment', optionalAuth, async (req: AuthRequest, res: Response) => {
-  try {
-    if (PAYMENTS_PAUSED) {
-      res.status(503).json({
-        error: 'Online checkout is temporarily paused while our live payment gateway is being finalized.',
-        paymentsPaused: true,
-        success: false,
-      });
-      return;
-    }
-    const orderId = req.body.order_id || req.body.razorpay_order_id;
-    const paymentId = req.body.payment_id || req.body.razorpay_payment_id;
-    const signature = req.body.signature || req.body.razorpay_signature;
-
-    // Validate required fields
-    if (!orderId || !paymentId || !signature) {
-      res.status(400).json({
-        error: 'Missing required payment verification fields (order_id, payment_id, signature)',
-        success: false,
-      });
-      return;
-    }
-
-    // Verify HMAC-SHA256 cryptographic signature
-    const isValid = verifySignature(orderId, paymentId, signature);
-    if (!isValid) {
-      // If payment record exists, mark status as FAILED
-      try {
-        await prisma.purchase.updateMany({
-          where: { razorpayOrderId: orderId },
-          data: { status: 'FAILED' },
-        });
-      } catch {
-        // ignore
-      }
-
-      res.status(400).json({
-        error: 'Invalid payment signature. Verification failed.',
-        success: false,
-      });
-      return;
-    }
-
-    // Payment signature is 100% valid! Fulfill entitlements in Supabase PostgreSQL
-    // 1. Check for purchase record matching this orderId
-    const purchase = await prisma.purchase.findFirst({
-      where: { razorpayOrderId: orderId },
-      include: { track: true },
-    });
-
-    if (purchase) {
-      await prisma.purchase.update({
-        where: { id: purchase.id },
-        data: {
-          status: 'SUCCESS',
-          razorpayPaymentId: paymentId,
-        },
+      const cfOrder = await cashfreeService.createOrder({
+        orderId,
+        orderAmount: amountRupees,
+        orderCurrency: 'INR',
+        customerId: userId || `cust_${Date.now()}`,
+        customerName: userName || 'Customer',
+        customerEmail: userEmail || 'customer@tonyprakash.com',
+        customerPhone: userPhone || '9999999999',
+        returnUrl,
+        notifyUrl,
+        orderNote: itemTitle,
       });
 
-      // Grant download and playback entitlement in Supabase PostgreSQL
-      await prisma.entitlement.upsert({
-        where: {
-          userId_trackId_entitlementType: {
-            userId: purchase.userId,
-            trackId: purchase.trackId,
-            entitlementType: 'PURCHASE',
-          },
-        },
-        create: {
-          userId: purchase.userId,
-          trackId: purchase.trackId,
-          entitlementType: 'PURCHASE',
-        },
-        update: {},
-      });
-    }
-
-    // 2. Check for subscription record matching this orderId
-    const subscription = await prisma.subscription.findFirst({
-      where: {
-        OR: [
-          { razorpaySubscriptionId: orderId },
-          { razorpayPaymentId: paymentId },
-        ],
-      },
-    });
-
-    if (subscription) {
-      const startDate = new Date();
-      const endDate = new Date();
-      endDate.setFullYear(startDate.getFullYear() + 100);
-
-      await prisma.subscription.update({
-        where: { id: subscription.id },
-        data: {
-          status: 'ACTIVE',
-          razorpayPaymentId: paymentId,
-          currentPeriodStart: startDate,
-          currentPeriodEnd: endDate,
-        },
-      });
-    }
-
-    res.json({
-      success: true,
-      message: 'Payment verified successfully',
-      order_id: orderId,
-      payment_id: paymentId,
-      status: 'SUCCESS',
-    });
-  } catch (error: any) {
-    console.error('Error verifying payment:', error);
-    res.status(500).json({
-      error: 'Internal server error verifying payment',
-      details: error?.message || String(error),
-      success: false,
-    });
-  }
-});
-
-/**
- * Endpoint: POST /api/verify-order & POST /api/payments/verify-order
- * Verifies backing track order payment signature and immediately grants track entitlement in Supabase
- */
-router.post('/verify-order', authenticateUser, async (req: AuthRequest, res: Response) => {
-  try {
-    if (PAYMENTS_PAUSED) {
-      res.status(503).json({
-        error: 'Online checkout is temporarily paused while our live payment gateway is being finalized.',
-        paymentsPaused: true,
-        success: false,
-      });
-      return;
-    }
-    const orderId = req.body.razorpay_order_id || req.body.order_id;
-    const paymentId = req.body.razorpay_payment_id || req.body.payment_id;
-    const signature = req.body.razorpay_signature || req.body.signature;
-
-    if (!orderId || !paymentId) {
-      res.status(400).json({ error: 'Order ID and Payment ID are required' });
-      return;
-    }
-
-    // If signature provided, verify with HMAC-SHA256
-    if (signature) {
-      const isValid = verifySignature(orderId, paymentId, signature);
-      if (!isValid) {
-        await prisma.purchase.updateMany({
-          where: { razorpayOrderId: orderId },
-          data: { status: 'FAILED' },
-        });
-        res.status(400).json({
-          error: 'Invalid payment signature. Verification failed.',
-          success: false,
-        });
-        return;
-      }
-    }
-
-    // Find and update the purchase in Supabase PostgreSQL
-    let purchase = await prisma.purchase.findFirst({
-      where: { razorpayOrderId: orderId },
-      include: { track: true },
-    });
-
-    if (!purchase && req.user) {
-      // Fallback: locate pending purchase for this user
-      purchase = await prisma.purchase.findFirst({
-        where: { userId: req.user.id, status: 'PENDING' },
-        orderBy: { createdAt: 'desc' },
-        include: { track: true },
-      });
-    }
-
-    if (purchase) {
-      await prisma.purchase.update({
-        where: { id: purchase.id },
-        data: {
-          status: 'SUCCESS',
-          razorpayPaymentId: paymentId,
-        },
-      });
-
-      // Grant instant master download entitlement in Supabase PostgreSQL
-      await prisma.entitlement.upsert({
-        where: {
-          userId_trackId_entitlementType: {
-            userId: purchase.userId,
-            trackId: purchase.trackId,
-            entitlementType: 'PURCHASE',
-          },
-        },
-        create: {
-          userId: purchase.userId,
-          trackId: purchase.trackId,
-          entitlementType: 'PURCHASE',
-        },
-        update: {},
+      // Update gatewayOrderId
+      await prisma.paymentTransaction.update({
+        where: { orderId },
+        data: { gatewayOrderId: cfOrder.cfOrderId },
       });
 
       res.json({
         success: true,
-        status: 'SUCCESS',
-        message: 'Payment verified! Studio backing track unlocked.',
-        track: {
-          id: purchase.track.id,
-          titleEnglish: purchase.track.titleEnglish,
-          titleTelugu: purchase.track.titleTelugu,
-        },
+        gateway: 'CASHFREE',
+        orderId,
+        cfOrderId: cfOrder.cfOrderId,
+        paymentSessionId: cfOrder.paymentSessionId,
+        amountRupees,
+        amountPaise,
+        itemType,
+        itemTitle,
+        itemDescription,
       });
       return;
     }
 
-    res.json({
-      success: true,
-      status: 'SUCCESS',
-      message: 'Payment verified successfully.',
-    });
+    if (selectedGateway === 'INSTAMOJO') {
+      const redirectUrl = `${clientUrl}/payment-return?order_id=${encodeURIComponent(orderId)}&gateway=instamojo`;
+      const webhookUrl = `${backendUrl}/api/payments/instamojo-webhook`;
+
+      const imOrder = await instamojoService.createPaymentRequest({
+        amount: amountRupees,
+        purpose: itemTitle.substring(0, 30),
+        buyerName: userName || 'Customer',
+        email: userEmail || 'customer@tonyprakash.com',
+        phone: userPhone || '9999999999',
+        redirectUrl,
+        webhookUrl,
+      });
+
+      // Update gatewayOrderId
+      await prisma.paymentTransaction.update({
+        where: { orderId },
+        data: { gatewayOrderId: imOrder.paymentRequestId },
+      });
+
+      res.json({
+        success: true,
+        gateway: 'INSTAMOJO',
+        orderId,
+        paymentRequestId: imOrder.paymentRequestId,
+        paymentUrl: imOrder.paymentUrl,
+        amountRupees,
+        amountPaise,
+        itemType,
+        itemTitle,
+        itemDescription,
+      });
+      return;
+    }
+
+    // Fallback: Razorpay (if requested)
+    if (selectedGateway === 'RAZORPAY') {
+      const rzpOrder = await razorpayClient.orders.create({
+        amount: amountPaise,
+        currency: 'INR',
+        receipt: `rcpt_${Date.now()}`,
+        notes: { orderId, itemType, ...(track ? { trackId: track.id } : {}) },
+      });
+
+      await prisma.paymentTransaction.update({
+        where: { orderId },
+        data: { gatewayOrderId: rzpOrder.id },
+      });
+
+      res.json({
+        success: true,
+        gateway: 'RAZORPAY',
+        orderId,
+        rzpOrderId: rzpOrder.id,
+        keyId: RAZORPAY_KEY_ID,
+        amountRupees,
+        amountPaise,
+        itemType,
+        itemTitle,
+      });
+      return;
+    }
   } catch (error: any) {
-    console.error('Error verifying order:', error);
-    res.status(500).json({ error: error?.message || 'Payment verification failed', success: false });
+    console.error('Error creating unified payment order:', error);
+    res.status(500).json({
+      error: 'Failed to create payment order',
+      details: error?.message || String(error),
+    });
   }
 });
 
+// =========================================================================
+// 3. INDEPENDENT SERVER-TO-SERVER VERIFICATION
+// =========================================================================
+
 /**
- * Endpoint: POST /api/verify-subscription & POST /api/payments/verify-subscription
- * Verifies VIP pass subscription signature and immediately activates 100-year pass in Supabase
+ * POST /api/payments/verify-unified-payment
+ * Queries official gateway APIs directly to verify payment authenticity.
+ * Never grants access based on client-side status.
  */
-router.post('/verify-subscription', authenticateUser, async (req: AuthRequest, res: Response) => {
+router.post('/verify-unified-payment', optionalAuth, async (req: AuthRequest, res: Response) => {
   try {
-    if (PAYMENTS_PAUSED) {
-      res.status(503).json({
-        error: 'Online checkout is temporarily paused while our live payment gateway is being finalized.',
-        paymentsPaused: true,
-        success: false,
+    const { orderId, gateway, paymentId, paymentRequestId } = req.body;
+
+    if (!orderId) {
+      res.status(400).json({ error: 'orderId is required for verification.' });
+      return;
+    }
+
+    const transaction = await prisma.paymentTransaction.findUnique({
+      where: { orderId },
+      include: { track: true, user: true },
+    });
+
+    if (!transaction) {
+      res.status(404).json({ error: 'Order not found in transaction ledger.' });
+      return;
+    }
+
+    // Idempotency: if already SUCCESS, return immediately
+    if (transaction.status === 'SUCCESS') {
+      res.json({
+        success: true,
+        status: 'SUCCESS',
+        orderId,
+        itemType: transaction.itemType,
+        message: 'Order already fulfilled.',
+        alreadyFulfilled: true,
+        track: transaction.track ? { id: transaction.track.id, titleEnglish: transaction.track.titleEnglish } : undefined,
       });
       return;
     }
-    const orderId = req.body.subscriptionId || req.body.razorpay_order_id || req.body.order_id;
-    const paymentId = req.body.paymentId || req.body.razorpay_payment_id || req.body.payment_id;
-    const signature = req.body.razorpay_signature || req.body.signature;
-    const userId = await ensureSupabaseUser(req.user!);
 
-    if (!orderId || !paymentId) {
-      res.status(400).json({ error: 'Order ID and Payment ID are required' });
-      return;
-    }
+    const targetGateway = (gateway || transaction.gateway || 'CASHFREE').toUpperCase();
 
-    // Verify HMAC-SHA256 signature if present
-    if (signature) {
-      const isValid = verifySignature(orderId, paymentId, signature);
-      if (!isValid) {
+    // 1. Verify Cashfree payment with Cashfree API
+    if (targetGateway === 'CASHFREE') {
+      const cfOrder = await cashfreeService.getOrder(orderId);
+      const cfPayments = await cashfreeService.getOrderPayments(orderId);
+
+      const successfulPayment = cfPayments.find(
+        (p: any) => p.payment_status === 'SUCCESS' || p.payment_status === 'CAPTURED'
+      );
+
+      const isPaid = cfOrder.order_status === 'PAID' || Boolean(successfulPayment);
+
+      if (isPaid) {
+        const result = await fulfillmentService.fulfillOrder({
+          orderId,
+          gateway: 'CASHFREE',
+          gatewayOrderId: String(cfOrder.cf_order_id || transaction.gatewayOrderId || ''),
+          gatewayPaymentId: String(successfulPayment?.cf_payment_id || paymentId || 'cf_verified'),
+          paymentMethod: successfulPayment?.payment_group || successfulPayment?.payment_method || 'CASHFREE',
+          rawResponse: { cfOrder, successfulPayment },
+        });
+
+        res.json({
+          success: true,
+          status: 'SUCCESS',
+          orderId,
+          itemType: result.itemType,
+          message: result.message,
+          trackTitle: result.trackTitle,
+        });
+        return;
+      } else {
+        await fulfillmentService.failOrder(orderId, `Cashfree order status: ${cfOrder.order_status}`, cfOrder);
         res.status(400).json({
-          error: 'Invalid payment signature. Verification failed.',
           success: false,
+          status: cfOrder.order_status,
+          error: `Payment is not completed (status: ${cfOrder.order_status})`,
         });
         return;
       }
     }
 
-    // Activate 100-year VIP Lifetime Pass in Supabase PostgreSQL
-    const startDate = new Date();
-    const endDate = new Date();
-    endDate.setFullYear(startDate.getFullYear() + 100);
+    // 2. Verify Instamojo payment with Instamojo API
+    if (targetGateway === 'INSTAMOJO') {
+      const imReqId = paymentRequestId || transaction.gatewayOrderId;
+      if (!imReqId) {
+        res.status(400).json({ error: 'Missing Instamojo payment request identifier.' });
+        return;
+      }
 
-    const existingPending = await prisma.subscription.findFirst({
-      where: {
-        userId,
-        OR: [
-          { razorpaySubscriptionId: orderId },
-          { status: 'PENDING' },
-        ],
-      },
-    });
+      const imDetails = await instamojoService.getPaymentRequestDetails(imReqId);
+      const payments = Array.isArray(imDetails.payments) ? imDetails.payments : [];
 
-    let subscription: any;
-    if (existingPending) {
-      subscription = await prisma.subscription.update({
-        where: { id: existingPending.id },
-        data: {
-          status: 'ACTIVE',
-          razorpayPaymentId: paymentId,
-          amountPaise: 29900,
-          currentPeriodStart: startDate,
-          currentPeriodEnd: endDate,
-        },
-        include: { user: true },
-      });
-    } else {
-      subscription = await prisma.subscription.create({
-        data: {
-          userId,
-          planName: "Tony's VIP Lifetime Pass",
-          status: 'ACTIVE',
-          amountPaise: 29900,
-          currentPeriodStart: startDate,
-          currentPeriodEnd: endDate,
-          razorpaySubscriptionId: orderId,
-          razorpayPaymentId: paymentId,
-        },
-        include: { user: true },
-      });
-    }
+      const completedPayment = payments.find(
+        (p: any) => p.status === 'Credit' || p.status === 'SUCCESS' || p.status === 'Completed'
+      );
 
-    res.json({
-      success: true,
-      status: 'ACTIVE',
-      message: 'Payment verified! One-Time VIP Lifetime Pass activated.',
-      subscription,
-    });
-  } catch (error: any) {
-    console.error('Error verifying subscription:', error);
-    res.status(500).json({ error: error?.message || 'Failed to verify subscription', success: false });
-  }
-});
+      const isCompleted = imDetails.status === 'Completed' || Boolean(completedPayment);
 
-/**
- * Endpoint: POST /api/webhook & POST /api/payments/webhook
- * Razorpay Webhook Handler (Raw signature validation & Idempotency)
- */
-router.post('/webhook', async (req, res) => {
-  try {
-    const signature = req.headers['x-razorpay-signature'] as string;
-    const rawBody = (req as any).rawBody || JSON.stringify(req.body);
+      if (isCompleted) {
+        const result = await fulfillmentService.fulfillOrder({
+          orderId,
+          gateway: 'INSTAMOJO',
+          gatewayOrderId: imReqId,
+          gatewayPaymentId: String(completedPayment?.payment_id || paymentId || 'im_verified'),
+          paymentMethod: completedPayment?.instrument_type || 'INSTAMOJO',
+          rawResponse: imDetails,
+        });
 
-    if (isRazorpayConfigured && signature) {
-      const expectedSignature = crypto
-        .createHmac('sha256', RAZORPAY_WEBHOOK_SECRET)
-        .update(rawBody)
-        .digest('hex');
-
-      if (expectedSignature !== signature) {
-        res.status(400).json({ error: 'Invalid webhook signature' });
+        res.json({
+          success: true,
+          status: 'SUCCESS',
+          orderId,
+          itemType: result.itemType,
+          message: result.message,
+          trackTitle: result.trackTitle,
+        });
+        return;
+      } else {
+        await fulfillmentService.failOrder(orderId, `Instamojo payment status: ${imDetails.status}`, imDetails);
+        res.status(400).json({
+          success: false,
+          status: imDetails.status,
+          error: `Payment is not completed (status: ${imDetails.status})`,
+        });
         return;
       }
     }
 
-    const event = req.body;
-    const eventId = event?.id || `evt_${Date.now()}_${Math.random()}`;
+    // 3. Verify Razorpay
+    if (targetGateway === 'RAZORPAY') {
+      const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
+      const isValid = verifyRazorpaySignature(
+        razorpay_order_id || transaction.gatewayOrderId || '',
+        razorpay_payment_id || paymentId || '',
+        razorpay_signature || ''
+      );
 
-    // Idempotent duplicate check
+      if (isValid) {
+        const result = await fulfillmentService.fulfillOrder({
+          orderId,
+          gateway: 'RAZORPAY',
+          gatewayOrderId: razorpay_order_id,
+          gatewayPaymentId: razorpay_payment_id,
+          paymentMethod: 'RAZORPAY',
+        });
+
+        res.json({
+          success: true,
+          status: 'SUCCESS',
+          orderId,
+          itemType: result.itemType,
+          message: result.message,
+        });
+        return;
+      } else {
+        res.status(400).json({ success: false, error: 'Invalid Razorpay signature' });
+        return;
+      }
+    }
+
+    res.status(400).json({ error: 'Unknown gateway' });
+  } catch (error: any) {
+    console.error('Error verifying payment independently:', error);
+    res.status(500).json({
+      error: 'Payment verification failed',
+      details: error?.message || String(error),
+    });
+  }
+});
+
+/**
+ * GET /api/payments/order/:orderId
+ * Fetches order status from database ledger
+ */
+router.get('/order/:orderId', async (req, res: Response) => {
+  try {
+    const orderId = String(req.params.orderId);
+    const transaction = await prisma.paymentTransaction.findUnique({
+      where: { orderId },
+      include: {
+        track: { select: { id: true, titleEnglish: true, titleTelugu: true, slug: true } },
+      },
+    });
+
+    if (!transaction) {
+      res.status(404).json({ error: 'Order not found' });
+      return;
+    }
+
+    res.json({
+      orderId: transaction.orderId,
+      gateway: transaction.gateway,
+      itemType: transaction.itemType,
+      amountPaise: transaction.amountPaise,
+      amountRupees: transaction.amountPaise / 100,
+      status: transaction.status,
+      customerName: transaction.customerName,
+      customerEmail: transaction.customerEmail,
+      track: transaction.track,
+      createdAt: transaction.createdAt,
+    });
+  } catch (error: any) {
+    res.status(500).json({ error: 'Failed to fetch order status' });
+  }
+});
+
+// =========================================================================
+// 4. WEBHOOKS (CRYPTOGRAPHIC VERIFICATION + IDEMPOTENCY)
+// =========================================================================
+
+/**
+ * POST /api/payments/cashfree-webhook
+ * Official Cashfree Webhook Handler
+ * Verifies x-webhook-signature HMAC-SHA256 with timestamp + rawBody
+ */
+router.post('/cashfree-webhook', async (req, res: Response) => {
+  try {
+    const signature = req.headers['x-webhook-signature'] as string;
+    const timestamp = req.headers['x-webhook-timestamp'] as string;
+    const rawBody = (req as any).rawBody || JSON.stringify(req.body);
+
+    // Cryptographic verification
+    const isValid = cashfreeService.verifyWebhookSignature(signature, timestamp, rawBody);
+    if (!isValid) {
+      console.warn('Unauthorized Cashfree Webhook Attempt: Signature mismatch');
+      res.status(400).json({ error: 'Invalid Cashfree webhook signature' });
+      return;
+    }
+
+    const payload = req.body || {};
+    const eventType = payload.type || 'PAYMENT_WEBHOOK';
+    const data = payload.data || {};
+    const orderData = data.order || {};
+    const paymentData = data.payment || {};
+    const orderId = orderData.order_id;
+    const paymentId = paymentData.cf_payment_id || `cf_pay_${Date.now()}`;
+
+    const eventId = `cf_evt_${orderId}_${paymentId}_${eventType}`;
+
+    // Idempotency: Ignore duplicate webhook event deliveries
     const existingEvent = await prisma.webhookEvent.findUnique({
       where: { eventId },
     });
 
     if (existingEvent) {
-      res.json({ message: 'Event already processed' });
+      res.json({ message: 'Event already processed', eventId });
       return;
     }
 
+    // Record webhook event in PostgreSQL
     await prisma.webhookEvent.create({
       data: {
         eventId,
-        eventType: event?.event || 'payment.captured',
-        payload: JSON.stringify(event),
+        eventType,
+        payload: typeof rawBody === 'string' ? rawBody : JSON.stringify(payload),
         status: 'PROCESSED',
       },
     });
 
-    res.json({ status: 'ok' });
+    // Fulfill order if payment succeeded
+    const isSuccess =
+      eventType === 'PAYMENT_SUCCESS_WEBHOOK' ||
+      paymentData.payment_status === 'SUCCESS' ||
+      orderData.order_status === 'PAID';
+
+    if (isSuccess && orderId) {
+      await fulfillmentService.fulfillOrder({
+        orderId,
+        gateway: 'CASHFREE',
+        gatewayOrderId: String(orderData.cf_order_id || ''),
+        gatewayPaymentId: String(paymentId),
+        paymentMethod: paymentData.payment_group || paymentData.payment_method || 'CASHFREE',
+        rawResponse: payload,
+      });
+    } else if (orderId && (eventType === 'PAYMENT_FAILED_WEBHOOK' || paymentData.payment_status === 'FAILED')) {
+      await fulfillmentService.failOrder(orderId, 'Cashfree payment failed webhook received', payload);
+    }
+
+    res.json({ status: 'ok', eventId });
   } catch (error) {
-    console.error('Webhook error:', error);
+    console.error('Error handling Cashfree webhook:', error);
     res.status(500).json({ error: 'Webhook processing error' });
   }
+});
+
+/**
+ * POST /api/payments/instamojo-webhook
+ * Official Instamojo Webhook Handler
+ * Verifies MAC signature with INSTAMOJO_SALT
+ */
+router.post('/instamojo-webhook', async (req, res: Response) => {
+  try {
+    const postData = req.body || {};
+
+    // Cryptographic MAC verification
+    const isValid = instamojoService.verifyWebhookMac(postData);
+    if (!isValid) {
+      console.warn('Unauthorized Instamojo Webhook Attempt: MAC signature mismatch');
+      res.status(403).json({ error: 'Invalid Instamojo MAC signature' });
+      return;
+    }
+
+    const paymentId = postData.payment_id;
+    const paymentRequestId = postData.payment_request_id;
+    const status = postData.status; // 'Credit' for successful payment
+
+    const eventId = `im_evt_${paymentId}_${status}`;
+
+    // Idempotency check
+    const existingEvent = await prisma.webhookEvent.findUnique({
+      where: { eventId },
+    });
+
+    if (existingEvent) {
+      res.json({ message: 'Event already processed', eventId });
+      return;
+    }
+
+    // Record webhook event in PostgreSQL
+    await prisma.webhookEvent.create({
+      data: {
+        eventId,
+        eventType: `INSTAMOJO_${status}`,
+        payload: JSON.stringify(postData),
+        status: 'PROCESSED',
+      },
+    });
+
+    // Locate transaction by gatewayOrderId (paymentRequestId)
+    const transaction = await prisma.paymentTransaction.findFirst({
+      where: {
+        OR: [
+          { gatewayOrderId: paymentRequestId },
+          { orderId: paymentRequestId },
+        ],
+      },
+    });
+
+    if (transaction && status === 'Credit') {
+      await fulfillmentService.fulfillOrder({
+        orderId: transaction.orderId,
+        gateway: 'INSTAMOJO',
+        gatewayOrderId: paymentRequestId,
+        gatewayPaymentId: paymentId,
+        paymentMethod: postData.instrument_type || 'INSTAMOJO',
+        rawResponse: postData,
+      });
+    } else if (transaction && status !== 'Credit') {
+      await fulfillmentService.failOrder(transaction.orderId, `Instamojo webhook status: ${status}`, postData);
+    }
+
+    res.json({ status: 'ok', eventId });
+  } catch (error) {
+    console.error('Error handling Instamojo webhook:', error);
+    res.status(500).json({ error: 'Webhook processing error' });
+  }
+});
+
+// =========================================================================
+// 5. LEGACY RAZORPAY / BACKWARD COMPATIBILITY
+// =========================================================================
+
+router.post('/create-order', optionalAuth, async (req: AuthRequest, res: Response) => {
+  if (PAYMENTS_PAUSED) {
+    res.status(503).json({ error: 'Online checkout paused', paymentsPaused: true });
+    return;
+  }
+  // Redirect internally to unified order creator
+  req.body.itemType = 'TRACK';
+  req.body.gateway = req.body.gateway || 'CASHFREE';
+  return (router as any).handle(req, res);
+});
+
+router.post('/create-subscription', authenticateUser, async (req: AuthRequest, res: Response) => {
+  if (PAYMENTS_PAUSED) {
+    res.status(503).json({ error: 'Online checkout paused', paymentsPaused: true });
+    return;
+  }
+  req.body.itemType = 'VIP_PASS';
+  req.body.gateway = req.body.gateway || 'CASHFREE';
+  return (router as any).handle(req, res);
+});
+
+router.post('/verify-payment', optionalAuth, async (req: AuthRequest, res: Response) => {
+  const orderId = req.body.order_id || req.body.razorpay_order_id;
+  const paymentId = req.body.payment_id || req.body.razorpay_payment_id;
+  const signature = req.body.signature || req.body.razorpay_signature;
+
+  if (orderId && paymentId && signature) {
+    const isValid = verifyRazorpaySignature(orderId, paymentId, signature);
+    if (!isValid) {
+      res.status(400).json({ error: 'Invalid signature', success: false });
+      return;
+    }
+    const result = await fulfillmentService.fulfillOrder({
+      orderId,
+      gateway: 'RAZORPAY',
+      gatewayPaymentId: paymentId,
+    });
+    res.json(result);
+    return;
+  }
+
+  res.status(400).json({ error: 'Invalid request' });
+});
+
+router.post('/verify-order', authenticateUser, async (req: AuthRequest, res: Response) => {
+  const orderId = req.body.razorpay_order_id || req.body.order_id;
+  const paymentId = req.body.razorpay_payment_id || req.body.payment_id;
+  if (!orderId) {
+    res.status(400).json({ error: 'Order ID is required' });
+    return;
+  }
+  const result = await fulfillmentService.fulfillOrder({
+    orderId,
+    gateway: 'RAZORPAY',
+    gatewayPaymentId: paymentId || 'manual_verify',
+  });
+  res.json(result);
+});
+
+router.post('/verify-subscription', authenticateUser, async (req: AuthRequest, res: Response) => {
+  const orderId = req.body.subscriptionId || req.body.razorpay_order_id || req.body.order_id;
+  const paymentId = req.body.paymentId || req.body.razorpay_payment_id || req.body.payment_id;
+  if (!orderId) {
+    res.status(400).json({ error: 'Order ID is required' });
+    return;
+  }
+  const result = await fulfillmentService.fulfillOrder({
+    orderId,
+    gateway: 'RAZORPAY',
+    gatewayPaymentId: paymentId || 'manual_verify',
+  });
+  res.json(result);
 });
 
 export default router;

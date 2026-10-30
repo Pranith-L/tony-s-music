@@ -157,3 +157,4 @@ export const PaymentsPausedModal: React.FC<PaymentsPausedModalProps> = ({
     document.body
   );
 };
+

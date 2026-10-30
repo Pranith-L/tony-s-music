@@ -5,9 +5,7 @@ import { Track } from '../types/index.js';
 import { usePlayer } from '../context/PlayerContext.js';
 import { useAuth } from '../context/AuthContext.js';
 import { api } from '../services/api.js';
-import { RazorpayModal } from './RazorpayModal.js';
-import { PaymentsPausedModal } from './PaymentsPausedModal.js';
-import { PAYMENTS_PAUSED } from '../config/payments.js';
+import { UnifiedCheckoutModal } from './UnifiedCheckoutModal.js';
 
 interface LyricsModalProps {
   track: Track | null;
@@ -20,9 +18,7 @@ export const LyricsModal: React.FC<LyricsModalProps> = ({ track, onClose }) => {
   const [downloading, setDownloading] = useState(false);
   const [purchasing, setPurchasing] = useState(false);
   const [purchaseSuccess, setPurchaseSuccess] = useState(false);
-  const [showRazorpay, setShowRazorpay] = useState(false);
-  const [razorpayOrder, setRazorpayOrder] = useState<any>(null);
-  const [showPausedModal, setShowPausedModal] = useState(false);
+  const [showCheckout, setShowCheckout] = useState(false);
 
   if (!track) return null;
 
@@ -55,39 +51,8 @@ export const LyricsModal: React.FC<LyricsModalProps> = ({ track, onClose }) => {
     }
   };
 
-  const handleBuySingleTrack = async () => {
-    if (PAYMENTS_PAUSED) {
-      setShowPausedModal(true);
-      return;
-    }
-    if (!user) {
-      alert('Please sign in to purchase this backing track download.');
-      return;
-    }
-    setPurchasing(true);
-    try {
-      const order = await api.payments.createOrder(track.id);
-      setRazorpayOrder(order);
-      setShowRazorpay(true);
-    } catch (err: any) {
-      alert(err.message || 'Could not initiate backing track order.');
-    } finally {
-      setPurchasing(false);
-    }
-  };
-
-  const handlePaymentSuccess = async (paymentData: any) => {
-    try {
-      const verified = await api.payments.verifyOrder(paymentData);
-      if (verified.success) {
-        setPurchaseSuccess(true);
-        setShowRazorpay(false);
-      } else {
-        alert('Payment verification failed on the server.');
-      }
-    } catch (err: any) {
-      alert(err.message || 'Payment verification failed.');
-    }
+  const handleBuySingleTrack = () => {
+    setShowCheckout(true);
   };
 
   return createPortal(
@@ -260,30 +225,17 @@ export const LyricsModal: React.FC<LyricsModalProps> = ({ track, onClose }) => {
           </div>
         )}
 
-        {/* Launching Soon Modal */}
-        <PaymentsPausedModal
-          isOpen={showPausedModal}
-          onClose={() => setShowPausedModal(false)}
-          itemTitle={`Backing Track: ${track.titleEnglish}`}
-          itemType="track"
-          price="₹99"
+        {/* Unified Checkout Modal */}
+        <UnifiedCheckoutModal
+          isOpen={showCheckout}
+          onClose={() => setShowCheckout(false)}
+          itemType="TRACK"
+          track={track}
+          onSuccess={() => {
+            setPurchaseSuccess(true);
+            setShowCheckout(false);
+          }}
         />
-
-        {/* Razorpay Checkout Modal for ₹99 track purchase */}
-        {showRazorpay && razorpayOrder && (
-          <RazorpayModal
-            isOpen={showRazorpay}
-            orderId={razorpayOrder.orderId}
-            amountPaise={razorpayOrder.amountPaise || 9900}
-            itemTitle={`Backing Track: ${track.titleEnglish}`}
-            itemSubtitle={track.titleTelugu ? `ట్రాక్: ${track.titleTelugu}` : 'Studio Karaoke Master'}
-            isSubscription={false}
-            userEmail={user?.email}
-            userName={user?.name}
-            onSuccess={handlePaymentSuccess}
-            onClose={() => setShowRazorpay(false)}
-          />
-        )}
       </div>
     </div>,
     document.body

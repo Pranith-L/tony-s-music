@@ -16,9 +16,7 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext.js';
 import { api } from '../services/api.js';
-import { RazorpayModal } from '../components/RazorpayModal.js';
-import { PaymentsPausedModal } from '../components/PaymentsPausedModal.js';
-import { PAYMENTS_PAUSED } from '../config/payments.js';
+import { UnifiedCheckoutModal } from '../components/UnifiedCheckoutModal.js';
 import { SEO } from '../components/SEO.js';
 
 export const MembershipPage: React.FC = () => {
@@ -35,37 +33,10 @@ export const MembershipPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
-  const [showPaymentsPausedModal, setShowPaymentsPausedModal] = useState<boolean>(false);
+  const [showCheckoutModal, setShowCheckoutModal] = useState<boolean>(false);
 
-  const [razorpayOrder, setRazorpayOrder] = useState<{
-    orderId: string;
-    amount: number;
-  } | null>(null);
-
-  const handleSubscribe = async () => {
-    if (PAYMENTS_PAUSED) {
-      setShowPaymentsPausedModal(true);
-      return;
-    }
-
-    if (!user) {
-      navigate('/auth?redirect=/membership');
-      return;
-    }
-
-    setIsLoading(true);
-    setErrorMsg(null);
-    try {
-      const subOrder = await api.payments.createSubscription();
-      setRazorpayOrder({
-        orderId: subOrder.subscriptionId,
-        amount: subOrder.amount || 29900,
-      });
-    } catch (err: any) {
-      setErrorMsg(err.message || 'Payment initiation failed. Please try again.');
-    } finally {
-      setIsLoading(false);
-    }
+  const handleSubscribe = () => {
+    setShowCheckoutModal(true);
   };
 
   const handleRazorpaySuccess = async (paymentData: {
@@ -147,24 +118,22 @@ export const MembershipPage: React.FC = () => {
         </div>
       )}
 
-      {/* Online Checkout Launching Soon / Free Songs Notice */}
-      {PAYMENTS_PAUSED && (
-        <div className="p-4 rounded-2xl bg-[#D4A017]/10 border border-[#D4A017]/30 text-xs text-center flex flex-col sm:flex-row items-center justify-between gap-3 shadow-sm">
-          <div className="flex items-center gap-2.5 text-left">
-            <Sparkles className="w-4 h-4 text-[#D4A017] shrink-0" />
-            <div>
-              <span className="font-bold text-[#D4A017] block sm:inline">All 68 Devotional Songs are 100% Free to Stream! </span>
-              <span className="text-gray-400 text-[11px]">Online pass checkout is launching soon. For early VIP access, connect directly with Rev. Tony Prakash.</span>
-            </div>
+      {/* Free Devotional Songs Notice */}
+      <div className="p-4 rounded-2xl bg-[#D4A017]/10 border border-[#D4A017]/30 text-xs text-center flex flex-col sm:flex-row items-center justify-between gap-3 shadow-sm">
+        <div className="flex items-center gap-2.5 text-left">
+          <Sparkles className="w-4 h-4 text-[#D4A017] shrink-0" />
+          <div>
+            <span className="font-bold text-[#D4A017] block sm:inline">All 68 Devotional Songs are 100% Free to Stream! </span>
+            <span className="text-gray-300 text-[11px]">VIP Pass grants master WAV downloads, infinite skips, and ad-free offline access.</span>
           </div>
-          <button
-            onClick={() => setShowPaymentsPausedModal(true)}
-            className="px-4 py-2 rounded-xl bg-[#D4A017] hover:bg-[#E8DCB8] text-[#0E0305] text-[11px] font-bold uppercase tracking-wider shrink-0 transition-colors"
-          >
-            Direct Access Info
-          </button>
         </div>
-      )}
+        <button
+          onClick={handleSubscribe}
+          className="px-4 py-2 rounded-xl bg-[#D4A017] hover:bg-[#E8DCB8] text-[#0E0305] text-[11px] font-bold uppercase tracking-wider shrink-0 transition-colors"
+        >
+          Get VIP Pass • ₹299
+        </button>
+      </div>
 
       {/* 3 Tier Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 items-stretch">
@@ -283,7 +252,7 @@ export const MembershipPage: React.FC = () => {
               </button>
             )}
             <p className="text-[10px] text-gray-400 text-center mt-2.5 font-mono">
-              Single payment of ₹299 (29,900 paise). Secure Razorpay integration.
+              Single payment of ₹299 (29,900 paise). Secure Cashfree & Instamojo checkout.
             </p>
           </div>
         </div>
@@ -363,30 +332,16 @@ export const MembershipPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Payments Paused / Launching Soon Modal */}
-      <PaymentsPausedModal
-        isOpen={showPaymentsPausedModal}
-        onClose={() => setShowPaymentsPausedModal(false)}
-        itemTitle="Tony's One-Time VIP Lifetime Pass"
-        itemType="pass"
-        price="₹299"
+      {/* Unified Secure Checkout Modal (Cashfree + Instamojo) */}
+      <UnifiedCheckoutModal
+        isOpen={showCheckoutModal}
+        onClose={() => setShowCheckoutModal(false)}
+        itemType="VIP_PASS"
+        onSuccess={() => {
+          setSuccessMsg("Tony's One-Time VIP Lifetime Pass activated successfully!");
+          refreshUser();
+        }}
       />
-
-      {/* Razorpay Gateway Modal */}
-      {razorpayOrder && (
-        <RazorpayModal
-          isOpen={true}
-          orderId={razorpayOrder.orderId}
-          amountPaise={razorpayOrder.amount}
-          itemTitle="Songs One-Time Pass (₹299)"
-          itemSubtitle="Lifetime Access: All Devotional Vocal Songs Master Downloads & Infinite Skips"
-          isSubscription={true}
-          userEmail={user?.email}
-          userName={user?.name}
-          onSuccess={handleRazorpaySuccess}
-          onClose={() => setRazorpayOrder(null)}
-        />
-      )}
     </div>
   );
 };

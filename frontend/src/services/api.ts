@@ -317,8 +317,99 @@ export const api = {
     },
   },
 
-  // Payments & Subscriptions (Razorpay Standard Web Checkout)
+  // Payments & Subscriptions (Cashfree, Instamojo & Unified Gateway)
   payments: {
+    async getConfig() {
+      const res = await fetch(`${API_BASE}/payments/config`);
+      return handleResponse<{
+        paymentsPaused: boolean;
+        gateways: {
+          cashfree: { enabled: boolean; environment: string };
+          instamojo: { enabled: boolean; environment: string };
+          razorpay: { enabled: boolean; environment: string };
+        };
+        pricing: {
+          vipPassPaise: number;
+          vipPassRupees: number;
+          trackPaise: number;
+          trackRupees: number;
+        };
+      }>(res);
+    },
+
+    async createUnifiedOrder(data: {
+      itemType: 'VIP_PASS' | 'TRACK';
+      trackId?: string;
+      slug?: string;
+      gateway: 'CASHFREE' | 'INSTAMOJO' | 'RAZORPAY';
+      customerName?: string;
+      customerEmail?: string;
+      customerPhone?: string;
+    }) {
+      const res = await fetch(`${API_BASE}/payments/create-unified-order`, {
+        method: 'POST',
+        headers: getAuthHeaders(),
+        body: JSON.stringify(data),
+      });
+      return handleResponse<{
+        success: boolean;
+        gateway: string;
+        orderId: string;
+        cfOrderId?: string;
+        paymentSessionId?: string;
+        paymentRequestId?: string;
+        paymentUrl?: string;
+        rzpOrderId?: string;
+        keyId?: string;
+        amountRupees: number;
+        amountPaise: number;
+        itemType: string;
+        itemTitle: string;
+        itemDescription?: string;
+      }>(res);
+    },
+
+    async verifyUnifiedPayment(data: {
+      orderId: string;
+      gateway?: string;
+      paymentId?: string;
+      paymentRequestId?: string;
+      razorpay_order_id?: string;
+      razorpay_payment_id?: string;
+      razorpay_signature?: string;
+    }) {
+      const res = await fetch(`${API_BASE}/payments/verify-unified-payment`, {
+        method: 'POST',
+        headers: getAuthHeaders(),
+        body: JSON.stringify(data),
+      });
+      return handleResponse<{
+        success: boolean;
+        status: string;
+        orderId: string;
+        itemType: string;
+        message: string;
+        alreadyFulfilled?: boolean;
+        track?: { id: string; titleEnglish: string };
+      }>(res);
+    },
+
+    async getOrder(orderId: string) {
+      const res = await fetch(`${API_BASE}/payments/order/${encodeURIComponent(orderId)}`);
+      return handleResponse<{
+        orderId: string;
+        gateway: string;
+        itemType: string;
+        amountPaise: number;
+        amountRupees: number;
+        status: string;
+        customerName?: string;
+        customerEmail?: string;
+        track?: any;
+        createdAt: string;
+      }>(res);
+    },
+
     async createOrder(trackId?: string, slug?: string, amount?: number) {
       const res = await fetch(`${API_BASE}/create-order`, {
         method: 'POST',
@@ -439,7 +530,23 @@ export const api = {
       const res = await fetch(`${API_BASE}/admin/payments`, {
         headers: getAuthHeaders(),
       });
-      return handleResponse<{ purchases: Purchase[]; subscriptions: any[] }>(res);
+      return handleResponse<{
+        summary: {
+          totalSuccessful: number;
+          totalRevenuePaise: number;
+          totalRevenueRupees: number;
+          pendingPayments: number;
+          failedPayments: number;
+          byGateway: {
+            cashfree: { count: number; revenueRupees: number };
+            instamojo: { count: number; revenueRupees: number };
+            razorpay: { count: number; revenueRupees: number };
+          };
+        };
+        transactions: any[];
+        purchases: any[];
+        subscriptions: any[];
+      }>(res);
     },
 
     async getSettings() {

@@ -110,6 +110,14 @@ router.get('/users', authenticateUser, requireAdmin, async (_req: AuthRequest, r
 // 3. Payment and subscription history audit (Handled 100% by Supabase PostgreSQL Database)
 router.get('/payments', authenticateUser, requireAdmin, async (_req: AuthRequest, res: Response) => {
   try {
+    const transactions = await prisma.paymentTransaction.findMany({
+      include: {
+        user: { select: { id: true, name: true, email: true, phone: true } },
+        track: { select: { id: true, titleEnglish: true, titleTelugu: true, slug: true } },
+      },
+      orderBy: { createdAt: 'desc' },
+    });
+
     const purchases = await prisma.purchase.findMany({
       include: {
         user: { select: { id: true, name: true, email: true, phone: true } },
@@ -125,7 +133,57 @@ router.get('/payments', authenticateUser, requireAdmin, async (_req: AuthRequest
       orderBy: { createdAt: 'desc' },
     });
 
-    res.json({ purchases, subscriptions });
+    // Compute unified analytics
+    const successfulTx = transactions.filter((t) => t.status === 'SUCCESS');
+    const pendingTx = transactions.filter((t) => t.status === 'PENDING');
+    const failedTx = transactions.filter((t) => t.status === 'FAILED' || t.status === 'CANCELLED');
+
+    // Combine transaction revenue with any legacy purchases/subscriptions not captured in transactions
+    let totalRevenuePaise = successfulTx.reduce((acc, t) => acc + t.amountPaise, 0);
+
+    // If transactions table is new, ensure legacy revenue is also counted
+    const legacyPurchaseRevenue = purchases
+      .filter((p) => p.status === 'SUCCESS' && !successfulTx.some((t) => t.orderId === p.razorpayOrderId))
+      .reduce((acc, p) => acc + p.amountPaise, 0);
+
+    const legacySubRevenue = subscriptions
+      .filter((s) => s.status === 'ACTIVE' && !successfulTx.some((t) => t.orderId === s.razorpaySubscriptionId))
+      .reduce((acc, s) => acc + s.amountPaise, 0);
+
+    totalRevenuePaise += legacyPurchaseRevenue + legacySubRevenue;
+
+    const totalSuccessful = successfulTx.length +
+      purchases.filter((p) => p.status === 'SUCCESS').length +
+      subscriptions.filter((s) => s.status === 'ACTIVE').length;
+
+    const summary = {
+      totalSuccessful,
+      totalRevenuePaise,
+      totalRevenueRupees: Math.floor(totalRevenuePaise / 100),
+      pendingPayments: pendingTx.length + purchases.filter((p) => p.status === 'PENDING').length + subscriptions.filter((s) => s.status === 'PENDING').length,
+      failedPayments: failedTx.length + purchases.filter((p) => p.status === 'FAILED').length,
+      byGateway: {
+        cashfree: {
+          count: transactions.filter((t) => t.gateway === 'CASHFREE' && t.status === 'SUCCESS').length,
+          revenueRupees: Math.floor(transactions.filter((t) => t.gateway === 'CASHFREE' && t.status === 'SUCCESS').reduce((acc, t) => acc + t.amountPaise, 0) / 100),
+        },
+        instamojo: {
+          count: transactions.filter((t) => t.gateway === 'INSTAMOJO' && t.status === 'SUCCESS').length,
+          revenueRupees: Math.floor(transactions.filter((t) => t.gateway === 'INSTAMOJO' && t.status === 'SUCCESS').reduce((acc, t) => acc + t.amountPaise, 0) / 100),
+        },
+        razorpay: {
+          count: transactions.filter((t) => t.gateway === 'RAZORPAY' && t.status === 'SUCCESS').length + purchases.filter((p) => p.status === 'SUCCESS' && p.razorpayOrderId).length,
+          revenueRupees: Math.floor(transactions.filter((t) => t.gateway === 'RAZORPAY' && t.status === 'SUCCESS').reduce((acc, t) => acc + t.amountPaise, 0) / 100),
+        },
+      },
+    };
+
+    res.json({
+      summary,
+      transactions,
+      purchases,
+      subscriptions,
+    });
   } catch (error) {
     console.error('Error fetching payments from Supabase:', error);
     res.status(500).json({ error: 'Failed to fetch payment records from Supabase database' });

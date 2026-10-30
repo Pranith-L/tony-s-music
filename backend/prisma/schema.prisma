@@ -24,11 +24,12 @@ model User {
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
 
-  subscriptions Subscription[]
-  purchases     Purchase[]
-  entitlements  Entitlement[]
-  playlists     Playlist[]
-  likedTracks   LikedTrack[]
+  subscriptions       Subscription[]
+  purchases           Purchase[]
+  entitlements        Entitlement[]
+  playlists           Playlist[]
+  likedTracks         LikedTrack[]
+  paymentTransactions PaymentTransaction[]
 }
 
 model Subscription {
@@ -42,6 +43,9 @@ model Subscription {
   currentPeriodEnd       DateTime
   razorpaySubscriptionId String?   @unique
   razorpayPaymentId      String?
+  gateway                String?   @default("MANUAL") // "CASHFREE" | "INSTAMOJO" | "RAZORPAY" | "MANUAL"
+  gatewayOrderId         String?
+  gatewayPaymentId       String?
   createdAt              DateTime  @default(now())
   updatedAt              DateTime  @updatedAt
 }
@@ -56,6 +60,9 @@ model Purchase {
   status            String   @default("SUCCESS") // "SUCCESS" | "PENDING" | "FAILED"
   razorpayOrderId   String?  @unique
   razorpayPaymentId String?
+  gateway           String?  @default("MANUAL") // "CASHFREE" | "INSTAMOJO" | "RAZORPAY" | "MANUAL"
+  gatewayOrderId    String?
+  gatewayPaymentId  String?
   createdAt         DateTime @default(now())
 }
 
@@ -89,10 +96,11 @@ model Track {
   createdAt          DateTime      @default(now())
   updatedAt          DateTime      @updatedAt
 
-  purchases          Purchase[]
-  entitlements       Entitlement[]
-  playlistTracks     PlaylistTrack[]
-  likedBy            LikedTrack[]
+  purchases           Purchase[]
+  entitlements        Entitlement[]
+  playlistTracks      PlaylistTrack[]
+  likedBy             LikedTrack[]
+  paymentTransactions PaymentTransaction[]
 }
 
 model Album {
@@ -209,4 +217,28 @@ model SiteSetting {
   key       String   @unique
   value     String   @db.Text
   updatedAt DateTime @updatedAt
+}
+
+model PaymentTransaction {
+  id               String   @id @default(uuid())
+  orderId          String   @unique
+  gateway          String   // "CASHFREE" | "INSTAMOJO" | "RAZORPAY" | "MANUAL"
+  gatewayOrderId   String?
+  gatewayPaymentId String?
+  userId           String?
+  user             User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  itemType         String   // "VIP_PASS" | "TRACK"
+  trackId          String?
+  track            Track?   @relation(fields: [trackId], references: [id], onDelete: SetNull)
+  amountPaise      Int
+  currency         String   @default("INR")
+  status           String   @default("PENDING") // "PENDING" | "SUCCESS" | "FAILED" | "CANCELLED"
+  customerName     String?
+  customerEmail    String?
+  customerPhone    String?
+  paymentMethod    String?
+  rawResponse      String?  @db.Text
+  errorMessage     String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
 }
