@@ -553,7 +553,7 @@ router.get('/order/:orderId', async (req, res: Response) => {
  * Official Cashfree Webhook Handler
  * Verifies x-webhook-signature HMAC-SHA256 with timestamp + rawBody
  */
-router.post('/cashfree-webhook', async (req, res: Response) => {
+router.post(['/cashfree-webhook', '/cashfree'], async (req, res: Response) => {
   try {
     const signature = req.headers['x-webhook-signature'] as string;
     const timestamp = req.headers['x-webhook-timestamp'] as string;
@@ -628,7 +628,7 @@ router.post('/cashfree-webhook', async (req, res: Response) => {
  * Official Instamojo Webhook Handler
  * Verifies MAC signature with INSTAMOJO_SALT
  */
-router.post('/instamojo-webhook', async (req, res: Response) => {
+router.post(['/instamojo-webhook', '/instamojo', '/instamoj'], async (req, res: Response) => {
   try {
     const postData = req.body || {};
 
