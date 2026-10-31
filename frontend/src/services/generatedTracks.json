@@ -13,7 +13,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/tonyprakash%20song/001%20prayermp3.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/01_Devotional_Songs/001_Prayer.mp3",
     "coverImage": "/covers/001_prayermp3.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -25,7 +25,9 @@
     "orderIndex": 1,
     "createdAt": "2024-01-01T00:00:00Z",
     "updatedAt": "2024-01-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "01_Devotional_Songs/001_Prayer.mp3",
+    "mp3FileName": "001_Prayer.mp3"
   },
   {
     "id": "tp-song-2",
@@ -41,7 +43,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/tonyprakash%20song/002_Nee%20Prema%20Naaku%20Chalu.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/01_Devotional_Songs/002_Nee_Prema_Naaku_Chalu.mp3",
     "coverImage": "/covers/002_Nee_Prema_Naaku_Chalu.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -53,7 +55,9 @@
     "orderIndex": 2,
     "createdAt": "2024-01-01T00:00:00Z",
     "updatedAt": "2024-01-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "01_Devotional_Songs/002_Nee_Prema_Naaku_Chalu.mp3",
+    "mp3FileName": "002_Nee_Prema_Naaku_Chalu.mp3"
   },
   {
     "id": "tp-song-3",
@@ -69,7 +73,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/tonyprakash%20song/003_Ninduga%20Naa%20Gundelo.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/01_Devotional_Songs/003_Ninduga_Naa_Gundelo.mp3",
     "coverImage": "/covers/003_Ninduga_Naa_Gundelo.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -81,7 +85,9 @@
     "orderIndex": 3,
     "createdAt": "2024-01-01T00:00:00Z",
     "updatedAt": "2024-01-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "01_Devotional_Songs/003_Ninduga_Naa_Gundelo.mp3",
+    "mp3FileName": "003_Ninduga_Naa_Gundelo.mp3"
   },
   {
     "id": "tp-song-4",
@@ -97,7 +103,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/tonyprakash%20song/004_Kanugontini%20Yesayya.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/01_Devotional_Songs/004_Kanugontini_Yesayya.mp3",
     "coverImage": "/covers/004_Kanugontini_Yesayya.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -109,7 +115,9 @@
     "orderIndex": 4,
     "createdAt": "2024-01-01T00:00:00Z",
     "updatedAt": "2024-01-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "01_Devotional_Songs/004_Kanugontini_Yesayya.mp3",
+    "mp3FileName": "004_Kanugontini_Yesayya.mp3"
   },
   {
     "id": "tp-song-5",
@@ -125,7 +133,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/tonyprakash%20song/005_Paavuramaa.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/01_Devotional_Songs/005_Paavuramaa.mp3",
     "coverImage": "/covers/005_Paavuramaa.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -137,7 +145,9 @@
     "orderIndex": 5,
     "createdAt": "2024-01-01T00:00:00Z",
     "updatedAt": "2024-01-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "01_Devotional_Songs/005_Paavuramaa.mp3",
+    "mp3FileName": "005_Paavuramaa.mp3"
   },
   {
     "id": "tp-song-6",
@@ -153,7 +163,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/tonyprakash%20song/006_Palletoori%20Thammuda.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/01_Devotional_Songs/006_Palletoori_Thammuda.mp3",
     "coverImage": "/covers/006_Palletoori_Thammuda.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -165,7 +175,9 @@
     "orderIndex": 6,
     "createdAt": "2024-01-01T00:00:00Z",
     "updatedAt": "2024-01-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "01_Devotional_Songs/006_Palletoori_Thammuda.mp3",
+    "mp3FileName": "006_Palletoori_Thammuda.mp3"
   },
   {
     "id": "tp-song-7",
@@ -181,7 +193,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/tonyprakash%20song/007_Ninnu%20Marachi.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/01_Devotional_Songs/007_Ninnu_Marachi.mp3",
     "coverImage": "/covers/007_Ninnu_Marachi.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -193,7 +205,9 @@
     "orderIndex": 7,
     "createdAt": "2024-01-01T00:00:00Z",
     "updatedAt": "2024-01-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "01_Devotional_Songs/007_Ninnu_Marachi.mp3",
+    "mp3FileName": "007_Ninnu_Marachi.mp3"
   },
   {
     "id": "tp-song-8",
@@ -209,7 +223,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/tonyprakash%20song/008_Madhuramaina.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/01_Devotional_Songs/008_Madhuramaina.mp3",
     "coverImage": "/covers/008_Madhuramaina.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -221,7 +235,9 @@
     "orderIndex": 8,
     "createdAt": "2024-01-01T00:00:00Z",
     "updatedAt": "2024-01-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "01_Devotional_Songs/008_Madhuramaina.mp3",
+    "mp3FileName": "008_Madhuramaina.mp3"
   },
   {
     "id": "tp-song-9",
@@ -237,7 +253,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/tonyprakash%20song/009_Nyayama%20Dharmama.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/01_Devotional_Songs/009_Nyayama_Dharmama.mp3",
     "coverImage": "/covers/009_Nyayama_Dharmama.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -249,7 +265,9 @@
     "orderIndex": 9,
     "createdAt": "2024-01-01T00:00:00Z",
     "updatedAt": "2024-01-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "01_Devotional_Songs/009_Nyayama_Dharmama.mp3",
+    "mp3FileName": "009_Nyayama_Dharmama.mp3"
   },
   {
     "id": "tp-song-10",
@@ -265,7 +283,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/tonyprakash%20song/010_Jayashali.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/01_Devotional_Songs/010_Jayashali.mp3",
     "coverImage": "/covers/010_Jayashali.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -277,7 +295,9 @@
     "orderIndex": 10,
     "createdAt": "2024-01-01T00:00:00Z",
     "updatedAt": "2024-01-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "01_Devotional_Songs/010_Jayashali.mp3",
+    "mp3FileName": "010_Jayashali.mp3"
   },
   {
     "id": "tp-song-11",
@@ -293,7 +313,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/tonyprakash%20song/011%20aradhana-ASMA_01.wma%20(1).wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/01_Devotional_Songs/011_Aradhana.mp3",
     "coverImage": "/covers/011_aradhana-ASMA_01_wma__1_.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -305,7 +325,9 @@
     "orderIndex": 11,
     "createdAt": "2024-01-01T00:00:00Z",
     "updatedAt": "2024-01-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "01_Devotional_Songs/011_Aradhana.mp3",
+    "mp3FileName": "011_Aradhana.mp3"
   },
   {
     "id": "tp-song-12",
@@ -321,7 +343,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/tonyprakash%20song/012_Idhe%20naa%20Hrudaya.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/01_Devotional_Songs/012_Idhe_Naa_Hrudaya.mp3",
     "coverImage": "/covers/012_Idhe_naa_Hrudaya.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -333,7 +355,9 @@
     "orderIndex": 12,
     "createdAt": "2024-01-01T00:00:00Z",
     "updatedAt": "2024-01-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "01_Devotional_Songs/012_Idhe_Naa_Hrudaya.mp3",
+    "mp3FileName": "012_Idhe_Naa_Hrudaya.mp3"
   },
   {
     "id": "tp-song-13",
@@ -349,7 +373,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/tonyprakash%20song/013_Paavuramaa.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/01_Devotional_Songs/013_Paavuramaa_Part_2.mp3",
     "coverImage": "/covers/013_Paavuramaa.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -361,7 +385,9 @@
     "orderIndex": 13,
     "createdAt": "2024-01-01T00:00:00Z",
     "updatedAt": "2024-01-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "01_Devotional_Songs/013_Paavuramaa_Part_2.mp3",
+    "mp3FileName": "013_Paavuramaa_Part_2.mp3"
   },
   {
     "id": "tp-song-14",
@@ -377,7 +403,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/tonyprakash%20song/014_Yehova.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/01_Devotional_Songs/014_Yehova_Naa_Kaapari.mp3",
     "coverImage": "/covers/014_Yehova.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -389,7 +415,9 @@
     "orderIndex": 14,
     "createdAt": "2024-01-01T00:00:00Z",
     "updatedAt": "2024-01-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "01_Devotional_Songs/014_Yehova_Naa_Kaapari.mp3",
+    "mp3FileName": "014_Yehova_Naa_Kaapari.mp3"
   },
   {
     "id": "tp-song-15",
@@ -405,7 +433,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/tonyprakash%20song/015_Aradhana.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/01_Devotional_Songs/015_Aradhana.mp3",
     "coverImage": "/covers/015_Aradhana.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -417,7 +445,9 @@
     "orderIndex": 15,
     "createdAt": "2024-01-01T00:00:00Z",
     "updatedAt": "2024-01-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "01_Devotional_Songs/015_Aradhana.mp3",
+    "mp3FileName": "015_Aradhana.mp3"
   },
   {
     "id": "tp-song-16",
@@ -433,7 +463,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/tonyprakash%20song/016_Manishi%20Brathuku.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/01_Devotional_Songs/016_Manishi_Brathuku.mp3",
     "coverImage": "/covers/016_Manishi_Brathuku.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -445,7 +475,9 @@
     "orderIndex": 16,
     "createdAt": "2024-01-01T00:00:00Z",
     "updatedAt": "2024-01-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "01_Devotional_Songs/016_Manishi_Brathuku.mp3",
+    "mp3FileName": "016_Manishi_Brathuku.mp3"
   },
   {
     "id": "tp-song-17",
@@ -461,7 +493,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/tonyprakash%20song/017_Neeva%20Pranam.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/01_Devotional_Songs/017_Neeve_Naa_Pranam.mp3",
     "coverImage": "/covers/017_Neeva_Pranam.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -473,7 +505,9 @@
     "orderIndex": 17,
     "createdAt": "2024-01-01T00:00:00Z",
     "updatedAt": "2024-01-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "01_Devotional_Songs/017_Neeve_Naa_Pranam.mp3",
+    "mp3FileName": "017_Neeve_Naa_Pranam.mp3"
   },
   {
     "id": "tp-song-18",
@@ -489,7 +523,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/tonyprakash%20song/018_Nee%20Krupa.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/01_Devotional_Songs/018_Nee_Krupa.mp3",
     "coverImage": "/covers/018_Nee_Krupa.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -501,7 +535,9 @@
     "orderIndex": 18,
     "createdAt": "2024-01-01T00:00:00Z",
     "updatedAt": "2024-01-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "01_Devotional_Songs/018_Nee_Krupa.mp3",
+    "mp3FileName": "018_Nee_Krupa.mp3"
   },
   {
     "id": "tp-song-19",
@@ -517,7 +553,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/tonyprakash%20song/019_Neeve%20Naa%20Manchi.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/01_Devotional_Songs/019_Neeve_Naa_Manchi_Kaapari.mp3",
     "coverImage": "/covers/019_Neeve_Naa_Manchi.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -529,7 +565,9 @@
     "orderIndex": 19,
     "createdAt": "2024-01-01T00:00:00Z",
     "updatedAt": "2024-01-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "01_Devotional_Songs/019_Neeve_Naa_Manchi_Kaapari.mp3",
+    "mp3FileName": "019_Neeve_Naa_Manchi_Kaapari.mp3"
   },
   {
     "id": "tp-song-20",
@@ -545,7 +583,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/tonyprakash%20song/020_Abraham%20Devudavu.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/01_Devotional_Songs/020_Abraham_Devudavu.mp3",
     "coverImage": "/covers/020_Abraham_Devudavu.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -557,7 +595,9 @@
     "orderIndex": 20,
     "createdAt": "2024-01-01T00:00:00Z",
     "updatedAt": "2024-01-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "01_Devotional_Songs/020_Abraham_Devudavu.mp3",
+    "mp3FileName": "020_Abraham_Devudavu.mp3"
   },
   {
     "id": "tp-song-21",
@@ -573,7 +613,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/tonyprakash%20song/021_Naa%20Manchi.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/01_Devotional_Songs/021_Naa_Manchi_Devuda.mp3",
     "coverImage": "/covers/021_Naa_Manchi.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -585,7 +625,9 @@
     "orderIndex": 21,
     "createdAt": "2024-01-01T00:00:00Z",
     "updatedAt": "2024-01-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "01_Devotional_Songs/021_Naa_Manchi_Devuda.mp3",
+    "mp3FileName": "021_Naa_Manchi_Devuda.mp3"
   },
   {
     "id": "tp-song-22",
@@ -601,7 +643,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/tonyprakash%20song/022_Sthuthi%20Padedono.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/01_Devotional_Songs/022_Sthuthi_Padedanu.mp3",
     "coverImage": "/covers/022_Sthuthi_Padedono.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -613,7 +655,9 @@
     "orderIndex": 22,
     "createdAt": "2024-01-01T00:00:00Z",
     "updatedAt": "2024-01-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "01_Devotional_Songs/022_Sthuthi_Padedanu.mp3",
+    "mp3FileName": "022_Sthuthi_Padedanu.mp3"
   },
   {
     "id": "tp-song-23",
@@ -629,7 +673,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/tonyprakash%20song/023%20ABBATANDRI.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/01_Devotional_Songs/023_Abba_Tandri.mp3",
     "coverImage": "/covers/023_ABBATANDRI.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -641,7 +685,9 @@
     "orderIndex": 23,
     "createdAt": "2024-01-01T00:00:00Z",
     "updatedAt": "2024-01-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "01_Devotional_Songs/023_Abba_Tandri.mp3",
+    "mp3FileName": "023_Abba_Tandri.mp3"
   },
   {
     "id": "tp-song-24",
@@ -657,7 +703,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/tonyprakash%20song/024_Neere%20yen%20Aradhanai_tamil.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/01_Devotional_Songs/024_Neere_Yen_Aradhanai.mp3",
     "coverImage": "/covers/024_Neere_yen_Aradhanai_tamil.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -669,7 +715,9 @@
     "orderIndex": 24,
     "createdAt": "2024-01-01T00:00:00Z",
     "updatedAt": "2024-01-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "01_Devotional_Songs/024_Neere_Yen_Aradhanai.mp3",
+    "mp3FileName": "024_Neere_Yen_Aradhanai.mp3"
   },
   {
     "id": "tp-song-25",
@@ -685,7 +733,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/tonyprakash%20song/025_Kaanthi%20Kiranama.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/01_Devotional_Songs/025_Kaanthi_Kiranama.mp3",
     "coverImage": "/covers/025_Kaanthi_Kiranama.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -697,7 +745,9 @@
     "orderIndex": 25,
     "createdAt": "2024-01-01T00:00:00Z",
     "updatedAt": "2024-01-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "01_Devotional_Songs/025_Kaanthi_Kiranama.mp3",
+    "mp3FileName": "025_Kaanthi_Kiranama.mp3"
   },
   {
     "id": "tp-song-26",
@@ -713,7 +763,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/tonyprakash%20song/026_Neeve%20Naa%20Aradhana.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/01_Devotional_Songs/026_Neeve_Naa_Aradhana.mp3",
     "coverImage": "/covers/026_Neeve_Naa_Aradhana.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -725,7 +775,9 @@
     "orderIndex": 26,
     "createdAt": "2024-01-01T00:00:00Z",
     "updatedAt": "2024-01-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "01_Devotional_Songs/026_Neeve_Naa_Aradhana.mp3",
+    "mp3FileName": "026_Neeve_Naa_Aradhana.mp3"
   },
   {
     "id": "tp-song-27",
@@ -741,7 +793,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/tonyprakash%20song/027_Paavanuda.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/01_Devotional_Songs/027_Paavanuda.mp3",
     "coverImage": "/covers/027_Paavanuda.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -753,7 +805,9 @@
     "orderIndex": 27,
     "createdAt": "2024-01-01T00:00:00Z",
     "updatedAt": "2024-01-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "01_Devotional_Songs/027_Paavanuda.mp3",
+    "mp3FileName": "027_Paavanuda.mp3"
   },
   {
     "id": "tp-song-28",
@@ -769,7 +823,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/tonyprakash%20song/028_Ashakaligi%20Jeevinchi.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/01_Devotional_Songs/028_Asha_Kaligi_Jeevinchi.mp3",
     "coverImage": "/covers/028_Ashakaligi_Jeevinchi.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -781,7 +835,9 @@
     "orderIndex": 28,
     "createdAt": "2024-01-01T00:00:00Z",
     "updatedAt": "2024-01-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "01_Devotional_Songs/028_Asha_Kaligi_Jeevinchi.mp3",
+    "mp3FileName": "028_Asha_Kaligi_Jeevinchi.mp3"
   },
   {
     "id": "tp-song-29",
@@ -797,7 +853,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/tonyprakash%20song/029_Yekkadiki.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/01_Devotional_Songs/029_Yekkadiki_Pogalanayya.mp3",
     "coverImage": "/covers/029_Yekkadiki.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -809,7 +865,9 @@
     "orderIndex": 29,
     "createdAt": "2024-01-01T00:00:00Z",
     "updatedAt": "2024-01-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "01_Devotional_Songs/029_Yekkadiki_Pogalanayya.mp3",
+    "mp3FileName": "029_Yekkadiki_Pogalanayya.mp3"
   },
   {
     "id": "tp-song-30",
@@ -825,7 +883,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/tonyprakash%20song/030%20AH%20SUHA%20VELALO.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/01_Devotional_Songs/030_Aa_Shubha_Velalo.mp3",
     "coverImage": "/covers/030_AH_SUHA_VELALO.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -837,7 +895,9 @@
     "orderIndex": 30,
     "createdAt": "2024-01-01T00:00:00Z",
     "updatedAt": "2024-01-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "01_Devotional_Songs/030_Aa_Shubha_Velalo.mp3",
+    "mp3FileName": "030_Aa_Shubha_Velalo.mp3"
   },
   {
     "id": "tp-song-31",
@@ -853,7 +913,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/tonyprakash%20song/031%20NU%20VANTAE.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/01_Devotional_Songs/031_Nuvvante_Naaku_Pranam.mp3",
     "coverImage": "/covers/031_NU_VANTAE.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -865,7 +925,9 @@
     "orderIndex": 31,
     "createdAt": "2024-01-01T00:00:00Z",
     "updatedAt": "2024-01-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "01_Devotional_Songs/031_Nuvvante_Naaku_Pranam.mp3",
+    "mp3FileName": "031_Nuvvante_Naaku_Pranam.mp3"
   },
   {
     "id": "tp-song-32",
@@ -881,7 +943,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/tonyprakash%20song/032%20SRI%20YESU%20F.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/01_Devotional_Songs/032_Sri_Yesu_Namamu.mp3",
     "coverImage": "/covers/032_SRI_YESU_F.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -893,7 +955,9 @@
     "orderIndex": 32,
     "createdAt": "2024-01-01T00:00:00Z",
     "updatedAt": "2024-01-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "01_Devotional_Songs/032_Sri_Yesu_Namamu.mp3",
+    "mp3FileName": "032_Sri_Yesu_Namamu.mp3"
   },
   {
     "id": "tp-song-33",
@@ -909,7 +973,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/tonyprakash%20song/033%20PREMA%20KAVALI.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/01_Devotional_Songs/033_Prema_Kavali.mp3",
     "coverImage": "/covers/033_PREMA_KAVALI.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -921,7 +985,9 @@
     "orderIndex": 33,
     "createdAt": "2024-01-01T00:00:00Z",
     "updatedAt": "2024-01-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "01_Devotional_Songs/033_Prema_Kavali.mp3",
+    "mp3FileName": "033_Prema_Kavali.mp3"
   },
   {
     "id": "tp-song-34",
@@ -937,7 +1003,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/tonyprakash%20song/034%20NAKAPARI.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/01_Devotional_Songs/034_Naa_Kaapari.mp3",
     "coverImage": "/covers/034_NAKAPARI.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -949,7 +1015,9 @@
     "orderIndex": 34,
     "createdAt": "2024-01-01T00:00:00Z",
     "updatedAt": "2024-01-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "01_Devotional_Songs/034_Naa_Kaapari.mp3",
+    "mp3FileName": "034_Naa_Kaapari.mp3"
   },
   {
     "id": "tp-song-35",
@@ -965,7 +1033,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/tonyprakash%20song/035%20JEYAHO.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/01_Devotional_Songs/035_Jeyaho.mp3",
     "coverImage": "/covers/035_JEYAHO.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -977,7 +1045,9 @@
     "orderIndex": 35,
     "createdAt": "2024-01-01T00:00:00Z",
     "updatedAt": "2024-01-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "01_Devotional_Songs/035_Jeyaho.mp3",
+    "mp3FileName": "035_Jeyaho.mp3"
   },
   {
     "id": "tp-song-36",
@@ -993,7 +1063,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/tonyprakash%20song/036%20KADAVARI.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/01_Devotional_Songs/036_Kadavari_Dinamulalo.mp3",
     "coverImage": "/covers/036_KADAVARI.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -1005,7 +1075,9 @@
     "orderIndex": 36,
     "createdAt": "2024-01-01T00:00:00Z",
     "updatedAt": "2024-01-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "01_Devotional_Songs/036_Kadavari_Dinamulalo.mp3",
+    "mp3FileName": "036_Kadavari_Dinamulalo.mp3"
   },
   {
     "id": "tp-song-37",
@@ -1021,7 +1093,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/tonyprakash%20song/037%20YESU%20PREMA.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/01_Devotional_Songs/037_Yesu_Prema.mp3",
     "coverImage": "/covers/037_YESU_PREMA.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -1033,7 +1105,9 @@
     "orderIndex": 37,
     "createdAt": "2024-01-01T00:00:00Z",
     "updatedAt": "2024-01-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "01_Devotional_Songs/037_Yesu_Prema.mp3",
+    "mp3FileName": "037_Yesu_Prema.mp3"
   },
   {
     "id": "tp-song-38",
@@ -1049,7 +1123,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/tonyprakash%20song/038_Sarvajanulara.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/01_Devotional_Songs/038_Sarvajanulara.mp3",
     "coverImage": "/covers/038_Sarvajanulara.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -1061,7 +1135,9 @@
     "orderIndex": 38,
     "createdAt": "2024-01-01T00:00:00Z",
     "updatedAt": "2024-01-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "01_Devotional_Songs/038_Sarvajanulara.mp3",
+    "mp3FileName": "038_Sarvajanulara.mp3"
   },
   {
     "id": "tp-song-39",
@@ -1077,7 +1153,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/tonyprakash%20song/039%20SRI%20YESU.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/01_Devotional_Songs/039_Sri_Yesu_Nee_Paadha_Seva.mp3",
     "coverImage": "/covers/039_SRI_YESU.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -1089,7 +1165,9 @@
     "orderIndex": 39,
     "createdAt": "2024-01-01T00:00:00Z",
     "updatedAt": "2024-01-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "01_Devotional_Songs/039_Sri_Yesu_Nee_Paadha_Seva.mp3",
+    "mp3FileName": "039_Sri_Yesu_Nee_Paadha_Seva.mp3"
   },
   {
     "id": "tp-song-40",
@@ -1105,7 +1183,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/tonyprakash%20song/040%20MADHURA.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/01_Devotional_Songs/040_Madhuramaina_Prema.mp3",
     "coverImage": "/covers/040_MADHURA.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -1117,7 +1195,9 @@
     "orderIndex": 40,
     "createdAt": "2024-01-01T00:00:00Z",
     "updatedAt": "2024-01-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "01_Devotional_Songs/040_Madhuramaina_Prema.mp3",
+    "mp3FileName": "040_Madhuramaina_Prema.mp3"
   },
   {
     "id": "tp-song-41",
@@ -1133,7 +1213,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/tonyprakash%20song/041%20KATHILINVEE.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/01_Devotional_Songs/041_Karunamayuda.mp3",
     "coverImage": "/covers/041_KATHILINVEE.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -1145,7 +1225,9 @@
     "orderIndex": 41,
     "createdAt": "2024-01-01T00:00:00Z",
     "updatedAt": "2024-01-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "01_Devotional_Songs/041_Karunamayuda.mp3",
+    "mp3FileName": "041_Karunamayuda.mp3"
   },
   {
     "id": "tp-song-42",
@@ -1161,7 +1243,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/tonyprakash%20song/042%20OO%20NAESAMA.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/01_Devotional_Songs/042_Oo_Nesama.mp3",
     "coverImage": "/covers/042_OO_NAESAMA.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -1173,7 +1255,9 @@
     "orderIndex": 42,
     "createdAt": "2024-01-01T00:00:00Z",
     "updatedAt": "2024-01-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "01_Devotional_Songs/042_Oo_Nesama.mp3",
+    "mp3FileName": "042_Oo_Nesama.mp3"
   },
   {
     "id": "tp-song-43",
@@ -1189,7 +1273,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/tonyprakash%20song/043%20nathrinjuvada.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/01_Devotional_Songs/043_Nannu_Rakshinchuvada.mp3",
     "coverImage": "/covers/043_nathrinjuvada.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -1201,7 +1285,9 @@
     "orderIndex": 43,
     "createdAt": "2024-01-01T00:00:00Z",
     "updatedAt": "2024-01-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "01_Devotional_Songs/043_Nannu_Rakshinchuvada.mp3",
+    "mp3FileName": "043_Nannu_Rakshinchuvada.mp3"
   },
   {
     "id": "tp-song-44",
@@ -1217,7 +1303,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/tonyprakash%20song/044%20gadandhanthakara%20.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/01_Devotional_Songs/044_Gadhanthakara_Loyalalona.mp3",
     "coverImage": "/covers/044_gadandhanthakara_.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -1229,7 +1315,9 @@
     "orderIndex": 44,
     "createdAt": "2024-01-01T00:00:00Z",
     "updatedAt": "2024-01-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "01_Devotional_Songs/044_Gadhanthakara_Loyalalona.mp3",
+    "mp3FileName": "044_Gadhanthakara_Loyalalona.mp3"
   },
   {
     "id": "tp-song-45",
@@ -1245,7 +1333,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/tonyprakash%20song/045%20%20NAA%20YESUNI.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/01_Devotional_Songs/045_Naa_Yesuni_Paadamula_Chentha.mp3",
     "coverImage": "/covers/045__NAA_YESUNI.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -1257,7 +1345,9 @@
     "orderIndex": 45,
     "createdAt": "2024-01-01T00:00:00Z",
     "updatedAt": "2024-01-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "01_Devotional_Songs/045_Naa_Yesuni_Paadamula_Chentha.mp3",
+    "mp3FileName": "045_Naa_Yesuni_Paadamula_Chentha.mp3"
   },
   {
     "id": "tp-song-46",
@@ -1273,7 +1363,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/tonyprakash%20song/046%20needhodu.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/01_Devotional_Songs/046_Nee_Thodu_Lenidhe.mp3",
     "coverImage": "/covers/046_needhodu.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -1285,7 +1375,9 @@
     "orderIndex": 46,
     "createdAt": "2024-01-01T00:00:00Z",
     "updatedAt": "2024-01-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "01_Devotional_Songs/046_Nee_Thodu_Lenidhe.mp3",
+    "mp3FileName": "046_Nee_Thodu_Lenidhe.mp3"
   },
   {
     "id": "tp-song-47",
@@ -1301,7 +1393,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/tonyprakash%20song/047%20o%20paavanda%20.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/01_Devotional_Songs/047_O_Paavanuda.mp3",
     "coverImage": "/covers/047_o_paavanda_.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -1313,7 +1405,9 @@
     "orderIndex": 47,
     "createdAt": "2024-01-01T00:00:00Z",
     "updatedAt": "2024-01-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "01_Devotional_Songs/047_O_Paavanuda.mp3",
+    "mp3FileName": "047_O_Paavanuda.mp3"
   },
   {
     "id": "tp-song-48",
@@ -1329,7 +1423,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/tonyprakash%20song/048%20aahaa%20aarbhaattam.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/01_Devotional_Songs/048_Aahaa_Aarbhaattam.mp3",
     "coverImage": "/covers/048_aahaa_aarbhaattam.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -1341,7 +1435,9 @@
     "orderIndex": 48,
     "createdAt": "2024-01-01T00:00:00Z",
     "updatedAt": "2024-01-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "01_Devotional_Songs/048_Aahaa_Aarbhaattam.mp3",
+    "mp3FileName": "048_Aahaa_Aarbhaattam.mp3"
   },
   {
     "id": "tp-song-49",
@@ -1357,7 +1453,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/tonyprakash%20song/049%20dhudha%20ganam.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/01_Devotional_Songs/049_Dhootha_Ganam.mp3",
     "coverImage": "/covers/049_dhudha_ganam.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -1369,7 +1465,9 @@
     "orderIndex": 49,
     "createdAt": "2024-01-01T00:00:00Z",
     "updatedAt": "2024-01-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "01_Devotional_Songs/049_Dhootha_Ganam.mp3",
+    "mp3FileName": "049_Dhootha_Ganam.mp3"
   },
   {
     "id": "tp-song-50",
@@ -1385,7 +1483,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/tonyprakash%20song/050%20nannu%20viduva.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/01_Devotional_Songs/050_Nannu_Viduva.mp3",
     "coverImage": "/covers/050_nannu_viduva.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -1397,7 +1495,9 @@
     "orderIndex": 50,
     "createdAt": "2024-01-01T00:00:00Z",
     "updatedAt": "2024-01-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "01_Devotional_Songs/050_Nannu_Viduva.mp3",
+    "mp3FileName": "050_Nannu_Viduva.mp3"
   },
   {
     "id": "tp-song-51",
@@ -1413,7 +1513,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/tonyprakash%20song/051%20yenthu%20kaiya.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/01_Devotional_Songs/051_Yenthukaiya_Intha_Prema.mp3",
     "coverImage": "/covers/051_yenthu_kaiya.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -1425,7 +1525,9 @@
     "orderIndex": 51,
     "createdAt": "2024-01-01T00:00:00Z",
     "updatedAt": "2024-01-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "01_Devotional_Songs/051_Yenthukaiya_Intha_Prema.mp3",
+    "mp3FileName": "051_Yenthukaiya_Intha_Prema.mp3"
   },
   {
     "id": "tp-song-52",
@@ -1441,7 +1543,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/tonyprakash%20song/052%20manasunna%20manchi.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/01_Devotional_Songs/052_Manasunna_Manchi_Devuda.mp3",
     "coverImage": "/covers/052_manasunna_manchi.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -1453,7 +1555,9 @@
     "orderIndex": 52,
     "createdAt": "2024-01-01T00:00:00Z",
     "updatedAt": "2024-01-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "01_Devotional_Songs/052_Manasunna_Manchi_Devuda.mp3",
+    "mp3FileName": "052_Manasunna_Manchi_Devuda.mp3"
   },
   {
     "id": "tp-song-53",
@@ -1469,7 +1573,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/tonyprakash%20song/053%20yevarunna.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/01_Devotional_Songs/053_Yevarunna_Naaku.mp3",
     "coverImage": "/covers/053_yevarunna.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -1481,7 +1585,9 @@
     "orderIndex": 53,
     "createdAt": "2024-01-01T00:00:00Z",
     "updatedAt": "2024-01-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "01_Devotional_Songs/053_Yevarunna_Naaku.mp3",
+    "mp3FileName": "053_Yevarunna_Naaku.mp3"
   },
   {
     "id": "tp-song-54",
@@ -1497,7 +1603,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/tonyprakash%20song/054%20bethalahem.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/01_Devotional_Songs/054_Bethalahem_Puramulona.mp3",
     "coverImage": "/covers/054_bethalahem.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -1509,7 +1615,9 @@
     "orderIndex": 54,
     "createdAt": "2024-01-01T00:00:00Z",
     "updatedAt": "2024-01-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "01_Devotional_Songs/054_Bethalahem_Puramulona.mp3",
+    "mp3FileName": "054_Bethalahem_Puramulona.mp3"
   },
   {
     "id": "tp-song-55",
@@ -1525,7 +1633,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/tonyprakash%20song/055%20naa%20aaathma.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/01_Devotional_Songs/055_Naa_Aathmanu_Seda_Theerchu.mp3",
     "coverImage": "/covers/055_naa_aaathma.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -1537,7 +1645,9 @@
     "orderIndex": 55,
     "createdAt": "2024-01-01T00:00:00Z",
     "updatedAt": "2024-01-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "01_Devotional_Songs/055_Naa_Aathmanu_Seda_Theerchu.mp3",
+    "mp3FileName": "055_Naa_Aathmanu_Seda_Theerchu.mp3"
   },
   {
     "id": "tp-song-56",
@@ -1553,7 +1663,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/tonyprakash%20song/056%20maa%20sarva.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/01_Devotional_Songs/056_Maa_Sarvamu_Neeve.mp3",
     "coverImage": "/covers/056_maa_sarva.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -1565,7 +1675,9 @@
     "orderIndex": 56,
     "createdAt": "2024-01-01T00:00:00Z",
     "updatedAt": "2024-01-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "01_Devotional_Songs/056_Maa_Sarvamu_Neeve.mp3",
+    "mp3FileName": "056_Maa_Sarvamu_Neeve.mp3"
   },
   {
     "id": "tp-song-57",
@@ -1581,7 +1693,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/tonyprakash%20song/057%20prema%20nithi.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/01_Devotional_Songs/057_Prema_Nidhi.mp3",
     "coverImage": "/covers/057_prema_nithi.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -1593,7 +1705,9 @@
     "orderIndex": 57,
     "createdAt": "2024-01-01T00:00:00Z",
     "updatedAt": "2024-01-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "01_Devotional_Songs/057_Prema_Nidhi.mp3",
+    "mp3FileName": "057_Prema_Nidhi.mp3"
   },
   {
     "id": "tp-song-58",
@@ -1609,7 +1723,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/tonyprakash%20song/058%20maruvalanaiyaa.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/01_Devotional_Songs/058_Maruvalenayya.mp3",
     "coverImage": "/covers/058_maruvalanaiyaa.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -1621,7 +1735,9 @@
     "orderIndex": 58,
     "createdAt": "2024-01-01T00:00:00Z",
     "updatedAt": "2024-01-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "01_Devotional_Songs/058_Maruvalenayya.mp3",
+    "mp3FileName": "058_Maruvalenayya.mp3"
   },
   {
     "id": "tp-song-59",
@@ -1637,7 +1753,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/tonyprakash%20song/059%20naa%20jeevithame.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/01_Devotional_Songs/059_Naa_Jeevithame.mp3",
     "coverImage": "/covers/059_naa_jeevithame.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -1649,7 +1765,9 @@
     "orderIndex": 59,
     "createdAt": "2024-01-01T00:00:00Z",
     "updatedAt": "2024-01-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "01_Devotional_Songs/059_Naa_Jeevithame.mp3",
+    "mp3FileName": "059_Naa_Jeevithame.mp3"
   },
   {
     "id": "tp-song-60",
@@ -1665,7 +1783,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/tonyprakash%20song/060%20neeve%20naa.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/01_Devotional_Songs/060_Neeve_Naa_Aashraya_Durgamu.mp3",
     "coverImage": "/covers/060_neeve_naa.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -1677,7 +1795,9 @@
     "orderIndex": 60,
     "createdAt": "2024-01-01T00:00:00Z",
     "updatedAt": "2024-01-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "01_Devotional_Songs/060_Neeve_Naa_Aashraya_Durgamu.mp3",
+    "mp3FileName": "060_Neeve_Naa_Aashraya_Durgamu.mp3"
   },
   {
     "id": "tp-song-61",
@@ -1693,7 +1813,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/tonyprakash%20song/061%20naa%20gunday.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/01_Devotional_Songs/061_Naa_Gunde_Gadhilo.mp3",
     "coverImage": "/covers/061_naa_gunday.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -1705,7 +1825,9 @@
     "orderIndex": 61,
     "createdAt": "2024-01-01T00:00:00Z",
     "updatedAt": "2024-01-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "01_Devotional_Songs/061_Naa_Gunde_Gadhilo.mp3",
+    "mp3FileName": "061_Naa_Gunde_Gadhilo.mp3"
   },
   {
     "id": "tp-song-62",
@@ -1721,7 +1843,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/tonyprakash%20song/062%20thalli%20kantay.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/01_Devotional_Songs/062_Thalli_Kante_Minna.mp3",
     "coverImage": "/covers/062_thalli_kantay.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -1733,7 +1855,9 @@
     "orderIndex": 62,
     "createdAt": "2024-01-01T00:00:00Z",
     "updatedAt": "2024-01-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "01_Devotional_Songs/062_Thalli_Kante_Minna.mp3",
+    "mp3FileName": "062_Thalli_Kante_Minna.mp3"
   },
   {
     "id": "tp-song-63",
@@ -1749,7 +1873,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/tonyprakash%20song/063%20naa%20parisudhra.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/01_Devotional_Songs/063_Naa_Parisuddhuda.mp3",
     "coverImage": "/covers/063_naa_parisudhra.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -1761,7 +1885,9 @@
     "orderIndex": 63,
     "createdAt": "2024-01-01T00:00:00Z",
     "updatedAt": "2024-01-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "01_Devotional_Songs/063_Naa_Parisuddhuda.mp3",
+    "mp3FileName": "063_Naa_Parisuddhuda.mp3"
   },
   {
     "id": "tp-song-64",
@@ -1777,7 +1903,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/tonyprakash%20song/067%20o%20yesaiya.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/01_Devotional_Songs/064_O_Yesaiya.mp3",
     "coverImage": "/covers/067_o_yesaiya.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -1789,7 +1915,9 @@
     "orderIndex": 64,
     "createdAt": "2024-01-01T00:00:00Z",
     "updatedAt": "2024-01-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "01_Devotional_Songs/064_O_Yesaiya.mp3",
+    "mp3FileName": "064_O_Yesaiya.mp3"
   },
   {
     "id": "tp-song-65",
@@ -1805,7 +1933,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/tonyprakash%20song/068%20mattikunda.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/01_Devotional_Songs/065_Matti_Kunda_Vanti_Nannu.mp3",
     "coverImage": "/covers/068_mattikunda.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -1817,7 +1945,9 @@
     "orderIndex": 65,
     "createdAt": "2024-01-01T00:00:00Z",
     "updatedAt": "2024-01-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "01_Devotional_Songs/065_Matti_Kunda_Vanti_Nannu.mp3",
+    "mp3FileName": "065_Matti_Kunda_Vanti_Nannu.mp3"
   },
   {
     "id": "tp-song-66",
@@ -1833,7 +1963,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/tonyprakash%20song/069%20naa%20dhodu.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/01_Devotional_Songs/066_Naa_Thodu_Neeve.mp3",
     "coverImage": "/covers/069_naa_dhodu.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -1845,7 +1975,9 @@
     "orderIndex": 66,
     "createdAt": "2024-01-01T00:00:00Z",
     "updatedAt": "2024-01-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "01_Devotional_Songs/066_Naa_Thodu_Neeve.mp3",
+    "mp3FileName": "066_Naa_Thodu_Neeve.mp3"
   },
   {
     "id": "tp-song-67",
@@ -1861,7 +1993,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/tonyprakash%20song/070%20krubaa%20sampanoda.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/01_Devotional_Songs/067_Krupa_Sampannuda.mp3",
     "coverImage": "/covers/070_krubaa_sampanoda.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -1873,7 +2005,9 @@
     "orderIndex": 67,
     "createdAt": "2024-01-01T00:00:00Z",
     "updatedAt": "2024-01-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "01_Devotional_Songs/067_Krupa_Sampannuda.mp3",
+    "mp3FileName": "067_Krupa_Sampannuda.mp3"
   },
   {
     "id": "tp-song-68",
@@ -1889,7 +2023,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/tonyprakash%20song/071%20kottolonaina.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/01_Devotional_Songs/068_Kottolonaina_Preminchithivi.mp3",
     "coverImage": "/covers/071_kottolonaina.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -1901,7 +2035,9 @@
     "orderIndex": 68,
     "createdAt": "2024-01-01T00:00:00Z",
     "updatedAt": "2024-01-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "01_Devotional_Songs/068_Kottolonaina_Preminchithivi.mp3",
+    "mp3FileName": "068_Kottolonaina_Preminchithivi.mp3"
   },
   {
     "id": "tp-song-69",
@@ -1917,7 +2053,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 9900,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/tonyprakash%20song/072%20manasnna-TRACK.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/03_Studio_Minus_One_Tracks/069_Manasunna_Manchi_Devuda.mp3",
     "coverImage": "/covers/072_manasnna-TRACK.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -1929,7 +2065,9 @@
     "orderIndex": 69,
     "createdAt": "2024-01-01T00:00:00Z",
     "updatedAt": "2024-01-01T00:00:00Z",
-    "isTrack": true
+    "isTrack": true,
+    "mp3StoragePath": "03_Studio_Minus_One_Tracks/069_Manasunna_Manchi_Devuda.mp3",
+    "mp3FileName": "069_Manasunna_Manchi_Devuda.mp3"
   },
   {
     "id": "tp-song-70",
@@ -1945,7 +2083,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 9900,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/tonyprakash%20song/073%20nannu%20TRACK.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/03_Studio_Minus_One_Tracks/070_Nannu_Viduva.mp3",
     "coverImage": "/covers/073_nannu_TRACK.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -1957,7 +2095,9 @@
     "orderIndex": 70,
     "createdAt": "2024-01-01T00:00:00Z",
     "updatedAt": "2024-01-01T00:00:00Z",
-    "isTrack": true
+    "isTrack": true,
+    "mp3StoragePath": "03_Studio_Minus_One_Tracks/070_Nannu_Viduva.mp3",
+    "mp3FileName": "070_Nannu_Viduva.mp3"
   },
   {
     "id": "tp-song-71",
@@ -1973,7 +2113,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 9900,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/tonyprakash%20song/074_Neere%20Yen%20Aradhanai%20(Track).wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/03_Studio_Minus_One_Tracks/071_Neere_Yen_Aradhanai.mp3",
     "coverImage": "/covers/074_Neere_Yen_Aradhanai__Track_.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -1985,7 +2125,9 @@
     "orderIndex": 71,
     "createdAt": "2024-01-01T00:00:00Z",
     "updatedAt": "2024-01-01T00:00:00Z",
-    "isTrack": true
+    "isTrack": true,
+    "mp3StoragePath": "03_Studio_Minus_One_Tracks/071_Neere_Yen_Aradhanai.mp3",
+    "mp3FileName": "071_Neere_Yen_Aradhanai.mp3"
   },
   {
     "id": "tp-track-72",
@@ -2002,7 +2144,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 9900,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/5/Andaru%20nannu%20vidichina.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/03_Studio_Minus_One_Tracks/072_Andaru_nannu_vidichina.mp3",
     "coverImage": "/covers/track_5_Andaru_nannu_vidichina.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -2013,7 +2155,9 @@
     "lyricsEnglish": "Andaru nannu vidichina - Official Sacred Backing Track / Minus-One Recording by Rev. Tony Prakash.",
     "orderIndex": 72,
     "createdAt": "2024-01-01T00:00:00Z",
-    "updatedAt": "2024-01-01T00:00:00Z"
+    "updatedAt": "2024-01-01T00:00:00Z",
+    "mp3StoragePath": "03_Studio_Minus_One_Tracks/072_Andaru_nannu_vidichina.mp3",
+    "mp3FileName": "072_Andaru_nannu_vidichina.mp3"
   },
   {
     "id": "tp-track-73",
@@ -2030,7 +2174,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 9900,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/5/Aradhintunu%20Track.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/03_Studio_Minus_One_Tracks/073_Aradhintunu_Track.mp3",
     "coverImage": "/covers/track_5_Aradhintunu_Track.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -2041,7 +2185,9 @@
     "lyricsEnglish": "Aradhintunu Track - Official Sacred Backing Track / Minus-One Recording by Rev. Tony Prakash.",
     "orderIndex": 73,
     "createdAt": "2024-01-01T00:00:00Z",
-    "updatedAt": "2024-01-01T00:00:00Z"
+    "updatedAt": "2024-01-01T00:00:00Z",
+    "mp3StoragePath": "03_Studio_Minus_One_Tracks/073_Aradhintunu_Track.mp3",
+    "mp3FileName": "073_Aradhintunu_Track.mp3"
   },
   {
     "id": "tp-track-74",
@@ -2058,7 +2204,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 9900,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/5/Asha%20asha%20track.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/03_Studio_Minus_One_Tracks/074_Asha_asha_track.mp3",
     "coverImage": "/covers/track_5_Asha_asha_track.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -2069,7 +2215,9 @@
     "lyricsEnglish": "Asha asha track - Official Sacred Backing Track / Minus-One Recording by Rev. Tony Prakash.",
     "orderIndex": 74,
     "createdAt": "2024-01-01T00:00:00Z",
-    "updatedAt": "2024-01-01T00:00:00Z"
+    "updatedAt": "2024-01-01T00:00:00Z",
+    "mp3StoragePath": "03_Studio_Minus_One_Tracks/074_Asha_asha_track.mp3",
+    "mp3FileName": "074_Asha_asha_track.mp3"
   },
   {
     "id": "tp-track-75",
@@ -2086,7 +2234,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 9900,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/5/Chatudham%20Chatudham%20Track.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/03_Studio_Minus_One_Tracks/075_Chatudham_Chatudham_Track.mp3",
     "coverImage": "/covers/track_5_Chatudham_Chatudham_Track.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -2097,7 +2245,9 @@
     "lyricsEnglish": "Chatudham Chatudham Track - Official Sacred Backing Track / Minus-One Recording by Rev. Tony Prakash.",
     "orderIndex": 75,
     "createdAt": "2024-01-01T00:00:00Z",
-    "updatedAt": "2024-01-01T00:00:00Z"
+    "updatedAt": "2024-01-01T00:00:00Z",
+    "mp3StoragePath": "03_Studio_Minus_One_Tracks/075_Chatudham_Chatudham_Track.mp3",
+    "mp3FileName": "075_Chatudham_Chatudham_Track.mp3"
   },
   {
     "id": "tp-track-76",
@@ -2114,7 +2264,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 9900,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/5/Devadhi%20deva%20track.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/03_Studio_Minus_One_Tracks/076_Devadhi_deva_track.mp3",
     "coverImage": "/covers/track_5_Devadhi_deva_track.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -2125,7 +2275,9 @@
     "lyricsEnglish": "Devadhi deva track - Official Sacred Backing Track / Minus-One Recording by Rev. Tony Prakash.",
     "orderIndex": 76,
     "createdAt": "2024-01-01T00:00:00Z",
-    "updatedAt": "2024-01-01T00:00:00Z"
+    "updatedAt": "2024-01-01T00:00:00Z",
+    "mp3StoragePath": "03_Studio_Minus_One_Tracks/076_Devadhi_deva_track.mp3",
+    "mp3FileName": "076_Devadhi_deva_track.mp3"
   },
   {
     "id": "tp-track-77",
@@ -2142,7 +2294,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 9900,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/5/Maruvaleni%20yesaiah.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/03_Studio_Minus_One_Tracks/077_Maruvaleni_yesaiah.mp3",
     "coverImage": "/covers/track_5_Maruvaleni_yesaiah.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -2153,7 +2305,9 @@
     "lyricsEnglish": "Maruvaleni yesaiah - Official Sacred Backing Track / Minus-One Recording by Rev. Tony Prakash.",
     "orderIndex": 77,
     "createdAt": "2024-01-01T00:00:00Z",
-    "updatedAt": "2024-01-01T00:00:00Z"
+    "updatedAt": "2024-01-01T00:00:00Z",
+    "mp3StoragePath": "03_Studio_Minus_One_Tracks/077_Maruvaleni_yesaiah.mp3",
+    "mp3FileName": "077_Maruvaleni_yesaiah.mp3"
   },
   {
     "id": "tp-track-78",
@@ -2170,7 +2324,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 9900,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/5/O%20nesthama%20Track.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/03_Studio_Minus_One_Tracks/078_O_nesthama_Track.mp3",
     "coverImage": "/covers/track_5_O_nesthama_Track.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -2181,7 +2335,9 @@
     "lyricsEnglish": "O nesthama Track - Official Sacred Backing Track / Minus-One Recording by Rev. Tony Prakash.",
     "orderIndex": 78,
     "createdAt": "2024-01-01T00:00:00Z",
-    "updatedAt": "2024-01-01T00:00:00Z"
+    "updatedAt": "2024-01-01T00:00:00Z",
+    "mp3StoragePath": "03_Studio_Minus_One_Tracks/078_O_nesthama_Track.mp3",
+    "mp3FileName": "078_O_nesthama_Track.mp3"
   },
   {
     "id": "tp-track-79",
@@ -2198,7 +2354,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 9900,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/5/yesaiah%20Naku%20oka%20asha%20Track.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/03_Studio_Minus_One_Tracks/079_yesaiah_Naku_oka_asha_Track.mp3",
     "coverImage": "/covers/track_5_yesaiah_Naku_oka_asha_Track.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -2209,7 +2365,9 @@
     "lyricsEnglish": "yesaiah Naku oka asha Track - Official Sacred Backing Track / Minus-One Recording by Rev. Tony Prakash.",
     "orderIndex": 79,
     "createdAt": "2024-01-01T00:00:00Z",
-    "updatedAt": "2024-01-01T00:00:00Z"
+    "updatedAt": "2024-01-01T00:00:00Z",
+    "mp3StoragePath": "03_Studio_Minus_One_Tracks/079_yesaiah_Naku_oka_asha_Track.mp3",
+    "mp3FileName": "079_yesaiah_Naku_oka_asha_Track.mp3"
   },
   {
     "id": "tp-track-80",
@@ -2226,7 +2384,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 9900,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/5/Yesu%20prema%20Track.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/03_Studio_Minus_One_Tracks/080_Yesu_prema_Track.mp3",
     "coverImage": "/covers/track_5_Yesu_prema_Track.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -2237,7 +2395,9 @@
     "lyricsEnglish": "Yesu prema Track - Official Sacred Backing Track / Minus-One Recording by Rev. Tony Prakash.",
     "orderIndex": 80,
     "createdAt": "2024-01-01T00:00:00Z",
-    "updatedAt": "2024-01-01T00:00:00Z"
+    "updatedAt": "2024-01-01T00:00:00Z",
+    "mp3StoragePath": "03_Studio_Minus_One_Tracks/080_Yesu_prema_Track.mp3",
+    "mp3FileName": "080_Yesu_prema_Track.mp3"
   },
   {
     "id": "tp-track-81",
@@ -2254,7 +2414,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 9900,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/6/Jayaho%20yesuva%20Trk.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/03_Studio_Minus_One_Tracks/081_Jayaho_yesuva_Trk.mp3",
     "coverImage": "/covers/035_JEYAHO.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -2265,7 +2425,9 @@
     "lyricsEnglish": "Jayaho yesuva Trk - Official Sacred Backing Track / Minus-One Recording by Rev. Tony Prakash.",
     "orderIndex": 81,
     "createdAt": "2024-01-01T00:00:00Z",
-    "updatedAt": "2024-01-01T00:00:00Z"
+    "updatedAt": "2024-01-01T00:00:00Z",
+    "mp3StoragePath": "03_Studio_Minus_One_Tracks/081_Jayaho_yesuva_Trk.mp3",
+    "mp3FileName": "081_Jayaho_yesuva_Trk.mp3"
   },
   {
     "id": "tp-track-82",
@@ -2282,7 +2444,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 9900,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/6/Kadavari%20dinamulalo%20Trk.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/03_Studio_Minus_One_Tracks/082_Kadavari_dinamulalo_Trk.mp3",
     "coverImage": "/covers/036_KADAVARI.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -2293,7 +2455,9 @@
     "lyricsEnglish": "Kadavari dinamulalo Trk - Official Sacred Backing Track / Minus-One Recording by Rev. Tony Prakash.",
     "orderIndex": 82,
     "createdAt": "2024-01-01T00:00:00Z",
-    "updatedAt": "2024-01-01T00:00:00Z"
+    "updatedAt": "2024-01-01T00:00:00Z",
+    "mp3StoragePath": "03_Studio_Minus_One_Tracks/082_Kadavari_dinamulalo_Trk.mp3",
+    "mp3FileName": "082_Kadavari_dinamulalo_Trk.mp3"
   },
   {
     "id": "tp-track-83",
@@ -2310,7 +2474,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 9900,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/6/Madhuramaina%20prema%20Trk.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/03_Studio_Minus_One_Tracks/083_Madhuramaina_prema_Trk.mp3",
     "coverImage": "/covers/008_Madhuramaina.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -2321,7 +2485,9 @@
     "lyricsEnglish": "Madhuramaina prema Trk - Official Sacred Backing Track / Minus-One Recording by Rev. Tony Prakash.",
     "orderIndex": 83,
     "createdAt": "2024-01-01T00:00:00Z",
-    "updatedAt": "2024-01-01T00:00:00Z"
+    "updatedAt": "2024-01-01T00:00:00Z",
+    "mp3StoragePath": "03_Studio_Minus_One_Tracks/083_Madhuramaina_prema_Trk.mp3",
+    "mp3FileName": "083_Madhuramaina_prema_Trk.mp3"
   },
   {
     "id": "tp-track-84",
@@ -2338,7 +2504,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 9900,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/6/Nadhu%20kapari%20Trk.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/03_Studio_Minus_One_Tracks/084_Nadhu_kapari_Trk.mp3",
     "coverImage": "/covers/034_NAKAPARI.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -2349,7 +2515,9 @@
     "lyricsEnglish": "Nadhu kapari Trk - Official Sacred Backing Track / Minus-One Recording by Rev. Tony Prakash.",
     "orderIndex": 84,
     "createdAt": "2024-01-01T00:00:00Z",
-    "updatedAt": "2024-01-01T00:00:00Z"
+    "updatedAt": "2024-01-01T00:00:00Z",
+    "mp3StoragePath": "03_Studio_Minus_One_Tracks/084_Nadhu_kapari_Trk.mp3",
+    "mp3FileName": "084_Nadhu_kapari_Trk.mp3"
   },
   {
     "id": "tp-track-85",
@@ -2366,7 +2534,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 9900,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/6/Nuvante%20naku%20pranam%20Trk.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/03_Studio_Minus_One_Tracks/085_Nuvante_naku_pranam_Trk.mp3",
     "coverImage": "/covers/031_NU_VANTAE.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -2377,7 +2545,9 @@
     "lyricsEnglish": "Nuvante naku pranam Trk - Official Sacred Backing Track / Minus-One Recording by Rev. Tony Prakash.",
     "orderIndex": 85,
     "createdAt": "2024-01-01T00:00:00Z",
-    "updatedAt": "2024-01-01T00:00:00Z"
+    "updatedAt": "2024-01-01T00:00:00Z",
+    "mp3StoragePath": "03_Studio_Minus_One_Tracks/085_Nuvante_naku_pranam_Trk.mp3",
+    "mp3FileName": "085_Nuvante_naku_pranam_Trk.mp3"
   },
   {
     "id": "tp-track-86",
@@ -2394,7 +2564,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 9900,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/6/O%20nesthama%20Trk.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/03_Studio_Minus_One_Tracks/086_O_nesthama_Trk.mp3",
     "coverImage": "/covers/042_OO_NAESAMA.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -2405,7 +2575,9 @@
     "lyricsEnglish": "O nesthama Trk - Official Sacred Backing Track / Minus-One Recording by Rev. Tony Prakash.",
     "orderIndex": 86,
     "createdAt": "2024-01-01T00:00:00Z",
-    "updatedAt": "2024-01-01T00:00:00Z"
+    "updatedAt": "2024-01-01T00:00:00Z",
+    "mp3StoragePath": "03_Studio_Minus_One_Tracks/086_O_nesthama_Trk.mp3",
+    "mp3FileName": "086_O_nesthama_Trk.mp3"
   },
   {
     "id": "tp-track-87",
@@ -2422,7 +2594,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 9900,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/6/Prema%20Kavali%20Track.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/03_Studio_Minus_One_Tracks/087_Prema_Kavali_Track.mp3",
     "coverImage": "/covers/002_Nee_Prema_Naaku_Chalu.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -2433,7 +2605,9 @@
     "lyricsEnglish": "Prema Kavali Track - Official Sacred Backing Track / Minus-One Recording by Rev. Tony Prakash.",
     "orderIndex": 87,
     "createdAt": "2024-01-01T00:00:00Z",
-    "updatedAt": "2024-01-01T00:00:00Z"
+    "updatedAt": "2024-01-01T00:00:00Z",
+    "mp3StoragePath": "03_Studio_Minus_One_Tracks/087_Prema_Kavali_Track.mp3",
+    "mp3FileName": "087_Prema_Kavali_Track.mp3"
   },
   {
     "id": "tp-track-88",
@@ -2450,7 +2624,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 9900,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/6/Sri%20yesu%20ne%20pada%20Track.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/03_Studio_Minus_One_Tracks/088_Sri_yesu_ne_pada_Track.mp3",
     "coverImage": "/covers/032_SRI_YESU_F.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -2461,7 +2635,9 @@
     "lyricsEnglish": "Sri yesu ne pada Track - Official Sacred Backing Track / Minus-One Recording by Rev. Tony Prakash.",
     "orderIndex": 88,
     "createdAt": "2024-01-01T00:00:00Z",
-    "updatedAt": "2024-01-01T00:00:00Z"
+    "updatedAt": "2024-01-01T00:00:00Z",
+    "mp3StoragePath": "03_Studio_Minus_One_Tracks/088_Sri_yesu_ne_pada_Track.mp3",
+    "mp3FileName": "088_Sri_yesu_ne_pada_Track.mp3"
   },
   {
     "id": "tp-track-89",
@@ -2478,7 +2654,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 9900,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/6/Yesu%20prema%20chatedhamu%20trk.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/03_Studio_Minus_One_Tracks/089_Yesu_prema_chatedhamu_trk.mp3",
     "coverImage": "/covers/032_SRI_YESU_F.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -2489,7 +2665,9 @@
     "lyricsEnglish": "Yesu prema chatedhamu trk - Official Sacred Backing Track / Minus-One Recording by Rev. Tony Prakash.",
     "orderIndex": 89,
     "createdAt": "2024-01-01T00:00:00Z",
-    "updatedAt": "2024-01-01T00:00:00Z"
+    "updatedAt": "2024-01-01T00:00:00Z",
+    "mp3StoragePath": "03_Studio_Minus_One_Tracks/089_Yesu_prema_chatedhamu_trk.mp3",
+    "mp3FileName": "089_Yesu_prema_chatedhamu_trk.mp3"
   },
   {
     "id": "tp-track-90",
@@ -2506,7 +2684,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 9900,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/7/Manohara%20Track.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/03_Studio_Minus_One_Tracks/090_Manohara_Track.mp3",
     "coverImage": "/covers/072_manasnna-TRACK.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -2517,7 +2695,9 @@
     "lyricsEnglish": "Manohara Track - Official Sacred Backing Track / Minus-One Recording by Rev. Tony Prakash.",
     "orderIndex": 90,
     "createdAt": "2024-01-01T00:00:00Z",
-    "updatedAt": "2024-01-01T00:00:00Z"
+    "updatedAt": "2024-01-01T00:00:00Z",
+    "mp3StoragePath": "03_Studio_Minus_One_Tracks/090_Manohara_Track.mp3",
+    "mp3FileName": "090_Manohara_Track.mp3"
   },
   {
     "id": "tp-track-91",
@@ -2534,7 +2714,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 9900,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/7/Nakunna%20Madhura%20swaram%20Track.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/03_Studio_Minus_One_Tracks/091_Nakunna_Madhura_swaram_Track.mp3",
     "coverImage": "/covers/040_MADHURA.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -2545,7 +2725,9 @@
     "lyricsEnglish": "Nakunna Madhura swaram Track - Official Sacred Backing Track / Minus-One Recording by Rev. Tony Prakash.",
     "orderIndex": 91,
     "createdAt": "2024-01-01T00:00:00Z",
-    "updatedAt": "2024-01-01T00:00:00Z"
+    "updatedAt": "2024-01-01T00:00:00Z",
+    "mp3StoragePath": "03_Studio_Minus_One_Tracks/091_Nakunna_Madhura_swaram_Track.mp3",
+    "mp3FileName": "091_Nakunna_Madhura_swaram_Track.mp3"
   },
   {
     "id": "tp-track-92",
@@ -2562,7 +2744,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 9900,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/7/Nee%20krupa%20chalunu%20Track.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/03_Studio_Minus_One_Tracks/092_Nee_krupa_chalunu_Track.mp3",
     "coverImage": "/covers/018_Nee_Krupa.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -2573,7 +2755,9 @@
     "lyricsEnglish": "Nee krupa chalunu Track - Official Sacred Backing Track / Minus-One Recording by Rev. Tony Prakash.",
     "orderIndex": 92,
     "createdAt": "2024-01-01T00:00:00Z",
-    "updatedAt": "2024-01-01T00:00:00Z"
+    "updatedAt": "2024-01-01T00:00:00Z",
+    "mp3StoragePath": "03_Studio_Minus_One_Tracks/092_Nee_krupa_chalunu_Track.mp3",
+    "mp3FileName": "092_Nee_krupa_chalunu_Track.mp3"
   },
   {
     "id": "tp-track-93",
@@ -2590,7 +2774,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 9900,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/7/Parama%20vaidhuda%20Track.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/03_Studio_Minus_One_Tracks/093_Parama_vaidhuda_Track.mp3",
     "coverImage": "/covers/027_Paavanuda.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -2601,7 +2785,9 @@
     "lyricsEnglish": "Parama vaidhuda Track - Official Sacred Backing Track / Minus-One Recording by Rev. Tony Prakash.",
     "orderIndex": 93,
     "createdAt": "2024-01-01T00:00:00Z",
-    "updatedAt": "2024-01-01T00:00:00Z"
+    "updatedAt": "2024-01-01T00:00:00Z",
+    "mp3StoragePath": "03_Studio_Minus_One_Tracks/093_Parama_vaidhuda_Track.mp3",
+    "mp3FileName": "093_Parama_vaidhuda_Track.mp3"
   },
   {
     "id": "tp-track-94",
@@ -2618,7 +2804,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 9900,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/7/Prabhuva%20ne%20sannidhilo%20Track.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/03_Studio_Minus_One_Tracks/094_Prabhuva_ne_sannidhilo_Track.mp3",
     "coverImage": "/covers/026_Neeve_Naa_Aradhana.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -2629,7 +2815,9 @@
     "lyricsEnglish": "Prabhuva ne sannidhilo Track - Official Sacred Backing Track / Minus-One Recording by Rev. Tony Prakash.",
     "orderIndex": 94,
     "createdAt": "2024-01-01T00:00:00Z",
-    "updatedAt": "2024-01-01T00:00:00Z"
+    "updatedAt": "2024-01-01T00:00:00Z",
+    "mp3StoragePath": "03_Studio_Minus_One_Tracks/094_Prabhuva_ne_sannidhilo_Track.mp3",
+    "mp3FileName": "094_Prabhuva_ne_sannidhilo_Track.mp3"
   },
   {
     "id": "tp-track-95",
@@ -2646,7 +2834,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 9900,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/7/Priyamaina%20Yesu%20Track.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/03_Studio_Minus_One_Tracks/095_Priyamaina_Yesu_Track.mp3",
     "coverImage": "/covers/037_YESU_PREMA.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -2657,7 +2845,9 @@
     "lyricsEnglish": "Priyamaina Yesu Track - Official Sacred Backing Track / Minus-One Recording by Rev. Tony Prakash.",
     "orderIndex": 95,
     "createdAt": "2024-01-01T00:00:00Z",
-    "updatedAt": "2024-01-01T00:00:00Z"
+    "updatedAt": "2024-01-01T00:00:00Z",
+    "mp3StoragePath": "03_Studio_Minus_One_Tracks/095_Priyamaina_Yesu_Track.mp3",
+    "mp3FileName": "095_Priyamaina_Yesu_Track.mp3"
   },
   {
     "id": "tp-track-96",
@@ -2674,7 +2864,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 9900,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/7/Repu%20mapu%20Track.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/03_Studio_Minus_One_Tracks/096_Repu_mapu_Track.mp3",
     "coverImage": "/covers/028_Ashakaligi_Jeevinchi.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -2685,7 +2875,9 @@
     "lyricsEnglish": "Repu mapu Track - Official Sacred Backing Track / Minus-One Recording by Rev. Tony Prakash.",
     "orderIndex": 96,
     "createdAt": "2024-01-01T00:00:00Z",
-    "updatedAt": "2024-01-01T00:00:00Z"
+    "updatedAt": "2024-01-01T00:00:00Z",
+    "mp3StoragePath": "03_Studio_Minus_One_Tracks/096_Repu_mapu_Track.mp3",
+    "mp3FileName": "096_Repu_mapu_Track.mp3"
   },
   {
     "id": "tp-track-97",
@@ -2702,7 +2894,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 9900,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/7/Thara%20tharalalo%20Track.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/03_Studio_Minus_One_Tracks/097_Thara_tharalalo_Track.mp3",
     "coverImage": "/covers/056_maa_sarva.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -2713,7 +2905,9 @@
     "lyricsEnglish": "Thara tharalalo Track - Official Sacred Backing Track / Minus-One Recording by Rev. Tony Prakash.",
     "orderIndex": 97,
     "createdAt": "2024-01-01T00:00:00Z",
-    "updatedAt": "2024-01-01T00:00:00Z"
+    "updatedAt": "2024-01-01T00:00:00Z",
+    "mp3StoragePath": "03_Studio_Minus_One_Tracks/097_Thara_tharalalo_Track.mp3",
+    "mp3FileName": "097_Thara_tharalalo_Track.mp3"
   },
   {
     "id": "tp-track-98",
@@ -2730,7 +2924,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 9900,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/7/Yesu%20prema%20kanna%20Track.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/03_Studio_Minus_One_Tracks/098_Yesu_prema_kanna_Track.mp3",
     "coverImage": "/covers/032_SRI_YESU_F.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -2741,7 +2935,9 @@
     "lyricsEnglish": "Yesu prema kanna Track - Official Sacred Backing Track / Minus-One Recording by Rev. Tony Prakash.",
     "orderIndex": 98,
     "createdAt": "2024-01-01T00:00:00Z",
-    "updatedAt": "2024-01-01T00:00:00Z"
+    "updatedAt": "2024-01-01T00:00:00Z",
+    "mp3StoragePath": "03_Studio_Minus_One_Tracks/098_Yesu_prema_kanna_Track.mp3",
+    "mp3FileName": "098_Yesu_prema_kanna_Track.mp3"
   },
   {
     "id": "tp-track-99",
@@ -2758,7 +2954,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 9900,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/8/HRUDHAYAMA-MUSIC%20TRK-135-3-4.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/03_Studio_Minus_One_Tracks/099_HRUDHAYAMA_MUSIC_TRK_135_3_4.mp3",
     "coverImage": "/covers/track_8_HRUDHAYAMA-MUSIC_TRK-135-3-4.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -2769,7 +2965,9 @@
     "lyricsEnglish": "HRUDHAYAMA MUSIC TRK 135 3 4 - Official Sacred Backing Track / Minus-One Recording by Rev. Tony Prakash.",
     "orderIndex": 99,
     "createdAt": "2024-01-01T00:00:00Z",
-    "updatedAt": "2024-01-01T00:00:00Z"
+    "updatedAt": "2024-01-01T00:00:00Z",
+    "mp3StoragePath": "03_Studio_Minus_One_Tracks/099_HRUDHAYAMA_MUSIC_TRK_135_3_4.mp3",
+    "mp3FileName": "099_HRUDHAYAMA_MUSIC_TRK_135_3_4.mp3"
   },
   {
     "id": "tp-track-100",
@@ -2786,7 +2984,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 9900,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/8/KROTHTHA%20PAATA-STAGE%20TRK.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/03_Studio_Minus_One_Tracks/100_KROTHTHA_PAATA_STAGE_TRK.mp3",
     "coverImage": "/covers/track_8_KROTHTHA_PAATA-STAGE_TRK.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -2797,7 +2995,9 @@
     "lyricsEnglish": "KROTHTHA PAATA STAGE TRK - Official Sacred Backing Track / Minus-One Recording by Rev. Tony Prakash.",
     "orderIndex": 100,
     "createdAt": "2024-01-01T00:00:00Z",
-    "updatedAt": "2024-01-01T00:00:00Z"
+    "updatedAt": "2024-01-01T00:00:00Z",
+    "mp3StoragePath": "03_Studio_Minus_One_Tracks/100_KROTHTHA_PAATA_STAGE_TRK.mp3",
+    "mp3FileName": "100_KROTHTHA_PAATA_STAGE_TRK.mp3"
   },
   {
     "id": "tp-track-101",
@@ -2814,7 +3014,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 9900,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/8/MOSA%20POKUDI-STAGE%20TRK.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/03_Studio_Minus_One_Tracks/101_MOSA_POKUDI_STAGE_TRK.mp3",
     "coverImage": "/covers/track_8_MOSA_POKUDI-STAGE_TRK.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -2825,7 +3025,9 @@
     "lyricsEnglish": "MOSA POKUDI STAGE TRK - Official Sacred Backing Track / Minus-One Recording by Rev. Tony Prakash.",
     "orderIndex": 101,
     "createdAt": "2024-01-01T00:00:00Z",
-    "updatedAt": "2024-01-01T00:00:00Z"
+    "updatedAt": "2024-01-01T00:00:00Z",
+    "mp3StoragePath": "03_Studio_Minus_One_Tracks/101_MOSA_POKUDI_STAGE_TRK.mp3",
+    "mp3FileName": "101_MOSA_POKUDI_STAGE_TRK.mp3"
   },
   {
     "id": "tp-track-102",
@@ -2842,7 +3044,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 9900,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/8/NEE%20KRUPA-STAGE%20TRK.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/03_Studio_Minus_One_Tracks/102_NEE_KRUPA_STAGE_TRK.mp3",
     "coverImage": "/covers/track_8_NEE_KRUPA-STAGE_TRK.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -2853,7 +3055,9 @@
     "lyricsEnglish": "NEE KRUPA STAGE TRK - Official Sacred Backing Track / Minus-One Recording by Rev. Tony Prakash.",
     "orderIndex": 102,
     "createdAt": "2024-01-01T00:00:00Z",
-    "updatedAt": "2024-01-01T00:00:00Z"
+    "updatedAt": "2024-01-01T00:00:00Z",
+    "mp3StoragePath": "03_Studio_Minus_One_Tracks/102_NEE_KRUPA_STAGE_TRK.mp3",
+    "mp3FileName": "102_NEE_KRUPA_STAGE_TRK.mp3"
   },
   {
     "id": "tp-track-103",
@@ -2870,7 +3074,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 9900,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/8/NEE%20MANDHIRAMULO-MUSIC%20TRK-90-2-4.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/03_Studio_Minus_One_Tracks/103_NEE_MANDHIRAMULO_MUSIC_TRK_90_2_4.mp3",
     "coverImage": "/covers/track_8_NEE_MANDHIRAMULO-MUSIC_TRK-90-2-4.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -2881,7 +3085,9 @@
     "lyricsEnglish": "NEE MANDHIRAMULO MUSIC TRK 90 2 4 - Official Sacred Backing Track / Minus-One Recording by Rev. Tony Prakash.",
     "orderIndex": 103,
     "createdAt": "2024-01-01T00:00:00Z",
-    "updatedAt": "2024-01-01T00:00:00Z"
+    "updatedAt": "2024-01-01T00:00:00Z",
+    "mp3StoragePath": "03_Studio_Minus_One_Tracks/103_NEE_MANDHIRAMULO_MUSIC_TRK_90_2_4.mp3",
+    "mp3FileName": "103_NEE_MANDHIRAMULO_MUSIC_TRK_90_2_4.mp3"
   },
   {
     "id": "tp-track-104",
@@ -2898,7 +3104,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 9900,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/8/NEETHO%20UNDIPONI-STAGE%20TRK.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/03_Studio_Minus_One_Tracks/104_NEETHO_UNDIPONI_STAGE_TRK.mp3",
     "coverImage": "/covers/track_8_NEETHO_UNDIPONI-STAGE_TRK.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -2909,7 +3115,9 @@
     "lyricsEnglish": "NEETHO UNDIPONI STAGE TRK - Official Sacred Backing Track / Minus-One Recording by Rev. Tony Prakash.",
     "orderIndex": 104,
     "createdAt": "2024-01-01T00:00:00Z",
-    "updatedAt": "2024-01-01T00:00:00Z"
+    "updatedAt": "2024-01-01T00:00:00Z",
+    "mp3StoragePath": "03_Studio_Minus_One_Tracks/104_NEETHO_UNDIPONI_STAGE_TRK.mp3",
+    "mp3FileName": "104_NEETHO_UNDIPONI_STAGE_TRK.mp3"
   },
   {
     "id": "tp-track-105",
@@ -2926,7 +3134,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 9900,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/8/NEETHO-STAGE%20TRK.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/03_Studio_Minus_One_Tracks/105_NEETHO_STAGE_TRK.mp3",
     "coverImage": "/covers/track_8_NEETHO-STAGE_TRK.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -2937,7 +3145,9 @@
     "lyricsEnglish": "NEETHO STAGE TRK - Official Sacred Backing Track / Minus-One Recording by Rev. Tony Prakash.",
     "orderIndex": 105,
     "createdAt": "2024-01-01T00:00:00Z",
-    "updatedAt": "2024-01-01T00:00:00Z"
+    "updatedAt": "2024-01-01T00:00:00Z",
+    "mp3StoragePath": "03_Studio_Minus_One_Tracks/105_NEETHO_STAGE_TRK.mp3",
+    "mp3FileName": "105_NEETHO_STAGE_TRK.mp3"
   },
   {
     "id": "tp-track-106",
@@ -2954,7 +3164,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 9900,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/8/NEEVE-MUSIC%20TRK-128-2-4.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/03_Studio_Minus_One_Tracks/106_NEEVE_MUSIC_TRK_128_2_4.mp3",
     "coverImage": "/covers/track_8_NEEVE-MUSIC_TRK-128-2-4.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -2965,7 +3175,9 @@
     "lyricsEnglish": "NEEVE MUSIC TRK 128 2 4 - Official Sacred Backing Track / Minus-One Recording by Rev. Tony Prakash.",
     "orderIndex": 106,
     "createdAt": "2024-01-01T00:00:00Z",
-    "updatedAt": "2024-01-01T00:00:00Z"
+    "updatedAt": "2024-01-01T00:00:00Z",
+    "mp3StoragePath": "03_Studio_Minus_One_Tracks/106_NEEVE_MUSIC_TRK_128_2_4.mp3",
+    "mp3FileName": "106_NEEVE_MUSIC_TRK_128_2_4.mp3"
   },
   {
     "id": "tp-track-107",
@@ -2982,7 +3194,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 9900,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/8/RENDE%20RENDU-MUSIC%20TRK-112-2-4.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/03_Studio_Minus_One_Tracks/107_RENDE_RENDU_MUSIC_TRK_112_2_4.mp3",
     "coverImage": "/covers/track_8_RENDE_RENDU-MUSIC_TRK-112-2-4.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -2993,7 +3205,9 @@
     "lyricsEnglish": "RENDE RENDU MUSIC TRK 112 2 4 - Official Sacred Backing Track / Minus-One Recording by Rev. Tony Prakash.",
     "orderIndex": 107,
     "createdAt": "2024-01-01T00:00:00Z",
-    "updatedAt": "2024-01-01T00:00:00Z"
+    "updatedAt": "2024-01-01T00:00:00Z",
+    "mp3StoragePath": "03_Studio_Minus_One_Tracks/107_RENDE_RENDU_MUSIC_TRK_112_2_4.mp3",
+    "mp3FileName": "107_RENDE_RENDU_MUSIC_TRK_112_2_4.mp3"
   },
   {
     "id": "tp-track-108",
@@ -3010,7 +3224,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 9900,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/8/STHUTHULAKU-STAGE%20TRK.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/03_Studio_Minus_One_Tracks/108_STHUTHULAKU_STAGE_TRK.mp3",
     "coverImage": "/covers/track_8_STHUTHULAKU-STAGE_TRK.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -3021,7 +3235,9 @@
     "lyricsEnglish": "STHUTHULAKU STAGE TRK - Official Sacred Backing Track / Minus-One Recording by Rev. Tony Prakash.",
     "orderIndex": 108,
     "createdAt": "2024-01-01T00:00:00Z",
-    "updatedAt": "2024-01-01T00:00:00Z"
+    "updatedAt": "2024-01-01T00:00:00Z",
+    "mp3StoragePath": "03_Studio_Minus_One_Tracks/108_STHUTHULAKU_STAGE_TRK.mp3",
+    "mp3FileName": "108_STHUTHULAKU_STAGE_TRK.mp3"
   },
   {
     "id": "tp-track-109",
@@ -3038,7 +3254,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 9900,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/9/07%20Track%207.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/03_Studio_Minus_One_Tracks/109_Track_7.mp3",
     "coverImage": "/covers/072_manasnna-TRACK.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -3049,7 +3265,9 @@
     "lyricsEnglish": "Track 7 - Official Sacred Backing Track / Minus-One Recording by Rev. Tony Prakash.",
     "orderIndex": 109,
     "createdAt": "2024-01-01T00:00:00Z",
-    "updatedAt": "2024-01-01T00:00:00Z"
+    "updatedAt": "2024-01-01T00:00:00Z",
+    "mp3StoragePath": "03_Studio_Minus_One_Tracks/109_Track_7.mp3",
+    "mp3FileName": "109_Track_7.mp3"
   },
   {
     "id": "tp-track-110",
@@ -3066,7 +3284,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 9900,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/9/08%20Track%208.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/03_Studio_Minus_One_Tracks/110_Track_8.mp3",
     "coverImage": "/covers/072_manasnna-TRACK.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -3077,7 +3295,9 @@
     "lyricsEnglish": "Track 8 - Official Sacred Backing Track / Minus-One Recording by Rev. Tony Prakash.",
     "orderIndex": 110,
     "createdAt": "2024-01-01T00:00:00Z",
-    "updatedAt": "2024-01-01T00:00:00Z"
+    "updatedAt": "2024-01-01T00:00:00Z",
+    "mp3StoragePath": "03_Studio_Minus_One_Tracks/110_Track_8.mp3",
+    "mp3FileName": "110_Track_8.mp3"
   },
   {
     "id": "tp-track-111",
@@ -3094,7 +3314,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 9900,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/9/Ayya%20Yesayya%20Track.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/03_Studio_Minus_One_Tracks/111_Ayya_Yesayya_Track.mp3",
     "coverImage": "/covers/004_Kanugontini_Yesayya.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -3105,7 +3325,9 @@
     "lyricsEnglish": "Ayya Yesayya Track - Official Sacred Backing Track / Minus-One Recording by Rev. Tony Prakash.",
     "orderIndex": 111,
     "createdAt": "2024-01-01T00:00:00Z",
-    "updatedAt": "2024-01-01T00:00:00Z"
+    "updatedAt": "2024-01-01T00:00:00Z",
+    "mp3StoragePath": "03_Studio_Minus_One_Tracks/111_Ayya_Yesayya_Track.mp3",
+    "mp3FileName": "111_Ayya_Yesayya_Track.mp3"
   },
   {
     "id": "tp-track-112",
@@ -3122,7 +3344,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 9900,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/9/Gadichina%20Kalam%20Track.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/03_Studio_Minus_One_Tracks/112_Gadichina_Kalam_Track.mp3",
     "coverImage": "/covers/044_gadandhanthakara_.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -3133,7 +3355,9 @@
     "lyricsEnglish": "Gadichina Kalam Track - Official Sacred Backing Track / Minus-One Recording by Rev. Tony Prakash.",
     "orderIndex": 112,
     "createdAt": "2024-01-01T00:00:00Z",
-    "updatedAt": "2024-01-01T00:00:00Z"
+    "updatedAt": "2024-01-01T00:00:00Z",
+    "mp3StoragePath": "03_Studio_Minus_One_Tracks/112_Gadichina_Kalam_Track.mp3",
+    "mp3FileName": "112_Gadichina_Kalam_Track.mp3"
   },
   {
     "id": "tp-track-113",
@@ -3150,7 +3374,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 9900,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/9/Naa%20kunna%20madhura%20swaram%20Track.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/03_Studio_Minus_One_Tracks/113_Naa_kunna_madhura_swaram_Track.mp3",
     "coverImage": "/covers/014_Yehova.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -3161,7 +3385,9 @@
     "lyricsEnglish": "Naa kunna madhura swaram Track - Official Sacred Backing Track / Minus-One Recording by Rev. Tony Prakash.",
     "orderIndex": 113,
     "createdAt": "2024-01-01T00:00:00Z",
-    "updatedAt": "2024-01-01T00:00:00Z"
+    "updatedAt": "2024-01-01T00:00:00Z",
+    "mp3StoragePath": "03_Studio_Minus_One_Tracks/113_Naa_kunna_madhura_swaram_Track.mp3",
+    "mp3FileName": "113_Naa_kunna_madhura_swaram_Track.mp3"
   },
   {
     "id": "tp-track-114",
@@ -3178,7 +3404,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 9900,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/9/Ninnu%20marichipoyanayya%20Track.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/03_Studio_Minus_One_Tracks/114_Ninnu_marichipoyanayya_Track.mp3",
     "coverImage": "/covers/007_Ninnu_Marachi.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -3189,7 +3415,9 @@
     "lyricsEnglish": "Ninnu marichipoyanayya Track - Official Sacred Backing Track / Minus-One Recording by Rev. Tony Prakash.",
     "orderIndex": 114,
     "createdAt": "2024-01-01T00:00:00Z",
-    "updatedAt": "2024-01-01T00:00:00Z"
+    "updatedAt": "2024-01-01T00:00:00Z",
+    "mp3StoragePath": "03_Studio_Minus_One_Tracks/114_Ninnu_marichipoyanayya_Track.mp3",
+    "mp3FileName": "114_Ninnu_marichipoyanayya_Track.mp3"
   },
   {
     "id": "tp-track-115",
@@ -3206,7 +3434,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 9900,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/9/Yesu%20prema%20kanna%20Track.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/03_Studio_Minus_One_Tracks/115_Yesu_prema_kanna_Track.mp3",
     "coverImage": "/covers/032_SRI_YESU_F.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -3217,7 +3445,9 @@
     "lyricsEnglish": "Yesu prema kanna Track - Official Sacred Backing Track / Minus-One Recording by Rev. Tony Prakash.",
     "orderIndex": 115,
     "createdAt": "2024-01-01T00:00:00Z",
-    "updatedAt": "2024-01-01T00:00:00Z"
+    "updatedAt": "2024-01-01T00:00:00Z",
+    "mp3StoragePath": "03_Studio_Minus_One_Tracks/115_Yesu_prema_kanna_Track.mp3",
+    "mp3FileName": "115_Yesu_prema_kanna_Track.mp3"
   },
   {
     "id": "tp-track-116",
@@ -3234,7 +3464,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 9900,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/9/Youth%20strength%20Track.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/03_Studio_Minus_One_Tracks/116_Youth_strength_Track.mp3",
     "coverImage": "/covers/006_Palletoori_Thammuda.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -3245,7 +3475,9 @@
     "lyricsEnglish": "Youth strength Track - Official Sacred Backing Track / Minus-One Recording by Rev. Tony Prakash.",
     "orderIndex": 116,
     "createdAt": "2024-01-01T00:00:00Z",
-    "updatedAt": "2024-01-01T00:00:00Z"
+    "updatedAt": "2024-01-01T00:00:00Z",
+    "mp3StoragePath": "03_Studio_Minus_One_Tracks/116_Youth_strength_Track.mp3",
+    "mp3FileName": "116_Youth_strength_Track.mp3"
   },
   {
     "id": "tp-track-117",
@@ -3262,7 +3494,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 9900,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/Maruvalenayya%20Track/Kanuguntini%20yesaiah%20%20Track.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/03_Studio_Minus_One_Tracks/117_Kanuguntini_yesaiah__Track.mp3",
     "coverImage": "/covers/track_Maruvalenayya_Track_Kanuguntini_yesaiah__Track.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -3273,7 +3505,9 @@
     "lyricsEnglish": "Kanuguntini yesaiah  Track - Official Sacred Backing Track / Minus-One Recording by Rev. Tony Prakash.",
     "orderIndex": 117,
     "createdAt": "2024-01-01T00:00:00Z",
-    "updatedAt": "2024-01-01T00:00:00Z"
+    "updatedAt": "2024-01-01T00:00:00Z",
+    "mp3StoragePath": "03_Studio_Minus_One_Tracks/117_Kanuguntini_yesaiah__Track.mp3",
+    "mp3FileName": "117_Kanuguntini_yesaiah__Track.mp3"
   },
   {
     "id": "tp-track-118",
@@ -3290,7 +3524,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 9900,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/Maruvalenayya%20Track/Maruvalenidhi%20Track.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/03_Studio_Minus_One_Tracks/118_Maruvalenidhi_Track.mp3",
     "coverImage": "/covers/track_Maruvalenayya_Track_Maruvalenidhi_Track.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -3301,7 +3535,9 @@
     "lyricsEnglish": "Maruvalenidhi Track - Official Sacred Backing Track / Minus-One Recording by Rev. Tony Prakash.",
     "orderIndex": 118,
     "createdAt": "2024-01-01T00:00:00Z",
-    "updatedAt": "2024-01-01T00:00:00Z"
+    "updatedAt": "2024-01-01T00:00:00Z",
+    "mp3StoragePath": "03_Studio_Minus_One_Tracks/118_Maruvalenidhi_Track.mp3",
+    "mp3FileName": "118_Maruvalenidhi_Track.mp3"
   },
   {
     "id": "tp-track-119",
@@ -3318,7 +3554,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 9900,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/Maruvalenayya%20Track/Nayama%20dharmama%20%20Track.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/03_Studio_Minus_One_Tracks/119_Nayama_dharmama__Track.mp3",
     "coverImage": "/covers/track_Maruvalenayya_Track_Nayama_dharmama__Track.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -3329,7 +3565,9 @@
     "lyricsEnglish": "Nayama dharmama  Track - Official Sacred Backing Track / Minus-One Recording by Rev. Tony Prakash.",
     "orderIndex": 119,
     "createdAt": "2024-01-01T00:00:00Z",
-    "updatedAt": "2024-01-01T00:00:00Z"
+    "updatedAt": "2024-01-01T00:00:00Z",
+    "mp3StoragePath": "03_Studio_Minus_One_Tracks/119_Nayama_dharmama__Track.mp3",
+    "mp3FileName": "119_Nayama_dharmama__Track.mp3"
   },
   {
     "id": "tp-track-120",
@@ -3346,7 +3584,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 9900,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/Maruvalenayya%20Track/Nee%20preme%20naku%20chalayya%20Track.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/03_Studio_Minus_One_Tracks/120_Nee_preme_naku_chalayya_Track.mp3",
     "coverImage": "/covers/track_Maruvalenayya_Track_Nee_preme_naku_chalayya_Track.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -3357,7 +3595,9 @@
     "lyricsEnglish": "Nee preme naku chalayya Track - Official Sacred Backing Track / Minus-One Recording by Rev. Tony Prakash.",
     "orderIndex": 120,
     "createdAt": "2024-01-01T00:00:00Z",
-    "updatedAt": "2024-01-01T00:00:00Z"
+    "updatedAt": "2024-01-01T00:00:00Z",
+    "mp3StoragePath": "03_Studio_Minus_One_Tracks/120_Nee_preme_naku_chalayya_Track.mp3",
+    "mp3FileName": "120_Nee_preme_naku_chalayya_Track.mp3"
   },
   {
     "id": "tp-track-121",
@@ -3374,7 +3614,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 9900,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/Maruvalenayya%20Track/Ninduga%20naa%20gundalo%20Track.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/03_Studio_Minus_One_Tracks/121_Ninduga_naa_gundalo_Track.mp3",
     "coverImage": "/covers/track_Maruvalenayya_Track_Ninduga_naa_gundalo_Track.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -3385,7 +3625,9 @@
     "lyricsEnglish": "Ninduga naa gundalo Track - Official Sacred Backing Track / Minus-One Recording by Rev. Tony Prakash.",
     "orderIndex": 121,
     "createdAt": "2024-01-01T00:00:00Z",
-    "updatedAt": "2024-01-01T00:00:00Z"
+    "updatedAt": "2024-01-01T00:00:00Z",
+    "mp3StoragePath": "03_Studio_Minus_One_Tracks/121_Ninduga_naa_gundalo_Track.mp3",
+    "mp3FileName": "121_Ninduga_naa_gundalo_Track.mp3"
   },
   {
     "id": "tp-track-122",
@@ -3402,7 +3644,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 9900,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/Maruvalenayya%20Track/Ninnu%20marichi%20Track.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/03_Studio_Minus_One_Tracks/122_Ninnu_marichi_Track.mp3",
     "coverImage": "/covers/track_Maruvalenayya_Track_Ninnu_marichi_Track.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -3413,7 +3655,9 @@
     "lyricsEnglish": "Ninnu marichi Track - Official Sacred Backing Track / Minus-One Recording by Rev. Tony Prakash.",
     "orderIndex": 122,
     "createdAt": "2024-01-01T00:00:00Z",
-    "updatedAt": "2024-01-01T00:00:00Z"
+    "updatedAt": "2024-01-01T00:00:00Z",
+    "mp3StoragePath": "03_Studio_Minus_One_Tracks/122_Ninnu_marichi_Track.mp3",
+    "mp3FileName": "122_Ninnu_marichi_Track.mp3"
   },
   {
     "id": "tp-track-123",
@@ -3430,7 +3674,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 9900,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/Maruvalenayya%20Track/Palletori%20Thammuda%20Track.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/03_Studio_Minus_One_Tracks/123_Palletori_Thammuda_Track.mp3",
     "coverImage": "/covers/track_Maruvalenayya_Track_Palletori_Thammuda_Track.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -3441,7 +3685,9 @@
     "lyricsEnglish": "Palletori Thammuda Track - Official Sacred Backing Track / Minus-One Recording by Rev. Tony Prakash.",
     "orderIndex": 123,
     "createdAt": "2024-01-01T00:00:00Z",
-    "updatedAt": "2024-01-01T00:00:00Z"
+    "updatedAt": "2024-01-01T00:00:00Z",
+    "mp3StoragePath": "03_Studio_Minus_One_Tracks/123_Palletori_Thammuda_Track.mp3",
+    "mp3FileName": "123_Palletori_Thammuda_Track.mp3"
   },
   {
     "id": "tp-track-124",
@@ -3458,7 +3704,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 9900,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/Maruvalenayya%20Track/Pavurama%20Track.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/03_Studio_Minus_One_Tracks/124_Pavurama_Track.mp3",
     "coverImage": "/covers/track_Maruvalenayya_Track_Pavurama_Track.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -3469,7 +3715,9 @@
     "lyricsEnglish": "Pavurama Track - Official Sacred Backing Track / Minus-One Recording by Rev. Tony Prakash.",
     "orderIndex": 124,
     "createdAt": "2024-01-01T00:00:00Z",
-    "updatedAt": "2024-01-01T00:00:00Z"
+    "updatedAt": "2024-01-01T00:00:00Z",
+    "mp3StoragePath": "03_Studio_Minus_One_Tracks/124_Pavurama_Track.mp3",
+    "mp3FileName": "124_Pavurama_Track.mp3"
   },
   {
     "id": "tp-track-125",
@@ -3486,7 +3734,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 9900,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/tony%202024/%E0%B0%A8%E0%B1%82%E0%B0%A4%E0%B0%A8%E0%B0%AE%E0%B1%88%E0%B0%A8%E0%B0%A6%E0%B0%BF_%E0%B0%A8%E0%B1%80_%E0%B0%B5%E0%B0%BE%E0%B0%A4%E0%B1%8D%E0%B0%B8%E0%B0%B2%E0%B1%8D%E0%B0%AF%E0%B0%AE%E0%B1%81____Song_Track(256k).wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/03_Studio_Minus_One_Tracks/125_Nuthanamainadhi_Nee_Vathsalyamu_Song_Track.mp3",
     "coverImage": "/covers/071_kottolonaina.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -3497,7 +3745,9 @@
     "lyricsEnglish": "నూతనమైనది నీ వాత్సల్యము    Song Track(256k) - Official Sacred Backing Track / Minus-One Recording by Rev. Tony Prakash.",
     "orderIndex": 125,
     "createdAt": "2024-01-01T00:00:00Z",
-    "updatedAt": "2024-01-01T00:00:00Z"
+    "updatedAt": "2024-01-01T00:00:00Z",
+    "mp3StoragePath": "03_Studio_Minus_One_Tracks/125_Nuthanamainadhi_Nee_Vathsalyamu_Song_Track.mp3",
+    "mp3FileName": "125_Nuthanamainadhi_Nee_Vathsalyamu_Song_Track.mp3"
   },
   {
     "id": "tp-album-na-asha-1",
@@ -3513,7 +3763,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/na%20asha/01_Intro.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/02_Albums/Naa_Aasha/126_Intro.mp3",
     "coverImage": "/covers/track_5_Asha_asha_track.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -3525,7 +3775,9 @@
     "orderIndex": 126,
     "createdAt": "2023-03-10T00:00:00Z",
     "updatedAt": "2024-01-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "02_Albums/Naa_Aasha/126_Intro.mp3",
+    "mp3FileName": "126_Intro.mp3"
   },
   {
     "id": "tp-album-na-asha-2",
@@ -3541,7 +3793,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/na%20asha/02_Asha_Asha.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/02_Albums/Naa_Aasha/127_Asha_Asha.mp3",
     "coverImage": "/covers/track_5_Asha_asha_track.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -3553,7 +3805,9 @@
     "orderIndex": 127,
     "createdAt": "2023-03-10T00:00:00Z",
     "updatedAt": "2024-01-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "02_Albums/Naa_Aasha/127_Asha_Asha.mp3",
+    "mp3FileName": "127_Asha_Asha.mp3"
   },
   {
     "id": "tp-album-na-asha-3",
@@ -3569,7 +3823,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/na%20asha/03_Andharu_Nannu_Vidichina.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/02_Albums/Naa_Aasha/128_Andharu_Nannu_Vidichina.mp3",
     "coverImage": "/covers/track_5_Asha_asha_track.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -3581,7 +3835,9 @@
     "orderIndex": 128,
     "createdAt": "2023-03-10T00:00:00Z",
     "updatedAt": "2024-01-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "02_Albums/Naa_Aasha/128_Andharu_Nannu_Vidichina.mp3",
+    "mp3FileName": "128_Andharu_Nannu_Vidichina.mp3"
   },
   {
     "id": "tp-album-na-asha-4",
@@ -3597,7 +3853,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/na%20asha/04_Maruvalenu_Yesayya.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/02_Albums/Naa_Aasha/129_Maruvalenu_Yesayya.mp3",
     "coverImage": "/covers/track_5_Asha_asha_track.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -3609,7 +3865,9 @@
     "orderIndex": 129,
     "createdAt": "2023-03-10T00:00:00Z",
     "updatedAt": "2024-01-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "02_Albums/Naa_Aasha/129_Maruvalenu_Yesayya.mp3",
+    "mp3FileName": "129_Maruvalenu_Yesayya.mp3"
   },
   {
     "id": "tp-album-na-asha-5",
@@ -3625,7 +3883,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/na%20asha/05_Yesaiah_Naaku_Oka_Asha.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/02_Albums/Naa_Aasha/130_Yesaiah_Naaku_Oka_Asha.mp3",
     "coverImage": "/covers/track_5_Asha_asha_track.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -3637,7 +3895,9 @@
     "orderIndex": 130,
     "createdAt": "2023-03-10T00:00:00Z",
     "updatedAt": "2024-01-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "02_Albums/Naa_Aasha/130_Yesaiah_Naaku_Oka_Asha.mp3",
+    "mp3FileName": "130_Yesaiah_Naaku_Oka_Asha.mp3"
   },
   {
     "id": "tp-album-na-asha-6",
@@ -3653,7 +3913,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/na%20asha/06_Devadhi_Deva.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/02_Albums/Naa_Aasha/131_Devadhi_Deva.mp3",
     "coverImage": "/covers/track_5_Asha_asha_track.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -3665,7 +3925,9 @@
     "orderIndex": 131,
     "createdAt": "2023-03-10T00:00:00Z",
     "updatedAt": "2024-01-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "02_Albums/Naa_Aasha/131_Devadhi_Deva.mp3",
+    "mp3FileName": "131_Devadhi_Deva.mp3"
   },
   {
     "id": "tp-album-na-asha-7",
@@ -3681,7 +3943,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/na%20asha/07_Aradhinthunu.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/02_Albums/Naa_Aasha/132_Aradhinthunu.mp3",
     "coverImage": "/covers/track_5_Asha_asha_track.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -3693,7 +3955,9 @@
     "orderIndex": 132,
     "createdAt": "2023-03-10T00:00:00Z",
     "updatedAt": "2024-01-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "02_Albums/Naa_Aasha/132_Aradhinthunu.mp3",
+    "mp3FileName": "132_Aradhinthunu.mp3"
   },
   {
     "id": "tp-album-na-asha-8",
@@ -3709,7 +3973,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/na%20asha/08_Naa_Ganamu.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/02_Albums/Naa_Aasha/133_Naa_Ganamu_Neeve.mp3",
     "coverImage": "/covers/track_5_Asha_asha_track.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -3721,7 +3985,9 @@
     "orderIndex": 133,
     "createdAt": "2023-03-10T00:00:00Z",
     "updatedAt": "2024-01-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "02_Albums/Naa_Aasha/133_Naa_Ganamu_Neeve.mp3",
+    "mp3FileName": "133_Naa_Ganamu_Neeve.mp3"
   },
   {
     "id": "tp-album-na-asha-9",
@@ -3737,7 +4003,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/na%20asha/09_Oo_Nesthama.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/02_Albums/Naa_Aasha/134_Oo_Nesthama.mp3",
     "coverImage": "/covers/track_5_Asha_asha_track.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -3749,7 +4015,9 @@
     "orderIndex": 134,
     "createdAt": "2023-03-10T00:00:00Z",
     "updatedAt": "2024-01-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "02_Albums/Naa_Aasha/134_Oo_Nesthama.mp3",
+    "mp3FileName": "134_Oo_Nesthama.mp3"
   },
   {
     "id": "tp-album-na-asha-10",
@@ -3765,7 +4033,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/na%20asha/10_Chatudham_Yesu_Premanu.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/02_Albums/Naa_Aasha/135_Chatudham_Yesu_Premanu.mp3",
     "coverImage": "/covers/track_5_Asha_asha_track.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -3777,7 +4045,9 @@
     "orderIndex": 135,
     "createdAt": "2023-03-10T00:00:00Z",
     "updatedAt": "2024-01-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "02_Albums/Naa_Aasha/135_Chatudham_Yesu_Premanu.mp3",
+    "mp3FileName": "135_Chatudham_Yesu_Premanu.mp3"
   },
   {
     "id": "tp-album-nee-sannidhi-1",
@@ -3793,7 +4063,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/nee%20sannidhi/01_Prayer.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/02_Albums/Nee_Sannidhi/136_Prayer.mp3",
     "coverImage": "/covers/album_nee_sannidhi.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -3805,7 +4075,9 @@
     "orderIndex": 136,
     "createdAt": "2024-02-15T00:00:00Z",
     "updatedAt": "2024-02-15T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "02_Albums/Nee_Sannidhi/136_Prayer.mp3",
+    "mp3FileName": "136_Prayer.mp3"
   },
   {
     "id": "tp-album-nee-sannidhi-2",
@@ -3821,7 +4093,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/nee%20sannidhi/02_Prabhuva_Nee_Sannidhilo.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/02_Albums/Nee_Sannidhi/137_Prabhuva_Nee_Sannidhilo.mp3",
     "coverImage": "/covers/album_nee_sannidhi.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -3833,7 +4105,9 @@
     "orderIndex": 137,
     "createdAt": "2024-02-15T00:00:00Z",
     "updatedAt": "2024-02-15T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "02_Albums/Nee_Sannidhi/137_Prabhuva_Nee_Sannidhilo.mp3",
+    "mp3FileName": "137_Prabhuva_Nee_Sannidhilo.mp3"
   },
   {
     "id": "tp-album-nee-sannidhi-3",
@@ -3849,7 +4123,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/nee%20sannidhi/03_Tharatharalalo.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/02_Albums/Nee_Sannidhi/138_Tharatharalalo.mp3",
     "coverImage": "/covers/album_nee_sannidhi.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -3861,7 +4135,9 @@
     "orderIndex": 138,
     "createdAt": "2024-02-15T00:00:00Z",
     "updatedAt": "2024-02-15T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "02_Albums/Nee_Sannidhi/138_Tharatharalalo.mp3",
+    "mp3FileName": "138_Tharatharalalo.mp3"
   },
   {
     "id": "tp-album-nee-sannidhi-4",
@@ -3877,7 +4153,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/nee%20sannidhi/04_Priyamaina_Yesu.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/02_Albums/Nee_Sannidhi/139_Priyamaina_Yesu.mp3",
     "coverImage": "/covers/album_nee_sannidhi.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -3889,7 +4165,9 @@
     "orderIndex": 139,
     "createdAt": "2024-02-15T00:00:00Z",
     "updatedAt": "2024-02-15T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "02_Albums/Nee_Sannidhi/139_Priyamaina_Yesu.mp3",
+    "mp3FileName": "139_Priyamaina_Yesu.mp3"
   },
   {
     "id": "tp-album-nee-sannidhi-5",
@@ -3905,7 +4183,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/nee%20sannidhi/05_Parama_Vaidhyuda.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/02_Albums/Nee_Sannidhi/140_Parama_Vaidhyuda.mp3",
     "coverImage": "/covers/album_nee_sannidhi.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -3917,7 +4195,9 @@
     "orderIndex": 140,
     "createdAt": "2024-02-15T00:00:00Z",
     "updatedAt": "2024-02-15T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "02_Albums/Nee_Sannidhi/140_Parama_Vaidhyuda.mp3",
+    "mp3FileName": "140_Parama_Vaidhyuda.mp3"
   },
   {
     "id": "tp-album-nee-sannidhi-6",
@@ -3933,7 +4213,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/nee%20sannidhi/06_Yesu_Prema_Kanna.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/02_Albums/Nee_Sannidhi/141_Yesu_Prema_Kanna.mp3",
     "coverImage": "/covers/album_nee_sannidhi.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -3945,7 +4225,9 @@
     "orderIndex": 141,
     "createdAt": "2024-02-15T00:00:00Z",
     "updatedAt": "2024-02-15T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "02_Albums/Nee_Sannidhi/141_Yesu_Prema_Kanna.mp3",
+    "mp3FileName": "141_Yesu_Prema_Kanna.mp3"
   },
   {
     "id": "tp-album-nee-sannidhi-7",
@@ -3961,7 +4243,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/nee%20sannidhi/07_Repu_Maapu.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/02_Albums/Nee_Sannidhi/142_Repu_Maapu.mp3",
     "coverImage": "/covers/album_nee_sannidhi.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -3973,7 +4255,9 @@
     "orderIndex": 142,
     "createdAt": "2024-02-15T00:00:00Z",
     "updatedAt": "2024-02-15T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "02_Albums/Nee_Sannidhi/142_Repu_Maapu.mp3",
+    "mp3FileName": "142_Repu_Maapu.mp3"
   },
   {
     "id": "tp-album-nee-sannidhi-8",
@@ -3989,7 +4273,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/nee%20sannidhi/08_Nee_Krupa_Chalunu.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/02_Albums/Nee_Sannidhi/143_Nee_Krupa_Chalunu.mp3",
     "coverImage": "/covers/album_nee_sannidhi.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -4001,7 +4285,9 @@
     "orderIndex": 143,
     "createdAt": "2024-02-15T00:00:00Z",
     "updatedAt": "2024-02-15T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "02_Albums/Nee_Sannidhi/143_Nee_Krupa_Chalunu.mp3",
+    "mp3FileName": "143_Nee_Krupa_Chalunu.mp3"
   },
   {
     "id": "tp-album-nee-sannidhi-9",
@@ -4017,7 +4303,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/nee%20sannidhi/09_Naakunna_Madhura_Swaram.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/02_Albums/Nee_Sannidhi/144_Naakunna_Madhura_Swaram.mp3",
     "coverImage": "/covers/album_nee_sannidhi.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -4029,7 +4315,9 @@
     "orderIndex": 144,
     "createdAt": "2024-02-15T00:00:00Z",
     "updatedAt": "2024-02-15T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "02_Albums/Nee_Sannidhi/144_Naakunna_Madhura_Swaram.mp3",
+    "mp3FileName": "144_Naakunna_Madhura_Swaram.mp3"
   },
   {
     "id": "tp-album-nee-sannidhi-10",
@@ -4045,7 +4333,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/nee%20sannidhi/10_Manohara.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/02_Albums/Nee_Sannidhi/145_Manohara.mp3",
     "coverImage": "/covers/album_nee_sannidhi.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -4057,7 +4345,9 @@
     "orderIndex": 145,
     "createdAt": "2024-02-15T00:00:00Z",
     "updatedAt": "2024-02-15T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "02_Albums/Nee_Sannidhi/145_Manohara.mp3",
+    "mp3FileName": "145_Manohara.mp3"
   },
   {
     "id": "tp-hit-song-1",
@@ -4073,7 +4363,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/tonyprakash%20song/064_yesuva_naa_kristhu.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/01_Devotional_Songs/146_Yesuva_Naa_Kristhu.mp3",
     "coverImage": "/covers/063_naa_parisudhra.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -4085,7 +4375,9 @@
     "orderIndex": 146,
     "createdAt": "2024-03-01T00:00:00Z",
     "updatedAt": "2024-03-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "01_Devotional_Songs/146_Yesuva_Naa_Kristhu.mp3",
+    "mp3FileName": "146_Yesuva_Naa_Kristhu.mp3"
   },
   {
     "id": "tp-hit-song-2",
@@ -4101,7 +4393,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/tonyprakash%20song/065_OO_YESAIYA_F.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/01_Devotional_Songs/147_Oo_Yesaiya.mp3",
     "coverImage": "/covers/067_o_yesaiya.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -4113,7 +4405,9 @@
     "orderIndex": 147,
     "createdAt": "2024-03-01T00:00:00Z",
     "updatedAt": "2024-03-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "01_Devotional_Songs/147_Oo_Yesaiya.mp3",
+    "mp3FileName": "147_Oo_Yesaiya.mp3"
   },
   {
     "id": "tp-hit-song-3",
@@ -4129,7 +4423,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/tonyprakash%20song/066_poraattam.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/01_Devotional_Songs/148_Poraattam.mp3",
     "coverImage": "/covers/010_Jayashali.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -4141,7 +4435,9 @@
     "orderIndex": 148,
     "createdAt": "2024-03-01T00:00:00Z",
     "updatedAt": "2024-03-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "01_Devotional_Songs/148_Poraattam.mp3",
+    "mp3FileName": "148_Poraattam.mp3"
   },
   {
     "id": "tp-hit-song-4",
@@ -4157,7 +4453,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/tonyprakash%20song/072_prayer_vocal.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/01_Devotional_Songs/149_Aradhana_Prayer.mp3",
     "coverImage": "/covers/001_prayermp3.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -4169,7 +4465,9 @@
     "orderIndex": 149,
     "createdAt": "2024-03-01T00:00:00Z",
     "updatedAt": "2024-03-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "01_Devotional_Songs/149_Aradhana_Prayer.mp3",
+    "mp3FileName": "149_Aradhana_Prayer.mp3"
   },
   {
     "id": "tp-hit-song-5",
@@ -4185,7 +4483,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/tonyprakash%20song/073_sthuthulaku_vocal.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/01_Devotional_Songs/150_Sthuthulaku_Paathruda.mp3",
     "coverImage": "/covers/002_Nee_Prema_Naaku_Chalu.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -4197,7 +4495,9 @@
     "orderIndex": 150,
     "createdAt": "2024-03-01T00:00:00Z",
     "updatedAt": "2024-03-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "01_Devotional_Songs/150_Sthuthulaku_Paathruda.mp3",
+    "mp3FileName": "150_Sthuthulaku_Paathruda.mp3"
   },
   {
     "id": "tp-hit-song-6",
@@ -4213,7 +4513,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/tonyprakash%20song/074_neetho_undipo_vocal.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/01_Devotional_Songs/151_Neetho_Undipo.mp3",
     "coverImage": "/covers/002_Nee_Prema_Naaku_Chalu.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -4225,7 +4525,9 @@
     "orderIndex": 151,
     "createdAt": "2024-03-01T00:00:00Z",
     "updatedAt": "2024-03-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "01_Devotional_Songs/151_Neetho_Undipo.mp3",
+    "mp3FileName": "151_Neetho_Undipo.mp3"
   },
   {
     "id": "tp-hit-song-7",
@@ -4241,7 +4543,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/tonyprakash%20song/075_nee_mandhiramulo.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/01_Devotional_Songs/152_Nee_Mandhiramulo.mp3",
     "coverImage": "/covers/018_Nee_Krupa.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -4253,7 +4555,9 @@
     "orderIndex": 152,
     "createdAt": "2024-03-01T00:00:00Z",
     "updatedAt": "2024-03-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "01_Devotional_Songs/152_Nee_Mandhiramulo.mp3",
+    "mp3FileName": "152_Nee_Mandhiramulo.mp3"
   },
   {
     "id": "tp-hit-song-8",
@@ -4269,7 +4573,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/tonyprakash%20song/076_neethone_ne_nadavalani.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/01_Devotional_Songs/153_Neethone_Ne_Nadavalani.mp3",
     "coverImage": "/covers/026_Neeve_Naa_Aradhana.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -4281,7 +4585,9 @@
     "orderIndex": 153,
     "createdAt": "2024-03-01T00:00:00Z",
     "updatedAt": "2024-03-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "01_Devotional_Songs/153_Neethone_Ne_Nadavalani.mp3",
+    "mp3FileName": "153_Neethone_Ne_Nadavalani.mp3"
   },
   {
     "id": "tp-hit-song-9",
@@ -4297,7 +4603,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/tonyprakash%20song/077_hrudhayama.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/01_Devotional_Songs/154_Hrudhayama.mp3",
     "coverImage": "/covers/003_Ninduga_Naa_Gundelo.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -4309,7 +4615,9 @@
     "orderIndex": 154,
     "createdAt": "2024-03-01T00:00:00Z",
     "updatedAt": "2024-03-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "01_Devotional_Songs/154_Hrudhayama.mp3",
+    "mp3FileName": "154_Hrudhayama.mp3"
   },
   {
     "id": "tp-hit-song-10",
@@ -4325,7 +4633,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/tonyprakash%20song/078_mosapokudi.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/01_Devotional_Songs/155_Mosa_Pokudi.mp3",
     "coverImage": "/covers/009_Nyayama_Dharmama.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -4337,7 +4645,9 @@
     "orderIndex": 155,
     "createdAt": "2024-03-01T00:00:00Z",
     "updatedAt": "2024-03-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "01_Devotional_Songs/155_Mosa_Pokudi.mp3",
+    "mp3FileName": "155_Mosa_Pokudi.mp3"
   },
   {
     "id": "tp-hit-song-11",
@@ -4353,7 +4663,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/tonyprakash%20song/079_kroththa_paata.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/01_Devotional_Songs/156_Kroththa_Paata.mp3",
     "coverImage": "/covers/022_Sthuthi_Padedono.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -4365,7 +4675,9 @@
     "orderIndex": 156,
     "createdAt": "2024-03-01T00:00:00Z",
     "updatedAt": "2024-03-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "01_Devotional_Songs/156_Kroththa_Paata.mp3",
+    "mp3FileName": "156_Kroththa_Paata.mp3"
   },
   {
     "id": "tp-hit-song-12",
@@ -4381,7 +4693,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/tonyprakash%20song/080_nee_krupa.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/01_Devotional_Songs/157_Nee_Krupa_Leni_Kshanamu.mp3",
     "coverImage": "/covers/018_Nee_Krupa.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -4393,7 +4705,9 @@
     "orderIndex": 157,
     "createdAt": "2024-03-01T00:00:00Z",
     "updatedAt": "2024-03-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "01_Devotional_Songs/157_Nee_Krupa_Leni_Kshanamu.mp3",
+    "mp3FileName": "157_Nee_Krupa_Leni_Kshanamu.mp3"
   },
   {
     "id": "tp-hit-song-13",
@@ -4409,7 +4723,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/tonyprakash%20song/081_rende_rendu.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/01_Devotional_Songs/158_Rende_Rendu_Margamulu.mp3",
     "coverImage": "/covers/016_Manishi_Brathuku.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -4421,7 +4735,9 @@
     "orderIndex": 158,
     "createdAt": "2024-03-01T00:00:00Z",
     "updatedAt": "2024-03-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "01_Devotional_Songs/158_Rende_Rendu_Margamulu.mp3",
+    "mp3FileName": "158_Rende_Rendu_Margamulu.mp3"
   },
   {
     "id": "tp-hit-song-14",
@@ -4437,7 +4753,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/tonyprakash%20song/082_naa_paataku.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/01_Devotional_Songs/159_Naa_Paataku_Pallavi.mp3",
     "coverImage": "/covers/021_Naa_Manchi.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -4449,7 +4765,9 @@
     "orderIndex": 159,
     "createdAt": "2024-03-01T00:00:00Z",
     "updatedAt": "2024-03-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "01_Devotional_Songs/159_Naa_Paataku_Pallavi.mp3",
+    "mp3FileName": "159_Naa_Paataku_Pallavi.mp3"
   },
   {
     "id": "tp-hit-song-15",
@@ -4465,7 +4783,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/tonyprakash%20song/083_neetho_undiponi.wav",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/01_Devotional_Songs/160_Neetho_Undiponi.mp3",
     "coverImage": "/covers/002_Nee_Prema_Naaku_Chalu.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -4477,7 +4795,9 @@
     "orderIndex": 160,
     "createdAt": "2024-03-01T00:00:00Z",
     "updatedAt": "2024-03-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "01_Devotional_Songs/160_Neetho_Undiponi.mp3",
+    "mp3FileName": "160_Neetho_Undiponi.mp3"
   },
   {
     "id": "tp-album-neetho-1",
@@ -4493,7 +4813,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/Neetho/01%20Prayer.mp3",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/02_Albums/Neetho/161_Prayer.mp3",
     "coverImage": "/covers/album_neetho.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -4505,7 +4825,9 @@
     "orderIndex": 146,
     "createdAt": "2024-08-01T00:00:00Z",
     "updatedAt": "2024-08-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "02_Albums/Neetho/161_Prayer.mp3",
+    "mp3FileName": "161_Prayer.mp3"
   },
   {
     "id": "tp-album-neetho-2",
@@ -4521,7 +4843,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/Neetho/02%20Sthuthulaku%20Paathruda.mp3",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/02_Albums/Neetho/162_Sthuthulaku_Paathruda.mp3",
     "coverImage": "/covers/album_neetho.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -4533,7 +4855,9 @@
     "orderIndex": 147,
     "createdAt": "2024-08-01T00:00:00Z",
     "updatedAt": "2024-08-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "02_Albums/Neetho/162_Sthuthulaku_Paathruda.mp3",
+    "mp3FileName": "162_Sthuthulaku_Paathruda.mp3"
   },
   {
     "id": "tp-album-neetho-3",
@@ -4549,7 +4873,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/Neetho/03%20Neetho%20Undiponi.mp3",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/02_Albums/Neetho/163_Neetho_Undiponi.mp3",
     "coverImage": "/covers/album_neetho.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -4561,7 +4885,9 @@
     "orderIndex": 148,
     "createdAt": "2024-08-01T00:00:00Z",
     "updatedAt": "2024-08-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "02_Albums/Neetho/163_Neetho_Undiponi.mp3",
+    "mp3FileName": "163_Neetho_Undiponi.mp3"
   },
   {
     "id": "tp-album-neetho-4",
@@ -4577,7 +4903,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/Neetho/04%20Nee%20Mandhiramulo.mp3",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/02_Albums/Neetho/164_Nee_Mandhiramulo.mp3",
     "coverImage": "/covers/album_neetho.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -4589,7 +4915,9 @@
     "orderIndex": 149,
     "createdAt": "2024-08-01T00:00:00Z",
     "updatedAt": "2024-08-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "02_Albums/Neetho/164_Nee_Mandhiramulo.mp3",
+    "mp3FileName": "164_Nee_Mandhiramulo.mp3"
   },
   {
     "id": "tp-album-neetho-5",
@@ -4605,7 +4933,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/Neetho/05%20Neethone%20Ne%20Nadavalani.mp3",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/02_Albums/Neetho/165_Neethone_Ne_Nadavalani.mp3",
     "coverImage": "/covers/album_neetho.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -4617,7 +4945,9 @@
     "orderIndex": 150,
     "createdAt": "2024-08-01T00:00:00Z",
     "updatedAt": "2024-08-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "02_Albums/Neetho/165_Neethone_Ne_Nadavalani.mp3",
+    "mp3FileName": "165_Neethone_Ne_Nadavalani.mp3"
   },
   {
     "id": "tp-album-neetho-6",
@@ -4633,7 +4963,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/Neetho/06%20Hrudhayama.mp3",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/02_Albums/Neetho/166_Hrudhayama.mp3",
     "coverImage": "/covers/album_neetho.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -4645,7 +4975,9 @@
     "orderIndex": 151,
     "createdAt": "2024-08-01T00:00:00Z",
     "updatedAt": "2024-08-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "02_Albums/Neetho/166_Hrudhayama.mp3",
+    "mp3FileName": "166_Hrudhayama.mp3"
   },
   {
     "id": "tp-album-neetho-7",
@@ -4661,7 +4993,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/Neetho/07%20Mosapokudi.mp3",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/02_Albums/Neetho/167_Mosapokudi.mp3",
     "coverImage": "/covers/album_neetho.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -4673,7 +5005,9 @@
     "orderIndex": 152,
     "createdAt": "2024-08-01T00:00:00Z",
     "updatedAt": "2024-08-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "02_Albums/Neetho/167_Mosapokudi.mp3",
+    "mp3FileName": "167_Mosapokudi.mp3"
   },
   {
     "id": "tp-album-neetho-8",
@@ -4689,7 +5023,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/Neetho/08%20Krottha%20Paata.mp3",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/02_Albums/Neetho/168_Krottha_Paata.mp3",
     "coverImage": "/covers/album_neetho.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -4701,7 +5035,9 @@
     "orderIndex": 153,
     "createdAt": "2024-08-01T00:00:00Z",
     "updatedAt": "2024-08-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "02_Albums/Neetho/168_Krottha_Paata.mp3",
+    "mp3FileName": "168_Krottha_Paata.mp3"
   },
   {
     "id": "tp-album-neetho-9",
@@ -4717,7 +5053,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/Neetho/09%20Nee%20Krupa.mp3",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/02_Albums/Neetho/169_Nee_Krupa.mp3",
     "coverImage": "/covers/album_neetho.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -4729,7 +5065,9 @@
     "orderIndex": 154,
     "createdAt": "2024-08-01T00:00:00Z",
     "updatedAt": "2024-08-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "02_Albums/Neetho/169_Nee_Krupa.mp3",
+    "mp3FileName": "169_Nee_Krupa.mp3"
   },
   {
     "id": "tp-album-neetho-10",
@@ -4745,7 +5083,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/Neetho/10%20Rende%20Rendu.mp3",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/02_Albums/Neetho/170_Rende_Rendu.mp3",
     "coverImage": "/covers/album_neetho.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -4757,7 +5095,9 @@
     "orderIndex": 155,
     "createdAt": "2024-08-01T00:00:00Z",
     "updatedAt": "2024-08-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "02_Albums/Neetho/170_Rende_Rendu.mp3",
+    "mp3FileName": "170_Rende_Rendu.mp3"
   },
   {
     "id": "tp-album-neetho-11",
@@ -4773,7 +5113,7 @@
     "isDownloadable": true,
     "downloadPricePaise": 0,
     "rightsConfirmed": true,
-    "audioUrl": "/api/audio/Neetho/11%20Neeve%20Naa%20Paataku.mp3",
+    "audioUrl": "https://mrehomunxqccvcwpkwxd.supabase.co/storage/v1/object/public/songs/02_Albums/Neetho/171_Neeve_Naa_Paataku.mp3",
     "coverImage": "/covers/album_neetho.jpg",
     "composer": "Rev. Tony Prakash",
     "lyricist": "Rev. Tony Prakash",
@@ -4785,6 +5125,8 @@
     "orderIndex": 156,
     "createdAt": "2024-08-01T00:00:00Z",
     "updatedAt": "2024-08-01T00:00:00Z",
-    "isTrack": false
+    "isTrack": false,
+    "mp3StoragePath": "02_Albums/Neetho/171_Neeve_Naa_Paataku.mp3",
+    "mp3FileName": "171_Neeve_Naa_Paataku.mp3"
   }
 ]

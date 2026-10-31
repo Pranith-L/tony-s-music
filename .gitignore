@@ -55,3 +55,8 @@ exact_hero_card_0.jsx
 extracted_hero_section.jsx
 remove_bg*.py
 hero_version_2.txt
+
+# Generated Audio Libraries
+Tony_Prakash_*/
+*.bak
+
