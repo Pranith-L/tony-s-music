@@ -289,6 +289,32 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     };
 
     const handleError = (e: any) => {
+      const src = audio.src;
+      // Format auto-negotiation: if .wav failed, seamlessly try .mp3; if .mp3 failed, try .wav
+      if (src && src.includes('.wav') && !src.includes('__alt_format')) {
+        const mp3Src = src.replace('.wav', '.mp3') + (src.includes('?') ? '&' : '?') + '__alt_format=1';
+        console.info('WAV stream unavailable, automatically attempting MP3 alternative:', mp3Src);
+        audio.src = mp3Src;
+        audio.play().then(() => {
+          stopFallbackAudio();
+          setIsPlaying(true);
+        }).catch(() => {
+          startFallbackAudio();
+        });
+        return;
+      }
+      if (src && src.includes('.mp3') && !src.includes('__alt_format')) {
+        const wavSrc = src.replace('.mp3', '.wav') + (src.includes('?') ? '&' : '?') + '__alt_format=1';
+        console.info('MP3 stream unavailable, automatically attempting WAV alternative:', wavSrc);
+        audio.src = wavSrc;
+        audio.play().then(() => {
+          stopFallbackAudio();
+          setIsPlaying(true);
+        }).catch(() => {
+          startFallbackAudio();
+        });
+        return;
+      }
       console.warn('Audio stream fallback activated:', e);
       startFallbackAudio();
     };
