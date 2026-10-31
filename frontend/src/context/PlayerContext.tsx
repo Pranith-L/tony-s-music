@@ -6,6 +6,7 @@ import { TrackPreviewLimitModal } from '../components/modals/TrackPreviewLimitMo
 import { SkipLimitModal } from '../components/modals/SkipLimitModal.js';
 import { SongTheme, extractCoverTheme, applyGlobalSongTheme } from '../utils/themeEngine.js';
 import { devotionalSynthesizer } from '../services/audioSynthesizer.js';
+import { offlineStorage } from '../services/offlineStorage.js';
 
 export type RepeatMode = 'off' | 'all' | 'one';
 export type RightSidebarTab = 'now-playing' | 'queue' | 'lyrics';
@@ -251,7 +252,9 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       (window as any).__tonyAudio = audio;
     }
     if (currentTrack) {
-      audio.src = currentTrack.audioUrl;
+      offlineStorage.getOfflineAudioUrl(currentTrack.id).then((localUrl) => {
+        audio.src = localUrl || currentTrack.audioUrl;
+      });
     }
 
     const handleTimeUpdate = () => {
@@ -346,23 +349,33 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     }
 
     setCurrentTrack(track);
-    audioRef.current.src = track.audioUrl;
-    audioRef.current.volume = isMuted ? 0 : volume;
 
-    // Automatically open Fullscreen Player to showcase the dynamic color changing experience
-    setIsFullscreenPlayer(true);
+    // Prioritize in-app offline cache (like Spotify / Apple Music) before network streaming
+    offlineStorage.getOfflineAudioUrl(track.id).then((offlineUrl) => {
+      if (!audioRef.current) return;
+      if (offlineUrl) {
+        console.info(`[Offline] Playing "${track.titleEnglish}" from in-app storage.`);
+        audioRef.current.src = offlineUrl;
+      } else {
+        audioRef.current.src = track.audioUrl;
+      }
+      audioRef.current.volume = isMuted ? 0 : volume;
 
-    audioRef.current
-      .play()
-      .then(() => {
-        stopFallbackAudio();
-        setIsPlaying(true);
-      })
-      .catch((err) => {
-        console.warn('Audio playback fallback initiated:', err);
-        setIsPlaying(true);
-        startFallbackAudio();
-      });
+      // Automatically open Fullscreen Player to showcase the dynamic color changing experience
+      setIsFullscreenPlayer(true);
+
+      audioRef.current
+        .play()
+        .then(() => {
+          stopFallbackAudio();
+          setIsPlaying(true);
+        })
+        .catch((err) => {
+          console.warn('Audio playback fallback initiated:', err);
+          setIsPlaying(true);
+          startFallbackAudio();
+        });
+    });
   };
 
   const playOrToggleTrack = (track: Track, newQueue?: Track[]) => {

@@ -4,6 +4,7 @@ import { ThemeProvider } from './context/ThemeContext.js';
 import { AuthProvider } from './context/AuthContext.js';
 import { PlayerProvider } from './context/PlayerContext.js';
 import { PlaylistProvider } from './context/PlaylistContext.js';
+import { OfflineProvider } from './context/OfflineContext.js';
 import { MainLayout } from './components/layout/MainLayout.js';
 
 // Pages
@@ -45,29 +46,31 @@ export const App: React.FC = () => {
     <BrowserRouter>
       <ThemeProvider>
         <AuthProvider>
-          <PlayerProvider>
-            <PlaylistProvider>
-              <MainLayout>
-                <Routes>
-                  <Route path="/" element={<Home />} />
-                  <Route path="/music" element={<MusicPage />} />
-                  <Route path="/tracks" element={<TracksPage />} />
-                  <Route path="/library" element={<LibraryPage />} />
-                  <Route path="/albums" element={<AlbumsPage />} />
-                  <Route path="/albums/:slug" element={<AlbumDetailPage />} />
-                  <Route path="/videos" element={<VideosPage />} />
-                  <Route path="/about" element={<AboutPage />} />
-                  <Route path="/bookings" element={<BookingsPage />} />
-                  <Route path="/membership" element={<MembershipPage />} />
-                  <Route path="/payment-return" element={<PaymentReturnPage />} />
-                  <Route path="/account" element={<AccountPage />} />
-                  <Route path="/auth" element={<AuthPage />} />
-                  <Route path="/admin" element={<AdminDashboard />} />
-                  <Route path="*" element={<NotFound />} />
-                </Routes>
-              </MainLayout>
-            </PlaylistProvider>
-          </PlayerProvider>
+          <OfflineProvider>
+            <PlayerProvider>
+              <PlaylistProvider>
+                <MainLayout>
+                  <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/music" element={<MusicPage />} />
+                    <Route path="/tracks" element={<TracksPage />} />
+                    <Route path="/library" element={<LibraryPage />} />
+                    <Route path="/albums" element={<AlbumsPage />} />
+                    <Route path="/albums/:slug" element={<AlbumDetailPage />} />
+                    <Route path="/videos" element={<VideosPage />} />
+                    <Route path="/about" element={<AboutPage />} />
+                    <Route path="/bookings" element={<BookingsPage />} />
+                    <Route path="/membership" element={<MembershipPage />} />
+                    <Route path="/payment-return" element={<PaymentReturnPage />} />
+                    <Route path="/account" element={<AccountPage />} />
+                    <Route path="/auth" element={<AuthPage />} />
+                    <Route path="/admin" element={<AdminDashboard />} />
+                    <Route path="*" element={<NotFound />} />
+                  </Routes>
+                </MainLayout>
+              </PlaylistProvider>
+            </PlayerProvider>
+          </OfflineProvider>
         </AuthProvider>
       </ThemeProvider>
     </BrowserRouter>

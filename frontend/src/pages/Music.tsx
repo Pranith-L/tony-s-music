@@ -25,6 +25,8 @@ import { useAuth } from '../context/AuthContext.js';
 import { LyricsModal } from '../components/LyricsModal.js';
 import { TrackActionMenu } from '../components/layout/TrackActionMenu.js';
 import { SEO } from '../components/SEO.js';
+import { useOffline } from '../context/OfflineContext.js';
+import { DownloadButton } from '../components/DownloadButton.js';
 
 export const MusicPage: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -41,19 +43,10 @@ export const MusicPage: React.FC = () => {
   const { currentTrack, isPlaying, playTrack, playOrToggleTrack, isLiked, toggleLikeTrack, likedTrackIds } =
     usePlayer();
   const { isSubscriber } = useAuth();
+  const { downloadedTrackIds, isDownloaded, downloadTrack } = useOffline();
 
-  const handleDownloadSong = (track: Track) => {
-    if (!isSubscriber) {
-      navigate('/membership');
-      return;
-    }
-    const link = document.createElement('a');
-    link.href = track.audioUrl;
-    const isWav = track.audioUrl.toLowerCase().endsWith('.wav');
-    link.download = `${track.titleEnglish} - Rev. Tony Prakash Devotional.${isWav ? 'wav' : 'mp3'}`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+  const handleDownloadSong = async (track: Track) => {
+    await downloadTrack(track);
   };
 
   const isLikedFilter = searchParams.get('filter') === 'liked';
@@ -93,6 +86,7 @@ export const MusicPage: React.FC = () => {
 
   const categories = [
     { id: 'ALL', en: 'All Devotional Songs (68)', te: 'సమగ్ర కీర్తనలు' },
+    { id: 'DOWNLOADED', en: `Offline Downloaded (${downloadedTrackIds.size})`, te: 'ఆఫ్‌లైన్ పాటలు' },
     { id: 'Worship', en: 'Praise & Worship', te: 'ఆరాధన' },
     { id: 'Devotional', en: 'Devotional Hymns', te: 'కీర్తనలు' },
     { id: 'Praise', en: 'Thanksgiving Praise', te: 'స్తుతి' },
@@ -101,6 +95,8 @@ export const MusicPage: React.FC = () => {
 
   let displayTracks = isLikedFilter
     ? tracks.filter((t) => likedTrackIds.includes(t.id))
+    : activeCategory === 'DOWNLOADED'
+    ? tracks.filter((t) => isDownloaded(t.id))
     : activeCategory !== 'ALL'
     ? tracks.filter((t) => t.category?.toLowerCase() === activeCategory.toLowerCase())
     : tracks;
@@ -403,6 +399,9 @@ export const MusicPage: React.FC = () => {
                       >
                         <Heart className={`w-4 h-4 ${liked ? 'fill-[#FA243C] text-[#FA243C]' : ''}`} />
                       </button>
+
+                      {/* In-App Offline Download Button */}
+                      <DownloadButton track={track} size="sm" />
 
                       {/* Duration */}
                       <span className="font-mono text-xs text-[#86868B] dark:text-[#A1A1AA] font-medium hidden xs:inline-block px-1">

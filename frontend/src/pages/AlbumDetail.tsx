@@ -19,6 +19,8 @@ import { api } from '../services/api.js';
 import { usePlayer } from '../context/PlayerContext.js';
 import { LyricsModal } from '../components/LyricsModal.js';
 import { TrackActionMenu } from '../components/layout/TrackActionMenu.js';
+import { AlbumDownloadButton } from '../components/AlbumDownloadButton.js';
+import { DownloadButton } from '../components/DownloadButton.js';
 
 export const AlbumDetailPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -148,8 +150,8 @@ export const AlbumDetailPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Action Bar (Big Round Play Button, Heart, Share) */}
-      <div className="flex items-center gap-4 py-2">
+      {/* Action Bar (Big Round Play Button, Full Album Download, Heart, Share) */}
+      <div className="flex flex-wrap items-center gap-3 sm:gap-4 py-2">
         <button
           onClick={handlePlayAlbum}
           className="w-14 h-14 rounded-full bg-gradient-to-tr from-[#FC3C44] to-[#FA243C] text-[#FFFFFF] flex items-center justify-center shadow-md border border-[#FA243C]/40 hover:scale-105 active:scale-95 transition-all"
@@ -161,6 +163,9 @@ export const AlbumDetailPage: React.FC = () => {
             <Play className="w-6 h-6 fill-current ml-1" />
           )}
         </button>
+
+        {/* Full Album Offline Download Button */}
+        <AlbumDownloadButton album={album} tracks={tracks} />
 
         <button
           onClick={handleShare}
@@ -238,6 +243,8 @@ export const AlbumDetailPage: React.FC = () => {
                 </div>
 
                 <div className="col-span-2 text-right flex items-center justify-end gap-1.5 sm:gap-2">
+                  <DownloadButton track={track} size="sm" />
+
                   <button
                     onClick={(e) => {
                       e.stopPropagation();

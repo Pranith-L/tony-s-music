@@ -169,7 +169,7 @@ export const AboutPage: React.FC = () => {
                 Invite for Worship Gathering
               </Link>
               <a
-                href="https://www.youtube.com/@RevTonyPrakashOfficial"
+                href="https://www.youtube.com/@TonyPrakashOfficial"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-xs text-[#FA243C] dark:text-[#D4A017] font-semibold hover:underline flex items-center gap-1.5 ml-auto"

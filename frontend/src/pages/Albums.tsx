@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Disc3, Play, ChevronRight, Sparkles } from 'lucide-react';
 import { Album } from '../types/index.js';
 import { api } from '../services/api.js';
+import { AlbumDownloadButton } from '../components/AlbumDownloadButton.js';
 
 export const AlbumsPage: React.FC = () => {
   const [albums, setAlbums] = useState<Album[]>([]);
@@ -80,8 +81,11 @@ export const AlbumsPage: React.FC = () => {
                 </div>
               </div>
 
-              <div className="pt-3 border-t border-[#E5E5EA] flex items-center justify-between text-xs text-[#D4A017] font-semibold">
-                <span>{album._count?.tracks || album.tracks?.length || 4} Songs</span>
+              <div className="pt-3 border-t border-[#E5E5EA] flex items-center justify-between text-xs text-[#D4A017] font-semibold gap-2">
+                <div className="flex items-center gap-2">
+                  <span>{album._count?.tracks || album.tracks?.length || 10} Songs</span>
+                  <AlbumDownloadButton album={album} tracks={album.tracks || []} variant="compact" />
+                </div>
                 <span className="flex items-center gap-1 group-hover:translate-x-1 transition-transform text-[#FA243C]">
                   <span>Listen</span>
                   <ChevronRight className="w-4 h-4" />

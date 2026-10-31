@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { Track } from '../../types/index.js';
 import { usePlayer } from '../../context/PlayerContext.js';
+import { useOffline } from '../../context/OfflineContext.js';
 import { useNavigate } from 'react-router-dom';
 import { AddToPlaylistModal } from '../modals/AddToPlaylistModal.js';
 
@@ -52,10 +53,13 @@ export const TrackActionMenu: React.FC<TrackActionMenuProps> = ({
     isBackingTrack,
     hasTrackAccess,
   } = usePlayer();
+  const { isDownloaded, isDownloading, downloadingTrackIds, downloadTrack, removeDownload } = useOffline();
 
   const liked = isLiked(track.id);
   const isBacking = isBackingTrack(track);
   const unlocked = hasTrackAccess(track);
+  const downloaded = isDownloaded(track.id);
+  const downloading = isDownloading(track.id);
 
   const calculatePosition = () => {
     if (!buttonRef.current) return;
@@ -279,19 +283,37 @@ export const TrackActionMenu: React.FC<TrackActionMenuProps> = ({
                 </button>
               )}
 
-              {/* Option: Download or Purchase */}
+              {/* Option: In-App Offline Download or Purchase */}
               {isBacking ? (
                 unlocked ? (
                   <button
                     type="button"
-                    onClick={() => {
-                      if (onDownload) onDownload(track);
+                    onClick={async () => {
+                      if (downloaded) {
+                        await removeDownload(track.id);
+                      } else {
+                        await downloadTrack(track);
+                      }
                       setIsOpen(false);
                     }}
                     className="w-full px-3.5 py-2 hover:bg-[#FEE2E2]/60 dark:hover:bg-white/10 flex items-center gap-2.5 text-emerald-600 dark:text-emerald-400 font-semibold transition-colors"
                   >
-                    <Download className="w-4 h-4" />
-                    <span>Download Master WAV</span>
+                    {downloaded ? (
+                      <>
+                        <Check className="w-4 h-4 text-emerald-600" />
+                        <span>Downloaded for Offline</span>
+                      </>
+                    ) : downloading ? (
+                      <>
+                        <Download className="w-4 h-4 text-[#FA243C] animate-pulse" />
+                        <span>Downloading ({downloadingTrackIds[track.id]}%)...</span>
+                      </>
+                    ) : (
+                      <>
+                        <Download className="w-4 h-4" />
+                        <span>Download for Offline Play</span>
+                      </>
+                    )}
                   </button>
                 ) : (
                   <button
@@ -313,18 +335,32 @@ export const TrackActionMenu: React.FC<TrackActionMenuProps> = ({
               ) : (
                 <button
                   type="button"
-                  onClick={() => {
-                    if (onDownload) {
-                      onDownload(track);
+                  onClick={async () => {
+                    if (downloaded) {
+                      await removeDownload(track.id);
                     } else {
-                      window.location.href = `/api/download/song/${track.id}`;
+                      await downloadTrack(track);
                     }
                     setIsOpen(false);
                   }}
                   className="w-full px-3.5 py-2 hover:bg-[#FEE2E2]/60 dark:hover:bg-white/10 flex items-center gap-2.5 text-[#1D1D1F] dark:text-zinc-200 transition-colors"
                 >
-                  <Download className="w-4 h-4 text-[#86868B]" />
-                  <span>Download Song Audio</span>
+                  {downloaded ? (
+                    <>
+                      <Check className="w-4 h-4 text-emerald-600" />
+                      <span className="text-emerald-600 font-medium">Downloaded for Offline</span>
+                    </>
+                  ) : downloading ? (
+                    <>
+                      <Download className="w-4 h-4 text-[#FA243C] animate-pulse" />
+                      <span className="text-[#FA243C]">Downloading ({downloadingTrackIds[track.id]}%)...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Download className="w-4 h-4 text-[#86868B]" />
+                      <span>Download for Offline Play</span>
+                    </>
+                  )}
                 </button>
               )}
 

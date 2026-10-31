@@ -4,6 +4,7 @@ import { Track } from '../types/index.js';
 import { usePlayer } from '../context/PlayerContext.js';
 import { useAuth } from '../context/AuthContext.js';
 import { api } from '../services/api.js';
+import { DownloadButton } from './DownloadButton.js';
 
 interface TrackCardProps {
   track: Track;
@@ -133,17 +134,7 @@ export const TrackCard: React.FC<TrackCardProps> = ({ track, onOpenLyrics, index
             సాహిత్యం
           </button>
 
-          {track.isDownloadable && (
-            <button
-              onClick={handleDownload}
-              disabled={downloading}
-              title={isSubscriber ? 'Download track' : 'Download (₹99 or Member)'}
-              className="px-2 py-1 rounded bg-sacred-charcoal/80 hover:text-sacred-gold hover:border-sacred-gold/40 border border-white/5 text-[11px] transition-colors flex items-center gap-1 font-mono"
-            >
-              <Download className="w-3 h-3 text-sacred-gold" />
-              <span>{isSubscriber ? 'MP3' : '₹99'}</span>
-            </button>
-          )}
+          <DownloadButton track={track} size="sm" />
         </div>
       </div>
     </div>

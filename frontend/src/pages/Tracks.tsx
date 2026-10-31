@@ -25,6 +25,8 @@ import { LyricsModal } from '../components/LyricsModal.js';
 import { TrackActionMenu } from '../components/layout/TrackActionMenu.js';
 import { UnifiedCheckoutModal } from '../components/UnifiedCheckoutModal.js';
 import { SEO } from '../components/SEO.js';
+import { useOffline } from '../context/OfflineContext.js';
+import { DownloadButton } from '../components/DownloadButton.js';
 
 export const TracksPage: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -50,6 +52,7 @@ export const TracksPage: React.FC = () => {
     setShowPreviewLimitModal,
     addToQueue,
   } = usePlayer();
+  const { downloadTrack } = useOffline();
 
   const { user, isSubscriber, refreshUser } = useAuth();
 
@@ -136,19 +139,12 @@ export const TracksPage: React.FC = () => {
     }
   };
 
-  const handleDownload = (track: Track) => {
+  const handleDownload = async (track: Track) => {
     if (!hasTrackAccess(track)) {
       setShowPreviewLimitModal(true);
       return;
     }
-    // Direct audio download in studio WAV / master format
-    const link = document.createElement('a');
-    link.href = track.audioUrl;
-    const isWav = track.audioUrl.toLowerCase().endsWith('.wav');
-    link.download = `${track.titleEnglish} - Tony Prakash Backing Track.${isWav ? 'wav' : 'mp3'}`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    await downloadTrack(track);
   };
 
   return (
@@ -339,19 +335,9 @@ export const TracksPage: React.FC = () => {
                       </span>
                     )}
 
-                    {/* Action Button: Download if unlocked, else Buy Track */}
+                    {/* Action Button: In-App Offline Download if unlocked, else Buy Track */}
                     {unlocked ? (
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleDownload(track);
-                        }}
-                        className="hidden sm:flex px-3 py-1.5 rounded-xl text-xs font-semibold bg-[#FA243C] hover:bg-[#FA243C]/90 text-white border border-[#FA243C] transition-all items-center gap-1.5 shadow-sm"
-                        title="Download Studio WAV"
-                      >
-                        <Download className="w-3.5 h-3.5" />
-                        <span className="hidden sm:inline">Download</span>
-                      </button>
+                      <DownloadButton track={track} showText={true} size="sm" className="hidden sm:inline-flex" />
                     ) : (
                       <button
                         onClick={(e) => {

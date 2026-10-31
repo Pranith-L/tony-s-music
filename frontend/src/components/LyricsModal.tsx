@@ -6,6 +6,7 @@ import { usePlayer } from '../context/PlayerContext.js';
 import { useAuth } from '../context/AuthContext.js';
 import { api } from '../services/api.js';
 import { UnifiedCheckoutModal } from './UnifiedCheckoutModal.js';
+import { DownloadButton } from './DownloadButton.js';
 
 interface LyricsModalProps {
   track: Track | null;
@@ -108,16 +109,7 @@ export const LyricsModal: React.FC<LyricsModalProps> = ({ track, onClose }) => {
                 <span>{isThisPlaying ? 'Pause' : 'Play Track'}</span>
               </button>
 
-              {track.isDownloadable && (
-                <button
-                  onClick={handleDownload}
-                  disabled={downloading}
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-[#E5E5EA] text-xs text-[#1D1D1F] hover:bg-[#F2F2F7] transition-colors"
-                >
-                  <Download className="w-3.5 h-3.5" />
-                  <span>Download Audio</span>
-                </button>
-              )}
+              <DownloadButton track={track} showText={true} />
             </div>
           </div>
         </div>

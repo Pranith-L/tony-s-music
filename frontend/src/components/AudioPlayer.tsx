@@ -15,6 +15,7 @@ import {
 import { usePlayer } from '../context/PlayerContext.js';
 import { useAuth } from '../context/AuthContext.js';
 import { api } from '../services/api.js';
+import { DownloadButton } from './DownloadButton.js';
 
 function formatSeconds(secs: number): string {
   if (isNaN(secs) || secs < 0) return '0:00';
@@ -162,18 +163,8 @@ export const AudioPlayer: React.FC = () => {
 
           {/* Right: Master Volume, Queue, Download */}
           <div className="hidden sm:flex items-center gap-3 min-w-0 max-w-[26%] justify-end">
-            {/* Download MP3 */}
-            {currentTrack.isDownloadable && (
-              <button
-                onClick={handleDownload}
-                disabled={downloading}
-                title={isSubscriber ? 'Download Audio' : 'Download track (₹99 or Member)'}
-                className="px-2.5 py-1.5 rounded-lg bg-sacred-charcoal/90 hover:text-sacred-gold border border-white/5 text-[11px] font-mono text-sacred-ivoryMuted transition-colors flex items-center gap-1.5"
-              >
-                <Download className="w-3.5 h-3.5 text-sacred-gold" />
-                <span className="hidden lg:inline">{isSubscriber ? 'MP3' : '₹99'}</span>
-              </button>
-            )}
+            {/* In-App Offline Download Button */}
+            <DownloadButton track={currentTrack} size="sm" />
 
             {/* Volume Control */}
             <div className="flex items-center gap-1.5">
