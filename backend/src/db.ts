@@ -1,44 +1,7 @@
-import { MongoClient, ObjectId } from 'mongodb';
 import { prisma } from './prisma.js';
 import dotenv from 'dotenv';
 
 dotenv.config();
-
-const rawUrl =
-  process.env.MONGODB_URI ||
-  (process.env.DATABASE_URL?.startsWith('mongodb')
-    ? process.env.DATABASE_URL
-    : 'mongodb://127.0.0.1:27017/tony_prakash_music?directConnection=true');
-export const mongoClient = new MongoClient(rawUrl);
-
-let isConnected = false;
-export async function getMongoDb() {
-  if (!isConnected) {
-    try {
-      await mongoClient.connect();
-      isConnected = true;
-    } catch {
-      // Ignore if offline
-    }
-  }
-  return mongoClient.db() || mongoClient.db('tony_prakash_music');
-}
-
-export interface UserDoc {
-  _id?: ObjectId;
-  id?: string;
-  email: string;
-  name: string;
-  passwordHash?: string | null;
-  phone?: string | null;
-  avatar?: string | null;
-  provider?: string;
-  googleId?: string | null;
-  facebookId?: string | null;
-  role: string;
-  createdAt: Date;
-  updatedAt: Date;
-}
 
 export async function findOrCreateGoogleUser(data: {
   email: string;

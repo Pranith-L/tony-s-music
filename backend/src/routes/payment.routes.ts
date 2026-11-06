@@ -389,6 +389,29 @@ router.post('/verify-unified-payment', optionalAuth, async (req: AuthRequest, re
 
       const isPaid = cfOrder.order_status === 'PAID' || Boolean(successfulPayment);
 
+      // Amount & Currency Validation
+      const expectedRupees = transaction.amountPaise / 100;
+      const gatewayRupees = Number(cfOrder.order_amount);
+      if (Math.abs(gatewayRupees - expectedRupees) > 0.01) {
+        await fulfillmentService.failOrder(
+          orderId,
+          `Amount tampering detected: expected ₹${expectedRupees}, received ₹${gatewayRupees}`,
+          cfOrder
+        );
+        res.status(400).json({ success: false, error: 'Payment amount mismatch detected' });
+        return;
+      }
+
+      if (cfOrder.order_currency && cfOrder.order_currency.toUpperCase() !== 'INR') {
+        await fulfillmentService.failOrder(
+          orderId,
+          `Currency mismatch detected: expected INR, received ${cfOrder.order_currency}`,
+          cfOrder
+        );
+        res.status(400).json({ success: false, error: 'Currency mismatch detected' });
+        return;
+      }
+
       if (isPaid) {
         const result = await fulfillmentService.fulfillOrder({
           orderId,
@@ -435,6 +458,19 @@ router.post('/verify-unified-payment', optionalAuth, async (req: AuthRequest, re
       );
 
       const isCompleted = imDetails.status === 'Completed' || Boolean(completedPayment);
+
+      // Amount Validation
+      const expectedRupees = transaction.amountPaise / 100;
+      const gatewayRupees = Number(completedPayment?.amount || imDetails.amount);
+      if (Math.abs(gatewayRupees - expectedRupees) > 0.01) {
+        await fulfillmentService.failOrder(
+          orderId,
+          `Amount tampering detected: expected ₹${expectedRupees}, received ₹${gatewayRupees}`,
+          imDetails
+        );
+        res.status(400).json({ success: false, error: 'Payment amount mismatch detected' });
+        return;
+      }
 
       if (isCompleted) {
         const result = await fulfillmentService.fulfillOrder({
@@ -501,9 +537,13 @@ router.post('/verify-unified-payment', optionalAuth, async (req: AuthRequest, re
     res.status(400).json({ error: 'Unknown gateway' });
   } catch (error: any) {
     console.error('Error verifying payment independently:', error);
-    res.status(500).json({
-      error: 'Payment verification failed',
+    const isTimeout = error?.name === 'TimeoutError' || error?.message?.includes('timeout') || error?.code === 'ETIMEDOUT';
+    res.status(isTimeout ? 504 : 500).json({
+      error: isTimeout
+        ? 'Payment gateway verification timed out. Please wait a moment while the automated webhook processes.'
+        : 'Payment verification failed',
       details: error?.message || String(error),
+      retryable: isTimeout,
     });
   }
 });
@@ -607,14 +647,35 @@ router.post(['/cashfree-webhook', '/cashfree'], async (req, res: Response) => {
           orderData.order_status === 'PAID';
 
         if (isSuccess && orderId) {
-          await fulfillmentService.fulfillOrder({
-            orderId,
-            gateway: 'CASHFREE',
-            gatewayOrderId: String(orderData.cf_order_id || ''),
-            gatewayPaymentId: String(paymentId),
-            paymentMethod: paymentData.payment_group || paymentData.payment_method || 'CASHFREE',
-            rawResponse: payload,
+          const transaction = await prisma.paymentTransaction.findUnique({
+            where: { orderId },
           });
+
+          if (transaction) {
+            // Verify amount & currency
+            const expectedRupees = transaction.amountPaise / 100;
+            const webhookRupees = Number(orderData.order_amount || paymentData.payment_amount);
+            if (webhookRupees && Math.abs(webhookRupees - expectedRupees) > 0.01) {
+              console.error(
+                `Cashfree Webhook rejected: Amount tampering (expected ₹${expectedRupees}, received ₹${webhookRupees})`
+              );
+              await fulfillmentService.failOrder(
+                orderId,
+                `Amount tampering in webhook: expected ₹${expectedRupees}, received ₹${webhookRupees}`,
+                payload
+              );
+              return;
+            }
+
+            await fulfillmentService.fulfillOrder({
+              orderId,
+              gateway: 'CASHFREE',
+              gatewayOrderId: String(orderData.cf_order_id || ''),
+              gatewayPaymentId: String(paymentId),
+              paymentMethod: paymentData.payment_group || paymentData.payment_method || 'CASHFREE',
+              rawResponse: payload,
+            });
+          }
         } else if (orderId && (eventType === 'PAYMENT_FAILED_WEBHOOK' || paymentData.payment_status === 'FAILED')) {
           await fulfillmentService.failOrder(orderId, 'Cashfree payment failed webhook received', payload);
         }
@@ -688,6 +749,21 @@ router.post(['/instamojo-webhook', '/instamojo', '/instamoj'], async (req, res: 
         });
 
         if (transaction && status === 'Credit') {
+          // Verify amount to prevent webhook tampering
+          const expectedRupees = transaction.amountPaise / 100;
+          const webhookRupees = Number(postData.amount);
+          if (webhookRupees && Math.abs(webhookRupees - expectedRupees) > 0.01) {
+            console.error(
+              `Instamojo Webhook rejected: Amount tampering (expected ₹${expectedRupees}, received ₹${webhookRupees})`
+            );
+            await fulfillmentService.failOrder(
+              transaction.orderId,
+              `Amount tampering in webhook: expected ₹${expectedRupees}, received ₹${webhookRupees}`,
+              postData
+            );
+            return;
+          }
+
           await fulfillmentService.fulfillOrder({
             orderId: transaction.orderId,
             gateway: 'INSTAMOJO',
@@ -762,31 +838,107 @@ router.post('/verify-payment', optionalAuth, async (req: AuthRequest, res: Respo
 router.post('/verify-order', authenticateUser, async (req: AuthRequest, res: Response) => {
   const orderId = req.body.razorpay_order_id || req.body.order_id;
   const paymentId = req.body.razorpay_payment_id || req.body.payment_id;
+  const signature = req.body.signature || req.body.razorpay_signature;
+
   if (!orderId) {
     res.status(400).json({ error: 'Order ID is required' });
     return;
   }
-  const result = await fulfillmentService.fulfillOrder({
-    orderId,
-    gateway: 'RAZORPAY',
-    gatewayPaymentId: paymentId || 'manual_verify',
+
+  const transaction = await prisma.paymentTransaction.findUnique({
+    where: { orderId },
+    include: { track: true },
   });
-  res.json(result);
+
+  if (!transaction) {
+    res.status(404).json({ error: 'Order not found in transaction ledger' });
+    return;
+  }
+
+  if (transaction.status === 'SUCCESS') {
+    res.json({
+      success: true,
+      orderId,
+      itemType: transaction.itemType,
+      message: 'Order already fulfilled.',
+      alreadyFulfilled: true,
+      trackTitle: transaction.track?.titleEnglish,
+    });
+    return;
+  }
+
+  // Require legitimate cryptographic verification
+  if (signature && paymentId) {
+    const isValid = verifyRazorpaySignature(orderId, paymentId, signature);
+    if (!isValid) {
+      res.status(400).json({ error: 'Invalid signature', success: false });
+      return;
+    }
+    const result = await fulfillmentService.fulfillOrder({
+      orderId,
+      gateway: 'RAZORPAY',
+      gatewayPaymentId: paymentId,
+    });
+    res.json(result);
+    return;
+  }
+
+  res.status(400).json({
+    error: 'Payment verification failed: valid gateway signature or verification proof is required.',
+    success: false,
+  });
 });
 
 router.post('/verify-subscription', authenticateUser, async (req: AuthRequest, res: Response) => {
   const orderId = req.body.subscriptionId || req.body.razorpay_order_id || req.body.order_id;
   const paymentId = req.body.paymentId || req.body.razorpay_payment_id || req.body.payment_id;
+  const signature = req.body.signature || req.body.razorpay_signature;
+
   if (!orderId) {
     res.status(400).json({ error: 'Order ID is required' });
     return;
   }
-  const result = await fulfillmentService.fulfillOrder({
-    orderId,
-    gateway: 'RAZORPAY',
-    gatewayPaymentId: paymentId || 'manual_verify',
+
+  const transaction = await prisma.paymentTransaction.findUnique({
+    where: { orderId },
   });
-  res.json(result);
+
+  if (!transaction) {
+    res.status(404).json({ error: 'Order not found in transaction ledger' });
+    return;
+  }
+
+  if (transaction.status === 'SUCCESS') {
+    res.json({
+      success: true,
+      orderId,
+      itemType: transaction.itemType,
+      message: 'Subscription already active.',
+      alreadyFulfilled: true,
+    });
+    return;
+  }
+
+  // Require legitimate cryptographic verification
+  if (signature && paymentId) {
+    const isValid = verifyRazorpaySignature(orderId, paymentId, signature);
+    if (!isValid) {
+      res.status(400).json({ error: 'Invalid signature', success: false });
+      return;
+    }
+    const result = await fulfillmentService.fulfillOrder({
+      orderId,
+      gateway: 'RAZORPAY',
+      gatewayPaymentId: paymentId,
+    });
+    res.json(result);
+    return;
+  }
+
+  res.status(400).json({
+    error: 'Subscription verification failed: valid gateway signature or verification proof is required.',
+    success: false,
+  });
 });
 
 export default router;

@@ -1,10 +1,23 @@
 import { User, Track, Album, Video, Booking, AdminStats, Purchase } from '../types/index.js';
 import { MOCK_TRACKS, MOCK_ALBUMS, MOCK_VIDEOS } from './mockData.js';
 
+import { supabase } from '../lib/supabase.js';
+
 const API_BASE = (import.meta as any).env?.VITE_API_URL || '/api';
 
 function getAuthHeaders(): HeadersInit {
-  const token = localStorage.getItem('tony_prakash_token');
+  let token: string | null = null;
+  try {
+    const rawSession = localStorage.getItem('tony_prakash_auth_session');
+    if (rawSession) {
+      const parsed = JSON.parse(rawSession);
+      token = parsed.access_token || parsed.currentSession?.access_token || null;
+    }
+  } catch {}
+  if (!token) {
+    token = localStorage.getItem('tony_prakash_token');
+  }
+
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
   };
@@ -23,81 +36,204 @@ async function handleResponse<T>(res: Response): Promise<T> {
 }
 
 export const api = {
-  // Authentication
+  // Authentication powered by Supabase Auth (14-day persistent sessions)
   auth: {
     async register(data: { name: string; email: string; password: string; phone?: string }) {
-      const res = await fetch(`${API_BASE}/auth/register`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
+      const { data: authData, error } = await supabase.auth.signUp({
+        email: data.email.toLowerCase().trim(),
+        password: data.password,
+        options: {
+          data: {
+            name: data.name.trim(),
+            full_name: data.name.trim(),
+            phone: data.phone?.trim() || null,
+            role: 'USER',
+          },
+        },
       });
-      return handleResponse<{ message: string; user: User; token: string }>(res);
+
+      if (error) throw new Error(error.message);
+
+      const user: User = {
+        id: authData.user?.id || '',
+        email: authData.user?.email || data.email,
+        name: data.name.trim(),
+        phone: data.phone?.trim() || null,
+        role: 'USER',
+        isSubscriberActive: false,
+        activeSubscription: null,
+        purchases: [],
+      };
+
+      return {
+        message: 'Account created successfully',
+        user,
+        token: authData.session?.access_token || '',
+      };
     },
 
     async login(data: { email: string; password: string }) {
-      const res = await fetch(`${API_BASE}/auth/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
+      const { data: authData, error } = await supabase.auth.signInWithPassword({
+        email: data.email.toLowerCase().trim(),
+        password: data.password,
       });
-      return handleResponse<{ message: string; user: User; token: string }>(res);
+
+      if (error) throw new Error(error.message);
+
+      const { data: dbUser } = await supabase
+        .from('User')
+        .select('*, subscriptions:Subscription(*), purchases:Purchase(*)')
+        .eq('id', authData.user.id)
+        .single();
+
+      const user: User = {
+        id: authData.user.id,
+        email: authData.user.email || data.email,
+        name: dbUser?.name || authData.user.user_metadata?.name || 'Listener',
+        phone: dbUser?.phone || null,
+        role: (dbUser?.role || 'USER') as any,
+        isSubscriberActive: dbUser?.subscriptions?.some(
+          (s: any) => s.status === 'ACTIVE' && new Date(s.currentPeriodEnd) > new Date()
+        ),
+        activeSubscription: dbUser?.subscriptions?.find(
+          (s: any) => s.status === 'ACTIVE' && new Date(s.currentPeriodEnd) > new Date()
+        ) || null,
+        purchases: dbUser?.purchases || [],
+      };
+
+      return {
+        message: 'Logged in successfully',
+        user,
+        token: authData.session.access_token,
+      };
     },
 
     async adminLogin(data: { email: string; password: string }) {
-      const res = await fetch(`${API_BASE}/auth/admin-login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
+      const normalizedEmail = data.email.toLowerCase().trim();
+      const { data: authData, error } = await supabase.auth.signInWithPassword({
+        email: normalizedEmail,
+        password: data.password,
       });
-      return handleResponse<{ message: string; user: User; token: string }>(res);
+
+      if (error) throw new Error(error.message);
+
+      const role =
+        authData.user.app_metadata?.role ||
+        authData.user.user_metadata?.role;
+
+      const { data: dbUser } = await supabase
+        .from('User')
+        .select('*')
+        .eq('id', authData.user.id)
+        .single();
+
+      if (role !== 'ADMIN' && dbUser?.role !== 'ADMIN') {
+        await supabase.auth.signOut();
+        throw new Error('Unauthorized: Administrator privileges required');
+      }
+
+      const user: User = {
+        id: authData.user.id,
+        email: authData.user.email || normalizedEmail,
+        name: dbUser?.name || 'Rev. Tony Prakash (Official Admin)',
+        role: 'ADMIN',
+        isSubscriberActive: true,
+      };
+
+      return {
+        message: 'Admin access granted',
+        user,
+        token: authData.session.access_token,
+      };
     },
 
     async getProfile() {
-      const res = await fetch(`${API_BASE}/auth/me`, {
-        headers: getAuthHeaders(),
-      });
-      return handleResponse<{ user: User }>(res);
+      const { data: sessionData } = await supabase.auth.getSession();
+      const session = sessionData.session;
+      if (!session) throw new Error('No active session');
+
+      const { data: dbUser, error } = await supabase
+        .from('User')
+        .select(`
+          id, email, name, phone, role, createdAt,
+          subscriptions:Subscription(*),
+          purchases:Purchase(*, track:Track(id, slug, titleTelugu, titleEnglish, coverImage, duration))
+        `)
+        .eq('id', session.user.id)
+        .single();
+
+      if (error || !dbUser) {
+        return {
+          user: {
+            id: session.user.id,
+            email: session.user.email || '',
+            name: session.user.user_metadata?.name || 'Listener',
+            role: (session.user.app_metadata?.role || 'USER') as any,
+            isSubscriberActive: false,
+            activeSubscription: null,
+            purchases: [],
+          },
+        };
+      }
+
+      const subscriptions = (dbUser as any).subscriptions || [];
+      const activeSub = subscriptions.find(
+        (s: any) => s.status === 'ACTIVE' && new Date(s.currentPeriodEnd) > new Date()
+      );
+
+      return {
+        user: {
+          id: dbUser.id,
+          email: dbUser.email,
+          name: dbUser.name || 'Listener',
+          phone: dbUser.phone || null,
+          role: dbUser.role as any,
+          createdAt: dbUser.createdAt,
+          isSubscriberActive: Boolean(activeSub),
+          activeSubscription: activeSub || null,
+          purchases: (dbUser as any).purchases || [],
+        },
+      };
     },
 
-    async googleLogin(data: { credential?: string; userInfo?: any }) {
-      const res = await fetch(`${API_BASE}/auth/google`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
+    async googleLogin() {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: `${window.location.origin}/auth`,
+          queryParams: {
+            access_type: 'offline',
+            prompt: 'consent',
+          },
+        },
       });
-      return handleResponse<{ message: string; user: User; token: string }>(res);
+      if (error) throw new Error(error.message);
+      return { message: 'Redirecting to Google Sign-In...' };
     },
 
     async exchangeGoogleCode(code: string, redirectUri?: string) {
-      const res = await fetch(`${API_BASE}/auth/google/code`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ code, redirectUri }),
-      });
-      return handleResponse<{ message: string; user: User; token: string }>(res);
+      const { data, error } = await supabase.auth.exchangeCodeForSession(code);
+      if (error) {
+        const res = await fetch(`${API_BASE}/auth/google/callback?code=${encodeURIComponent(code)}`);
+        return handleResponse<{ token: string; user: User }>(res);
+      }
+      return {
+        token: data.session?.access_token || '',
+        user: data.user as any,
+      };
     },
 
-    async facebookLogin(data: {
-      accessToken?: string;
-      userID?: string;
-      name?: string;
-      email?: string;
-      picture?: string;
-    }) {
-      const res = await fetch(`${API_BASE}/auth/facebook`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
+    async resetPassword(email: string) {
+      const { error } = await supabase.auth.resetPasswordForEmail(email.toLowerCase().trim(), {
+        redirectTo: `${window.location.origin}/auth?mode=reset`,
       });
-      return handleResponse<{ message: string; user: User; token: string }>(res);
+      if (error) throw new Error(error.message);
+      return { message: 'Password reset link sent to your email.' };
     },
 
     async logout() {
-      const res = await fetch(`${API_BASE}/auth/logout`, {
-        method: 'POST',
-        headers: getAuthHeaders(),
-      });
-      return handleResponse<{ message: string }>(res);
+      await supabase.auth.signOut();
+      return { message: 'Logged out successfully' };
     },
   },
 

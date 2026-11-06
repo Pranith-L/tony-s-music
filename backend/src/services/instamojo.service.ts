@@ -85,6 +85,7 @@ export class InstamojoService {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
       body: body.toString(),
+      signal: AbortSignal.timeout(8000),
     });
 
     const data: any = await response.json();
@@ -142,6 +143,7 @@ export class InstamojoService {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(payload),
+        signal: AbortSignal.timeout(8000),
       });
       data = await response.json();
     } else {
@@ -158,6 +160,7 @@ export class InstamojoService {
           'Content-Type': 'application/x-www-form-urlencoded',
         },
         body: formData.toString(),
+        signal: AbortSignal.timeout(8000),
       });
       data = await response.json();
     }
@@ -195,6 +198,7 @@ export class InstamojoService {
         headers: {
           Authorization: `Bearer ${token}`,
         },
+        signal: AbortSignal.timeout(8000),
       });
     } else {
       response = await fetch(`${this.baseUrl}/api/1.1/payment-requests/${encodeURIComponent(paymentRequestId)}/`, {
@@ -203,6 +207,7 @@ export class InstamojoService {
           'X-Api-Key': this.apiKey || this.clientId,
           'X-Auth-Token': this.authToken || this.clientSecret,
         },
+        signal: AbortSignal.timeout(8000),
       });
     }
 

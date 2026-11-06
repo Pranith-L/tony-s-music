@@ -15,8 +15,6 @@ interface TrackCardProps {
 export const TrackCard: React.FC<TrackCardProps> = ({ track, onOpenLyrics, index }) => {
   const { currentTrack, isPlaying, playTrack, togglePlay } = usePlayer();
   const { user, isSubscriber } = useAuth();
-  const [downloading, setDownloading] = useState(false);
-
   const isCurrent = currentTrack?.id === track.id;
   const isThisPlaying = isCurrent && isPlaying;
 
@@ -26,29 +24,6 @@ export const TrackCard: React.FC<TrackCardProps> = ({ track, onOpenLyrics, index
       togglePlay();
     } else {
       playTrack(track);
-    }
-  };
-
-  const handleDownload = async (e: React.MouseEvent) => {
-    e.stopPropagation();
-    if (!track.isDownloadable) {
-      alert('This song is currently not configured for download.');
-      return;
-    }
-
-    if (!user) {
-      alert("Please sign in to access downloads or subscribe to Tony's VIP Pass.");
-      return;
-    }
-
-    setDownloading(true);
-    try {
-      const res = await api.downloads.requestToken(track.id);
-      window.location.href = res.downloadUrl;
-    } catch (err: any) {
-      alert(err.message || 'Active subscription or single track purchase (₹99) required.');
-    } finally {
-      setDownloading(false);
     }
   };
 

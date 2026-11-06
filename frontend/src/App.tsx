@@ -7,21 +7,37 @@ import { PlaylistProvider } from './context/PlaylistContext.js';
 import { OfflineProvider } from './context/OfflineContext.js';
 import { MainLayout } from './components/layout/MainLayout.js';
 
-// Pages
+// Core Pages
 import { Home } from './pages/Home.js';
 import { MusicPage } from './pages/Music.js';
 import { TracksPage } from './pages/Tracks.js';
 import { AlbumsPage } from './pages/Albums.js';
 import { AlbumDetailPage } from './pages/AlbumDetail.js';
 import { LibraryPage } from './pages/Library.js';
-import { VideosPage } from './pages/Videos.js';
-import { AboutPage } from './pages/About.js';
-import { BookingsPage } from './pages/Bookings.js';
-import { MembershipPage } from './pages/Membership.js';
 import { AccountPage } from './pages/Account.js';
 import { AuthPage } from './pages/Auth.js';
-import { AdminDashboard } from './pages/admin/AdminDashboard.js';
-import { PaymentReturnPage } from './pages/PaymentReturn.js';
+import { ProtectedRoute } from './routes/ProtectedRoute.js';
+import { AdminRoute } from './routes/AdminRoute.js';
+
+// Code-split heavy routes for optimal bundle chunking
+const AdminDashboard = React.lazy(() =>
+  import('./pages/admin/AdminDashboard.js').then((m) => ({ default: m.AdminDashboard }))
+);
+const VideosPage = React.lazy(() =>
+  import('./pages/Videos.js').then((m) => ({ default: m.VideosPage }))
+);
+const AboutPage = React.lazy(() =>
+  import('./pages/About.js').then((m) => ({ default: m.AboutPage }))
+);
+const BookingsPage = React.lazy(() =>
+  import('./pages/Bookings.js').then((m) => ({ default: m.BookingsPage }))
+);
+const MembershipPage = React.lazy(() =>
+  import('./pages/Membership.js').then((m) => ({ default: m.MembershipPage }))
+);
+const PaymentReturnPage = React.lazy(() =>
+  import('./pages/PaymentReturn.js').then((m) => ({ default: m.PaymentReturnPage }))
+);
 
 const NotFound: React.FC = () => (
   <div className="py-24 text-center px-6 text-[#1D1D1F]">
@@ -50,23 +66,45 @@ export const App: React.FC = () => {
             <PlayerProvider>
               <PlaylistProvider>
                 <MainLayout>
-                  <Routes>
-                    <Route path="/" element={<Home />} />
-                    <Route path="/music" element={<MusicPage />} />
-                    <Route path="/tracks" element={<TracksPage />} />
-                    <Route path="/library" element={<LibraryPage />} />
-                    <Route path="/albums" element={<AlbumsPage />} />
-                    <Route path="/albums/:slug" element={<AlbumDetailPage />} />
-                    <Route path="/videos" element={<VideosPage />} />
-                    <Route path="/about" element={<AboutPage />} />
-                    <Route path="/bookings" element={<BookingsPage />} />
-                    <Route path="/membership" element={<MembershipPage />} />
-                    <Route path="/payment-return" element={<PaymentReturnPage />} />
-                    <Route path="/account" element={<AccountPage />} />
-                    <Route path="/auth" element={<AuthPage />} />
-                    <Route path="/admin" element={<AdminDashboard />} />
-                    <Route path="*" element={<NotFound />} />
-                  </Routes>
+                  <React.Suspense
+                    fallback={
+                      <div className="py-24 flex items-center justify-center">
+                        <div className="w-8 h-8 border-2 border-[#FA243C] border-t-transparent rounded-full animate-spin" />
+                      </div>
+                    }
+                  >
+                    <Routes>
+                      <Route path="/" element={<Home />} />
+                      <Route path="/music" element={<MusicPage />} />
+                      <Route path="/tracks" element={<TracksPage />} />
+                      <Route path="/library" element={<LibraryPage />} />
+                      <Route path="/albums" element={<AlbumsPage />} />
+                      <Route path="/albums/:slug" element={<AlbumDetailPage />} />
+                      <Route path="/videos" element={<VideosPage />} />
+                      <Route path="/about" element={<AboutPage />} />
+                      <Route path="/bookings" element={<BookingsPage />} />
+                      <Route path="/membership" element={<MembershipPage />} />
+                      <Route path="/payment-return" element={<PaymentReturnPage />} />
+                      <Route
+                        path="/account"
+                        element={
+                          <ProtectedRoute>
+                            <AccountPage />
+                          </ProtectedRoute>
+                        }
+                      />
+                      <Route path="/auth" element={<AuthPage />} />
+                      <Route
+                        path="/admin"
+                        element={
+                          <AdminRoute>
+                            <AdminDashboard />
+                          </AdminRoute>
+                        }
+                      />
+                      <Route path="*" element={<NotFound />} />
+                    </Routes>
+                  </React.Suspense>
                 </MainLayout>
               </PlaylistProvider>
             </PlayerProvider>

@@ -10,5 +10,14 @@ if (!supabaseUrl || !supabaseKey) {
   console.warn('Supabase URL or Key is missing in environment variables.');
 }
 
-export const supabase = createClient(supabaseUrl, supabaseKey);
+// 14-day persistent session client with auto-refresh and token rotation
+export const supabase = createClient(supabaseUrl, supabaseKey, {
+  auth: {
+    persistSession: true,
+    autoRefreshToken: true,
+    detectSessionInUrl: true,
+    storageKey: 'tony_prakash_auth_session',
+  },
+});
+
 export default supabase;

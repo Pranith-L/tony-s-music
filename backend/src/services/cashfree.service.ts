@@ -85,6 +85,7 @@ export class CashfreeService {
         'x-client-secret': this.secretKey,
       },
       body: JSON.stringify(payload),
+      signal: AbortSignal.timeout(8000),
     });
 
     const data: any = await response.json();
@@ -120,6 +121,7 @@ export class CashfreeService {
         'x-client-id': this.appId,
         'x-client-secret': this.secretKey,
       },
+      signal: AbortSignal.timeout(8000),
     });
 
     const data: any = await response.json();
@@ -145,6 +147,7 @@ export class CashfreeService {
         'x-client-id': this.appId,
         'x-client-secret': this.secretKey,
       },
+      signal: AbortSignal.timeout(8000),
     });
 
     const data = await response.json();

@@ -26,7 +26,8 @@ const CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:5173';
 app.use(
   helmet({
     crossOriginResourcePolicy: { policy: 'cross-origin' },
-    contentSecurityPolicy: false, // Allows flexible video and asset embedding
+    crossOriginOpenerPolicy: { policy: 'same-origin-allow-popups' },
+    contentSecurityPolicy: false, // CSP is managed at edge (vercel.json / reverse proxy)
   })
 );
 
@@ -34,6 +35,7 @@ app.use(
   cors({
     origin: [
       CLIENT_URL,
+      'https://tony-prakash-music.vercel.app',
       'http://localhost:5173',
       'http://127.0.0.1:5173',
       'http://localhost:5174',
@@ -54,7 +56,16 @@ app.use(
     },
   })
 );
-app.use(express.urlencoded({ extended: true }));
+app.use(
+  express.urlencoded({
+    extended: true,
+    verify: (req: any, _res, buf) => {
+      if (!req.rawBody) {
+        req.rawBody = buf.toString();
+      }
+    },
+  })
+);
 
 // Express Session & Passport Middleware
 app.use(

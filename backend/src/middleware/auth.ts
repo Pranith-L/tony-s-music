@@ -1,8 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { ObjectId } from 'mongodb';
 import { prisma } from '../prisma.js';
-import { getMongoDb } from '../db.js';
+import { supabase } from '../supabase.js';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'sacred_light_jwt_secret_tony_prakash_2026_super_secure';
 
@@ -28,8 +27,76 @@ export function generateToken(user: AuthenticatedUser): string {
   return jwt.sign(
     { id: user.id, email: user.email, name: user.name, role: user.role },
     JWT_SECRET,
-    { expiresIn: '7d' }
+    { expiresIn: '14d' }
   );
+}
+
+/**
+ * Universal token resolver supporting both local HMAC JWTs and Supabase Auth ES256 tokens.
+ */
+export async function resolveUserFromToken(token: string): Promise<AuthenticatedUser | null> {
+  if (!token) return null;
+
+  // 1. Try local JWT verification
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET) as any;
+    if (decoded && (decoded.id || decoded.email)) {
+      try {
+        const pUser = await prisma.user.findFirst({
+          where: {
+            OR: [
+              ...(decoded.id ? [{ id: decoded.id }] : []),
+              ...(decoded.email ? [{ email: decoded.email.toLowerCase().trim() }] : []),
+            ],
+          },
+          select: { id: true, email: true, name: true, role: true, avatar: true },
+        });
+        if (pUser) return pUser;
+      } catch {}
+
+      return {
+        id: decoded.id,
+        email: decoded.email,
+        name: decoded.name || 'User',
+        role: decoded.role || 'USER',
+      };
+    }
+  } catch {
+    // Local JWT verification failed; fall through to Supabase Auth token verification
+  }
+
+  // 2. Try Supabase Auth verification
+  try {
+    const { data: supaAuth, error: supaErr } = await supabase.auth.getUser(token);
+    if (!supaErr && supaAuth?.user) {
+      const supaUser = supaAuth.user;
+      const email = supaUser.email?.toLowerCase().trim() || '';
+      try {
+        const pUser = await prisma.user.findFirst({
+          where: {
+            OR: [
+              { id: supaUser.id },
+              ...(email ? [{ email }] : []),
+            ],
+          },
+          select: { id: true, email: true, name: true, role: true, avatar: true },
+        });
+        if (pUser) return pUser;
+      } catch {}
+
+      const role = (supaUser.user_metadata?.role || 'USER').toUpperCase();
+      const name = supaUser.user_metadata?.name || supaUser.user_metadata?.full_name || email.split('@')[0] || 'User';
+      return {
+        id: supaUser.id,
+        email,
+        name,
+        role,
+        avatar: supaUser.user_metadata?.avatar_url || null,
+      };
+    }
+  } catch {}
+
+  return null;
 }
 
 export async function authenticateUser(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
@@ -43,69 +110,14 @@ export async function authenticateUser(req: AuthRequest, res: Response, next: Ne
     return;
   }
 
-  try {
-    const decoded = jwt.verify(token, JWT_SECRET) as AuthenticatedUser;
-    let user: AuthenticatedUser | null = null;
-
-    // 1. Try Prisma first
-    try {
-      const pUser = await prisma.user.findUnique({
-        where: { id: decoded.id },
-        select: { id: true, email: true, name: true, role: true, avatar: true },
-      });
-      if (pUser) {
-        user = pUser;
-      }
-    } catch {
-      // Prisma error, fallback to MongoDB
-    }
-
-    // 2. Try MongoDB fallback
-    if (!user) {
-      try {
-        const db = await getMongoDb();
-        const uObj = /^[0-9a-fA-F]{24}$/.test(decoded.id) ? new ObjectId(decoded.id) : null;
-        const mongoUser = await db.collection('User').findOne({
-          $or: [
-            ...(uObj ? [{ _id: uObj }] : []),
-            { id: decoded.id },
-            { email: decoded.email?.toLowerCase().trim() },
-          ],
-        });
-        if (mongoUser) {
-          user = {
-            id: mongoUser._id ? mongoUser._id.toString() : (mongoUser.id || decoded.id),
-            email: mongoUser.email,
-            name: mongoUser.name || 'User',
-            role: mongoUser.role || 'USER',
-            avatar: mongoUser.avatar || null,
-          };
-        }
-      } catch {
-        // Mongo query error
-      }
-    }
-
-    // 3. Resilient fallback: if token is verified by JWT_SECRET and has valid id/email
-    if (!user && decoded.id && decoded.email) {
-      user = {
-        id: decoded.id,
-        email: decoded.email,
-        name: decoded.name || 'User',
-        role: decoded.role || 'USER',
-      };
-    }
-
-    if (!user) {
-      res.status(401).json({ error: 'User not found' });
-      return;
-    }
-
-    req.user = user;
-    next();
-  } catch (err) {
+  const user = await resolveUserFromToken(token);
+  if (!user) {
     res.status(401).json({ error: 'Invalid or expired token' });
+    return;
   }
+
+  req.user = user;
+  next();
 }
 
 export function requireAdmin(req: AuthRequest, res: Response, next: NextFunction): void {
@@ -123,58 +135,9 @@ export async function optionalAuth(req: AuthRequest, res: Response, next: NextFu
     : req.cookies?.token;
 
   if (token) {
-    try {
-      const decoded = jwt.verify(token, JWT_SECRET) as AuthenticatedUser;
-      let user: AuthenticatedUser | null = null;
-      try {
-        const pUser = await prisma.user.findUnique({
-          where: { id: decoded.id },
-          select: { id: true, email: true, name: true, role: true, avatar: true },
-        });
-        if (pUser) user = pUser;
-      } catch {
-        // ignore
-      }
-
-      if (!user) {
-        try {
-          const db = await getMongoDb();
-          const uObj = /^[0-9a-fA-F]{24}$/.test(decoded.id) ? new ObjectId(decoded.id) : null;
-          const mongoUser = await db.collection('User').findOne({
-            $or: [
-              ...(uObj ? [{ _id: uObj }] : []),
-              { id: decoded.id },
-              { email: decoded.email?.toLowerCase().trim() },
-            ],
-          });
-          if (mongoUser) {
-            user = {
-              id: mongoUser._id ? mongoUser._id.toString() : (mongoUser.id || decoded.id),
-              email: mongoUser.email,
-              name: mongoUser.name || 'User',
-              role: mongoUser.role || 'USER',
-              avatar: mongoUser.avatar || null,
-            };
-          }
-        } catch {
-          // ignore
-        }
-      }
-
-      if (!user && decoded.id && decoded.email) {
-        user = {
-          id: decoded.id,
-          email: decoded.email,
-          name: decoded.name || 'User',
-          role: decoded.role || 'USER',
-        };
-      }
-
-      if (user) {
-        req.user = user;
-      }
-    } catch {
-      // Ignore token failure for optional auth
+    const user = await resolveUserFromToken(token);
+    if (user) {
+      req.user = user;
     }
   }
   next();

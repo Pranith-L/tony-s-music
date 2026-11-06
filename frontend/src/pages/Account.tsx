@@ -157,7 +157,7 @@ export const AccountPage: React.FC = () => {
           </div>
         ) : (
           <p className="text-xs text-[#86868B] dark:text-[#A1A1AA]">
-            You are currently on the free public streaming plan. Subscribe for ₹299/month to unlock subscriber-only songs and early downloads.
+            You are currently on the free public streaming plan. Get the Songs One-Time Pass for ₹299 to unlock lifetime master downloads, infinite skips, and offline listening with zero recurring fees.
           </p>
         )}
       </div>

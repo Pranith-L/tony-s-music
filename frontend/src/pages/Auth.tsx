@@ -16,7 +16,7 @@ declare global {
 export const AuthPage: React.FC = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const { login, register, adminLogin, setAuthToken } = useAuth();
+  const { user, login, register, adminLogin, loginWithGoogle, resetPassword, setAuthToken } = useAuth();
 
   const redirectPath = searchParams.get('redirect') || '/account';
 
@@ -27,6 +27,19 @@ export const AuthPage: React.FC = () => {
       navigate('/');
     }
   };
+
+  // Auto-navigate if already authenticated or newly authenticated
+  useEffect(() => {
+    if (user) {
+      if (user.role === 'ADMIN' && redirectPath === '/admin') {
+        navigate('/admin', { replace: true });
+      } else if (redirectPath && redirectPath !== '/auth') {
+        navigate(redirectPath, { replace: true });
+      } else {
+        navigate(user.role === 'ADMIN' ? '/admin' : '/account', { replace: true });
+      }
+    }
+  }, [user, redirectPath, navigate]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -77,11 +90,11 @@ export const AuthPage: React.FC = () => {
       const redirectUri = window.location.origin + window.location.pathname;
       api.auth
         .exchangeGoogleCode(code, redirectUri)
-        .then(async (data) => {
+        .then(async (data: any) => {
           await setAuthToken(data.token);
           navigate(redirectPath, { replace: true });
         })
-        .catch((err) => {
+        .catch((err: any) => {
           console.error('Google code exchange error:', err);
           setErrorMsg(err.message || 'Failed to complete Google authentication.');
         })
@@ -94,17 +107,39 @@ export const AuthPage: React.FC = () => {
     }
   }, [searchParams, redirectPath, navigate, setAuthToken]);
 
-  const handleGoogleClick = () => {
+  const handleGoogleClick = async () => {
     setIsLoading(true);
     setErrorMsg(null);
     setOauthStatus('Redirecting to Google Sign-In...');
-    // Traditional Passport Google OAuth initiation endpoint on backend
-    const rawApiUrl = (import.meta as any).env?.VITE_API_URL || '';
-    const backendUrl =
-      (import.meta as any).env?.VITE_BACKEND_URL ||
-      (rawApiUrl ? rawApiUrl.replace(/\/api\/?$/, '') : '') ||
-      'http://localhost:5000';
-    window.location.href = `${backendUrl}/api/auth/google`;
+    try {
+      await loginWithGoogle();
+    } catch (err: any) {
+      console.warn('Native Supabase Google OAuth notice, trying backend fallback:', err?.message);
+      // Fallback to backend passport route if configured
+      const rawApiUrl = (import.meta as any).env?.VITE_API_URL || '';
+      const backendUrl =
+        (import.meta as any).env?.VITE_BACKEND_URL ||
+        (rawApiUrl ? rawApiUrl.replace(/\/api\/?$/, '') : '') ||
+        'http://localhost:5000';
+      window.location.href = `${backendUrl}/api/auth/google`;
+    }
+  };
+
+  const handleForgotPassword = async () => {
+    if (!email.trim()) {
+      setErrorMsg('Please enter your email in the field above, then click "Forgot password?".');
+      return;
+    }
+    setIsLoading(true);
+    setErrorMsg(null);
+    try {
+      await resetPassword(email.trim());
+      setShowForgotNotice(true);
+    } catch (err: any) {
+      setErrorMsg(err.message || 'Unable to send password reset email. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -272,7 +307,7 @@ export const AuthPage: React.FC = () => {
             <div className="flex justify-end pt-0.5">
               <button
                 type="button"
-                onClick={() => setShowForgotNotice(true)}
+                onClick={handleForgotPassword}
                 className="text-xs text-[#86868B] hover:text-[#FA243C] transition-colors"
               >
                 Forgot password?

@@ -1,7 +1,5 @@
 import { Router, Response } from 'express';
-import { ObjectId } from 'mongodb';
 import { prisma } from '../prisma.js';
-import { getMongoDb } from '../db.js';
 import { authenticateUser, requireAdmin, AuthRequest } from '../middleware/auth.js';
 
 const router = Router();
