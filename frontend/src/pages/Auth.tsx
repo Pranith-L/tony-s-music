@@ -114,14 +114,10 @@ export const AuthPage: React.FC = () => {
     try {
       await loginWithGoogle();
     } catch (err: any) {
-      console.warn('Native Supabase Google OAuth notice, trying backend fallback:', err?.message);
-      // Fallback to backend passport route if configured
-      const rawApiUrl = (import.meta as any).env?.VITE_API_URL || '';
-      const backendUrl =
-        (import.meta as any).env?.VITE_BACKEND_URL ||
-        (rawApiUrl ? rawApiUrl.replace(/\/api\/?$/, '') : '') ||
-        'http://localhost:5000';
-      window.location.href = `${backendUrl}/api/auth/google`;
+      console.error('Google Sign-In error:', err);
+      setErrorMsg(err?.message || 'Failed to connect to Google Sign-In. Please try again.');
+      setIsLoading(false);
+      setOauthStatus(null);
     }
   };
 

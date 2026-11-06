@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "npm --prefix frontend run dev",
     "dev:all": "concurrently \"npm --prefix backend run dev\" \"npm --prefix frontend run dev\"",
-    "build": "npm --prefix frontend run build",
+    "build": "npm --prefix frontend install && npm --prefix frontend run build",
     "backend": "npm --prefix backend run dev",
     "seed": "npm --prefix backend run prisma:seed"
   },

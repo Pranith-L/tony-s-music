@@ -1,14 +1,11 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "installCommand": "npm --prefix frontend install",
   "buildCommand": "npm --prefix frontend run build",
   "outputDirectory": "frontend/dist",
   "cleanUrls": true,
   "trailingSlash": false,
   "rewrites": [
-    {
-      "source": "/api/(.*)",
-      "destination": "https://mrehomunxqccvcwpkwxd.supabase.co/functions/v1/hyper-responder/$1"
-    },
     {
       "source": "/robots.txt",
       "destination": "/robots.txt"
