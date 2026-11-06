@@ -133,3 +133,4 @@ const isValid = calculatedMac.toLowerCase() === receivedMac.toLowerCase();
 3. **User Authentication Binding**:
    - The user ID is attached to the transaction ledger at creation time.
    - Payments cannot be hijacked or transferred to different accounts.
+

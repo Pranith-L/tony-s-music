@@ -95,3 +95,4 @@ To ensure seamless API communication between the React SPA and the Node/Express 
    - Validates user identity and loads their live role from PostgreSQL (`public."User"`).
 3. **Step 3: Role Authorization**:
    - `requireAdmin` checks `req.user.role === 'ADMIN'`. Non-administrators receive `403 Forbidden`.
+

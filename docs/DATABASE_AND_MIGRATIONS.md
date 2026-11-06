@@ -124,3 +124,4 @@ SELECT public.fulfill_order_atomic(
 3. **Ledger Update**: Sets `status = 'SUCCESS'`, records gateway transaction identifiers, and updates timestamps.
 4. **Subscription Activation**: For `VIP_PASS`, creates or renews the `Subscription` with `planName = "Tony's VIP Pass"` and valid until 100 years into the future.
 5. **Entitlement Generation**: Automatically grants full track access across the catalogue.
+

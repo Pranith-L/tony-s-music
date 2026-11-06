@@ -105,3 +105,4 @@ node "H:\new project\scripts\verify_backend_foundation.cjs"
 | **401 Invalid Token on API** | Inspect token format (ES256 vs HMAC). | Ensure `resolveUserFromToken` is active in `auth.ts` to verify Supabase Auth tokens. |
 | **404 on page refresh on Vercel** | Check `vercel.json` rewrite rules. | Ensure `"rewrites": [{ "source": "/((?!api/.*).*)", "destination": "/index.html" }]` is present. |
 | **Audio streaming blocked** | Check CSP `media-src` in `vercel.json`. | Ensure `blob:`, `https://*.supabase.co`, and `https://*.googlevideo.com` are whitelisted in `media-src`. |
+
