@@ -103,7 +103,8 @@ export const AuthPage: React.FC = () => {
           setOauthStatus(null);
         });
     } else if (error) {
-      setErrorMsg('Google Sign-In failed or was cancelled. Please verify your Google Console settings.');
+      const errorDesc = searchParams.get('error_description');
+      setErrorMsg(errorDesc ? decodeURIComponent(errorDesc.replace(/\+/g, ' ')) : 'Google Sign-In failed or was cancelled.');
     }
   }, [searchParams, redirectPath, navigate, setAuthToken]);
 
