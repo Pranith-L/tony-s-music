@@ -23,6 +23,7 @@ export const RightSidebar: React.FC = () => {
     currentTrack,
     isPlaying,
     queue,
+    history,
     repeatMode,
     isRightSidebarOpen,
     rightSidebarTab,
@@ -32,6 +33,7 @@ export const RightSidebar: React.FC = () => {
     togglePlay,
     removeFromQueue,
     clearQueue,
+    clearHistory,
     isLiked,
     toggleLikeTrack,
   } = usePlayer();
@@ -42,7 +44,11 @@ export const RightSidebar: React.FC = () => {
 
   const currentIndex = currentTrack ? queue.findIndex((t) => t.id === currentTrack.id) : -1;
   const upNextTracks = currentIndex >= 0 ? queue.slice(currentIndex + 1) : queue;
-  const previouslyPlayedTracks = currentIndex > 0 ? queue.slice(0, currentIndex) : [];
+  const sessionPastTracks = currentIndex > 0 ? queue.slice(0, currentIndex) : [];
+  const fullHistory = [
+    ...sessionPastTracks,
+    ...history.filter((h) => !sessionPastTracks.some((s) => s.id === h.id) && h.id !== currentTrack?.id),
+  ];
 
   return (
     <aside className="hidden lg:flex flex-col w-80 xl:w-96 h-full pb-28 bg-white border-l border-[#E5E5EA] select-none z-30 shrink-0 transition-all">
@@ -275,11 +281,11 @@ export const RightSidebar: React.FC = () => {
               {upNextTracks.length === 0 ? (
                 <div className="py-8 text-center text-xs text-[#86868B] space-y-2 bg-[#F9F9FB] rounded-xl border border-dashed border-[#E5E5EA] p-4">
                   <ListMusic className="w-7 h-7 opacity-40 mx-auto text-[#FA243C]" />
-                  {repeatMode === 'all' && previouslyPlayedTracks.length > 0 ? (
+                  {repeatMode === 'all' && fullHistory.length > 0 ? (
                     <div>
                       <p className="font-semibold text-[#1D1D1F]">Repeat All Active</p>
                       <p className="text-[10px] text-[#86868B] mt-0.5">
-                        Queue will loop back to the beginning ({previouslyPlayedTracks[0]?.titleEnglish}).
+                        Queue will loop back to the beginning ({fullHistory[0]?.titleEnglish}).
                       </p>
                     </div>
                   ) : (
@@ -344,26 +350,37 @@ export const RightSidebar: React.FC = () => {
               )}
             </div>
 
-            {/* Previously Played Accordion */}
-            {previouslyPlayedTracks.length > 0 && (
+            {/* History / Previously Played Section */}
+            {fullHistory.length > 0 && (
               <div className="pt-2 border-t border-[#E5E5EA]">
-                <button
-                  onClick={() => setShowHistory((prev) => !prev)}
-                  className="w-full flex items-center justify-between py-1.5 text-[11px] font-mono text-[#86868B] hover:text-[#1D1D1F] transition-colors"
-                >
-                  <span className="uppercase tracking-wider">
-                    Previously Played ({previouslyPlayedTracks.length})
-                  </span>
-                  {showHistory ? (
-                    <ChevronUp className="w-3.5 h-3.5" />
-                  ) : (
-                    <ChevronDown className="w-3.5 h-3.5" />
-                  )}
-                </button>
+                <div className="flex items-center justify-between py-1.5">
+                  <button
+                    onClick={() => setShowHistory((prev) => !prev)}
+                    className="flex items-center gap-1.5 text-[11px] font-mono text-[#86868B] hover:text-[#1D1D1F] transition-colors"
+                  >
+                    <span className="uppercase tracking-wider">
+                      History ({fullHistory.length})
+                    </span>
+                    {showHistory ? (
+                      <ChevronUp className="w-3.5 h-3.5" />
+                    ) : (
+                      <ChevronDown className="w-3.5 h-3.5" />
+                    )}
+                  </button>
+
+                  <button
+                    onClick={clearHistory}
+                    className="text-[10px] text-gray-400 hover:text-red-500 transition-colors flex items-center gap-1 font-mono"
+                    title="Clear playback history"
+                  >
+                    <Trash2 className="w-3 h-3" />
+                    <span>Clear History</span>
+                  </button>
+                </div>
 
                 {showHistory && (
                   <div className="space-y-1 mt-2 opacity-80 max-h-48 overflow-y-auto">
-                    {previouslyPlayedTracks.map((track, pIdx) => (
+                    {fullHistory.map((track, pIdx) => (
                       <div
                         key={`prev-${track.id}-${pIdx}`}
                         onClick={() => playTrack(track, queue)}

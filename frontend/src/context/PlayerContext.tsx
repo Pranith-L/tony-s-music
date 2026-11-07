@@ -22,6 +22,7 @@ interface PlayerContextType {
   duration: number;
   volume: number;
   queue: Track[];
+  history: Track[];
   isMuted: boolean;
   shuffle: boolean;
   repeatMode: RepeatMode;
@@ -61,6 +62,7 @@ interface PlayerContextType {
   removeFromQueue: (index: number) => void;
   reorderQueue: (fromIndex: number, toIndex: number) => void;
   clearQueue: () => void;
+  clearHistory: () => void;
   toggleRightSidebar: () => void;
   setRightSidebarOpen: (open: boolean) => void;
   setRightSidebarTab: (tab: RightSidebarTab) => void;
@@ -75,7 +77,10 @@ const PlayerContext = createContext<PlayerContextType | undefined>(undefined);
 export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { user, isSubscriber } = useAuth();
 
-  const [currentTrack, setCurrentTrack] = useState<Track | null>(MOCK_TRACKS[0] || null);
+  // Initial queue: strictly 100% free devotional vocal songs (all backing tracks excluded from auto-queue)
+  const DEVOTIONAL_TRACKS: Track[] = MOCK_TRACKS.filter((t) => !t.isTrack);
+
+  const [currentTrack, setCurrentTrack] = useState<Track | null>(DEVOTIONAL_TRACKS[0] || null);
   const [songTheme, setSongTheme] = useState<SongTheme>({
     primary: '#FA243C',
     primaryRgb: '250, 36, 60',
@@ -101,7 +106,18 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const [duration, setDuration] = useState<number>(342); // 5:42 default
   const [volume, setVolume] = useState<number>(0.85);
   const [isMuted, setIsMuted] = useState<boolean>(false);
-  const [queue, setQueue] = useState<Track[]>(MOCK_TRACKS);
+  const [queue, setQueue] = useState<Track[]>(DEVOTIONAL_TRACKS);
+  const [history, setHistory] = useState<Track[]>(() => {
+    try {
+      const stored = localStorage.getItem('tony_music_history');
+      if (stored) {
+        return JSON.parse(stored);
+      }
+    } catch {
+      // ignore
+    }
+    return [];
+  });
   const [shuffle, setShuffle] = useState<boolean>(false);
   const [repeatMode, setRepeatMode] = useState<RepeatMode>('all');
   const [isRightSidebarOpen, setIsRightSidebarOpen] = useState<boolean>(false);
@@ -109,6 +125,23 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const [isFullscreenPlayer, setIsFullscreenPlayer] = useState<boolean>(false);
   const [isMobileNowPlayingOpen, setIsMobileNowPlayingOpen] = useState<boolean>(false);
   const [fullscreenView, setFullscreenView] = useState<FullscreenView>('player');
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('tony_music_history', JSON.stringify(history.slice(0, 50)));
+    } catch {
+      // ignore
+    }
+  }, [history]);
+
+  const clearHistory = () => {
+    setHistory([]);
+    try {
+      localStorage.removeItem('tony_music_history');
+    } catch {
+      // ignore
+    }
+  };
 
   // Modals for limits
   const [showPreviewLimitModal, setShowPreviewLimitModal] = useState<boolean>(false);
@@ -367,16 +400,51 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     previewDismissedTrackIdRef.current = null;
     stopFallbackAudio();
 
-    let activeQueue = queueRef.current;
+    const prevTrack = currentTrackRef.current;
+    const prevQueue = queueRef.current;
+
+    let activeQueue = prevQueue;
     if (newQueue && newQueue.length > 0) {
-      activeQueue = newQueue;
-      queueRef.current = newQueue;
-      setQueue(newQueue);
+      // Archive previous tracks into history
+      const tracksToArchive: Track[] = [];
+      if (prevTrack && prevTrack.id !== track.id) {
+        tracksToArchive.push(prevTrack);
+      }
+      for (const pt of prevQueue) {
+        if (pt.id !== track.id && !newQueue.some((nt) => nt.id === pt.id)) {
+          if (!tracksToArchive.some((ta) => ta.id === pt.id)) {
+            tracksToArchive.push(pt);
+          }
+        }
+      }
+
+      if (tracksToArchive.length > 0) {
+        setHistory((prevHist) => {
+          const existingIds = new Set(tracksToArchive.map((t) => t.id));
+          const filtered = prevHist.filter((t) => !existingIds.has(t.id));
+          return [...tracksToArchive, ...filtered].slice(0, 100);
+        });
+      }
+
+      // Filter album/new queue: only include devotional songs (plus the selected track if explicitly clicked)
+      const sanitizedQueue = newQueue.filter((t) => !t.isTrack || t.id === track.id);
+      activeQueue = sanitizedQueue;
+      queueRef.current = sanitizedQueue;
+      setQueue(sanitizedQueue);
       playedShuffleIndicesRef.current = [];
-    } else if (!activeQueue.some((t) => t.id === track.id)) {
-      activeQueue = [...activeQueue, track];
-      queueRef.current = activeQueue;
-      setQueue(activeQueue);
+    } else {
+      if (prevTrack && prevTrack.id !== track.id) {
+        setHistory((prevHist) => {
+          const filtered = prevHist.filter((t) => t.id !== prevTrack.id);
+          return [prevTrack, ...filtered].slice(0, 100);
+        });
+      }
+
+      if (!activeQueue.some((t) => t.id === track.id)) {
+        activeQueue = [...activeQueue, track];
+        queueRef.current = activeQueue;
+        setQueue(activeQueue);
+      }
     }
 
     setCurrentTrack(track);
@@ -727,6 +795,7 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         duration,
         volume,
         queue,
+        history,
         isMuted,
         shuffle,
         repeatMode,
@@ -762,6 +831,7 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         removeFromQueue,
         reorderQueue,
         clearQueue,
+        clearHistory,
         toggleRightSidebar,
         setRightSidebarOpen: setIsRightSidebarOpen,
         setRightSidebarTab,

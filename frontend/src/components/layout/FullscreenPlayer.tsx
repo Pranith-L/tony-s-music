@@ -38,6 +38,8 @@ export const FullscreenPlayer: React.FC = () => {
     duration,
     volume,
     queue,
+    history,
+    clearHistory,
     isMuted,
     shuffle,
     repeatMode,
@@ -84,7 +86,11 @@ export const FullscreenPlayer: React.FC = () => {
   // Queue Calculations: Next In Queue must only show songs AFTER the current song
   const currentIndex = queue.findIndex((t) => t.id === currentTrack.id);
   const upNextTracks = currentIndex >= 0 ? queue.slice(currentIndex + 1) : queue;
-  const previouslyPlayedTracks = currentIndex > 0 ? queue.slice(0, currentIndex) : [];
+  const sessionPastTracks = currentIndex > 0 ? queue.slice(0, currentIndex) : [];
+  const fullHistory = [
+    ...sessionPastTracks,
+    ...history.filter((h) => !sessionPastTracks.some((s) => s.id === h.id) && h.id !== currentTrack?.id),
+  ];
 
   // Parse lyrics into stanzas
   const lyricsStanzas = currentTrack.lyricsTelugu
@@ -442,58 +448,21 @@ export const FullscreenPlayer: React.FC = () => {
           </div>
         )}
 
-        {/* ================= VIEW 3: UP NEXT / QUEUE VIEW (Strictly Upcoming Songs) ================= */}
+        {/* ================= VIEW 3: UP NEXT / QUEUE VIEW ================= */}
         {fullscreenView === 'queue' && (
-          <div className="w-full max-w-2xl h-full max-h-[min(72vh,620px)] bg-white/92 backdrop-blur-2xl rounded-3xl border border-[#E5E5EA] shadow-2xl overflow-hidden flex flex-col p-4 sm:p-6 animate-fadeIn">
-            {/* Queue Header with Controls */}
-            <div className="flex items-center justify-between pb-3 border-b border-[#E5E5EA] shrink-0">
-              <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-lg bg-[#FA243C]/10 text-[#FA243C] flex items-center justify-center">
-                  <ListMusic className="w-4 h-4" />
-                </div>
-                <div>
-                  <h3 className="text-sm sm:text-base font-bold text-[#1D1D1F]">
-                    Up Next • రాబోయే గీతాలు
-                  </h3>
-                  <p className="text-[11px] text-[#86868B]">
-                    {upNextTracks.length} {upNextTracks.length === 1 ? 'song' : 'songs'} remaining in queue
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={toggleShuffle}
-                  className={`px-2.5 py-1 rounded-lg text-xs font-semibold border transition-all flex items-center gap-1.5 ${
-                    shuffle
-                      ? 'bg-[#FA243C]/10 border-[#FA243C]/40 text-[#FA243C]'
-                      : 'bg-[#F5F5F7] border-[#E5E5EA] text-[#86868B]'
-                  }`}
-                  title="Toggle Shuffle"
-                >
-                  <Shuffle className="w-3.5 h-3.5" />
-                  <span className="text-[10px]">Shuffle</span>
-                </button>
-
-                {upNextTracks.length > 0 && (
-                  <button
-                    onClick={clearQueue}
-                    className="px-2.5 py-1 rounded-lg text-xs font-semibold text-gray-500 hover:text-red-600 hover:bg-red-50 border border-transparent transition-colors flex items-center gap-1"
-                    title="Clear Queue"
-                  >
-                    <Trash2 className="w-3.5 h-3.5" />
-                    <span className="text-[10px]">Clear</span>
-                  </button>
-                )}
-              </div>
-            </div>
-
-            {/* Scrollable Song Queue */}
-            <div className="flex-1 min-h-0 overflow-y-auto space-y-2 py-3 pr-1 no-scrollbar scrollbar-none">
-              {/* NOW PLAYING CARD */}
-              <div className="p-3 rounded-2xl bg-gradient-to-r from-red-500/10 via-amber-500/5 to-transparent border border-[#FA243C]/30 flex items-center justify-between gap-3 shadow-sm">
+          <div className="w-full h-full flex flex-col overflow-hidden animate-fadeIn">
+            {/* ---------------- MOBILE QUEUE VIEW (Top Image Banner | Below it Queue & History) ---------------- */}
+            <div className="md:hidden w-full h-full overflow-y-auto space-y-4 pb-28 pt-2 px-3 no-scrollbar">
+              {/* TOP: Image Banner Card */}
+              <div
+                className="w-full p-4 rounded-3xl border shadow-xl flex items-center justify-between gap-3 relative overflow-hidden"
+                style={{
+                  background: `linear-gradient(135deg, rgba(${songTheme.primaryRgb}, 0.20), rgba(${songTheme.secondaryRgb}, 0.15))`,
+                  borderColor: `rgba(${songTheme.primaryRgb}, 0.35)`,
+                }}
+              >
                 <div className="flex items-center gap-3 min-w-0">
-                  <div className="relative w-11 h-11 rounded-xl overflow-hidden shrink-0 shadow-md">
+                  <div className="relative w-14 h-14 rounded-2xl overflow-hidden shrink-0 shadow-md">
                     <img
                       src={currentTrack.coverImage || '/covers/001_prayermp3.jpg'}
                       alt={currentTrack.titleEnglish}
@@ -508,15 +477,13 @@ export const FullscreenPlayer: React.FC = () => {
                     )}
                   </div>
                   <div className="min-w-0">
-                    <div className="flex items-center gap-1.5">
-                      <span className="px-1.5 py-0.5 rounded bg-[#FA243C] text-[9px] font-bold text-white uppercase tracking-wider">
-                        Now Playing
-                      </span>
-                    </div>
-                    <h4 className="text-xs sm:text-sm font-bold text-[#1D1D1F] truncate mt-0.5">
+                    <span className="px-2 py-0.5 rounded bg-[#FA243C] text-[9px] font-bold text-white uppercase tracking-wider">
+                      Now Playing
+                    </span>
+                    <h4 className="text-sm font-bold text-[#1D1D1F] truncate mt-1">
                       {currentTrack.titleEnglish}
                     </h4>
-                    <p className="text-[11px] font-telugu text-[#D4A017] truncate">
+                    <p className="text-xs font-telugu text-[#D4A017] truncate font-semibold">
                       {currentTrack.titleTelugu}
                     </p>
                   </div>
@@ -524,114 +491,145 @@ export const FullscreenPlayer: React.FC = () => {
 
                 <button
                   onClick={togglePlay}
-                  className="w-8 h-8 rounded-full bg-[#FA243C] text-white flex items-center justify-center shadow hover:scale-105 active:scale-95 transition-transform shrink-0"
+                  className="w-10 h-10 rounded-full bg-[#FA243C] text-white flex items-center justify-center shadow hover:scale-105 active:scale-95 transition-transform shrink-0"
                   title={isPlaying ? 'Pause' : 'Play'}
                 >
                   {isPlaying ? (
-                    <Pause className="w-4 h-4 fill-current" />
+                    <Pause className="w-5 h-5 fill-current" />
                   ) : (
-                    <Play className="w-4 h-4 fill-current ml-0.5" />
+                    <Play className="w-5 h-5 fill-current ml-0.5" />
                   )}
                 </button>
               </div>
 
-              {/* UP NEXT SECTION */}
-              <div className="pt-2 pb-1 flex items-center justify-between text-[10px] font-bold text-[#86868B] uppercase tracking-wider px-1">
-                <span>Playing Next</span>
-                <span>{upNextTracks.length} Tracks</span>
-              </div>
-
-              {upNextTracks.length === 0 ? (
-                <div className="py-8 text-center text-xs text-[#86868B] space-y-2 bg-[#F9F9FB] rounded-2xl border border-dashed border-[#E5E5EA] p-4">
-                  <ListMusic className="w-7 h-7 opacity-40 mx-auto text-[#FA243C]" />
-                  {repeatMode === 'all' && previouslyPlayedTracks.length > 0 ? (
-                    <div>
-                      <p className="font-semibold text-[#1D1D1F]">Repeat All Active</p>
-                      <p className="text-[10px] text-[#86868B] mt-0.5">
-                        Queue will loop back to the beginning ({previouslyPlayedTracks[0]?.titleEnglish}).
-                      </p>
-                    </div>
-                  ) : (
-                    <div>
-                      <p className="font-semibold text-[#1D1D1F]">End of Queue</p>
-                      <p className="text-[10px] text-[#86868B] mt-0.5">
-                        You have reached the last track in this queue.
-                      </p>
-                    </div>
-                  )}
+              {/* BELOW IT: Queue Header */}
+              <div className="flex items-center justify-between px-1 pt-1">
+                <div>
+                  <h3 className="text-sm font-bold text-[#1D1D1F]">
+                    Up Next • రాబోయే గీతాలు
+                  </h3>
+                  <p className="text-[11px] text-[#86868B]">
+                    {upNextTracks.length} {upNextTracks.length === 1 ? 'song' : 'songs'} remaining
+                  </p>
                 </div>
-              ) : (
-                upNextTracks.map((track, idx) => {
-                  const actualQueueIndex = currentIndex >= 0 ? currentIndex + 1 + idx : idx;
-                  return (
-                    <div
-                      key={`${track.id}-${actualQueueIndex}`}
-                      onClick={() => playTrack(track, queue)}
-                      className="group p-2.5 rounded-xl border border-[#E5E5EA] bg-white hover:bg-[#F2F2F7] flex items-center justify-between gap-3 cursor-pointer transition-all"
-                    >
-                      <div className="flex items-center gap-3 min-w-0">
-                        <span className="text-[11px] font-mono text-[#86868B] w-5 text-center shrink-0">
-                          {String(idx + 1).padStart(2, '0')}
-                        </span>
-                        <img
-                          src={track.coverImage || '/covers/001_prayermp3.jpg'}
-                          alt={track.titleEnglish}
-                          className="w-10 h-10 rounded-lg object-cover shrink-0 shadow-sm"
-                        />
-                        <div className="min-w-0">
-                          <h5 className="text-xs font-semibold truncate text-[#1D1D1F] group-hover:text-[#FA243C]">
-                            {track.titleEnglish}
-                          </h5>
-                          <p className="text-[10px] font-telugu text-[#86868B] truncate">
-                            {track.titleTelugu}
-                          </p>
-                        </div>
-                      </div>
 
-                      <div className="flex items-center gap-2 shrink-0">
-                        <span className="text-[10px] font-mono text-[#86868B]">
-                          {track.duration || '5:12'}
-                        </span>
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            removeFromQueue(actualQueueIndex);
-                          }}
-                          className="p-1 text-gray-400 hover:text-red-600 rounded-md hover:bg-gray-100 transition-colors"
-                          title="Remove from queue"
-                        >
-                          <X className="w-3.5 h-3.5" />
-                        </button>
-                      </div>
-                    </div>
-                  );
-                })
-              )}
-
-              {/* Previously Played Accordion */}
-              {previouslyPlayedTracks.length > 0 && (
-                <div className="pt-3 border-t border-[#E5E5EA] mt-3">
+                <div className="flex items-center gap-2">
                   <button
-                    onClick={() => setShowFullscreenHistory((prev) => !prev)}
-                    className="w-full flex items-center justify-between py-1.5 px-2 text-[11px] font-mono text-[#86868B] hover:text-[#1D1D1F] transition-colors"
+                    onClick={toggleShuffle}
+                    className={`px-2.5 py-1 rounded-lg text-xs font-semibold border transition-all flex items-center gap-1 ${
+                      shuffle
+                        ? 'bg-[#FA243C]/10 border-[#FA243C]/40 text-[#FA243C]'
+                        : 'bg-[#F5F5F7] border-[#E5E5EA] text-[#86868B]'
+                    }`}
                   >
-                    <span className="uppercase tracking-wider">
-                      Previously Played ({previouslyPlayedTracks.length})
-                    </span>
-                    {showFullscreenHistory ? (
-                      <ChevronUp className="w-3.5 h-3.5" />
-                    ) : (
-                      <ChevronDown className="w-3.5 h-3.5" />
-                    )}
+                    <Shuffle className="w-3.5 h-3.5" />
+                    <span className="text-[10px]">Shuffle</span>
                   </button>
 
+                  {upNextTracks.length > 0 && (
+                    <button
+                      onClick={clearQueue}
+                      className="px-2.5 py-1 rounded-lg text-xs font-semibold text-gray-500 hover:text-red-600 border border-transparent transition-colors flex items-center gap-1"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                      <span className="text-[10px]">Clear</span>
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              {/* BELOW IT: Up Next Songs List */}
+              <div className="space-y-2">
+                {upNextTracks.length === 0 ? (
+                  <div className="py-6 text-center text-xs text-[#86868B] space-y-1.5 bg-[#F9F9FB] rounded-2xl border border-dashed border-[#E5E5EA] p-4">
+                    <ListMusic className="w-7 h-7 opacity-40 mx-auto text-[#FA243C]" />
+                    <p className="font-semibold text-[#1D1D1F]">End of Queue</p>
+                    <p className="text-[10px] text-[#86868B]">Click any album song to queue its hymns.</p>
+                  </div>
+                ) : (
+                  upNextTracks.map((track, idx) => {
+                    const actualQueueIndex = currentIndex >= 0 ? currentIndex + 1 + idx : idx;
+                    return (
+                      <div
+                        key={`mob-${track.id}-${actualQueueIndex}`}
+                        onClick={() => playTrack(track, queue)}
+                        className="group p-2.5 rounded-2xl border border-[#E5E5EA] bg-white flex items-center justify-between gap-3 active:scale-[0.99] transition-all cursor-pointer shadow-sm"
+                      >
+                        <div className="flex items-center gap-3 min-w-0">
+                          <span className="text-[11px] font-mono text-[#86868B] w-5 text-center shrink-0">
+                            {String(idx + 1).padStart(2, '0')}
+                          </span>
+                          <img
+                            src={track.coverImage || '/covers/001_prayermp3.jpg'}
+                            alt={track.titleEnglish}
+                            className="w-10 h-10 rounded-xl object-cover shrink-0 shadow-sm"
+                          />
+                          <div className="min-w-0">
+                            <h5 className="text-xs font-semibold truncate text-[#1D1D1F]">
+                              {track.titleEnglish}
+                            </h5>
+                            <p className="text-[10px] font-telugu text-[#86868B] truncate">
+                              {track.titleTelugu}
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="flex items-center gap-2 shrink-0">
+                          <span className="text-[10px] font-mono text-[#86868B]">
+                            {track.duration || '5:12'}
+                          </span>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              removeFromQueue(actualQueueIndex);
+                            }}
+                            className="p-1 text-gray-400 hover:text-red-600 rounded-md transition-colors"
+                            title="Remove"
+                          >
+                            <X className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      </div>
+                    );
+                  })
+                )}
+              </div>
+
+              {/* BELOW IT: History Section with Clear History */}
+              {fullHistory.length > 0 && (
+                <div className="pt-4 border-t border-[#E5E5EA] mt-4">
+                  <div className="flex items-center justify-between py-1 px-1">
+                    <button
+                      onClick={() => setShowFullscreenHistory((prev) => !prev)}
+                      className="flex items-center gap-1.5 text-xs font-mono text-[#86868B] hover:text-[#1D1D1F]"
+                    >
+                      <span className="uppercase tracking-wider font-semibold">
+                        Playback History ({fullHistory.length})
+                      </span>
+                      {showFullscreenHistory ? (
+                        <ChevronUp className="w-3.5 h-3.5" />
+                      ) : (
+                        <ChevronDown className="w-3.5 h-3.5" />
+                      )}
+                    </button>
+
+                    <button
+                      onClick={clearHistory}
+                      className="text-[10px] text-gray-400 hover:text-red-600 transition-colors flex items-center gap-1 font-mono"
+                      title="Clear history"
+                    >
+                      <Trash2 className="w-3 h-3" />
+                      <span>Clear History</span>
+                    </button>
+                  </div>
+
                   {showFullscreenHistory && (
-                    <div className="space-y-1.5 mt-2 opacity-85 max-h-48 overflow-y-auto">
-                      {previouslyPlayedTracks.map((track, pIdx) => (
+                    <div className="space-y-1.5 mt-2">
+                      {fullHistory.map((track, pIdx) => (
                         <div
-                          key={`fs-prev-${track.id}-${pIdx}`}
+                          key={`fs-mob-prev-${track.id}-${pIdx}`}
                           onClick={() => playTrack(track, queue)}
-                          className="group p-2 rounded-lg hover:bg-black/5 flex items-center justify-between text-xs cursor-pointer transition-colors"
+                          className="group p-2 rounded-xl bg-black/5 flex items-center justify-between text-xs cursor-pointer"
                         >
                           <div className="flex items-center gap-2.5 min-w-0">
                             <span className="font-mono text-[9px] text-[#86868B] w-4 text-center shrink-0">
@@ -640,9 +638,9 @@ export const FullscreenPlayer: React.FC = () => {
                             <img
                               src={track.coverImage || '/covers/001_prayermp3.jpg'}
                               alt={track.titleEnglish}
-                              className="w-7 h-7 rounded object-cover shrink-0"
+                              className="w-7 h-7 rounded-lg object-cover shrink-0"
                             />
-                            <span className="truncate text-xs text-[#1D1D1F] group-hover:text-[#FA243C]">
+                            <span className="truncate text-xs text-[#1D1D1F]">
                               {track.titleEnglish}
                             </span>
                           </div>
@@ -655,6 +653,252 @@ export const FullscreenPlayer: React.FC = () => {
                   )}
                 </div>
               )}
+            </div>
+
+            {/* ---------------- DESKTOP SPLIT QUEUE VIEW (Left Image Banner | Right Up Next Queue & History) ---------------- */}
+            <div className="hidden md:flex w-full h-full flex-row items-center justify-center gap-8 lg:gap-12 overflow-hidden animate-fadeIn">
+              {/* Left Column: Image Banner Card */}
+              <div className="flex flex-col items-center justify-center max-w-xs lg:max-w-sm w-full shrink-0">
+                <div
+                  className="relative aspect-square w-56 md:w-64 lg:w-72 xl:w-80 max-h-[42vh] rounded-3xl overflow-hidden border transition-all duration-700 shadow-2xl group"
+                  style={{
+                    borderColor: `rgba(${songTheme.primaryRgb}, 0.35)`,
+                    boxShadow: `0 24px 50px -12px rgba(${songTheme.primaryRgb}, 0.45)`,
+                  }}
+                >
+                  <img
+                    src={currentTrack.coverImage || '/covers/001_prayermp3.jpg'}
+                    alt={currentTrack.titleEnglish}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                  />
+                  {isPlaying && (
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex items-end p-4 pointer-events-none">
+                      <div className="flex items-center gap-2 text-xs text-white font-mono">
+                        <Sparkles
+                          className="w-4 h-4 animate-pulse"
+                          style={{ color: songTheme.primary }}
+                        />
+                        <span>Now Playing</span>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                <div className="w-full text-center mt-4 space-y-1">
+                  <h2 className="text-lg lg:text-2xl font-bold truncate px-2 text-[#1D1D1F]">
+                    {currentTrack.titleEnglish}
+                  </h2>
+                  <p
+                    className="font-telugu text-sm lg:text-lg truncate font-semibold transition-colors duration-500"
+                    style={{ color: songTheme.primary }}
+                  >
+                    {currentTrack.titleTelugu}
+                  </p>
+                  <p className="text-xs text-gray-500 truncate font-medium">
+                    {currentTrack.singer || 'Rev. Tony Prakash'} • {currentTrack.category || 'Devotional'}
+                  </p>
+                </div>
+
+                {/* Left Mini Transport Controls */}
+                <div className="flex items-center gap-3 mt-4">
+                  <button
+                    onClick={playPrev}
+                    className="p-2 rounded-full hover:bg-black/5 text-gray-700 active:scale-95 transition-transform"
+                    title="Previous"
+                  >
+                    <SkipBack className="w-5 h-5 fill-current" />
+                  </button>
+                  <button
+                    onClick={togglePlay}
+                    className="w-12 h-12 rounded-full bg-[#FA243C] text-white flex items-center justify-center shadow-lg hover:scale-105 active:scale-95 transition-all"
+                    title={isPlaying ? 'Pause' : 'Play'}
+                  >
+                    {isPlaying ? <Pause className="w-5 h-5 fill-current" /> : <Play className="w-5 h-5 fill-current ml-0.5" />}
+                  </button>
+                  <button
+                    onClick={playNext}
+                    className="p-2 rounded-full hover:bg-black/5 text-gray-700 active:scale-95 transition-transform"
+                    title="Next"
+                  >
+                    <SkipForward className="w-5 h-5 fill-current" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Right Column: Up Next Queue & Below it History */}
+              <div className="flex-1 flex flex-col h-full max-h-[min(74vh,640px)] bg-white/60 dark:bg-black/40 backdrop-blur-2xl rounded-3xl border border-[#E5E5EA] dark:border-white/10 p-5 lg:p-6 shadow-2xl overflow-hidden">
+                {/* Header with Title and Controls */}
+                <div className="flex items-center justify-between pb-3 border-b border-black/10 dark:border-white/10 shrink-0">
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-8 h-8 rounded-lg bg-[#FA243C]/10 text-[#FA243C] flex items-center justify-center">
+                      <ListMusic className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <h3 className="text-sm sm:text-base font-bold text-[#1D1D1F]">
+                        Up Next • రాబోయే గీతాలు
+                      </h3>
+                      <p className="text-[11px] text-[#86868B]">
+                        {upNextTracks.length} {upNextTracks.length === 1 ? 'song' : 'songs'} remaining in queue
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={toggleShuffle}
+                      className={`px-2.5 py-1 rounded-lg text-xs font-semibold border transition-all flex items-center gap-1.5 ${
+                        shuffle
+                          ? 'bg-[#FA243C]/10 border-[#FA243C]/40 text-[#FA243C]'
+                          : 'bg-[#F5F5F7] border-[#E5E5EA] text-[#86868B]'
+                      }`}
+                      title="Toggle Shuffle"
+                    >
+                      <Shuffle className="w-3.5 h-3.5" />
+                      <span className="text-[10px]">Shuffle</span>
+                    </button>
+
+                    {upNextTracks.length > 0 && (
+                      <button
+                        onClick={clearQueue}
+                        className="px-2.5 py-1 rounded-lg text-xs font-semibold text-gray-500 hover:text-red-600 hover:bg-red-50 border border-transparent transition-colors flex items-center gap-1"
+                        title="Clear Queue"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                        <span className="text-[10px]">Clear Queue</span>
+                      </button>
+                    )}
+                  </div>
+                </div>
+
+                {/* Up Next List */}
+                <div className="flex-1 min-h-0 overflow-y-auto space-y-2 py-3 pr-2 no-scrollbar scrollbar-none">
+                  {upNextTracks.length === 0 ? (
+                    <div className="py-8 text-center text-xs text-[#86868B] space-y-2 bg-[#F9F9FB] rounded-2xl border border-dashed border-[#E5E5EA] p-4">
+                      <ListMusic className="w-7 h-7 opacity-40 mx-auto text-[#FA243C]" />
+                      {repeatMode === 'all' && fullHistory.length > 0 ? (
+                        <div>
+                          <p className="font-semibold text-[#1D1D1F]">Repeat All Active</p>
+                          <p className="text-[10px] text-[#86868B] mt-0.5">
+                            Queue will restart from the beginning ({fullHistory[0]?.titleEnglish}).
+                          </p>
+                        </div>
+                      ) : (
+                        <div>
+                          <p className="font-semibold text-[#1D1D1F]">End of Queue</p>
+                          <p className="text-[10px] text-[#86868B] mt-0.5">
+                            Click any album song or select more hymns to add them to your queue.
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    upNextTracks.map((track, idx) => {
+                      const actualQueueIndex = currentIndex >= 0 ? currentIndex + 1 + idx : idx;
+                      return (
+                        <div
+                          key={`${track.id}-${actualQueueIndex}`}
+                          onClick={() => playTrack(track, queue)}
+                          className="group p-2.5 rounded-xl border border-[#E5E5EA] bg-white hover:bg-[#F2F2F7] flex items-center justify-between gap-3 cursor-pointer transition-all"
+                        >
+                          <div className="flex items-center gap-3 min-w-0">
+                            <span className="text-[11px] font-mono text-[#86868B] w-5 text-center shrink-0">
+                              {String(idx + 1).padStart(2, '0')}
+                            </span>
+                            <img
+                              src={track.coverImage || '/covers/001_prayermp3.jpg'}
+                              alt={track.titleEnglish}
+                              className="w-10 h-10 rounded-lg object-cover shrink-0 shadow-sm"
+                            />
+                            <div className="min-w-0">
+                              <h5 className="text-xs font-semibold truncate text-[#1D1D1F] group-hover:text-[#FA243C]">
+                                {track.titleEnglish}
+                              </h5>
+                              <p className="text-[10px] font-telugu text-[#86868B] truncate">
+                                {track.titleTelugu}
+                              </p>
+                            </div>
+                          </div>
+
+                          <div className="flex items-center gap-2 shrink-0">
+                            <span className="text-[10px] font-mono text-[#86868B]">
+                              {track.duration || '5:12'}
+                            </span>
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                removeFromQueue(actualQueueIndex);
+                              }}
+                              className="p-1 text-gray-400 hover:text-red-600 rounded-md hover:bg-gray-100 transition-colors"
+                              title="Remove from queue"
+                            >
+                              <X className="w-3.5 h-3.5" />
+                            </button>
+                          </div>
+                        </div>
+                      );
+                    })
+                  )}
+
+                  {/* Below it: The History Section */}
+                  {fullHistory.length > 0 && (
+                    <div className="pt-3 border-t border-[#E5E5EA] mt-4">
+                      <div className="flex items-center justify-between py-1.5 px-2">
+                        <button
+                          onClick={() => setShowFullscreenHistory((prev) => !prev)}
+                          className="flex items-center gap-1.5 text-[11px] font-mono text-[#86868B] hover:text-[#1D1D1F] transition-colors"
+                        >
+                          <span className="uppercase tracking-wider">
+                            Playback History ({fullHistory.length})
+                          </span>
+                          {showFullscreenHistory ? (
+                            <ChevronUp className="w-3.5 h-3.5" />
+                          ) : (
+                            <ChevronDown className="w-3.5 h-3.5" />
+                          )}
+                        </button>
+
+                        <button
+                          onClick={clearHistory}
+                          className="text-[10px] text-gray-400 hover:text-red-600 transition-colors flex items-center gap-1 font-mono"
+                          title="Clear playback history"
+                        >
+                          <Trash2 className="w-3 h-3" />
+                          <span>Clear History</span>
+                        </button>
+                      </div>
+
+                      {showFullscreenHistory && (
+                        <div className="space-y-1.5 mt-2 opacity-85 max-h-48 overflow-y-auto pr-1">
+                          {fullHistory.map((track, pIdx) => (
+                            <div
+                              key={`fs-prev-${track.id}-${pIdx}`}
+                              onClick={() => playTrack(track, queue)}
+                              className="group p-2 rounded-lg hover:bg-black/5 flex items-center justify-between text-xs cursor-pointer transition-colors"
+                            >
+                              <div className="flex items-center gap-2.5 min-w-0">
+                                <span className="font-mono text-[9px] text-[#86868B] w-4 text-center shrink-0">
+                                  {pIdx + 1}
+                                </span>
+                                <img
+                                  src={track.coverImage || '/covers/001_prayermp3.jpg'}
+                                  alt={track.titleEnglish}
+                                  className="w-7 h-7 rounded object-cover shrink-0"
+                                />
+                                <span className="truncate text-xs text-[#1D1D1F] group-hover:text-[#FA243C]">
+                                  {track.titleEnglish}
+                                </span>
+                              </div>
+                              <span className="text-[10px] font-mono text-[#86868B]">
+                                {track.duration}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              </div>
             </div>
           </div>
         )}
