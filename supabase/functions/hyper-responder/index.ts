@@ -707,6 +707,136 @@ Deno.serve(async (req: Request) => {
     }
   }
 
+  // 9. Albums Endpoint
+  if ((path === '/albums' || path.startsWith('/albums/')) && req.method === 'GET') {
+    try {
+      if (path.startsWith('/albums/')) {
+        const slugOrId = path.split('/albums/')[1]?.replace(/\/+$/, '');
+        const { data: album } = await supabase
+          .from('Album')
+          .select('*, tracks:Track(*)')
+          .or(`slug.eq.${slugOrId},id.eq.${slugOrId}`)
+          .maybeSingle();
+
+        if (album) {
+          return new Response(JSON.stringify(album), {
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          });
+        }
+      }
+
+      const { data: albums } = await supabase
+        .from('Album')
+        .select('*, tracks:Track(*)')
+        .eq('status', 'PUBLISHED')
+        .order('releaseYear', { ascending: false });
+
+      if (albums && albums.length > 0) {
+        return new Response(JSON.stringify(albums), {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
+      }
+
+      return new Response(JSON.stringify([]), {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    } catch (err: any) {
+      return new Response(JSON.stringify({ error: err.message }), {
+        status: 500,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+  }
+
+  // 10. Tracks Endpoint
+  if ((path === '/tracks' || path.startsWith('/tracks/') || path.startsWith('/tracks?')) && req.method === 'GET') {
+    try {
+      if (path.startsWith('/tracks/') && !path.startsWith('/tracks?')) {
+        const slugOrId = path.split('/tracks/')[1]?.replace(/\/+$/, '');
+        const { data: track } = await supabase
+          .from('Track')
+          .select('*')
+          .or(`slug.eq.${slugOrId},id.eq.${slugOrId}`)
+          .maybeSingle();
+
+        if (track) {
+          return new Response(
+            JSON.stringify({ track, entitlement: { hasAccess: true, hasPurchased: false } }),
+            { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+          );
+        }
+      }
+
+      const category = url.searchParams.get('category');
+      const search = url.searchParams.get('search');
+      const albumId = url.searchParams.get('albumId');
+      const popular = url.searchParams.get('popular');
+      const featured = url.searchParams.get('featured');
+
+      let query = supabase.from('Track').select('*').eq('status', 'PUBLISHED');
+
+      if (category && category !== 'ALL') {
+        query = query.ilike('category', category);
+      }
+      if (albumId) {
+        query = query.eq('albumId', albumId);
+      }
+      if (popular === 'true') {
+        query = query.eq('isPopular', true);
+      }
+      if (featured === 'true') {
+        query = query.eq('isFeatured', true);
+      }
+
+      const { data: tracks } = await query.order('trackNumber', { ascending: true });
+
+      if (tracks && tracks.length > 0) {
+        let result = tracks;
+        if (search) {
+          const s = search.toLowerCase();
+          result = result.filter(
+            (t: any) =>
+              (t.titleEnglish && t.titleEnglish.toLowerCase().includes(s)) ||
+              (t.titleTelugu && t.titleTelugu.toLowerCase().includes(s)) ||
+              (t.composer && t.composer.toLowerCase().includes(s))
+          );
+        }
+        return new Response(JSON.stringify(result), {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
+      }
+
+      return new Response(JSON.stringify([]), {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    } catch (err: any) {
+      return new Response(JSON.stringify({ error: err.message }), {
+        status: 500,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+  }
+
+  // 11. Videos Endpoint
+  if (path === '/videos' && req.method === 'GET') {
+    try {
+      const { data: videos } = await supabase
+        .from('Video')
+        .select('*')
+        .eq('status', 'PUBLISHED')
+        .order('publishedAt', { ascending: false });
+
+      return new Response(JSON.stringify(videos || []), {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    } catch (err: any) {
+      return new Response(JSON.stringify({ error: err.message }), {
+        status: 500,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+  }
+
   return new Response(JSON.stringify({ error: 'Endpoint not found', path }), {
     status: 404,
     headers: { ...corsHeaders, 'Content-Type': 'application/json' },

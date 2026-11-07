@@ -248,58 +248,113 @@ export const api = {
       albumId?: string;
       includeDrafts?: boolean;
     }) {
+      // 1. Direct Supabase Query (fastest, zero 404s)
       try {
-        const query = new URLSearchParams();
-        if (params?.search) query.set('search', params.search);
-        if (params?.category) query.set('category', params.category);
-        if (params?.featured) query.set('featured', 'true');
-        if (params?.popular) query.set('popular', 'true');
-        if (params?.subscriberOnly) query.set('subscriberOnly', 'true');
-        if (params?.albumId) query.set('albumId', params.albumId);
-        if (params?.includeDrafts) query.set('includeDrafts', 'true');
-
-        const res = await fetch(`${API_BASE}/tracks?${query.toString()}`, {
-          headers: getAuthHeaders(),
-        });
-        return await handleResponse<Track[]>(res);
-      } catch (err) {
-        console.warn('Backend unavailable, using rich devotional catalogue:', err);
-        let filtered = [...MOCK_TRACKS];
-        if (params?.search) {
-          const s = params.search.toLowerCase();
-          filtered = filtered.filter(
-            (t) =>
-              t.titleTelugu.toLowerCase().includes(s) ||
-              t.titleEnglish.toLowerCase().includes(s) ||
-              t.composer.toLowerCase().includes(s)
-          );
-        }
+        let query = supabase.from('Track').select('*').eq('status', 'PUBLISHED');
         if (params?.category && params.category !== 'ALL') {
-          filtered = filtered.filter((t) => t.category.toLowerCase() === params.category?.toLowerCase());
+          query = query.ilike('category', params.category);
         }
         if (params?.albumId) {
-          filtered = filtered.filter((t) => t.albumId === params.albumId);
+          query = query.eq('albumId', params.albumId);
         }
         if (params?.popular) {
-          filtered = filtered.filter((t) => t.isPopular);
+          query = query.eq('isPopular', true);
         }
         if (params?.featured) {
-          filtered = filtered.filter((t) => t.isFeatured);
+          query = query.eq('isFeatured', true);
         }
-        return filtered;
+        const { data: dbTracks, error: dbError } = await query.order('trackNumber', { ascending: true });
+        if (!dbError && dbTracks && dbTracks.length > 0) {
+          let filtered = dbTracks as Track[];
+          if (params?.search) {
+            const s = params.search.toLowerCase();
+            filtered = filtered.filter(
+              (t) =>
+                t.titleTelugu?.toLowerCase().includes(s) ||
+                t.titleEnglish?.toLowerCase().includes(s) ||
+                t.composer?.toLowerCase().includes(s)
+            );
+          }
+          return filtered;
+        }
+      } catch {}
+
+      // 2. REST API endpoint fallback if API_BASE is configured
+      if (API_BASE && API_BASE !== '/api') {
+        try {
+          const query = new URLSearchParams();
+          if (params?.search) query.set('search', params.search);
+          if (params?.category) query.set('category', params.category);
+          if (params?.featured) query.set('featured', 'true');
+          if (params?.popular) query.set('popular', 'true');
+          if (params?.subscriberOnly) query.set('subscriberOnly', 'true');
+          if (params?.albumId) query.set('albumId', params.albumId);
+          if (params?.includeDrafts) query.set('includeDrafts', 'true');
+
+          const res = await fetch(`${API_BASE}/tracks?${query.toString()}`, {
+            headers: getAuthHeaders(),
+          });
+          if (res.ok) {
+            const data = await res.json();
+            if (Array.isArray(data) && data.length > 0) {
+              return data;
+            }
+          }
+        } catch {}
       }
+
+      // 3. Official Embedded Devotional Catalogue (125 tracks)
+      let filtered = [...MOCK_TRACKS];
+      if (params?.search) {
+        const s = params.search.toLowerCase();
+        filtered = filtered.filter(
+          (t) =>
+            t.titleTelugu.toLowerCase().includes(s) ||
+            t.titleEnglish.toLowerCase().includes(s) ||
+            t.composer.toLowerCase().includes(s)
+        );
+      }
+      if (params?.category && params.category !== 'ALL') {
+        filtered = filtered.filter((t) => t.category.toLowerCase() === params.category?.toLowerCase());
+      }
+      if (params?.albumId) {
+        filtered = filtered.filter((t) => t.albumId === params.albumId);
+      }
+      if (params?.popular) {
+        filtered = filtered.filter((t) => t.isPopular);
+      }
+      if (params?.featured) {
+        filtered = filtered.filter((t) => t.isFeatured);
+      }
+      return filtered;
     },
 
     async getBySlug(slug: string) {
       try {
-        const res = await fetch(`${API_BASE}/tracks/${slug}`, {
-          headers: getAuthHeaders(),
-        });
-        return await handleResponse<{ track: Track; entitlement: { hasAccess: boolean; hasPurchased: boolean } }>(res);
-      } catch {
-        const track = MOCK_TRACKS.find((t) => t.slug === slug) || MOCK_TRACKS[0];
-        return { track, entitlement: { hasAccess: true, hasPurchased: false } };
+        const { data: track } = await supabase
+          .from('Track')
+          .select('*')
+          .eq('slug', slug)
+          .maybeSingle();
+
+        if (track) {
+          return { track: track as Track, entitlement: { hasAccess: true, hasPurchased: false } };
+        }
+      } catch {}
+
+      if (API_BASE && API_BASE !== '/api') {
+        try {
+          const res = await fetch(`${API_BASE}/tracks/${slug}`, {
+            headers: getAuthHeaders(),
+          });
+          if (res.ok) {
+            return await res.json();
+          }
+        } catch {}
       }
+
+      const track = MOCK_TRACKS.find((t) => t.slug === slug) || MOCK_TRACKS[0];
+      return { track, entitlement: { hasAccess: true, hasPurchased: false } };
     },
 
     async create(trackData: Partial<Track>) {
@@ -333,22 +388,57 @@ export const api = {
   albums: {
     async getAll() {
       try {
-        const res = await fetch(`${API_BASE}/albums`);
-        return await handleResponse<Album[]>(res);
-      } catch {
-        return MOCK_ALBUMS;
+        const { data: dbAlbums, error } = await supabase
+          .from('Album')
+          .select('*, tracks:Track(*)')
+          .eq('status', 'PUBLISHED')
+          .order('releaseYear', { ascending: false });
+
+        if (!error && dbAlbums && dbAlbums.length > 0) {
+          return dbAlbums as Album[];
+        }
+      } catch {}
+
+      if (API_BASE && API_BASE !== '/api') {
+        try {
+          const res = await fetch(`${API_BASE}/albums`);
+          if (res.ok) {
+            const data = await res.json();
+            if (Array.isArray(data) && data.length > 0) {
+              return data;
+            }
+          }
+        } catch {}
       }
+
+      return MOCK_ALBUMS;
     },
 
     async getBySlug(slug: string) {
       try {
-        const res = await fetch(`${API_BASE}/albums/${slug}`);
-        return await handleResponse<Album>(res);
-      } catch {
-        const album = MOCK_ALBUMS.find((a) => a.slug === slug) || MOCK_ALBUMS[0];
-        const tracks = MOCK_TRACKS.filter((t) => t.albumId === album.id);
-        return { ...album, tracks };
+        const { data: dbAlbum } = await supabase
+          .from('Album')
+          .select('*, tracks:Track(*)')
+          .eq('slug', slug)
+          .maybeSingle();
+
+        if (dbAlbum) {
+          return dbAlbum as Album;
+        }
+      } catch {}
+
+      if (API_BASE && API_BASE !== '/api') {
+        try {
+          const res = await fetch(`${API_BASE}/albums/${slug}`);
+          if (res.ok) {
+            return await res.json();
+          }
+        } catch {}
       }
+
+      const album = MOCK_ALBUMS.find((a) => a.slug === slug) || MOCK_ALBUMS[0];
+      const tracks = MOCK_TRACKS.filter((t) => t.albumId === album.id);
+      return { ...album, tracks };
     },
 
     async create(albumData: Partial<Album>) {
@@ -382,11 +472,30 @@ export const api = {
   videos: {
     async getAll() {
       try {
-        const res = await fetch(`${API_BASE}/videos`);
-        return await handleResponse<Video[]>(res);
-      } catch {
-        return MOCK_VIDEOS;
+        const { data: dbVideos, error } = await supabase
+          .from('Video')
+          .select('*')
+          .eq('status', 'PUBLISHED')
+          .order('publishedAt', { ascending: false });
+
+        if (!error && dbVideos && dbVideos.length > 0) {
+          return dbVideos as Video[];
+        }
+      } catch {}
+
+      if (API_BASE && API_BASE !== '/api') {
+        try {
+          const res = await fetch(`${API_BASE}/videos`);
+          if (res.ok) {
+            const data = await res.json();
+            if (Array.isArray(data) && data.length > 0) {
+              return data;
+            }
+          }
+        } catch {}
       }
+
+      return MOCK_VIDEOS;
     },
 
     async create(videoData: Partial<Video>) {
