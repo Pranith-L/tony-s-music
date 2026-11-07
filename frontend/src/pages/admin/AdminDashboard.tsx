@@ -388,7 +388,7 @@ export const AdminDashboard: React.FC = () => {
                   {stats.activeSubscriptions}
                 </div>
                 <div className="text-xs text-[#86868B] dark:text-[#A1A1AA] font-medium">
-                  ₹299/mo Members
+                  VIP Lifetime Members
                 </div>
               </div>
 

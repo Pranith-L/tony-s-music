@@ -47,7 +47,7 @@ export const Footer: React.FC = () => {
             </li>
             <li>
               <Link to="/membership" className="hover:text-sacred-gold transition-colors">
-                Tony's VIP Pass (₹299/mo)
+                Tony's VIP Lifetime Pass (₹299)
               </Link>
             </li>
             <li>

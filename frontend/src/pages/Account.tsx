@@ -129,21 +129,21 @@ export const AccountPage: React.FC = () => {
           </div>
           {isSubscriber ? (
             <span className="px-3 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/40 text-emerald-600 dark:text-emerald-300 text-xs font-semibold">
-              Active • ₹299/mo
+              Active • VIP Lifetime Pass
             </span>
           ) : (
             <Link
               to="/membership"
               className="px-4 py-2 rounded-full bg-gradient-to-r from-[#FA243C] to-[#D71A30] hover:brightness-110 text-white text-xs font-bold uppercase tracking-wider shadow-sm transition-all active:scale-95"
             >
-              Upgrade to Premium (₹299)
+              Get VIP Lifetime Pass (₹299)
             </Link>
           )}
         </div>
 
         {isSubscriber ? (
           <div className="text-xs text-[#86868B] dark:text-[#A1A1AA] space-y-1 pt-1">
-            <p>Your subscription unlocks all exclusive Telugu devotional audio, early releases, and VIP events.</p>
+            <p>Your VIP Lifetime Pass unlocks unlimited skips, devotional master downloads, and offline listening with zero recurring fees.</p>
             {user.activeSubscription && (
               <p className="font-mono text-[11px] text-[#1D1D1F] dark:text-white font-semibold">
                 Valid through:{' '}
