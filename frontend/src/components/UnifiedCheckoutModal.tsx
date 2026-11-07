@@ -84,7 +84,8 @@ export const UnifiedCheckoutModal: React.FC<UnifiedCheckoutModalProps> = ({
   if (!isOpen) return null;
 
   const isVipPass = itemType === 'VIP_PASS';
-  const priceRupees = 1; // Testing mode: ₹1 live gateway verification
+  // Instamojo enforces a hard platform minimum of ₹9.00; Cashfree supports ₹1.00 testing
+  const priceRupees = selectedGateway === 'INSTAMOJO' ? 9 : 1;
   const itemTitle = isVipPass
     ? "Tony's One-Time VIP Lifetime Pass"
     : track
@@ -453,6 +454,9 @@ export const UnifiedCheckoutModal: React.FC<UnifiedCheckoutModalProps> = ({
                     <p className="text-[11px] text-gray-300">
                       UPI QR, Debit/Credit Cards, Wallets, Net Banking
                     </p>
+                    <span className="text-[10px] text-[#D4A017] font-mono mt-1 block">
+                      (Platform minimum ₹9 • Use Cashfree for ₹1)
+                    </span>
                   </div>
                 </div>
               </div>

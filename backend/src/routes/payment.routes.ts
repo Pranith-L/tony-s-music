@@ -264,6 +264,12 @@ router.post('/create-unified-order', optionalAuth, async (req: AuthRequest, res:
     }
 
     if (selectedGateway === 'INSTAMOJO') {
+      // Instamojo enforces a strict platform minimum of ₹9.00
+      if (amountRupees < 9) {
+        amountRupees = 9;
+        amountPaise = 900;
+      }
+
       const redirectUrl = `${clientUrl}/payment-return?order_id=${encodeURIComponent(orderId)}&gateway=instamojo`;
       const webhookUrl = `${backendUrl}/api/payments/instamojo-webhook`;
 

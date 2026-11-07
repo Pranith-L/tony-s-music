@@ -338,8 +338,12 @@ Deno.serve(async (req: Request) => {
       const { itemType, trackId, gateway, customerName, customerEmail, customerPhone } = body;
 
       const isVip = itemType === 'VIP_PASS';
-      const amountRupees = isVip ? PRICING.vipPassRupees : PRICING.trackRupees;
-      const amountPaise = isVip ? PRICING.vipPassPaise : PRICING.trackPaise;
+      let amountRupees = isVip ? PRICING.vipPassRupees : PRICING.trackRupees;
+      // Instamojo enforces a strict platform minimum of ₹9.00
+      if (gateway === 'INSTAMOJO' && amountRupees < 9) {
+        amountRupees = 9;
+      }
+      const amountPaise = amountRupees * 100;
       const orderId = `tp_${isVip ? 'vip' : 'trk'}_${Date.now()}`;
 
       // Insert transaction into PostgreSQL
@@ -426,6 +430,24 @@ Deno.serve(async (req: Request) => {
 
         const imData = await imRes.json();
         const paymentReq = imData.payment_request || imData;
+
+        if (!imRes.ok || !imData.success || !paymentReq?.longurl) {
+          let errorMessage = 'Instamojo failed to create payment link.';
+          if (imData.message) {
+            if (typeof imData.message === 'object') {
+              errorMessage = Object.entries(imData.message)
+                .map(([field, errs]) => `${field}: ${Array.isArray(errs) ? errs.join(', ') : errs}`)
+                .join('; ');
+            } else {
+              errorMessage = String(imData.message);
+            }
+          }
+          console.error('Instamojo creation failed:', errorMessage, imData);
+          return new Response(
+            JSON.stringify({ success: false, error: errorMessage }),
+            { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+          );
+        }
 
         // Update transaction with gatewayOrderId
         await supabase
