@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   X,
   Play,
@@ -13,6 +13,7 @@ import {
   Heart,
   Sparkles,
   ChevronDown,
+  ChevronUp,
   FileText,
   ListMusic,
   Music2,
@@ -59,6 +60,8 @@ export const FullscreenPlayer: React.FC = () => {
     clearQueue,
   } = usePlayer();
 
+  const [showFullscreenHistory, setShowFullscreenHistory] = useState<boolean>(false);
+
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && isFullscreenPlayer) {
@@ -77,6 +80,36 @@ export const FullscreenPlayer: React.FC = () => {
 
   const progressPercent = duration > 0 ? (currentTime / duration) * 100 : 0;
   const liked = isLiked(currentTrack.id);
+
+  // Queue Calculations: Next In Queue must only show songs AFTER the current song
+  const currentIndex = queue.findIndex((t) => t.id === currentTrack.id);
+  const upNextTracks = currentIndex >= 0 ? queue.slice(currentIndex + 1) : queue;
+  const previouslyPlayedTracks = currentIndex > 0 ? queue.slice(0, currentIndex) : [];
+
+  // Parse lyrics into stanzas
+  const lyricsStanzas = currentTrack.lyricsTelugu
+    ? currentTrack.lyricsTelugu
+        .split('\n\n')
+        .map((s) => s.trim())
+        .filter(Boolean)
+    : [];
+
+  const scrollToMobileLyrics = () => {
+    setFullscreenView('player');
+    setTimeout(() => {
+      const el = document.getElementById('spotify-mobile-lyrics-card');
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 60);
+  };
+
+  const scrollToMobileTop = () => {
+    const el = document.getElementById('fullscreen-mobile-scroll-container');
+    if (el) {
+      el.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
 
   return (
     <div
@@ -113,10 +146,13 @@ export const FullscreenPlayer: React.FC = () => {
           <ChevronDown className="w-5 sm:w-6 h-5 sm:h-6" />
         </button>
 
-        {/* View Switcher Tabs: Now Playing | Lyrics | Up Next Queue */}
+        {/* View Switcher Tabs: Now Playing | Lyrics (Scroll) | Up Next Queue */}
         <div className="flex items-center gap-1 bg-[#F5F5F7] p-1 rounded-2xl border border-[#E5E5EA] shadow-inner">
           <button
-            onClick={() => setFullscreenView('player')}
+            onClick={() => {
+              setFullscreenView('player');
+              scrollToMobileTop();
+            }}
             className={`px-3 py-1 rounded-xl text-xs font-semibold transition-all flex items-center gap-1.5 ${
               fullscreenView === 'player'
                 ? 'bg-white text-[#FA243C] shadow-sm'
@@ -124,11 +160,17 @@ export const FullscreenPlayer: React.FC = () => {
             }`}
           >
             <Disc3 className="w-3.5 h-3.5" />
-            <span className="hidden xs:inline">Now Playing</span>
+            <span>Now Playing</span>
           </button>
 
           <button
-            onClick={() => setFullscreenView('lyrics')}
+            onClick={() => {
+              if (window.innerWidth < 768) {
+                scrollToMobileLyrics();
+              } else {
+                setFullscreenView('player');
+              }
+            }}
             className={`px-3 py-1 rounded-xl text-xs font-semibold transition-all flex items-center gap-1.5 ${
               fullscreenView === 'lyrics'
                 ? 'bg-white text-[#FA243C] shadow-sm'
@@ -149,9 +191,9 @@ export const FullscreenPlayer: React.FC = () => {
           >
             <ListMusic className="w-3.5 h-3.5" />
             <span>Queue</span>
-            {queue.length > 0 && (
+            {upNextTracks.length > 0 && (
               <span className="px-1.5 py-0.2 rounded-full bg-[#FA243C]/15 text-[#FA243C] text-[10px] font-bold">
-                {queue.length}
+                {upNextTracks.length}
               </span>
             )}
           </button>
@@ -166,157 +208,255 @@ export const FullscreenPlayer: React.FC = () => {
         </button>
       </div>
 
-      {/* Main Content Area based on active view */}
-      <div className="relative z-10 flex-1 min-h-0 flex flex-col items-center justify-center p-3 sm:p-5 lg:p-8 overflow-hidden max-w-6xl mx-auto w-full">
-        {/* ================= VIEW 1: PLAYER (Artwork + Synced Lyrics side-by-side on desktop) ================= */}
-        {fullscreenView === 'player' && (
-          <div className="w-full h-full flex flex-col md:flex-row items-center justify-center gap-4 sm:gap-8 overflow-hidden animate-fadeIn">
-            {/* Left: Album Artwork Container */}
-            <div className="flex flex-col items-center justify-center max-w-xs sm:max-w-sm w-full shrink-0">
-              <div
-                className="relative aspect-square w-40 xs:w-48 sm:w-56 md:w-64 lg:w-72 xl:w-80 max-h-[38vh] rounded-2xl sm:rounded-3xl overflow-hidden border transition-all duration-700 group"
-                style={{
-                  borderColor: `rgba(${songTheme.primaryRgb}, 0.3)`,
-                  boxShadow: `0 16px 36px -10px rgba(${songTheme.primaryRgb}, 0.4)`,
-                }}
-              >
-                <img
-                  src={currentTrack.coverImage || '/covers/001_prayermp3.jpg'}
-                  alt={currentTrack.titleEnglish}
-                  className="w-full h-full object-cover"
-                />
-                {isPlaying && (
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex items-end p-3 pointer-events-none">
-                    <div className="flex items-center gap-1.5 text-[11px] text-white font-mono">
-                      <Sparkles
-                        className="w-3.5 h-3.5 animate-pulse"
-                        style={{ color: songTheme.primary }}
-                      />
-                      <span>Now Playing</span>
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              {/* Song Info Right Under Artwork */}
-              <div className="w-full text-center mt-2.5 sm:mt-3 space-y-0.5 sm:space-y-1">
-                <h2 className="fullscreen-track-title text-sm sm:text-xl font-bold truncate px-2">
-                  {currentTrack.titleEnglish}
-                </h2>
-                <p
-                  className="font-telugu text-xs sm:text-base truncate font-semibold transition-colors duration-500"
-                  style={{ color: songTheme.primary }}
-                >
-                  {currentTrack.titleTelugu}
-                </p>
-                <p className="fullscreen-track-meta text-[11px] truncate font-medium">
-                  {currentTrack.singer || 'Rev. Tony Prakash'} • {currentTrack.category || 'Worship'}
-                </p>
-              </div>
-
-              {/* Mobile Quick Action Pills */}
-              <div className="flex items-center gap-2 mt-2.5 md:hidden">
-                <button
-                  onClick={() => setFullscreenView('lyrics')}
-                  className="px-3 py-1 rounded-full border border-[#E5E5EA] bg-white/80 text-[11px] font-semibold flex items-center gap-1.5 shadow-sm text-gray-700 hover:text-[#FA243C]"
-                >
-                  <FileText className="w-3.5 h-3.5" style={{ color: songTheme.primary }} />
-                  <span>Lyrics</span>
-                </button>
-                <button
-                  onClick={() => setFullscreenView('queue')}
-                  className="px-3 py-1 rounded-full border border-[#E5E5EA] bg-white/80 text-[11px] font-semibold flex items-center gap-1.5 shadow-sm text-gray-700 hover:text-[#FA243C]"
-                >
-                  <ListMusic className="w-3.5 h-3.5" style={{ color: songTheme.primary }} />
-                  <span>Up Next ({queue.length})</span>
-                </button>
-              </div>
-            </div>
-
-            {/* Right: Synced Lyrics Display (Visible on desktop) */}
+      {/* Main Content Area */}
+      <div className="relative z-10 flex-1 min-h-0 flex flex-col items-center justify-center p-2 sm:p-5 lg:p-8 overflow-hidden max-w-6xl mx-auto w-full">
+        {/* ================= VIEW 1 & 2: PLAYER / LYRICS VIEW ================= */}
+        {fullscreenView !== 'queue' && (
+          <div className="w-full h-full flex flex-col overflow-hidden animate-fadeIn">
+            {/* ---------------- MOBILE LAYOUT (Spotify-Style Smooth Vertical Scroll) ---------------- */}
             <div
-              className="hidden md:flex flex-1 flex-col h-full max-h-[min(54vh,460px)] bg-white/85 backdrop-blur-xl rounded-3xl border p-4 sm:p-6 shadow-sm overflow-hidden transition-all duration-500"
-              style={{ borderColor: `rgba(${songTheme.primaryRgb}, 0.25)` }}
+              id="fullscreen-mobile-scroll-container"
+              className="md:hidden w-full h-full overflow-y-auto overflow-x-hidden space-y-6 pb-28 pt-2 px-3 no-scrollbar"
             >
-              <div className="flex items-center justify-between border-b border-[#E5E5EA] pb-2.5 mb-3 shrink-0">
+              {/* FOLD 1: Album Artwork, Song Info & Quick Pills */}
+              <div className="flex flex-col items-center justify-center min-h-[calc(100vh-210px)] shrink-0 py-2">
                 <div
-                  className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider transition-colors duration-500"
-                  style={{ color: songTheme.primary }}
+                  className="relative aspect-square w-64 xs:w-72 sm:w-80 max-w-[80vw] rounded-2xl sm:rounded-3xl overflow-hidden border shadow-2xl transition-all duration-500"
+                  style={{
+                    borderColor: `rgba(${songTheme.primaryRgb}, 0.35)`,
+                    boxShadow: `0 20px 45px -10px rgba(${songTheme.primaryRgb}, 0.45)`,
+                  }}
                 >
-                  <Music2 className="w-4 h-4" />
-                  <span>సాహిత్యం • Devotional Lyrics</span>
+                  <img
+                    src={currentTrack.coverImage || '/covers/001_prayermp3.jpg'}
+                    alt={currentTrack.titleEnglish}
+                    className="w-full h-full object-cover"
+                  />
+                  {isPlaying && (
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex items-end p-3 pointer-events-none">
+                      <div className="flex items-center gap-1.5 text-[11px] text-white font-mono">
+                        <Sparkles
+                          className="w-3.5 h-3.5 animate-pulse"
+                          style={{ color: songTheme.primary }}
+                        />
+                        <span>Now Playing</span>
+                      </div>
+                    </div>
+                  )}
                 </div>
-                <span className="fullscreen-composer-text text-[11px] font-mono">
-                  Composer: {currentTrack.composer || 'Rev. Tony Prakash'}
-                </span>
-              </div>
 
-              <div className="flex-1 min-h-0 overflow-y-auto space-y-4 pr-1 text-left no-scrollbar scrollbar-none">
-                {currentTrack.lyricsTelugu ? (
-                  <div className="fullscreen-lyrics-content space-y-4 font-telugu text-sm sm:text-base leading-relaxed whitespace-pre-line">
-                    {currentTrack.lyricsTelugu}
-                  </div>
-                ) : (
-                  <div className="fullscreen-lyrics-empty h-full flex flex-col items-center justify-center text-center space-y-2 py-8">
-                    <Music2 className="w-8 h-8 opacity-40" />
-                    <p className="text-xs">
-                      Instrumental / Studio Minus-One Backing Track. Sing along with the choir backing!
-                    </p>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* ================= VIEW 2: FULL LYRICS VIEW ================= */}
-        {fullscreenView === 'lyrics' && (
-          <div
-            className="w-full max-w-2xl h-full max-h-[min(65vh,520px)] bg-white/90 backdrop-blur-2xl rounded-3xl border p-4 sm:p-7 shadow-xl overflow-hidden flex flex-col animate-fadeIn"
-            style={{ borderColor: `rgba(${songTheme.primaryRgb}, 0.3)` }}
-          >
-            <div className="flex items-center justify-between border-b border-[#E5E5EA] pb-3 mb-3 shrink-0">
-              <div className="flex items-center gap-2">
-                <FileText className="w-4 h-4" style={{ color: songTheme.primary }} />
-                <span className="font-bold text-sm text-[#1D1D1F]">
-                  {currentTrack.titleEnglish} • సాహిత్యం
-                </span>
-              </div>
-              <span className="text-[11px] font-mono text-gray-500">
-                {currentTrack.singer || 'Rev. Tony Prakash'}
-              </span>
-            </div>
-
-            <div className="flex-1 min-h-0 overflow-y-auto space-y-4 pr-2 text-center no-scrollbar scrollbar-none">
-              {currentTrack.lyricsTelugu ? (
-                <div className="space-y-4 font-telugu text-sm sm:text-base leading-relaxed whitespace-pre-line text-[#1D1D1F]">
-                  {currentTrack.lyricsTelugu}
-                </div>
-              ) : (
-                <div className="h-full flex flex-col items-center justify-center text-center space-y-2 py-12">
-                  <Music2 className="w-10 h-10 opacity-30 text-gray-400" />
-                  <p className="text-xs text-gray-500">
-                    Studio Minus-One backing track with no lead vocals.
+                {/* Song Meta */}
+                <div className="w-full text-center mt-4 space-y-1 px-4">
+                  <h2 className="text-lg sm:text-xl font-bold truncate text-[#1D1D1F]">
+                    {currentTrack.titleEnglish}
+                  </h2>
+                  <p
+                    className="font-telugu text-sm sm:text-base truncate font-semibold"
+                    style={{ color: songTheme.primary }}
+                  >
+                    {currentTrack.titleTelugu}
+                  </p>
+                  <p className="text-xs text-gray-500 truncate">
+                    {currentTrack.singer || 'Rev. Tony Prakash'} • {currentTrack.category || 'Devotional'}
                   </p>
                 </div>
-              )}
+
+                {/* Quick Navigation Pills */}
+                <div className="flex items-center gap-2.5 mt-3.5">
+                  <button
+                    onClick={scrollToMobileLyrics}
+                    className="px-3.5 py-1.5 rounded-full border border-[#E5E5EA] bg-white/90 text-xs font-semibold flex items-center gap-1.5 shadow-sm text-gray-700 hover:text-[#FA243C] active:scale-95 transition-transform"
+                  >
+                    <FileText className="w-3.5 h-3.5" style={{ color: songTheme.primary }} />
+                    <span>Scroll to Lyrics ↓</span>
+                  </button>
+                  <button
+                    onClick={() => setFullscreenView('queue')}
+                    className="px-3.5 py-1.5 rounded-full border border-[#E5E5EA] bg-white/90 text-xs font-semibold flex items-center gap-1.5 shadow-sm text-gray-700 hover:text-[#FA243C] active:scale-95 transition-transform"
+                  >
+                    <ListMusic className="w-3.5 h-3.5" style={{ color: songTheme.primary }} />
+                    <span>Up Next ({upNextTracks.length})</span>
+                  </button>
+                </div>
+
+                {/* Scroll Indicator Cue */}
+                <div
+                  onClick={scrollToMobileLyrics}
+                  className="mt-6 w-full max-w-xs flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl bg-black/5 border border-black/10 text-xs text-gray-600 cursor-pointer animate-bounce"
+                >
+                  <span>Scroll down for lyrics (సాహిత్యం)</span>
+                  <ChevronDown className="w-3.5 h-3.5" />
+                </div>
+              </div>
+
+              {/* FOLD 2: Spotify-Style Continuous Lyrics Card */}
+              <div
+                id="spotify-mobile-lyrics-card"
+                className="w-full rounded-3xl p-5 sm:p-6 shadow-2xl border transition-all duration-500 relative"
+                style={{
+                  background: `linear-gradient(180deg, rgba(${songTheme.primaryRgb}, 0.95) 0%, rgba(${songTheme.secondaryRgb}, 0.98) 100%)`,
+                  borderColor: `rgba(${songTheme.primaryRgb}, 0.5)`,
+                }}
+              >
+                <div className="flex items-center justify-between border-b border-white/20 pb-3 mb-4">
+                  <div>
+                    <span className="text-[10px] font-mono uppercase tracking-widest text-amber-200 block">
+                      Official Lyrics • సాహిత్యం
+                    </span>
+                    <h3 className="text-base font-bold text-white truncate mt-0.5">
+                      {currentTrack.titleEnglish}
+                    </h3>
+                  </div>
+                  <button
+                    onClick={scrollToMobileTop}
+                    className="px-2.5 py-1 rounded-full bg-white/20 hover:bg-white/30 text-white text-[11px] font-semibold flex items-center gap-1 transition-colors"
+                  >
+                    <ChevronUp className="w-3.5 h-3.5" />
+                    <span>Top</span>
+                  </button>
+                </div>
+
+                <div className="space-y-6">
+                  {lyricsStanzas.length > 0 ? (
+                    lyricsStanzas.map((stanza, sIdx) => (
+                      <p
+                        key={sIdx}
+                        className="font-telugu text-lg sm:text-xl font-bold text-white leading-loose whitespace-pre-line tracking-wide drop-shadow-sm"
+                      >
+                        {stanza}
+                      </p>
+                    ))
+                  ) : (
+                    <div className="py-12 text-center text-white/80 space-y-2">
+                      <Music2 className="w-10 h-10 mx-auto opacity-50" />
+                      <p className="text-sm font-semibold">Instrumental / Backing Track</p>
+                      <p className="text-xs text-white/70">Sing along with the audio backing track!</p>
+                    </div>
+                  )}
+                </div>
+
+                <div className="pt-6 mt-6 border-t border-white/20 flex items-center justify-between text-xs text-white/75">
+                  <span>Composer: {currentTrack.composer || 'Rev. Tony Prakash'}</span>
+                  <button
+                    onClick={scrollToMobileTop}
+                    className="hover:underline flex items-center gap-1 font-semibold"
+                  >
+                    Back to Top ↑
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* ---------------- DESKTOP / LAPTOP LAYOUT (Apple Music Style Full-Height Experience) ---------------- */}
+            <div className="hidden md:flex w-full h-full flex-row items-center justify-center gap-8 lg:gap-12 overflow-hidden animate-fadeIn">
+              {/* Left Column: Artwork & Info */}
+              <div className="flex flex-col items-center justify-center max-w-xs lg:max-w-sm w-full shrink-0">
+                <div
+                  className="relative aspect-square w-56 md:w-64 lg:w-72 xl:w-80 max-h-[42vh] rounded-3xl overflow-hidden border transition-all duration-700 shadow-2xl group"
+                  style={{
+                    borderColor: `rgba(${songTheme.primaryRgb}, 0.35)`,
+                    boxShadow: `0 24px 50px -12px rgba(${songTheme.primaryRgb}, 0.45)`,
+                  }}
+                >
+                  <img
+                    src={currentTrack.coverImage || '/covers/001_prayermp3.jpg'}
+                    alt={currentTrack.titleEnglish}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                  />
+                  {isPlaying && (
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex items-end p-4 pointer-events-none">
+                      <div className="flex items-center gap-2 text-xs text-white font-mono">
+                        <Sparkles
+                          className="w-4 h-4 animate-pulse"
+                          style={{ color: songTheme.primary }}
+                        />
+                        <span>Now Playing</span>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                <div className="w-full text-center mt-4 space-y-1">
+                  <h2 className="text-lg lg:text-2xl font-bold truncate px-2 text-[#1D1D1F]">
+                    {currentTrack.titleEnglish}
+                  </h2>
+                  <p
+                    className="font-telugu text-sm lg:text-lg truncate font-semibold transition-colors duration-500"
+                    style={{ color: songTheme.primary }}
+                  >
+                    {currentTrack.titleTelugu}
+                  </p>
+                  <p className="text-xs text-gray-500 truncate font-medium">
+                    {currentTrack.singer || 'Rev. Tony Prakash'} • {currentTrack.category || 'Devotional'}
+                  </p>
+                </div>
+              </div>
+
+              {/* Right Column: Apple Music Full-Height Synced Lyrics Canvas */}
+              <div
+                className="flex-1 flex flex-col h-full max-h-[min(72vh,620px)] bg-white/45 backdrop-blur-2xl rounded-3xl border p-6 lg:p-8 shadow-2xl overflow-hidden transition-all duration-500"
+                style={{
+                  borderColor: `rgba(${songTheme.primaryRgb}, 0.28)`,
+                  boxShadow: `0 24px 60px -15px rgba(${songTheme.primaryRgb}, 0.25)`,
+                }}
+              >
+                <div className="flex items-center justify-between border-b border-black/10 pb-3 mb-4 shrink-0">
+                  <div
+                    className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider transition-colors duration-500"
+                    style={{ color: songTheme.primary }}
+                  >
+                    <Music2 className="w-4 h-4" />
+                    <span>సాహిత్యం • Devotional Lyrics</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-[11px] font-mono text-gray-500">
+                    <span>Composer: {currentTrack.composer || 'Rev. Tony Prakash'}</span>
+                  </div>
+                </div>
+
+                <div className="flex-1 min-h-0 overflow-y-auto space-y-6 pr-3 text-left no-scrollbar scrollbar-none">
+                  {lyricsStanzas.length > 0 ? (
+                    lyricsStanzas.map((stanza, sIdx) => (
+                      <div
+                        key={sIdx}
+                        className="group/stanza transition-all duration-300 rounded-2xl p-2 -mx-2 hover:bg-black/5 cursor-pointer"
+                      >
+                        <p className="font-telugu text-xl lg:text-2xl xl:text-3xl font-extrabold leading-loose whitespace-pre-line tracking-wide text-[#1D1D1F] group-hover/stanza:text-[#FA243C] transition-colors">
+                          {stanza}
+                        </p>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="h-full flex flex-col items-center justify-center text-center space-y-3 py-12 text-gray-500">
+                      <Music2 className="w-12 h-12 opacity-30" />
+                      <p className="text-sm font-semibold">
+                        Instrumental / Studio Minus-One Backing Track
+                      </p>
+                      <p className="text-xs text-gray-400 max-w-xs">
+                        Enjoy singing along with the original backing track!
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </div>
             </div>
           </div>
         )}
 
-        {/* ================= VIEW 3: UP NEXT / QUEUE VIEW (Spotify & Apple Music mobile style) ================= */}
+        {/* ================= VIEW 3: UP NEXT / QUEUE VIEW (Strictly Upcoming Songs) ================= */}
         {fullscreenView === 'queue' && (
-          <div className="w-full max-w-2xl h-full max-h-[min(65vh,540px)] bg-white/92 backdrop-blur-2xl rounded-3xl border border-[#E5E5EA] shadow-2xl overflow-hidden flex flex-col p-3.5 sm:p-6 animate-fadeIn">
+          <div className="w-full max-w-2xl h-full max-h-[min(72vh,620px)] bg-white/92 backdrop-blur-2xl rounded-3xl border border-[#E5E5EA] shadow-2xl overflow-hidden flex flex-col p-4 sm:p-6 animate-fadeIn">
             {/* Queue Header with Controls */}
             <div className="flex items-center justify-between pb-3 border-b border-[#E5E5EA] shrink-0">
-              <div className="flex items-center gap-2">
-                <ListMusic className="w-5 h-5 text-[#FA243C]" />
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-lg bg-[#FA243C]/10 text-[#FA243C] flex items-center justify-center">
+                  <ListMusic className="w-4 h-4" />
+                </div>
                 <div>
                   <h3 className="text-sm sm:text-base font-bold text-[#1D1D1F]">
                     Up Next • రాబోయే గీతాలు
                   </h3>
                   <p className="text-[11px] text-[#86868B]">
-                    {queue.length} {queue.length === 1 ? 'song' : 'songs'} in active queue
+                    {upNextTracks.length} {upNextTracks.length === 1 ? 'song' : 'songs'} remaining in queue
                   </p>
                 </div>
               </div>
@@ -335,14 +475,16 @@ export const FullscreenPlayer: React.FC = () => {
                   <span className="text-[10px]">Shuffle</span>
                 </button>
 
-                <button
-                  onClick={clearQueue}
-                  className="px-2.5 py-1 rounded-lg text-xs font-semibold text-gray-500 hover:text-red-600 hover:bg-red-50 border border-transparent transition-colors flex items-center gap-1"
-                  title="Clear Queue"
-                >
-                  <Trash2 className="w-3.5 h-3.5" />
-                  <span className="text-[10px]">Clear</span>
-                </button>
+                {upNextTracks.length > 0 && (
+                  <button
+                    onClick={clearQueue}
+                    className="px-2.5 py-1 rounded-lg text-xs font-semibold text-gray-500 hover:text-red-600 hover:bg-red-50 border border-transparent transition-colors flex items-center gap-1"
+                    title="Clear Queue"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                    <span className="text-[10px]">Clear</span>
+                  </button>
+                )}
               </div>
             </div>
 
@@ -396,62 +538,123 @@ export const FullscreenPlayer: React.FC = () => {
               {/* UP NEXT SECTION */}
               <div className="pt-2 pb-1 flex items-center justify-between text-[10px] font-bold text-[#86868B] uppercase tracking-wider px-1">
                 <span>Playing Next</span>
-                <span>{queue.length} Tracks Total</span>
+                <span>{upNextTracks.length} Tracks</span>
               </div>
 
-              {queue.map((track, idx) => {
-                const isThisCurrent = track.id === currentTrack.id;
-                return (
-                  <div
-                    key={`${track.id}-${idx}`}
-                    onClick={() => playTrack(track)}
-                    className={`group p-2.5 rounded-xl border flex items-center justify-between gap-3 cursor-pointer transition-all ${
-                      isThisCurrent
-                        ? 'bg-[#FA243C]/5 border-[#FA243C]/25 shadow-sm'
-                        : 'bg-white hover:bg-[#F2F2F7] border-[#E5E5EA]'
-                    }`}
-                  >
-                    <div className="flex items-center gap-3 min-w-0">
-                      <span className="text-[11px] font-mono text-[#86868B] w-5 text-center shrink-0">
-                        {String(idx + 1).padStart(2, '0')}
-                      </span>
-                      <img
-                        src={track.coverImage || '/covers/001_prayermp3.jpg'}
-                        alt={track.titleEnglish}
-                        className="w-10 h-10 rounded-lg object-cover shrink-0 shadow-sm"
-                      />
-                      <div className="min-w-0">
-                        <h5
-                          className={`text-xs font-semibold truncate ${
-                            isThisCurrent ? 'text-[#FA243C]' : 'text-[#1D1D1F]'
-                          }`}
+              {upNextTracks.length === 0 ? (
+                <div className="py-8 text-center text-xs text-[#86868B] space-y-2 bg-[#F9F9FB] rounded-2xl border border-dashed border-[#E5E5EA] p-4">
+                  <ListMusic className="w-7 h-7 opacity-40 mx-auto text-[#FA243C]" />
+                  {repeatMode === 'all' && previouslyPlayedTracks.length > 0 ? (
+                    <div>
+                      <p className="font-semibold text-[#1D1D1F]">Repeat All Active</p>
+                      <p className="text-[10px] text-[#86868B] mt-0.5">
+                        Queue will loop back to the beginning ({previouslyPlayedTracks[0]?.titleEnglish}).
+                      </p>
+                    </div>
+                  ) : (
+                    <div>
+                      <p className="font-semibold text-[#1D1D1F]">End of Queue</p>
+                      <p className="text-[10px] text-[#86868B] mt-0.5">
+                        You have reached the last track in this queue.
+                      </p>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                upNextTracks.map((track, idx) => {
+                  const actualQueueIndex = currentIndex >= 0 ? currentIndex + 1 + idx : idx;
+                  return (
+                    <div
+                      key={`${track.id}-${actualQueueIndex}`}
+                      onClick={() => playTrack(track, queue)}
+                      className="group p-2.5 rounded-xl border border-[#E5E5EA] bg-white hover:bg-[#F2F2F7] flex items-center justify-between gap-3 cursor-pointer transition-all"
+                    >
+                      <div className="flex items-center gap-3 min-w-0">
+                        <span className="text-[11px] font-mono text-[#86868B] w-5 text-center shrink-0">
+                          {String(idx + 1).padStart(2, '0')}
+                        </span>
+                        <img
+                          src={track.coverImage || '/covers/001_prayermp3.jpg'}
+                          alt={track.titleEnglish}
+                          className="w-10 h-10 rounded-lg object-cover shrink-0 shadow-sm"
+                        />
+                        <div className="min-w-0">
+                          <h5 className="text-xs font-semibold truncate text-[#1D1D1F] group-hover:text-[#FA243C]">
+                            {track.titleEnglish}
+                          </h5>
+                          <p className="text-[10px] font-telugu text-[#86868B] truncate">
+                            {track.titleTelugu}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-2 shrink-0">
+                        <span className="text-[10px] font-mono text-[#86868B]">
+                          {track.duration || '5:12'}
+                        </span>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            removeFromQueue(actualQueueIndex);
+                          }}
+                          className="p-1 text-gray-400 hover:text-red-600 rounded-md hover:bg-gray-100 transition-colors"
+                          title="Remove from queue"
                         >
-                          {track.titleEnglish}
-                        </h5>
-                        <p className="text-[10px] font-telugu text-[#86868B] truncate">
-                          {track.titleTelugu}
-                        </p>
+                          <X className="w-3.5 h-3.5" />
+                        </button>
                       </div>
                     </div>
+                  );
+                })
+              )}
 
-                    <div className="flex items-center gap-2 shrink-0">
-                      <span className="text-[10px] font-mono text-[#86868B]">
-                        {track.duration || '5:12'}
-                      </span>
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          removeFromQueue(idx);
-                        }}
-                        className="p-1 text-gray-400 hover:text-red-600 rounded-md hover:bg-gray-100 transition-colors"
-                        title="Remove from queue"
-                      >
-                        <X className="w-3.5 h-3.5" />
-                      </button>
+              {/* Previously Played Accordion */}
+              {previouslyPlayedTracks.length > 0 && (
+                <div className="pt-3 border-t border-[#E5E5EA] mt-3">
+                  <button
+                    onClick={() => setShowFullscreenHistory((prev) => !prev)}
+                    className="w-full flex items-center justify-between py-1.5 px-2 text-[11px] font-mono text-[#86868B] hover:text-[#1D1D1F] transition-colors"
+                  >
+                    <span className="uppercase tracking-wider">
+                      Previously Played ({previouslyPlayedTracks.length})
+                    </span>
+                    {showFullscreenHistory ? (
+                      <ChevronUp className="w-3.5 h-3.5" />
+                    ) : (
+                      <ChevronDown className="w-3.5 h-3.5" />
+                    )}
+                  </button>
+
+                  {showFullscreenHistory && (
+                    <div className="space-y-1.5 mt-2 opacity-85 max-h-48 overflow-y-auto">
+                      {previouslyPlayedTracks.map((track, pIdx) => (
+                        <div
+                          key={`fs-prev-${track.id}-${pIdx}`}
+                          onClick={() => playTrack(track, queue)}
+                          className="group p-2 rounded-lg hover:bg-black/5 flex items-center justify-between text-xs cursor-pointer transition-colors"
+                        >
+                          <div className="flex items-center gap-2.5 min-w-0">
+                            <span className="font-mono text-[9px] text-[#86868B] w-4 text-center shrink-0">
+                              {pIdx + 1}
+                            </span>
+                            <img
+                              src={track.coverImage || '/covers/001_prayermp3.jpg'}
+                              alt={track.titleEnglish}
+                              className="w-7 h-7 rounded object-cover shrink-0"
+                            />
+                            <span className="truncate text-xs text-[#1D1D1F] group-hover:text-[#FA243C]">
+                              {track.titleEnglish}
+                            </span>
+                          </div>
+                          <span className="text-[10px] font-mono text-[#86868B]">
+                            {track.duration}
+                          </span>
+                        </div>
+                      ))}
                     </div>
-                  </div>
-                );
-              })}
+                  )}
+                </div>
+              )}
             </div>
           </div>
         )}
@@ -574,9 +777,9 @@ export const FullscreenPlayer: React.FC = () => {
               title="Up Next / Queue"
             >
               <ListMusic className="w-5 h-5" />
-              {queue.length > 0 && (
+              {upNextTracks.length > 0 && (
                 <span className="absolute -top-0.5 -right-0.5 px-1 min-w-[14px] h-[14px] rounded-full bg-[#FA243C] text-[9px] font-bold text-white flex items-center justify-center">
-                  {queue.length}
+                  {upNextTracks.length}
                 </span>
               )}
             </button>
@@ -610,4 +813,5 @@ export const FullscreenPlayer: React.FC = () => {
     </div>
   );
 };
+
 export default FullscreenPlayer;

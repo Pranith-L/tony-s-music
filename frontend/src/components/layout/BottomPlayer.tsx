@@ -91,10 +91,17 @@ export const BottomPlayer: React.FC = () => {
     setHoverSeekPos(hoverX);
   };
 
+  const currentIndex = currentTrack ? queue.findIndex((t) => t.id === currentTrack.id) : -1;
+  const upNextCount = currentIndex >= 0 ? Math.max(0, queue.length - 1 - currentIndex) : queue.length;
+
   const handleLyricsToggle = () => {
     if (window.innerWidth < 1024) {
-      setFullscreenView('lyrics');
+      setFullscreenView('player');
       setFullscreenPlayer(true);
+      setTimeout(() => {
+        const el = document.getElementById('spotify-mobile-lyrics-card');
+        if (el) el.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
       return;
     }
     if (isRightSidebarOpen && rightSidebarTab === 'lyrics') {
@@ -354,9 +361,9 @@ export const BottomPlayer: React.FC = () => {
             title="Queue (రాబోయే గీతాలు)"
           >
             <ListMusic className="w-4 h-4" />
-            {queue.length > 1 && (
+            {upNextCount > 0 && (
               <span className="absolute -top-1 -right-1 px-1 min-w-[14px] h-[14px] rounded-full bg-[#FA243C] text-[9px] font-bold text-white flex items-center justify-center leading-none">
-                {queue.length}
+                {upNextCount}
               </span>
             )}
           </button>
