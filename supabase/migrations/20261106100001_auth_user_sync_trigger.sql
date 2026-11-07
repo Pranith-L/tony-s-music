@@ -18,6 +18,7 @@ DECLARE
   v_role TEXT;
   v_avatar TEXT;
   v_provider TEXT;
+  v_existing_id TEXT;
 BEGIN
   v_name := COALESCE(
     NEW.raw_user_meta_data->>'full_name',
@@ -35,32 +36,45 @@ BEGIN
     'LOCAL'
   );
 
-  INSERT INTO public."User" (
-    id,
-    email,
-    name,
-    avatar,
-    role,
-    provider,
-    "createdAt",
-    "updatedAt"
-  )
-  VALUES (
-    NEW.id::text,
-    LOWER(NEW.email),
-    v_name,
-    v_avatar,
-    v_role,
-    v_provider,
-    NOW(),
-    NOW()
-  )
-  ON CONFLICT (id) DO UPDATE SET
-    email = EXCLUDED.email,
-    name = COALESCE(EXCLUDED.name, public."User".name),
-    avatar = COALESCE(EXCLUDED.avatar, public."User".avatar),
-    role = COALESCE(EXCLUDED.role, public."User".role),
-    "updatedAt" = NOW();
+  -- Safely check if a public."User" already exists by email to prevent duplicate key constraint failure
+  SELECT id INTO v_existing_id FROM public."User" WHERE LOWER(email) = LOWER(NEW.email) LIMIT 1;
+
+  IF v_existing_id IS NOT NULL THEN
+    UPDATE public."User" SET
+      name = COALESCE(v_name, public."User".name),
+      avatar = COALESCE(v_avatar, public."User".avatar),
+      role = COALESCE(v_role, public."User".role),
+      provider = COALESCE(v_provider, public."User".provider),
+      "updatedAt" = NOW()
+    WHERE id = v_existing_id;
+  ELSE
+    INSERT INTO public."User" (
+      id,
+      email,
+      name,
+      avatar,
+      role,
+      provider,
+      "createdAt",
+      "updatedAt"
+    )
+    VALUES (
+      NEW.id::text,
+      LOWER(NEW.email),
+      v_name,
+      v_avatar,
+      v_role,
+      v_provider,
+      NOW(),
+      NOW()
+    )
+    ON CONFLICT (id) DO UPDATE SET
+      email = EXCLUDED.email,
+      name = COALESCE(EXCLUDED.name, public."User".name),
+      avatar = COALESCE(EXCLUDED.avatar, public."User".avatar),
+      role = COALESCE(EXCLUDED.role, public."User".role),
+      "updatedAt" = NOW();
+  END IF;
 
   RETURN NEW;
 END;
