@@ -207,8 +207,8 @@ export const MembershipPage: React.FC = () => {
             </div>
 
             <div className="flex items-baseline gap-2">
-              <span className="text-4xl sm:text-5xl font-mono font-bold text-[#D4A017]">₹299</span>
-              <span className="text-xs text-gray-400 font-mono">/ one-time payment</span>
+              <span className="text-4xl sm:text-5xl font-mono font-bold text-[#D4A017]">₹1</span>
+              <span className="text-xs text-emerald-400 font-mono font-semibold">/ Live Test Mode (₹1 One-Time)</span>
             </div>
 
             <ul className="space-y-3 text-xs text-[#FFFFFF]">
@@ -248,11 +248,11 @@ export const MembershipPage: React.FC = () => {
                 className="w-full py-3.5 rounded-full bg-gradient-to-r from-[#D4A017] via-[#E8DCB8] to-[#D4A017] text-[#0E0305] text-xs font-bold uppercase tracking-widest shadow-xl hover:scale-[1.02] transition-transform active:scale-95 flex items-center justify-center gap-2"
               >
                 <Sparkles className="w-4 h-4" />
-                {isLoading ? 'Processing...' : 'Get Lifetime Pass • ₹299 (One-Time)'}
+                {isLoading ? 'Processing...' : 'Get Lifetime Pass • ₹1 (Live Test)'}
               </button>
             )}
             <p className="text-[10px] text-gray-400 text-center mt-2.5 font-mono">
-              Single payment of ₹299 (29,900 paise). Secure Cashfree & Instamojo checkout.
+              Live Test payment of ₹1 (100 paise). Secure Cashfree & Instamojo checkout.
             </p>
           </div>
         </div>
@@ -273,8 +273,8 @@ export const MembershipPage: React.FC = () => {
             </div>
 
             <div className="flex items-baseline gap-1">
-              <span className="text-4xl font-mono font-bold text-[#D4A017]">₹99</span>
-              <span className="text-xs text-[#86868B]">/ per track</span>
+              <span className="text-4xl font-mono font-bold text-[#D4A017]">₹1</span>
+              <span className="text-xs text-emerald-600 font-mono font-semibold">/ Live Test (per track)</span>
             </div>
 
             <ul className="space-y-3 text-xs text-[#86868B]">

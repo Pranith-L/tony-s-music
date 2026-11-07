@@ -177,7 +177,7 @@ export const TracksPage: React.FC = () => {
               ప్రత్యేక స్టూడియో ట్రాక్స్ సమాహారం (మైనస్-వన్ / కారౌకే)
             </p>
             <p className="text-xs sm:text-sm text-[#86868B] leading-relaxed">
-              Professional minus-one instrumental tracks engineered for church choirs, live gospel ministry, and vocal performances. Free users can listen to a <strong className="text-[#1D1D1F]">30-second studio preview</strong>. Unlock complete tracks & high-fidelity studio WAV downloads for <strong className="text-[#D4A017]">₹99 each</strong>.
+              Professional minus-one instrumental tracks engineered for church choirs, live gospel ministry, and vocal performances. Free users can listen to a <strong className="text-[#1D1D1F]">30-second studio preview</strong>. Unlock complete tracks & high-fidelity in-app offline downloads for <strong className="text-[#D4A017]">₹1 each (Live Test Mode)</strong>.
             </p>
           </div>
 
@@ -188,7 +188,7 @@ export const TracksPage: React.FC = () => {
                 Studio Master Tracks
               </span>
               <span className="text-xs font-bold px-2.5 py-0.5 rounded bg-emerald-600 text-white font-mono">
-                ₹99 / Track
+                ₹1 / Track (Test)
               </span>
             </div>
             <p className="text-xs text-[#86868B]">
@@ -346,10 +346,10 @@ export const TracksPage: React.FC = () => {
                         }}
                         disabled={isPurchasing}
                         className="hidden sm:flex px-3.5 py-1.5 rounded-xl text-xs font-bold bg-gradient-to-r from-[#FC3C44] to-[#FA243C] text-white hover:opacity-95 transition-all items-center gap-1.5 shadow-sm active:scale-95"
-                        title="Buy Full Studio Track for ₹99"
+                        title="Buy Full Studio Track for ₹1 (Live Test)"
                       >
                         <Sparkles className="w-3.5 h-3.5 text-white" />
-                        <span>{isPurchasing ? 'Processing...' : 'Buy • ₹99'}</span>
+                        <span>{isPurchasing ? 'Processing...' : 'Buy • ₹1'}</span>
                       </button>
                     )}
 

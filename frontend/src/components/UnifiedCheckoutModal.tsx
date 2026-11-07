@@ -70,7 +70,7 @@ export const UnifiedCheckoutModal: React.FC<UnifiedCheckoutModalProps> = ({
   if (!isOpen) return null;
 
   const isVipPass = itemType === 'VIP_PASS';
-  const priceRupees = isVipPass ? 299 : 99;
+  const priceRupees = 1; // Testing mode: ₹1 live gateway verification
   const itemTitle = isVipPass
     ? "Tony's One-Time VIP Lifetime Pass"
     : track

@@ -28,11 +28,11 @@ const razorpayClient = new Razorpay({
 // Server-wide payments pause toggle (defaults to false if any gateway is configured)
 const PAYMENTS_PAUSED = process.env.PAYMENTS_PAUSED === 'true';
 
-// Fixed official prices (in Paise and Rupees)
-const VIP_PASS_AMOUNT_PAISE = 29900; // ₹299
-const VIP_PASS_AMOUNT_RUPEES = 299.00;
-const TRACK_AMOUNT_PAISE = 9900; // ₹99
-const TRACK_AMOUNT_RUPEES = 99.00;
+// Fixed official prices (in Paise and Rupees) - Configured for ₹1 Live Payment Testing
+const VIP_PASS_AMOUNT_PAISE = 100; // ₹1 (Testing Mode)
+const VIP_PASS_AMOUNT_RUPEES = 1.00;
+const TRACK_AMOUNT_PAISE = 100; // ₹1 (Testing Mode)
+const TRACK_AMOUNT_RUPEES = 1.00;
 
 function getClientUrl(): string {
   return process.env.CLIENT_URL || 'https://tony-prakash-music.vercel.app';

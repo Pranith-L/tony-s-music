@@ -21,6 +21,8 @@ export const LyricsModal: React.FC<LyricsModalProps> = ({ track, onClose }) => {
   const [purchaseSuccess, setPurchaseSuccess] = useState(false);
   const [showCheckout, setShowCheckout] = useState(false);
 
+  const [checkoutItemType, setCheckoutItemType] = useState<'VIP_PASS' | 'TRACK'>('TRACK');
+
   if (!track) return null;
 
   const isCurrent = currentTrack?.id === track.id;
@@ -34,25 +36,13 @@ export const LyricsModal: React.FC<LyricsModalProps> = ({ track, onClose }) => {
     }
   };
 
-  const handleDownload = async () => {
-    if (!user) {
-      alert('Please sign in to download audio.');
-      return;
-    }
-    setDownloading(true);
-    try {
-      const data = await api.downloads.requestToken(track.id);
-      if (data.downloadUrl) {
-        window.open(data.downloadUrl, '_blank');
-      }
-    } catch (err: any) {
-      alert(err.message || 'Active subscription or single track purchase (₹99) required.');
-    } finally {
-      setDownloading(false);
-    }
+  const handleBuySingleTrack = () => {
+    setCheckoutItemType('TRACK');
+    setShowCheckout(true);
   };
 
-  const handleBuySingleTrack = () => {
+  const handleBuyVipPass = () => {
+    setCheckoutItemType('VIP_PASS');
     setShowCheckout(true);
   };
 
@@ -174,7 +164,7 @@ export const LyricsModal: React.FC<LyricsModalProps> = ({ track, onClose }) => {
           )}
         </div>
 
-        {/* If Backing Track: One-time ₹99 purchase */}
+        {/* If Backing Track: One-time ₹1 purchase */}
         {track.isTrack && !purchaseSuccess && (
           <div className="mt-6 p-4 rounded-xl bg-white/90 border border-[#D4A017]/40 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-lg">
             <div>
@@ -183,7 +173,7 @@ export const LyricsModal: React.FC<LyricsModalProps> = ({ track, onClose }) => {
                 <span>Official Studio Backing Track</span>
               </div>
               <p className="text-[11px] text-[#86868B]">
-                High-fidelity minus-one / karaoke track for churches and worship leaders at ₹99 each.
+                High-fidelity minus-one / karaoke track for churches and worship leaders at ₹1 each (Live Test).
               </p>
             </div>
             <button
@@ -191,12 +181,12 @@ export const LyricsModal: React.FC<LyricsModalProps> = ({ track, onClose }) => {
               disabled={purchasing}
               className="px-5 py-2.5 rounded-full bg-gradient-to-r from-[#D4A017] to-[#E5D7A8] text-[#0E0305] text-xs font-bold uppercase tracking-wider shrink-0 hover:scale-105 transition-transform shadow-md"
             >
-              {purchasing ? 'Processing...' : 'Buy Track (₹99)'}
+              {purchasing ? 'Processing...' : 'Buy Track (₹1)'}
             </button>
           </div>
         )}
 
-        {/* If Vocal Song: Requires ₹299 One-Time Pass */}
+        {/* If Vocal Song: Requires ₹1 One-Time Pass */}
         {!track.isTrack && !isSubscriber && (
           <div className="mt-6 p-4 rounded-xl bg-white/90 border border-[#E5E5EA] flex flex-col sm:flex-row items-center justify-between gap-4 shadow-lg">
             <div>
@@ -205,15 +195,15 @@ export const LyricsModal: React.FC<LyricsModalProps> = ({ track, onClose }) => {
                 <span>Vocal Song Download • One-Time Pass Exclusive</span>
               </div>
               <p className="text-[11px] text-[#86868B]">
-                Devotional vocal songs can be downloaded with the One-Time Pass (₹299). Backing tracks are unlocked separately.
+                Devotional vocal songs can be downloaded with the One-Time Pass (₹1 Live Test). Backing tracks are unlocked separately.
               </p>
             </div>
-            <a
-              href="/membership"
+            <button
+              onClick={handleBuyVipPass}
               className="px-5 py-2.5 rounded-full bg-gradient-to-r from-[#FC3C44] to-[#FA243C] text-[#FFFFFF] text-xs font-bold uppercase tracking-wider shrink-0 hover:scale-105 transition-transform shadow-md border border-[#D4A017]/40"
             >
-              Get One-Time Pass (₹299)
-            </a>
+              Get One-Time Pass (₹1)
+            </button>
           </div>
         )}
 
@@ -221,7 +211,7 @@ export const LyricsModal: React.FC<LyricsModalProps> = ({ track, onClose }) => {
         <UnifiedCheckoutModal
           isOpen={showCheckout}
           onClose={() => setShowCheckout(false)}
-          itemType="TRACK"
+          itemType={checkoutItemType}
           track={track}
           onSuccess={() => {
             setPurchaseSuccess(true);

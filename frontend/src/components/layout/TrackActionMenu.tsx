@@ -15,8 +15,10 @@ import {
 import { Track } from '../../types/index.js';
 import { usePlayer } from '../../context/PlayerContext.js';
 import { useOffline } from '../../context/OfflineContext.js';
+import { useAuth } from '../../context/AuthContext.js';
 import { useNavigate } from 'react-router-dom';
 import { AddToPlaylistModal } from '../modals/AddToPlaylistModal.js';
+import { UnifiedCheckoutModal } from '../UnifiedCheckoutModal.js';
 
 interface TrackActionMenuProps {
   track: Track;
@@ -36,6 +38,8 @@ export const TrackActionMenu: React.FC<TrackActionMenuProps> = ({
   const [isOpen, setIsOpen] = useState(false);
   const [copied, setCopied] = useState(false);
   const [showPlaylistModal, setShowPlaylistModal] = useState(false);
+  const [showCheckoutModal, setShowCheckoutModal] = useState(false);
+  const [checkoutType, setCheckoutType] = useState<'VIP_PASS' | 'TRACK'>('VIP_PASS');
   const [coords, setCoords] = useState<{ top: number; left: number }>({
     top: 0,
     left: 0,
@@ -45,6 +49,7 @@ export const TrackActionMenu: React.FC<TrackActionMenuProps> = ({
   const dropdownRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
+  const { user, isSubscriber } = useAuth();
   const {
     isLiked,
     toggleLikeTrack,
@@ -322,17 +327,18 @@ export const TrackActionMenu: React.FC<TrackActionMenuProps> = ({
                       if (onBuyTrack) {
                         onBuyTrack(track);
                       } else {
-                        navigate(`/tracks?buy=${track.id}`);
+                        setCheckoutType('TRACK');
+                        setShowCheckoutModal(true);
                       }
                       setIsOpen(false);
                     }}
                     className="w-full px-3.5 py-2 hover:bg-[#FEE2E2]/60 dark:hover:bg-white/10 flex items-center gap-2.5 text-[#FA243C] font-semibold transition-colors"
                   >
                     <Lock className="w-4 h-4" />
-                    <span>Unlock Studio Track (₹99)</span>
+                    <span>Unlock Studio Track (₹1)</span>
                   </button>
                 )
-              ) : (
+              ) : isSubscriber ? (
                 <button
                   type="button"
                   onClick={async () => {
@@ -362,6 +368,19 @@ export const TrackActionMenu: React.FC<TrackActionMenuProps> = ({
                     </>
                   )}
                 </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setCheckoutType('VIP_PASS');
+                    setShowCheckoutModal(true);
+                    setIsOpen(false);
+                  }}
+                  className="w-full px-3.5 py-2 hover:bg-[#FEE2E2]/60 dark:hover:bg-white/10 flex items-center gap-2.5 text-[#D4A017] font-semibold transition-colors"
+                >
+                  <Lock className="w-4 h-4 text-[#D4A017]" />
+                  <span>VIP Pass (₹1) to Download</span>
+                </button>
               )}
 
               {/* Option: Share Song */}
@@ -390,6 +409,18 @@ export const TrackActionMenu: React.FC<TrackActionMenuProps> = ({
       {showPlaylistModal && (
         <AddToPlaylistModal track={track} onClose={() => setShowPlaylistModal(false)} />
       )}
+
+      {/* Instant Checkout Modal */}
+      <UnifiedCheckoutModal
+        isOpen={showCheckoutModal}
+        onClose={() => setShowCheckoutModal(false)}
+        itemType={checkoutType}
+        track={track}
+        onSuccess={async () => {
+          setShowCheckoutModal(false);
+          await downloadTrack(track);
+        }}
+      />
     </>
   );
 };

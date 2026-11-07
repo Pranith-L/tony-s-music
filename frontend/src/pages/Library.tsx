@@ -55,6 +55,7 @@ export const LibraryPage: React.FC = () => {
   const { offlineTracks, stats, clearAllDownloads, removeDownload } = useOffline();
 
   const [activeTab, setActiveTab] = useState<'playlists' | 'liked' | 'purchased' | 'downloaded'>('playlists');
+  const [downloadedSubTab, setDownloadedSubTab] = useState<'devotional' | 'tracks' | 'all'>('devotional');
   const [selectedPlaylistId, setSelectedPlaylistId] = useState<string | null>(null);
   const [allTracks, setAllTracks] = useState<Track[]>([]);
   const [isLoadingTracks, setIsLoadingTracks] = useState(false);
@@ -117,6 +118,21 @@ export const LibraryPage: React.FC = () => {
   const userPurchasedTracks = useMemo(() => {
     return allTracks.filter((t) => t.isTrack && hasTrackAccess(t));
   }, [allTracks, user?.purchases]);
+
+  // Split in-app offline tracks into Devotionals (VIP Pass) vs Studio Backing Tracks (Purchased)
+  const offlineDevotionalTracks = useMemo(() => {
+    return offlineTracks.filter((item) => !item.track.isTrack);
+  }, [offlineTracks]);
+
+  const offlineBackingTracks = useMemo(() => {
+    return offlineTracks.filter((item) => Boolean(item.track.isTrack));
+  }, [offlineTracks]);
+
+  const displayedOfflineTracks = useMemo(() => {
+    if (downloadedSubTab === 'devotional') return offlineDevotionalTracks;
+    if (downloadedSubTab === 'tracks') return offlineBackingTracks;
+    return offlineTracks;
+  }, [downloadedSubTab, offlineDevotionalTracks, offlineBackingTracks, offlineTracks]);
 
   // Handle Play Playlist
   const handlePlayPlaylist = (tracksToPlay: Track[], shuffle = false) => {
@@ -787,86 +803,188 @@ export const LibraryPage: React.FC = () => {
 
       {/* ================= OFFLINE DOWNLOADED SONGS TAB ================= */}
       {activeTab === 'downloaded' && (
-        <div className="space-y-4 animate-fadeIn">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div className="space-y-5 animate-fadeIn">
+          {/* Header Banner & Storage Stats */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white dark:bg-[#1C1C1E] p-4 sm:p-5 rounded-2xl border border-[#E5E5EA] dark:border-[#2C2C2E] shadow-sm">
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-xs text-[#86868B]">
-                  {offlineTracks.length} In-App Offline Songs
+                <span className="text-sm font-bold text-[#1D1D1F] dark:text-white">
+                  In-App Offline Library
                 </span>
-                <span className="px-2 py-0.5 rounded-full text-[10px] font-mono bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-mono bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 font-bold">
                   {stats.totalMB} MB Cached
+                </span>
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-mono bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20">
+                  {offlineTracks.length} Total
                 </span>
               </div>
               <p className="text-[11px] text-[#86868B] mt-0.5">
-                Saved in your browser for 100% offline playback with zero internet required (Spotify/Apple Music style).
+                Encrypted in-app storage for 100% offline playback with zero internet required (Spotify/Apple Music style).
               </p>
             </div>
 
             <div className="flex items-center gap-2">
-              {offlineTracks.length > 0 && (
-                <>
-                  <button
-                    onClick={() => {
-                      const tracksList = offlineTracks.map((o) => o.track);
-                      playOrToggleTrack(tracksList[0], tracksList);
-                    }}
-                    className="px-4 py-2 rounded-xl bg-gradient-to-r from-[#FC3C44] to-[#FA243C] text-xs font-bold text-white flex items-center gap-2 hover:brightness-110 shadow-md transition-all active:scale-95"
-                  >
-                    <Play className="w-3.5 h-3.5 fill-current" />
-                    <span>Play All Offline</span>
-                  </button>
+              {displayedOfflineTracks.length > 0 && (
+                <button
+                  onClick={() => {
+                    const tracksList = displayedOfflineTracks.map((o) => o.track);
+                    playOrToggleTrack(tracksList[0], tracksList);
+                  }}
+                  className="px-4 py-2 rounded-xl bg-gradient-to-r from-[#FC3C44] to-[#FA243C] text-xs font-bold text-white flex items-center gap-2 hover:brightness-110 shadow-md transition-all active:scale-95"
+                >
+                  <Play className="w-3.5 h-3.5 fill-current" />
+                  <span>
+                    Play All {downloadedSubTab === 'devotional' ? 'Devotionals' : downloadedSubTab === 'tracks' ? 'Backing Tracks' : 'Offline'}
+                  </span>
+                </button>
+              )}
 
-                  <button
-                    onClick={clearAllDownloads}
-                    className="px-3 py-2 rounded-xl bg-[#F5F5F7] dark:bg-white/5 hover:bg-red-500/10 text-xs font-semibold text-[#86868B] hover:text-red-600 border border-[#E5E5EA] dark:border-white/10 transition-colors"
-                    title="Remove all downloaded offline tracks from this device"
-                  >
-                    <Trash2 className="w-3.5 h-3.5" />
-                  </button>
-                </>
+              {offlineTracks.length > 0 && (
+                <button
+                  onClick={clearAllDownloads}
+                  className="px-3 py-2 rounded-xl bg-[#F5F5F7] dark:bg-white/5 hover:bg-red-500/10 text-xs font-semibold text-[#86868B] hover:text-red-600 border border-[#E5E5EA] dark:border-white/10 transition-colors"
+                  title="Remove all downloaded offline tracks from this device"
+                >
+                  <Trash2 className="w-3.5 h-3.5" />
+                </button>
               )}
             </div>
           </div>
 
+          {/* Sub-Category Switcher: Separate Devotionals vs Backing Tracks */}
+          <div className="flex items-center gap-2 p-1.5 rounded-2xl bg-[#F5F5F7] dark:bg-[#141416] border border-[#E5E5EA] dark:border-[#27272A] w-fit max-w-full overflow-x-auto">
+            <button
+              onClick={() => setDownloadedSubTab('devotional')}
+              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all shrink-0 ${
+                downloadedSubTab === 'devotional'
+                  ? 'bg-white dark:bg-[#202023] text-[#FA243C] shadow-sm'
+                  : 'text-[#86868B] hover:text-[#1D1D1F] dark:hover:text-white'
+              }`}
+            >
+              <Music className="w-3.5 h-3.5" />
+              <span>Devotional Songs (VIP Pass)</span>
+              <span className={`px-1.5 py-0.2 rounded-full text-[10px] font-mono ${
+                downloadedSubTab === 'devotional' ? 'bg-[#FA243C]/10 text-[#FA243C]' : 'bg-black/5 dark:bg-white/10 text-[#86868B]'
+              }`}>
+                {offlineDevotionalTracks.length}
+              </span>
+            </button>
+
+            <button
+              onClick={() => setDownloadedSubTab('tracks')}
+              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all shrink-0 ${
+                downloadedSubTab === 'tracks'
+                  ? 'bg-white dark:bg-[#202023] text-[#D4A017] shadow-sm'
+                  : 'text-[#86868B] hover:text-[#1D1D1F] dark:hover:text-white'
+              }`}
+            >
+              <Disc3 className="w-3.5 h-3.5" />
+              <span>Studio Backing Tracks (Purchased)</span>
+              <span className={`px-1.5 py-0.2 rounded-full text-[10px] font-mono ${
+                downloadedSubTab === 'tracks' ? 'bg-[#D4A017]/15 text-[#D4A017]' : 'bg-black/5 dark:bg-white/10 text-[#86868B]'
+              }`}>
+                {offlineBackingTracks.length}
+              </span>
+            </button>
+
+            <button
+              onClick={() => setDownloadedSubTab('all')}
+              className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold transition-all shrink-0 ${
+                downloadedSubTab === 'all'
+                  ? 'bg-white dark:bg-[#202023] text-[#1D1D1F] dark:text-white shadow-sm'
+                  : 'text-[#86868B] hover:text-[#1D1D1F] dark:hover:text-white'
+              }`}
+            >
+              <span>All ({offlineTracks.length})</span>
+            </button>
+          </div>
+
+          {/* Downloaded Content Area */}
           <div className="bg-[#F5F5F7]/60 dark:bg-[#1C1C1E]/60 rounded-3xl border border-[#E5E5EA] dark:border-[#2C2C2E] shadow-xl overflow-hidden">
-            {offlineTracks.length === 0 ? (
+            {displayedOfflineTracks.length === 0 ? (
               <div className="py-16 text-center space-y-3 px-4">
-                <Download className="w-12 h-12 text-[#86868B]/30 mx-auto" />
-                <h4 className="text-base font-semibold text-[#1D1D1F] dark:text-white">
-                  No offline downloads yet
-                </h4>
-                <p className="text-xs text-[#86868B] max-w-sm mx-auto">
-                  Download individual devotional songs or full albums for in-app offline listening. Your tracks are safely cached inside your device for playback without internet.
-                </p>
-                <div className="flex items-center justify-center gap-3 pt-2">
-                  <Link
-                    to="/music"
-                    className="px-5 py-2.5 rounded-full bg-[#FA243C] text-xs font-bold text-white shadow-sm hover:brightness-110 transition-all"
-                  >
-                    Browse Devotional Songs
-                  </Link>
-                  <Link
-                    to="/albums"
-                    className="px-5 py-2.5 rounded-full bg-white dark:bg-zinc-800 text-xs font-bold text-[#1D1D1F] dark:text-white border border-[#E5E5EA] dark:border-zinc-700 hover:bg-[#F5F5F7] transition-all"
-                  >
-                    Browse Albums
-                  </Link>
-                </div>
+                {downloadedSubTab === 'devotional' ? (
+                  <>
+                    <Music className="w-12 h-12 text-[#86868B]/30 mx-auto" />
+                    <h4 className="text-base font-semibold text-[#1D1D1F] dark:text-white">
+                      No offline devotional songs yet
+                    </h4>
+                    <p className="text-xs text-[#86868B] max-w-sm mx-auto">
+                      Tony's VIP Lifetime Pass allows you to save individual devotional songs and full albums into your device for offline playback without internet.
+                    </p>
+                    <div className="flex items-center justify-center gap-3 pt-2">
+                      <Link
+                        to="/music"
+                        className="px-5 py-2.5 rounded-full bg-[#FA243C] text-xs font-bold text-white shadow-sm hover:brightness-110 transition-all"
+                      >
+                        Browse Devotional Songs
+                      </Link>
+                      <Link
+                        to="/albums"
+                        className="px-5 py-2.5 rounded-full bg-white dark:bg-zinc-800 text-xs font-bold text-[#1D1D1F] dark:text-white border border-[#E5E5EA] dark:border-zinc-700 hover:bg-[#F5F5F7] transition-all"
+                      >
+                        Browse Albums
+                      </Link>
+                    </div>
+                  </>
+                ) : downloadedSubTab === 'tracks' ? (
+                  <>
+                    <Disc3 className="w-12 h-12 text-[#86868B]/30 mx-auto" />
+                    <h4 className="text-base font-semibold text-[#1D1D1F] dark:text-white">
+                      No offline studio backing tracks yet
+                    </h4>
+                    <p className="text-xs text-[#86868B] max-w-sm mx-auto">
+                      Purchase individual studio minus-one backing tracks to download them for offline church choir accompaniment and live performances.
+                    </p>
+                    <div className="pt-2">
+                      <Link
+                        to="/tracks"
+                        className="px-5 py-2.5 rounded-full bg-gradient-to-r from-[#D4A017] to-[#E8DCB8] text-[#0E0305] text-xs font-bold uppercase tracking-wider shadow-sm hover:brightness-110 transition-all"
+                      >
+                        Browse Studio Backing Tracks
+                      </Link>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <Download className="w-12 h-12 text-[#86868B]/30 mx-auto" />
+                    <h4 className="text-base font-semibold text-[#1D1D1F] dark:text-white">
+                      No offline downloads yet
+                    </h4>
+                    <p className="text-xs text-[#86868B] max-w-sm mx-auto">
+                      Download individual devotional songs or full albums for in-app offline listening. Your tracks are safely cached inside your device for playback without internet.
+                    </p>
+                    <div className="flex items-center justify-center gap-3 pt-2">
+                      <Link
+                        to="/music"
+                        className="px-5 py-2.5 rounded-full bg-[#FA243C] text-xs font-bold text-white shadow-sm hover:brightness-110 transition-all"
+                      >
+                        Browse Devotional Songs
+                      </Link>
+                      <Link
+                        to="/tracks"
+                        className="px-5 py-2.5 rounded-full bg-white dark:bg-zinc-800 text-xs font-bold text-[#1D1D1F] dark:text-white border border-[#E5E5EA] dark:border-zinc-700 hover:bg-[#F5F5F7] transition-all"
+                      >
+                        Browse Backing Tracks
+                      </Link>
+                    </div>
+                  </>
+                )}
               </div>
             ) : (
               <div className="divide-y divide-[#FA243C]/10 dark:divide-white/5">
-                {offlineTracks.map((item, idx) => {
-                  const { track, size, downloadedAt } = item;
+                {displayedOfflineTracks.map((item, idx) => {
+                  const { track, size } = item;
                   const isCurrent = currentTrack?.id === track.id;
                   const isThisPlaying = isCurrent && isPlaying;
                   const sizeMB = size ? (size / (1024 * 1024)).toFixed(1) : '5.0';
+                  const isBacking = Boolean(track.isTrack);
 
                   return (
                     <div
                       key={track.id}
                       onClick={() => {
-                        const tracksList = offlineTracks.map((o) => o.track);
+                        const tracksList = displayedOfflineTracks.map((o) => o.track);
                         playOrToggleTrack(track, tracksList);
                       }}
                       className={`group flex items-center justify-between px-3.5 py-3 sm:px-6 sm:py-3.5 transition-all cursor-pointer ${
@@ -877,7 +995,15 @@ export const LibraryPage: React.FC = () => {
                     >
                       <div className="flex items-center gap-3 sm:gap-4 min-w-0 flex-1">
                         <span className="font-mono text-xs text-[#86868B] w-5 text-center shrink-0">
-                          {idx + 1}
+                          {isThisPlaying ? (
+                            <div className="flex items-end justify-center gap-0.5 h-3.5">
+                              <span className="w-0.5 bg-[#D4A017] rounded-full wave-bar-1" />
+                              <span className="w-0.5 bg-[#D4A017] rounded-full wave-bar-2" />
+                              <span className="w-0.5 bg-[#D4A017] rounded-full wave-bar-3" />
+                            </div>
+                          ) : (
+                            idx + 1
+                          )}
                         </span>
 
                         <div className="relative w-11 h-11 sm:w-12 sm:h-12 rounded-xl overflow-hidden bg-[#E5E5EA] dark:bg-[#2C2C2E] shrink-0 border border-black/5 shadow-sm">
@@ -903,15 +1029,24 @@ export const LibraryPage: React.FC = () => {
                         </div>
 
                         <div className="min-w-0 flex-1 pr-2">
-                          <h4
-                            className={`text-sm font-bold truncate transition-colors ${
-                              isCurrent
-                                ? 'text-[#FA243C] dark:text-[#FF455A]'
-                                : 'text-[#1D1D1F] dark:text-white group-hover:text-[#FA243C]'
-                            }`}
-                          >
-                            {track.titleEnglish}
-                          </h4>
+                          <div className="flex items-center gap-2">
+                            <h4
+                              className={`text-sm font-bold truncate transition-colors ${
+                                isCurrent
+                                  ? 'text-[#FA243C] dark:text-[#FF455A]'
+                                  : 'text-[#1D1D1F] dark:text-white group-hover:text-[#FA243C]'
+                              }`}
+                            >
+                              {track.titleEnglish}
+                            </h4>
+                            <span className={`px-2 py-0.2 rounded-full text-[9px] font-mono font-bold uppercase tracking-wider shrink-0 ${
+                              isBacking
+                                ? 'bg-[#D4A017]/15 text-[#D4A017] border border-[#D4A017]/30'
+                                : 'bg-[#FA243C]/10 text-[#FA243C] border border-[#FA243C]/20'
+                            }`}>
+                              {isBacking ? 'Studio Track' : 'Devotional'}
+                            </span>
+                          </div>
                           <p
                             className={`font-telugu text-xs truncate mt-0.5 transition-colors ${
                               isCurrent
