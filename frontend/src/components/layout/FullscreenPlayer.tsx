@@ -20,6 +20,7 @@ import {
   Trash2,
 } from 'lucide-react';
 import { usePlayer } from '../../context/PlayerContext.js';
+import { useTheme } from '../../context/ThemeContext.js';
 
 function formatSeconds(secs: number): string {
   if (isNaN(secs) || secs < 0) return '0:00';
@@ -29,6 +30,7 @@ function formatSeconds(secs: number): string {
 }
 
 export const FullscreenPlayer: React.FC = () => {
+  const { isDark } = useTheme();
   const {
     currentTrack,
     songTheme,
@@ -79,6 +81,8 @@ export const FullscreenPlayer: React.FC = () => {
 
   if (!isFullscreenPlayer || !currentTrack) return null;
 
+  const isDevotional = !currentTrack.isTrack;
+  const topBarCategoryLabel = isDevotional ? 'Devotional' : 'Track';
   const progressPercent = duration > 0 ? (currentTime / duration) * 100 : 0;
   const liked = isLiked(currentTrack.id);
 
@@ -109,55 +113,77 @@ export const FullscreenPlayer: React.FC = () => {
     }, 60);
   };
 
-  const scrollToMobileTop = () => {
-    const el = document.getElementById('fullscreen-mobile-scroll-container');
-    if (el) {
-      el.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-  };
-
   return (
     <div
       data-testid="fullscreen-player-modal"
-      className="fullscreen-player-modal fixed inset-0 z-50 bg-[#F5F5F7] text-[#0F172A] flex flex-col justify-between overflow-hidden animate-fadeIn select-none h-full h-[100dvh]"
+      className={`fullscreen-player-modal fixed inset-0 z-50 flex flex-col justify-between overflow-hidden animate-fadeIn select-none h-full h-[100dvh] transition-colors duration-500 ${
+        isDark ? 'bg-[#09090B] text-white' : 'bg-[#F8F8FA] text-[#0F172A]'
+      }`}
     >
-      {/* Dynamic Ambient Background Glow matching Song/Album Cover Colors */}
+      {/* Dynamic Ambient Background Glow matching Song/Album Cover Colors in Dark & Light Modes */}
       <div
         className="absolute inset-0 pointer-events-none transition-all duration-700 ease-out"
         style={{
-          background: `radial-gradient(circle at 20% 25%, rgba(${songTheme.primaryRgb}, 0.22), transparent 55%),
-                       radial-gradient(circle at 80% 30%, rgba(${songTheme.secondaryRgb}, 0.18), transparent 60%),
-                       radial-gradient(circle at 50% 85%, rgba(${songTheme.primaryRgb}, 0.12), transparent 65%),
-                       #F5F5F7`,
+          background: isDark
+            ? `radial-gradient(circle at 20% 25%, rgba(${songTheme.primaryRgb}, 0.28), transparent 55%),
+               radial-gradient(circle at 80% 30%, rgba(${songTheme.secondaryRgb}, 0.22), transparent 60%),
+               radial-gradient(circle at 50% 85%, rgba(${songTheme.primaryRgb}, 0.16), transparent 65%),
+               #09090B`
+            : `radial-gradient(circle at 20% 25%, rgba(${songTheme.primaryRgb}, 0.18), transparent 55%),
+               radial-gradient(circle at 80% 30%, rgba(${songTheme.secondaryRgb}, 0.14), transparent 60%),
+               radial-gradient(circle at 50% 85%, rgba(${songTheme.primaryRgb}, 0.10), transparent 65%),
+               #F8F8FA`,
         }}
       >
         <div
-          className="absolute top-1/4 left-1/3 -translate-x-1/2 w-[420px] h-[420px] rounded-full blur-[140px] opacity-40 transition-colors duration-700"
+          className={`absolute top-1/4 left-1/3 -translate-x-1/2 w-[440px] h-[440px] rounded-full blur-[140px] transition-colors duration-700 ${
+            isDark ? 'opacity-30' : 'opacity-20'
+          }`}
           style={{ backgroundColor: songTheme.primary }}
         />
         <div
-          className="absolute bottom-1/4 right-1/4 w-[380px] h-[380px] rounded-full blur-[130px] opacity-30 transition-colors duration-700"
+          className={`absolute bottom-1/4 right-1/4 w-[400px] h-[400px] rounded-full blur-[130px] transition-colors duration-700 ${
+            isDark ? 'opacity-25' : 'opacity-15'
+          }`}
           style={{ backgroundColor: songTheme.secondary }}
         />
       </div>
 
-      {/* Top Bar: Close / Minimize */}
-      <div className="relative z-10 px-3 sm:px-8 py-2.5 sm:py-3 flex items-center justify-between border-b border-[#E5E5EA] bg-white/80 backdrop-blur-xl shrink-0 gap-2">
+      {/* Top Bar: Close / Minimize with Dynamic Devotional/Track Label */}
+      <div
+        className={`relative z-10 px-3 sm:px-8 py-2.5 sm:py-3 flex items-center justify-between border-b backdrop-blur-xl shrink-0 gap-2 transition-colors duration-500 ${
+          isDark
+            ? 'border-white/10 bg-[#121216]/80 text-white'
+            : 'border-[#E5E5EA] bg-white/85 text-[#0F172A]'
+        }`}
+      >
         <button
           onClick={toggleFullscreenPlayer}
-          className="fullscreen-control-icon p-1.5 sm:p-2 rounded-full hover:bg-black/5 transition-colors"
+          className={`p-1.5 sm:p-2 rounded-full transition-colors ${
+            isDark ? 'hover:bg-white/10 text-white' : 'hover:bg-black/5 text-[#0F172A]'
+          }`}
           title="Minimize player"
         >
           <ChevronDown className="w-5 sm:w-6 h-5 sm:h-6" />
         </button>
 
-        <div className="text-center font-medium text-xs tracking-wider uppercase text-[#86868B]">
-          {fullscreenView === 'queue' ? 'Playing Queue • రాబోయే గీతాలు' : "Tony's Devotional Sanctuary"}
+        <div className="text-center">
+          <span
+            className={`font-mono text-xs sm:text-sm font-bold tracking-widest uppercase px-3.5 py-1 rounded-full border transition-colors ${
+              isDark
+                ? 'bg-white/10 border-white/15 text-[#F5D77F]'
+                : 'bg-black/5 border-black/10 text-[#8A6D1C]'
+            }`}
+          >
+            {topBarCategoryLabel}
+          </span>
         </div>
 
         <button
           onClick={toggleFullscreenPlayer}
-          className="fullscreen-control-icon p-1.5 sm:p-2 rounded-full hover:bg-black/5 transition-colors"
+          className={`p-1.5 sm:p-2 rounded-full transition-colors ${
+            isDark ? 'hover:bg-white/10 text-white' : 'hover:bg-black/5 text-[#0F172A]'
+          }`}
           title="Close player"
         >
           <X className="w-5 h-5" />
@@ -203,17 +229,25 @@ export const FullscreenPlayer: React.FC = () => {
 
                 {/* Song Meta */}
                 <div className="w-full text-center mt-4 space-y-1 px-4">
-                  <h2 className="text-lg sm:text-xl font-bold truncate text-[#1D1D1F]">
+                  <h2
+                    className={`text-lg sm:text-xl font-extrabold truncate ${
+                      isDark ? 'text-white' : 'text-[#0F172A]'
+                    }`}
+                  >
                     {currentTrack.titleEnglish}
                   </h2>
                   <p
-                    className="font-telugu text-sm sm:text-base truncate font-semibold"
-                    style={{ color: songTheme.primary }}
+                    className="font-telugu text-sm sm:text-base truncate font-bold"
+                    style={{ color: isDark ? '#F5D77F' : (songTheme.primary || '#B45309') }}
                   >
                     {currentTrack.titleTelugu}
                   </p>
-                  <p className="text-xs text-gray-500 truncate">
-                    {currentTrack.singer || 'Rev. Tony Prakash'} • {currentTrack.category || 'Devotional'}
+                  <p
+                    className={`text-xs truncate font-medium ${
+                      isDark ? 'text-gray-400' : 'text-[#475569]'
+                    }`}
+                  >
+                    {currentTrack.singer || 'Rev. Tony Prakash'} • {isDevotional ? 'Devotional' : 'Track'}
                   </p>
                 </div>
 
@@ -221,14 +255,22 @@ export const FullscreenPlayer: React.FC = () => {
                 <div className="flex items-center gap-2.5 mt-3.5">
                   <button
                     onClick={scrollToMobileLyrics}
-                    className="px-3.5 py-1.5 rounded-full border border-[#E5E5EA] bg-white/90 text-xs font-semibold flex items-center gap-1.5 shadow-sm text-gray-700 hover:text-[#FA243C] active:scale-95 transition-transform"
+                    className={`px-3.5 py-1.5 rounded-full border text-xs font-semibold flex items-center gap-1.5 shadow-sm active:scale-95 transition-all ${
+                      isDark
+                        ? 'border-white/15 bg-white/10 text-white hover:bg-white/20'
+                        : 'border-[#CBD5E1] bg-white text-[#0F172A] hover:bg-gray-50'
+                    }`}
                   >
                     <FileText className="w-3.5 h-3.5" style={{ color: songTheme.primary }} />
                     <span>Scroll to Lyrics ↓</span>
                   </button>
                   <button
                     onClick={() => setFullscreenView('queue')}
-                    className="px-3.5 py-1.5 rounded-full border border-[#E5E5EA] bg-white/90 text-xs font-semibold flex items-center gap-1.5 shadow-sm text-gray-700 hover:text-[#FA243C] active:scale-95 transition-transform"
+                    className={`px-3.5 py-1.5 rounded-full border text-xs font-semibold flex items-center gap-1.5 shadow-sm active:scale-95 transition-all ${
+                      isDark
+                        ? 'border-white/15 bg-white/10 text-white hover:bg-white/20'
+                        : 'border-[#CBD5E1] bg-white text-[#0F172A] hover:bg-gray-50'
+                    }`}
                   >
                     <ListMusic className="w-3.5 h-3.5" style={{ color: songTheme.primary }} />
                     <span>Up Next ({upNextTracks.length})</span>
@@ -238,7 +280,11 @@ export const FullscreenPlayer: React.FC = () => {
                 {/* Scroll Indicator Cue */}
                 <div
                   onClick={scrollToMobileLyrics}
-                  className="mt-6 w-full max-w-xs flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl bg-black/5 border border-black/10 text-xs text-gray-600 cursor-pointer animate-bounce"
+                  className={`mt-6 w-full max-w-xs flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl border text-xs cursor-pointer animate-bounce transition-colors ${
+                    isDark
+                      ? 'bg-white/5 border-white/10 text-gray-300'
+                      : 'bg-black/5 border-black/10 text-[#334155]'
+                  }`}
                 >
                   <span>Scroll down for lyrics (సాహిత్యం)</span>
                   <ChevronDown className="w-3.5 h-3.5" />
@@ -254,22 +300,13 @@ export const FullscreenPlayer: React.FC = () => {
                   borderColor: `rgba(${songTheme.primaryRgb}, 0.5)`,
                 }}
               >
-                <div className="flex items-center justify-between border-b border-white/20 pb-3 mb-4">
-                  <div>
-                    <span className="text-[10px] font-mono uppercase tracking-widest text-amber-200 block">
-                      Official Lyrics • సాహిత్యం
-                    </span>
-                    <h3 className="text-base font-bold text-white truncate mt-0.5">
-                      {currentTrack.titleEnglish}
-                    </h3>
-                  </div>
-                  <button
-                    onClick={scrollToMobileTop}
-                    className="px-2.5 py-1 rounded-full bg-white/20 hover:bg-white/30 text-white text-[11px] font-semibold flex items-center gap-1 transition-colors"
-                  >
-                    <ChevronUp className="w-3.5 h-3.5" />
-                    <span>Top</span>
-                  </button>
+                <div className="border-b border-white/20 pb-3 mb-4">
+                  <span className="text-[10px] font-mono uppercase tracking-widest text-amber-200 block">
+                    Official Lyrics • సాహిత్యం
+                  </span>
+                  <h3 className="text-base font-bold text-white truncate mt-0.5">
+                    {currentTrack.titleEnglish}
+                  </h3>
                 </div>
 
                 <div className="space-y-6">
@@ -293,12 +330,6 @@ export const FullscreenPlayer: React.FC = () => {
 
                 <div className="pt-6 mt-6 border-t border-white/20 flex items-center justify-between text-xs text-white/75">
                   <span>Composer: {currentTrack.composer || 'Rev. Tony Prakash'}</span>
-                  <button
-                    onClick={scrollToMobileTop}
-                    className="hover:underline flex items-center gap-1 font-semibold"
-                  >
-                    Back to Top ↑
-                  </button>
                 </div>
               </div>
             </div>
@@ -311,7 +342,9 @@ export const FullscreenPlayer: React.FC = () => {
                   className="relative aspect-square w-56 md:w-64 lg:w-72 xl:w-80 max-h-[42vh] rounded-3xl overflow-hidden border transition-all duration-700 shadow-2xl group"
                   style={{
                     borderColor: `rgba(${songTheme.primaryRgb}, 0.35)`,
-                    boxShadow: `0 24px 50px -12px rgba(${songTheme.primaryRgb}, 0.45)`,
+                    boxShadow: isDark
+                      ? `0 24px 50px -12px rgba(0, 0, 0, 0.7)`
+                      : `0 24px 50px -12px rgba(${songTheme.primaryRgb}, 0.35)`,
                   }}
                 >
                   <img
@@ -333,38 +366,62 @@ export const FullscreenPlayer: React.FC = () => {
                 </div>
 
                 <div className="w-full text-center mt-4 space-y-1">
-                  <h2 className="text-lg lg:text-2xl font-bold truncate px-2 text-[#1D1D1F]">
+                  <h2
+                    className={`text-lg lg:text-2xl font-extrabold truncate px-2 ${
+                      isDark ? 'text-white' : 'text-[#0F172A]'
+                    }`}
+                  >
                     {currentTrack.titleEnglish}
                   </h2>
                   <p
-                    className="font-telugu text-sm lg:text-lg truncate font-semibold transition-colors duration-500"
-                    style={{ color: songTheme.primary }}
+                    className="font-telugu text-sm lg:text-lg truncate font-bold transition-colors duration-500"
+                    style={{ color: isDark ? '#F5D77F' : (songTheme.primary || '#B45309') }}
                   >
                     {currentTrack.titleTelugu}
                   </p>
-                  <p className="text-xs text-gray-500 truncate font-medium">
-                    {currentTrack.singer || 'Rev. Tony Prakash'} • {currentTrack.category || 'Devotional'}
+                  <p
+                    className={`text-xs truncate font-medium ${
+                      isDark ? 'text-gray-400' : 'text-[#334155]'
+                    }`}
+                  >
+                    {currentTrack.singer || 'Rev. Tony Prakash'} • {isDevotional ? 'Devotional' : 'Track'}
                   </p>
                 </div>
               </div>
 
               {/* Right Column: Apple Music Full-Height Synced Lyrics Canvas */}
               <div
-                className="flex-1 flex flex-col h-full max-h-[min(72vh,620px)] bg-white/45 backdrop-blur-2xl rounded-3xl border p-6 lg:p-8 shadow-2xl overflow-hidden transition-all duration-500"
+                className={`flex-1 flex flex-col h-full max-h-[min(72vh,620px)] backdrop-blur-2xl rounded-3xl border p-6 lg:p-8 shadow-2xl overflow-hidden transition-all duration-500 ${
+                  isDark
+                    ? 'bg-black/50 border-white/15 text-white'
+                    : 'bg-white/85 border-[#CBD5E1] text-[#0F172A]'
+                }`}
                 style={{
-                  borderColor: `rgba(${songTheme.primaryRgb}, 0.28)`,
-                  boxShadow: `0 24px 60px -15px rgba(${songTheme.primaryRgb}, 0.25)`,
+                  borderColor: isDark
+                    ? `rgba(${songTheme.primaryRgb}, 0.35)`
+                    : `rgba(${songTheme.primaryRgb}, 0.28)`,
+                  boxShadow: isDark
+                    ? `0 24px 60px -15px rgba(0, 0, 0, 0.7)`
+                    : `0 24px 60px -15px rgba(${songTheme.primaryRgb}, 0.20)`,
                 }}
               >
-                <div className="flex items-center justify-between border-b border-black/10 pb-3 mb-4 shrink-0">
+                <div
+                  className={`flex items-center justify-between border-b pb-3 mb-4 shrink-0 transition-colors ${
+                    isDark ? 'border-white/10' : 'border-black/10'
+                  }`}
+                >
                   <div
                     className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider transition-colors duration-500"
-                    style={{ color: songTheme.primary }}
+                    style={{ color: isDark ? '#F5D77F' : (songTheme.primary || '#B45309') }}
                   >
                     <Music2 className="w-4 h-4" />
-                    <span>సాహిత్యం • Devotional Lyrics</span>
+                    <span>సాహిత్యం • {isDevotional ? 'Devotional Lyrics' : 'Track Lyrics'}</span>
                   </div>
-                  <div className="flex items-center gap-2 text-[11px] font-mono text-gray-500">
+                  <div
+                    className={`flex items-center gap-2 text-[11px] font-mono font-medium ${
+                      isDark ? 'text-gray-400' : 'text-[#334155]'
+                    }`}
+                  >
                     <span>Composer: {currentTrack.composer || 'Rev. Tony Prakash'}</span>
                   </div>
                 </div>
@@ -374,20 +431,32 @@ export const FullscreenPlayer: React.FC = () => {
                     lyricsStanzas.map((stanza, sIdx) => (
                       <div
                         key={sIdx}
-                        className="group/stanza transition-all duration-300 rounded-2xl p-2 -mx-2 hover:bg-black/5 cursor-pointer"
+                        className={`group/stanza transition-all duration-300 rounded-2xl p-2 -mx-2 cursor-pointer ${
+                          isDark ? 'hover:bg-white/5' : 'hover:bg-black/5'
+                        }`}
                       >
-                        <p className="font-telugu text-xl lg:text-2xl xl:text-3xl font-extrabold leading-loose whitespace-pre-line tracking-wide text-[#1D1D1F] group-hover/stanza:text-[#FA243C] transition-colors">
+                        <p
+                          className={`font-telugu text-xl lg:text-2xl xl:text-3xl font-extrabold leading-loose whitespace-pre-line tracking-wide transition-colors ${
+                            isDark
+                              ? 'text-white group-hover/stanza:text-[#FA243C]'
+                              : 'text-[#0F172A] group-hover/stanza:text-[#FA243C]'
+                          }`}
+                        >
                           {stanza}
                         </p>
                       </div>
                     ))
                   ) : (
-                    <div className="h-full flex flex-col items-center justify-center text-center space-y-3 py-12 text-gray-500">
+                    <div
+                      className={`h-full flex flex-col items-center justify-center text-center space-y-3 py-12 ${
+                        isDark ? 'text-gray-400' : 'text-[#475569]'
+                      }`}
+                    >
                       <Music2 className="w-12 h-12 opacity-30" />
                       <p className="text-sm font-semibold">
                         Instrumental / Studio Minus-One Backing Track
                       </p>
-                      <p className="text-xs text-gray-400 max-w-xs">
+                      <p className="text-xs max-w-xs">
                         Enjoy singing along with the original backing track!
                       </p>
                     </div>
@@ -405,10 +474,14 @@ export const FullscreenPlayer: React.FC = () => {
             <div className="md:hidden w-full h-full overflow-y-auto space-y-4 pb-28 pt-2 px-3 no-scrollbar">
               {/* TOP: Image Banner Card */}
               <div
-                className="w-full p-4 rounded-3xl border shadow-xl flex items-center justify-between gap-3 relative overflow-hidden"
+                className="w-full p-4 rounded-3xl border shadow-xl flex items-center justify-between gap-3 relative overflow-hidden transition-all duration-500"
                 style={{
-                  background: `linear-gradient(135deg, rgba(${songTheme.primaryRgb}, 0.20), rgba(${songTheme.secondaryRgb}, 0.15))`,
-                  borderColor: `rgba(${songTheme.primaryRgb}, 0.35)`,
+                  background: isDark
+                    ? `linear-gradient(135deg, rgba(${songTheme.primaryRgb}, 0.25), rgba(${songTheme.secondaryRgb}, 0.18))`
+                    : `linear-gradient(135deg, rgba(${songTheme.primaryRgb}, 0.20), rgba(${songTheme.secondaryRgb}, 0.15))`,
+                  borderColor: isDark
+                    ? `rgba(${songTheme.primaryRgb}, 0.45)`
+                    : `rgba(${songTheme.primaryRgb}, 0.35)`,
                 }}
               >
                 <div className="flex items-center gap-3 min-w-0">
@@ -430,10 +503,17 @@ export const FullscreenPlayer: React.FC = () => {
                     <span className="px-2 py-0.5 rounded bg-[#FA243C] text-[9px] font-bold text-white uppercase tracking-wider">
                       Now Playing
                     </span>
-                    <h4 className="text-sm font-bold text-[#1D1D1F] truncate mt-1">
+                    <h4
+                      className={`text-sm font-bold truncate mt-1 ${
+                        isDark ? 'text-white' : 'text-[#0F172A]'
+                      }`}
+                    >
                       {currentTrack.titleEnglish}
                     </h4>
-                    <p className="text-xs font-telugu text-[#D4A017] truncate font-semibold">
+                    <p
+                      className="text-xs font-telugu truncate font-semibold"
+                      style={{ color: isDark ? '#F5D77F' : (songTheme.primary || '#B45309') }}
+                    >
                       {currentTrack.titleTelugu}
                     </p>
                   </div>
@@ -443,10 +523,18 @@ export const FullscreenPlayer: React.FC = () => {
               {/* BELOW IT: Queue Header */}
               <div className="flex items-center justify-between px-1 pt-1">
                 <div>
-                  <h3 className="text-sm font-bold text-[#1D1D1F]">
+                  <h3
+                    className={`text-sm font-bold ${
+                      isDark ? 'text-white' : 'text-[#0F172A]'
+                    }`}
+                  >
                     Up Next • రాబోయే గీతాలు
                   </h3>
-                  <p className="text-[11px] text-[#86868B]">
+                  <p
+                    className={`text-[11px] font-medium ${
+                      isDark ? 'text-gray-400' : 'text-[#475569]'
+                    }`}
+                  >
                     {upNextTracks.length} {upNextTracks.length === 1 ? 'song' : 'songs'} remaining
                   </p>
                 </div>
@@ -456,8 +544,12 @@ export const FullscreenPlayer: React.FC = () => {
                     onClick={toggleShuffle}
                     className={`px-2.5 py-1 rounded-lg text-xs font-semibold border transition-all flex items-center gap-1 ${
                       shuffle
-                        ? 'bg-[#FA243C]/10 border-[#FA243C]/40 text-[#FA243C]'
-                        : 'bg-[#F5F5F7] border-[#E5E5EA] text-[#86868B]'
+                        ? isDark
+                          ? 'bg-red-500/20 border-red-500/40 text-red-400'
+                          : 'bg-red-500/10 border-red-500/30 text-red-600'
+                        : isDark
+                          ? 'bg-white/10 border-white/15 text-gray-300'
+                          : 'bg-black/5 border-black/10 text-[#475569]'
                     }`}
                   >
                     <Shuffle className="w-3.5 h-3.5" />
@@ -467,7 +559,9 @@ export const FullscreenPlayer: React.FC = () => {
                   {upNextTracks.length > 0 && (
                     <button
                       onClick={clearQueue}
-                      className="px-2.5 py-1 rounded-lg text-xs font-semibold text-gray-500 hover:text-red-600 border border-transparent transition-colors flex items-center gap-1"
+                      className={`px-2.5 py-1 rounded-lg text-xs font-semibold border border-transparent transition-colors flex items-center gap-1 ${
+                        isDark ? 'text-gray-400 hover:text-red-400' : 'text-[#475569] hover:text-red-600'
+                      }`}
                     >
                       <Trash2 className="w-3.5 h-3.5" />
                       <span className="text-[10px]">Clear</span>
@@ -479,10 +573,20 @@ export const FullscreenPlayer: React.FC = () => {
               {/* BELOW IT: Up Next Songs List */}
               <div className="space-y-2">
                 {upNextTracks.length === 0 ? (
-                  <div className="py-6 text-center text-xs text-[#86868B] space-y-1.5 bg-[#F9F9FB] rounded-2xl border border-dashed border-[#E5E5EA] p-4">
+                  <div
+                    className={`py-6 text-center text-xs space-y-1.5 rounded-2xl border border-dashed p-4 ${
+                      isDark
+                        ? 'bg-white/5 border-white/10 text-gray-400'
+                        : 'bg-[#F9F9FB] border-[#E5E5EA] text-[#475569]'
+                    }`}
+                  >
                     <ListMusic className="w-7 h-7 opacity-40 mx-auto text-[#FA243C]" />
-                    <p className="font-semibold text-[#1D1D1F]">End of Queue</p>
-                    <p className="text-[10px] text-[#86868B]">Click any album song to queue its hymns.</p>
+                    <p className={`font-semibold ${isDark ? 'text-white' : 'text-[#0F172A]'}`}>
+                      End of Queue
+                    </p>
+                    <p className={`text-[10px] ${isDark ? 'text-gray-400' : 'text-[#64748B]'}`}>
+                      Click any album song to queue its hymns.
+                    </p>
                   </div>
                 ) : (
                   upNextTracks.map((track, idx) => {
@@ -491,10 +595,18 @@ export const FullscreenPlayer: React.FC = () => {
                       <div
                         key={`mob-${track.id}-${actualQueueIndex}`}
                         onClick={() => playTrack(track, queue)}
-                        className="group p-2.5 rounded-2xl border border-[#E5E5EA] bg-white flex items-center justify-between gap-3 active:scale-[0.99] transition-all cursor-pointer shadow-sm"
+                        className={`group p-2.5 rounded-2xl border flex items-center justify-between gap-3 active:scale-[0.99] transition-all cursor-pointer shadow-sm ${
+                          isDark
+                            ? 'border-white/10 bg-white/5 hover:bg-white/10 text-white'
+                            : 'border-[#CBD5E1] bg-white hover:bg-gray-50 text-[#0F172A]'
+                        }`}
                       >
                         <div className="flex items-center gap-3 min-w-0">
-                          <span className="text-[11px] font-mono text-[#86868B] w-5 text-center shrink-0">
+                          <span
+                            className={`text-[11px] font-mono w-5 text-center shrink-0 ${
+                              isDark ? 'text-gray-400' : 'text-[#475569]'
+                            }`}
+                          >
                             {String(idx + 1).padStart(2, '0')}
                           </span>
                           <img
@@ -503,17 +615,29 @@ export const FullscreenPlayer: React.FC = () => {
                             className="w-10 h-10 rounded-xl object-cover shrink-0 shadow-sm"
                           />
                           <div className="min-w-0">
-                            <h5 className="text-xs font-semibold truncate text-[#1D1D1F]">
+                            <h5
+                              className={`text-xs font-bold truncate ${
+                                isDark ? 'text-white' : 'text-[#0F172A]'
+                              }`}
+                            >
                               {track.titleEnglish}
                             </h5>
-                            <p className="text-[10px] font-telugu text-[#86868B] truncate">
+                            <p
+                              className={`text-[10px] font-telugu truncate font-medium ${
+                                isDark ? 'text-[#F5D77F]' : 'text-[#8A6D1C]'
+                              }`}
+                            >
                               {track.titleTelugu}
                             </p>
                           </div>
                         </div>
 
                         <div className="flex items-center gap-2 shrink-0">
-                          <span className="text-[10px] font-mono text-[#86868B]">
+                          <span
+                            className={`text-[10px] font-mono ${
+                              isDark ? 'text-gray-400' : 'text-[#475569] font-medium'
+                            }`}
+                          >
                             {track.duration || '5:12'}
                           </span>
                           <button
@@ -521,7 +645,11 @@ export const FullscreenPlayer: React.FC = () => {
                               e.stopPropagation();
                               removeFromQueue(actualQueueIndex);
                             }}
-                            className="p-1 text-gray-400 hover:text-red-600 rounded-md transition-colors"
+                            className={`p-1 rounded-md transition-colors ${
+                              isDark
+                                ? 'text-gray-400 hover:text-red-400'
+                                : 'text-gray-500 hover:text-red-600'
+                            }`}
                             title="Remove"
                           >
                             <X className="w-3.5 h-3.5" />
@@ -535,11 +663,19 @@ export const FullscreenPlayer: React.FC = () => {
 
               {/* BELOW IT: History Section with Clear History */}
               {fullHistory.length > 0 && (
-                <div className="pt-4 border-t border-[#E5E5EA] mt-4">
+                <div
+                  className={`pt-4 border-t mt-4 ${
+                    isDark ? 'border-white/10' : 'border-[#CBD5E1]'
+                  }`}
+                >
                   <div className="flex items-center justify-between py-1 px-1">
                     <button
                       onClick={() => setShowFullscreenHistory((prev) => !prev)}
-                      className="flex items-center gap-1.5 text-xs font-mono text-[#86868B] hover:text-[#1D1D1F]"
+                      className={`flex items-center gap-1.5 text-xs font-mono transition-colors ${
+                        isDark
+                          ? 'text-gray-400 hover:text-white'
+                          : 'text-[#475569] hover:text-[#0F172A]'
+                      }`}
                     >
                       <span className="uppercase tracking-wider font-semibold">
                         Playback History ({fullHistory.length})
@@ -553,7 +689,11 @@ export const FullscreenPlayer: React.FC = () => {
 
                     <button
                       onClick={clearHistory}
-                      className="text-[10px] text-gray-400 hover:text-red-600 transition-colors flex items-center gap-1 font-mono"
+                      className={`text-[10px] transition-colors flex items-center gap-1 font-mono ${
+                        isDark
+                          ? 'text-gray-400 hover:text-red-400'
+                          : 'text-gray-500 hover:text-red-600'
+                      }`}
                       title="Clear history"
                     >
                       <Trash2 className="w-3 h-3" />
@@ -567,10 +707,18 @@ export const FullscreenPlayer: React.FC = () => {
                         <div
                           key={`fs-mob-prev-${track.id}-${pIdx}`}
                           onClick={() => playTrack(track, queue)}
-                          className="group p-2 rounded-xl bg-black/5 flex items-center justify-between text-xs cursor-pointer"
+                          className={`group p-2 rounded-xl flex items-center justify-between text-xs cursor-pointer transition-colors ${
+                            isDark
+                              ? 'bg-white/5 hover:bg-white/10 text-white'
+                              : 'bg-black/5 hover:bg-black/10 text-[#0F172A]'
+                          }`}
                         >
                           <div className="flex items-center gap-2.5 min-w-0">
-                            <span className="font-mono text-[9px] text-[#86868B] w-4 text-center shrink-0">
+                            <span
+                              className={`font-mono text-[9px] w-4 text-center shrink-0 ${
+                                isDark ? 'text-gray-400' : 'text-[#475569]'
+                              }`}
+                            >
                               {pIdx + 1}
                             </span>
                             <img
@@ -578,11 +726,19 @@ export const FullscreenPlayer: React.FC = () => {
                               alt={track.titleEnglish}
                               className="w-7 h-7 rounded-lg object-cover shrink-0"
                             />
-                            <span className="truncate text-xs text-[#1D1D1F]">
+                            <span
+                              className={`truncate text-xs font-medium ${
+                                isDark ? 'text-white' : 'text-[#0F172A]'
+                              }`}
+                            >
                               {track.titleEnglish}
                             </span>
                           </div>
-                          <span className="text-[10px] font-mono text-[#86868B]">
+                          <span
+                            className={`text-[10px] font-mono ${
+                              isDark ? 'text-gray-400' : 'text-[#475569]'
+                            }`}
+                          >
                             {track.duration}
                           </span>
                         </div>
@@ -601,7 +757,9 @@ export const FullscreenPlayer: React.FC = () => {
                   className="relative aspect-square w-56 md:w-64 lg:w-72 xl:w-80 max-h-[42vh] rounded-3xl overflow-hidden border transition-all duration-700 shadow-2xl group"
                   style={{
                     borderColor: `rgba(${songTheme.primaryRgb}, 0.35)`,
-                    boxShadow: `0 24px 50px -12px rgba(${songTheme.primaryRgb}, 0.45)`,
+                    boxShadow: isDark
+                      ? `0 24px 50px -12px rgba(0, 0, 0, 0.7)`
+                      : `0 24px 50px -12px rgba(${songTheme.primaryRgb}, 0.35)`,
                   }}
                 >
                   <img
@@ -623,34 +781,68 @@ export const FullscreenPlayer: React.FC = () => {
                 </div>
 
                 <div className="w-full text-center mt-4 space-y-1">
-                  <h2 className="text-lg lg:text-2xl font-bold truncate px-2 text-[#1D1D1F]">
+                  <h2
+                    className={`text-lg lg:text-2xl font-extrabold truncate px-2 ${
+                      isDark ? 'text-white' : 'text-[#0F172A]'
+                    }`}
+                  >
                     {currentTrack.titleEnglish}
                   </h2>
                   <p
-                    className="font-telugu text-sm lg:text-lg truncate font-semibold transition-colors duration-500"
-                    style={{ color: songTheme.primary }}
+                    className="font-telugu text-sm lg:text-lg truncate font-bold transition-colors duration-500"
+                    style={{ color: isDark ? '#F5D77F' : (songTheme.primary || '#B45309') }}
                   >
                     {currentTrack.titleTelugu}
                   </p>
-                  <p className="text-xs text-gray-500 truncate font-medium">
-                    {currentTrack.singer || 'Rev. Tony Prakash'} • {currentTrack.category || 'Devotional'}
+                  <p
+                    className={`text-xs truncate font-medium ${
+                      isDark ? 'text-gray-400' : 'text-[#334155]'
+                    }`}
+                  >
+                    {currentTrack.singer || 'Rev. Tony Prakash'} • {isDevotional ? 'Devotional' : 'Track'}
                   </p>
                 </div>
               </div>
 
               {/* Right Column: Up Next Queue & Below it History */}
-              <div className="flex-1 flex flex-col h-full max-h-[min(74vh,640px)] bg-white/60 dark:bg-black/40 backdrop-blur-2xl rounded-3xl border border-[#E5E5EA] dark:border-white/10 p-5 lg:p-6 shadow-2xl overflow-hidden">
+              <div
+                className={`flex-1 flex flex-col h-full max-h-[min(74vh,640px)] backdrop-blur-2xl rounded-3xl border p-5 lg:p-6 shadow-2xl overflow-hidden transition-all duration-500 ${
+                  isDark
+                    ? 'bg-black/50 border-white/15 text-white'
+                    : 'bg-white/85 border-[#CBD5E1] text-[#0F172A]'
+                }`}
+                style={{
+                  borderColor: isDark
+                    ? `rgba(${songTheme.primaryRgb}, 0.35)`
+                    : `rgba(${songTheme.primaryRgb}, 0.28)`,
+                  boxShadow: isDark
+                    ? `0 24px 60px -15px rgba(0, 0, 0, 0.7)`
+                    : `0 24px 60px -15px rgba(${songTheme.primaryRgb}, 0.20)`,
+                }}
+              >
                 {/* Header with Title and Controls */}
-                <div className="flex items-center justify-between pb-3 border-b border-black/10 dark:border-white/10 shrink-0">
+                <div
+                  className={`flex items-center justify-between pb-3 border-b shrink-0 transition-colors ${
+                    isDark ? 'border-white/10' : 'border-black/10'
+                  }`}
+                >
                   <div className="flex items-center gap-2.5">
                     <div className="w-8 h-8 rounded-lg bg-[#FA243C]/10 text-[#FA243C] flex items-center justify-center">
                       <ListMusic className="w-4 h-4" />
                     </div>
                     <div>
-                      <h3 className="text-sm sm:text-base font-bold text-[#1D1D1F]">
+                      <h3
+                        className={`text-sm sm:text-base font-bold ${
+                          isDark ? 'text-white' : 'text-[#0F172A]'
+                        }`}
+                      >
                         Up Next • రాబోయే గీతాలు
                       </h3>
-                      <p className="text-[11px] text-[#86868B]">
+                      <p
+                        className={`text-[11px] font-medium ${
+                          isDark ? 'text-gray-400' : 'text-[#475569]'
+                        }`}
+                      >
                         {upNextTracks.length} {upNextTracks.length === 1 ? 'song' : 'songs'} remaining in queue
                       </p>
                     </div>
@@ -661,8 +853,12 @@ export const FullscreenPlayer: React.FC = () => {
                       onClick={toggleShuffle}
                       className={`px-2.5 py-1 rounded-lg text-xs font-semibold border transition-all flex items-center gap-1.5 ${
                         shuffle
-                          ? 'bg-[#FA243C]/10 border-[#FA243C]/40 text-[#FA243C]'
-                          : 'bg-[#F5F5F7] border-[#E5E5EA] text-[#86868B]'
+                          ? isDark
+                            ? 'bg-red-500/20 border-red-500/40 text-red-400'
+                            : 'bg-red-500/10 border-red-500/30 text-red-600'
+                          : isDark
+                            ? 'bg-white/10 border-white/15 text-gray-300 hover:text-white'
+                            : 'bg-black/5 border-black/10 text-[#475569] hover:text-[#0F172A]'
                       }`}
                       title="Toggle Shuffle"
                     >
@@ -673,7 +869,11 @@ export const FullscreenPlayer: React.FC = () => {
                     {upNextTracks.length > 0 && (
                       <button
                         onClick={clearQueue}
-                        className="px-2.5 py-1 rounded-lg text-xs font-semibold text-gray-500 hover:text-red-600 hover:bg-red-50 border border-transparent transition-colors flex items-center gap-1"
+                        className={`px-2.5 py-1 rounded-lg text-xs font-semibold border border-transparent transition-colors flex items-center gap-1 ${
+                          isDark
+                            ? 'text-gray-400 hover:text-red-400'
+                            : 'text-[#475569] hover:text-red-600 hover:bg-red-50'
+                        }`}
                         title="Clear Queue"
                       >
                         <Trash2 className="w-3.5 h-3.5" />
@@ -686,19 +886,45 @@ export const FullscreenPlayer: React.FC = () => {
                 {/* Up Next List */}
                 <div className="flex-1 min-h-0 overflow-y-auto space-y-2 py-3 pr-2 no-scrollbar scrollbar-none">
                   {upNextTracks.length === 0 ? (
-                    <div className="py-8 text-center text-xs text-[#86868B] space-y-2 bg-[#F9F9FB] rounded-2xl border border-dashed border-[#E5E5EA] p-4">
+                    <div
+                      className={`py-8 text-center text-xs space-y-2 rounded-2xl border border-dashed p-4 ${
+                        isDark
+                          ? 'bg-white/5 border-white/10 text-gray-400'
+                          : 'bg-[#F9F9FB] border-[#E5E5EA] text-[#475569]'
+                      }`}
+                    >
                       <ListMusic className="w-7 h-7 opacity-40 mx-auto text-[#FA243C]" />
                       {repeatMode === 'all' && fullHistory.length > 0 ? (
                         <div>
-                          <p className="font-semibold text-[#1D1D1F]">Repeat All Active</p>
-                          <p className="text-[10px] text-[#86868B] mt-0.5">
+                          <p
+                            className={`font-semibold ${
+                              isDark ? 'text-white' : 'text-[#0F172A]'
+                            }`}
+                          >
+                            Repeat All Active
+                          </p>
+                          <p
+                            className={`text-[10px] mt-0.5 ${
+                              isDark ? 'text-gray-400' : 'text-[#64748B]'
+                            }`}
+                          >
                             Queue will restart from the beginning ({fullHistory[0]?.titleEnglish}).
                           </p>
                         </div>
                       ) : (
                         <div>
-                          <p className="font-semibold text-[#1D1D1F]">End of Queue</p>
-                          <p className="text-[10px] text-[#86868B] mt-0.5">
+                          <p
+                            className={`font-semibold ${
+                              isDark ? 'text-white' : 'text-[#0F172A]'
+                            }`}
+                          >
+                            End of Queue
+                          </p>
+                          <p
+                            className={`text-[10px] mt-0.5 ${
+                              isDark ? 'text-gray-400' : 'text-[#64748B]'
+                            }`}
+                          >
                             Click any album song or select more hymns to add them to your queue.
                           </p>
                         </div>
@@ -711,10 +937,18 @@ export const FullscreenPlayer: React.FC = () => {
                         <div
                           key={`${track.id}-${actualQueueIndex}`}
                           onClick={() => playTrack(track, queue)}
-                          className="group p-2.5 rounded-xl border border-[#E5E5EA] bg-white hover:bg-[#F2F2F7] flex items-center justify-between gap-3 cursor-pointer transition-all"
+                          className={`group p-2.5 rounded-xl border flex items-center justify-between gap-3 cursor-pointer transition-all ${
+                            isDark
+                              ? 'border-white/10 bg-white/5 hover:bg-white/10 text-white'
+                              : 'border-[#CBD5E1] bg-white hover:bg-gray-50 text-[#0F172A]'
+                          }`}
                         >
                           <div className="flex items-center gap-3 min-w-0">
-                            <span className="text-[11px] font-mono text-[#86868B] w-5 text-center shrink-0">
+                            <span
+                              className={`text-[11px] font-mono w-5 text-center shrink-0 ${
+                                isDark ? 'text-gray-400' : 'text-[#475569]'
+                              }`}
+                            >
                               {String(idx + 1).padStart(2, '0')}
                             </span>
                             <img
@@ -723,17 +957,29 @@ export const FullscreenPlayer: React.FC = () => {
                               className="w-10 h-10 rounded-lg object-cover shrink-0 shadow-sm"
                             />
                             <div className="min-w-0">
-                              <h5 className="text-xs font-semibold truncate text-[#1D1D1F] group-hover:text-[#FA243C]">
+                              <h5
+                                className={`text-xs font-bold truncate group-hover:text-[#FA243C] ${
+                                  isDark ? 'text-white' : 'text-[#0F172A]'
+                                }`}
+                              >
                                 {track.titleEnglish}
                               </h5>
-                              <p className="text-[10px] font-telugu text-[#86868B] truncate">
+                              <p
+                                className={`text-[10px] font-telugu truncate font-medium ${
+                                  isDark ? 'text-[#F5D77F]' : 'text-[#8A6D1C]'
+                                }`}
+                              >
                                 {track.titleTelugu}
                               </p>
                             </div>
                           </div>
 
                           <div className="flex items-center gap-2 shrink-0">
-                            <span className="text-[10px] font-mono text-[#86868B]">
+                            <span
+                              className={`text-[10px] font-mono ${
+                                isDark ? 'text-gray-400' : 'text-[#475569] font-medium'
+                              }`}
+                            >
                               {track.duration || '5:12'}
                             </span>
                             <button
@@ -741,7 +987,11 @@ export const FullscreenPlayer: React.FC = () => {
                                 e.stopPropagation();
                                 removeFromQueue(actualQueueIndex);
                               }}
-                              className="p-1 text-gray-400 hover:text-red-600 rounded-md hover:bg-gray-100 transition-colors"
+                              className={`p-1 rounded-md transition-colors ${
+                                isDark
+                                  ? 'text-gray-400 hover:text-red-400'
+                                  : 'text-gray-500 hover:text-red-600 hover:bg-gray-100'
+                              }`}
                               title="Remove from queue"
                             >
                               <X className="w-3.5 h-3.5" />
@@ -754,13 +1004,21 @@ export const FullscreenPlayer: React.FC = () => {
 
                   {/* Below it: The History Section */}
                   {fullHistory.length > 0 && (
-                    <div className="pt-3 border-t border-[#E5E5EA] mt-4">
+                    <div
+                      className={`pt-3 border-t mt-4 ${
+                        isDark ? 'border-white/10' : 'border-[#CBD5E1]'
+                      }`}
+                    >
                       <div className="flex items-center justify-between py-1.5 px-2">
                         <button
                           onClick={() => setShowFullscreenHistory((prev) => !prev)}
-                          className="flex items-center gap-1.5 text-[11px] font-mono text-[#86868B] hover:text-[#1D1D1F] transition-colors"
+                          className={`flex items-center gap-1.5 text-[11px] font-mono transition-colors ${
+                            isDark
+                              ? 'text-gray-400 hover:text-white'
+                              : 'text-[#475569] hover:text-[#0F172A]'
+                          }`}
                         >
-                          <span className="uppercase tracking-wider">
+                          <span className="uppercase tracking-wider font-semibold">
                             Playback History ({fullHistory.length})
                           </span>
                           {showFullscreenHistory ? (
@@ -772,7 +1030,11 @@ export const FullscreenPlayer: React.FC = () => {
 
                         <button
                           onClick={clearHistory}
-                          className="text-[10px] text-gray-400 hover:text-red-600 transition-colors flex items-center gap-1 font-mono"
+                          className={`text-[10px] transition-colors flex items-center gap-1 font-mono ${
+                            isDark
+                              ? 'text-gray-400 hover:text-red-400'
+                              : 'text-gray-500 hover:text-red-600'
+                          }`}
                           title="Clear playback history"
                         >
                           <Trash2 className="w-3 h-3" />
@@ -786,10 +1048,18 @@ export const FullscreenPlayer: React.FC = () => {
                             <div
                               key={`fs-prev-${track.id}-${pIdx}`}
                               onClick={() => playTrack(track, queue)}
-                              className="group p-2 rounded-lg hover:bg-black/5 flex items-center justify-between text-xs cursor-pointer transition-colors"
+                              className={`group p-2 rounded-lg flex items-center justify-between text-xs cursor-pointer transition-colors ${
+                                isDark
+                                  ? 'hover:bg-white/10 text-white'
+                                  : 'hover:bg-black/5 text-[#0F172A]'
+                              }`}
                             >
                               <div className="flex items-center gap-2.5 min-w-0">
-                                <span className="font-mono text-[9px] text-[#86868B] w-4 text-center shrink-0">
+                                <span
+                                  className={`font-mono text-[9px] w-4 text-center shrink-0 ${
+                                    isDark ? 'text-gray-400' : 'text-[#475569]'
+                                  }`}
+                                >
                                   {pIdx + 1}
                                 </span>
                                 <img
@@ -797,11 +1067,19 @@ export const FullscreenPlayer: React.FC = () => {
                                   alt={track.titleEnglish}
                                   className="w-7 h-7 rounded object-cover shrink-0"
                                 />
-                                <span className="truncate text-xs text-[#1D1D1F] group-hover:text-[#FA243C]">
+                                <span
+                                  className={`truncate text-xs font-medium group-hover:text-[#FA243C] ${
+                                    isDark ? 'text-white' : 'text-[#0F172A]'
+                                  }`}
+                                >
                                   {track.titleEnglish}
                                 </span>
                               </div>
-                              <span className="text-[10px] font-mono text-[#86868B]">
+                              <span
+                                className={`text-[10px] font-mono ${
+                                  isDark ? 'text-gray-400' : 'text-[#475569]'
+                                }`}
+                              >
                                 {track.duration}
                               </span>
                             </div>
@@ -818,7 +1096,13 @@ export const FullscreenPlayer: React.FC = () => {
       </div>
 
       {/* Bottom Transport Controls Bar */}
-      <div className="relative z-10 px-4 sm:px-8 py-3 sm:py-4 border-t border-[#E5E5EA] bg-white/85 backdrop-blur-xl shrink-0 space-y-2 sm:space-y-2.5">
+      <div
+        className={`relative z-10 px-4 sm:px-8 py-3 sm:py-4 border-t backdrop-blur-xl shrink-0 space-y-2 sm:space-y-2.5 transition-colors duration-500 ${
+          isDark
+            ? 'border-white/10 bg-[#121216]/90 text-white'
+            : 'border-[#E5E5EA] bg-white/90 text-[#0F172A]'
+        }`}
+      >
         {/* Progress Bar & Timestamps */}
         <div className="max-w-2xl mx-auto space-y-1">
           <div
@@ -827,7 +1111,9 @@ export const FullscreenPlayer: React.FC = () => {
               const pos = (e.clientX - rect.left) / rect.width;
               seek(pos * duration);
             }}
-            className="h-2 bg-[#E5E5EA] rounded-full cursor-pointer relative overflow-hidden group"
+            className={`h-2 rounded-full cursor-pointer relative overflow-hidden group transition-colors ${
+              isDark ? 'bg-white/15' : 'bg-[#E2E8F0]'
+            }`}
           >
             <div
               className="h-full rounded-full transition-all duration-300"
@@ -837,9 +1123,13 @@ export const FullscreenPlayer: React.FC = () => {
               }}
             />
           </div>
-          <div className="flex justify-between text-[11px] font-mono">
-            <span className="fullscreen-timestamp">{formatSeconds(currentTime)}</span>
-            <span className="fullscreen-timestamp">{formatSeconds(duration)}</span>
+          <div className="flex justify-between text-[11px] font-mono font-semibold">
+            <span className={isDark ? 'text-gray-400' : 'text-[#334155]'}>
+              {formatSeconds(currentTime)}
+            </span>
+            <span className={isDark ? 'text-gray-400' : 'text-[#334155]'}>
+              {formatSeconds(duration)}
+            </span>
           </div>
         </div>
 
@@ -849,7 +1139,13 @@ export const FullscreenPlayer: React.FC = () => {
           <button
             onClick={() => toggleLikeTrack(currentTrack.id)}
             className="p-2 rounded-full transition-transform hover:scale-110"
-            style={{ color: liked ? songTheme.primary : '#475569' }}
+            style={{
+              color: liked
+                ? (songTheme.primary || '#FA243C')
+                : isDark
+                  ? '#94A3B8'
+                  : '#475569',
+            }}
             title={liked ? 'Liked' : 'Like'}
           >
             <Heart className={`w-5 sm:w-6 h-5 sm:h-6 ${liked ? 'fill-current' : ''}`} />
@@ -860,21 +1156,29 @@ export const FullscreenPlayer: React.FC = () => {
             <button
               onClick={toggleShuffle}
               className="p-2 rounded-full transition-colors relative"
-              style={{ color: shuffle ? songTheme.primary : '#475569' }}
+              style={{
+                color: shuffle
+                  ? (songTheme.primary || '#FA243C')
+                  : isDark
+                    ? '#94A3B8'
+                    : '#475569',
+              }}
               title={shuffle ? 'Shuffle On' : 'Shuffle Off'}
             >
               <Shuffle className="w-4 sm:w-5 h-4 sm:h-5" />
               {shuffle && (
                 <span
                   className="absolute bottom-0.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full"
-                  style={{ backgroundColor: songTheme.primary }}
+                  style={{ backgroundColor: songTheme.primary || '#FA243C' }}
                 />
               )}
             </button>
 
             <button
               onClick={playPrev}
-              className="fullscreen-control-icon p-2 transition-colors hover:scale-105 active:scale-95"
+              className={`p-2 transition-transform hover:scale-105 active:scale-95 ${
+                isDark ? 'text-white hover:text-white' : 'text-[#0F172A] hover:text-black'
+              }`}
               title="Previous"
             >
               <SkipBack className="w-6 sm:w-7 h-6 sm:h-7 fill-current" />
@@ -898,7 +1202,9 @@ export const FullscreenPlayer: React.FC = () => {
 
             <button
               onClick={playNext}
-              className="fullscreen-control-icon p-2 transition-colors hover:scale-105 active:scale-95"
+              className={`p-2 transition-transform hover:scale-105 active:scale-95 ${
+                isDark ? 'text-white hover:text-white' : 'text-[#0F172A] hover:text-black'
+              }`}
               title="Next"
             >
               <SkipForward className="w-6 sm:w-7 h-6 sm:h-7 fill-current" />
@@ -907,7 +1213,13 @@ export const FullscreenPlayer: React.FC = () => {
             <button
               onClick={toggleRepeat}
               className="p-2 rounded-full transition-colors relative"
-              style={{ color: repeatMode !== 'off' ? songTheme.primary : '#475569' }}
+              style={{
+                color: repeatMode !== 'off'
+                  ? (songTheme.primary || '#FA243C')
+                  : isDark
+                    ? '#94A3B8'
+                    : '#475569',
+              }}
               title={`Repeat: ${repeatMode.toUpperCase()}`}
             >
               {repeatMode === 'one' ? (
@@ -918,7 +1230,7 @@ export const FullscreenPlayer: React.FC = () => {
               {repeatMode !== 'off' && (
                 <span
                   className="absolute bottom-0.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full"
-                  style={{ backgroundColor: songTheme.primary }}
+                  style={{ backgroundColor: songTheme.primary || '#FA243C' }}
                 />
               )}
             </button>
@@ -929,7 +1241,11 @@ export const FullscreenPlayer: React.FC = () => {
             <button
               onClick={() => setFullscreenView(fullscreenView === 'queue' ? 'player' : 'queue')}
               className={`p-2 rounded-full transition-colors relative ${
-                fullscreenView === 'queue' ? 'text-[#FA243C] bg-black/5' : 'text-gray-500 hover:text-black'
+                fullscreenView === 'queue'
+                  ? 'text-[#FA243C] bg-red-500/10'
+                  : isDark
+                    ? 'text-gray-400 hover:text-white'
+                    : 'text-[#475569] hover:text-[#0F172A]'
               }`}
               title="Up Next / Queue"
             >
@@ -942,7 +1258,12 @@ export const FullscreenPlayer: React.FC = () => {
             </button>
 
             <div className="hidden lg:flex items-center gap-2 w-28">
-              <button onClick={toggleMute} className="fullscreen-control-icon p-1 transition-colors">
+              <button
+                onClick={toggleMute}
+                className={`p-1 transition-colors ${
+                  isDark ? 'text-gray-300 hover:text-white' : 'text-[#334155] hover:text-[#0F172A]'
+                }`}
+              >
                 {isMuted ? <VolumeX className="w-5 h-5 text-red-500" /> : <Volume2 className="w-5 h-5" />}
               </button>
               <input
@@ -952,7 +1273,9 @@ export const FullscreenPlayer: React.FC = () => {
                 step="0.01"
                 value={isMuted ? 0 : volume}
                 onChange={(e) => setVolumeLevel(parseFloat(e.target.value))}
-                className="w-full h-1 bg-[#CBD5E1] rounded-full"
+                className={`w-full h-1 rounded-full cursor-pointer ${
+                  isDark ? 'bg-white/20' : 'bg-[#CBD5E1]'
+                }`}
                 style={{ accentColor: songTheme.primary }}
               />
             </div>
