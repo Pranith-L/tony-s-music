@@ -77,7 +77,7 @@ export async function openRazorpayCheckout(options: RazorpayCheckoutOptions): Pr
       item: options.itemTitle,
     },
     theme: {
-      color: '#FA243C', // Sacred Red Brand color
+      color: '#FA243C', // Tony's Sacred Red Brand color
     },
     modal: {
       confirm_close: true,

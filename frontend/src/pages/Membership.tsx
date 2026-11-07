@@ -222,7 +222,7 @@ export const MembershipPage: React.FC = () => {
               </li>
               <li className="flex items-center gap-2.5">
                 <Download className="w-4 h-4 text-[#D4A017] shrink-0" />
-                <span className="font-semibold text-white">Full In-App Offline Downloads & Master Audio Caching</span>
+                <span className="font-semibold text-white">Full In-App Offline Downloads & Album Caching</span>
               </li>
               <li className="flex items-center gap-2.5">
                 <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />

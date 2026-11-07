@@ -84,8 +84,8 @@ export const UnifiedCheckoutModal: React.FC<UnifiedCheckoutModalProps> = ({
   if (!isOpen) return null;
 
   const isVipPass = itemType === 'VIP_PASS';
-  // Official Production Pricing: ₹299 for VIP Lifetime Pass, ₹99 for Studio Backing Track
-  const priceRupees = isVipPass ? 299 : 99;
+  const standardPrice = isVipPass ? 299 : 99;
+  const priceRupees = selectedGateway === 'INSTAMOJO' ? Math.max(standardPrice, 9) : standardPrice;
   const itemTitle = isVipPass
     ? "Tony's One-Time VIP Lifetime Pass"
     : track
@@ -454,6 +454,9 @@ export const UnifiedCheckoutModal: React.FC<UnifiedCheckoutModalProps> = ({
                     <p className="text-[11px] text-gray-300">
                       UPI QR, Debit/Credit Cards, Wallets, Net Banking
                     </p>
+                    <span className="text-[10px] text-blue-300 font-mono mt-1 block">
+                      (Instant UPI, Net Banking & Cards)
+                    </span>
                   </div>
                 </div>
               </div>
