@@ -96,7 +96,7 @@ export const DownloadButton: React.FC<DownloadButtonProps> = ({
       <button
         onClick={handleClick}
         className={`inline-flex items-center gap-1.5 p-1.5 rounded-full bg-emerald-500/15 hover:bg-red-500/15 text-emerald-600 dark:text-emerald-400 hover:text-red-600 transition-all group ${className}`}
-        title="Downloaded in-app for offline playback (Spotify/Apple Music style). Click to remove."
+        title="Downloaded in-app for offline playback. Click to remove."
       >
         <span className="group-hover:hidden flex items-center gap-1.5">
           <Check className={`${iconSizes[size]} stroke-[2.5]`} />
@@ -121,10 +121,10 @@ export const DownloadButton: React.FC<DownloadButtonProps> = ({
         } ${className}`}
         title={
           isEntitled
-            ? 'Download for in-app offline listening (Spotify/Apple Music style)'
+            ? 'Download for in-app offline listening'
             : isBacking
-            ? 'Studio backing track requires purchase (₹1 Live Test) for in-app offline download'
-            : "Devotional vocal songs require Tony's VIP Lifetime Pass (₹1 Live Test) for in-app offline download"
+            ? 'Studio backing track requires purchase (₹99) for in-app offline download'
+            : "Devotional vocal songs require Tony's VIP Lifetime Pass (₹299) for in-app offline download"
         }
       >
         <div className="relative flex items-center">

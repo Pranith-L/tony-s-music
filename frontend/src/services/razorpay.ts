@@ -77,7 +77,7 @@ export async function openRazorpayCheckout(options: RazorpayCheckoutOptions): Pr
       item: options.itemTitle,
     },
     theme: {
-      color: '#FA243C', // Apple Music Red Brand color
+      color: '#FA243C', // Sacred Red Brand color
     },
     modal: {
       confirm_close: true,

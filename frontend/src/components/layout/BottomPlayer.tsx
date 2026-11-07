@@ -35,6 +35,7 @@ export const BottomPlayer: React.FC = () => {
     currentTime,
     duration,
     volume,
+    queue,
     isMuted,
     shuffle,
     repeatMode,
@@ -55,6 +56,8 @@ export const BottomPlayer: React.FC = () => {
     toggleRightSidebar,
     setRightSidebarTab,
     toggleFullscreenPlayer,
+    setFullscreenPlayer,
+    setFullscreenView,
     remainingSkips,
     isBackingTrack,
     hasTrackAccess,
@@ -89,6 +92,11 @@ export const BottomPlayer: React.FC = () => {
   };
 
   const handleLyricsToggle = () => {
+    if (window.innerWidth < 1024) {
+      setFullscreenView('lyrics');
+      setFullscreenPlayer(true);
+      return;
+    }
     if (isRightSidebarOpen && rightSidebarTab === 'lyrics') {
       toggleRightSidebar();
     } else {
@@ -98,6 +106,11 @@ export const BottomPlayer: React.FC = () => {
   };
 
   const handleQueueToggle = () => {
+    if (window.innerWidth < 1024) {
+      setFullscreenView('queue');
+      setFullscreenPlayer(true);
+      return;
+    }
     if (isRightSidebarOpen && rightSidebarTab === 'queue') {
       toggleRightSidebar();
     } else {
@@ -330,10 +343,10 @@ export const BottomPlayer: React.FC = () => {
             <FileText className="w-4 h-4" />
           </button>
 
-          {/* Queue Button */}
+          {/* Queue Button - Accessible on both mobile and desktop */}
           <button
             onClick={handleQueueToggle}
-            className={`p-1.5 rounded-lg transition-colors hidden sm:flex ${
+            className={`p-1.5 rounded-lg transition-colors flex items-center justify-center relative ${
               isRightSidebarOpen && rightSidebarTab === 'queue'
                 ? 'text-[#FA243C] bg-[#F2F2F7]'
                 : 'text-[#86868B] hover:text-[#1D1D1F]'
@@ -341,6 +354,11 @@ export const BottomPlayer: React.FC = () => {
             title="Queue (రాబోయే గీతాలు)"
           >
             <ListMusic className="w-4 h-4" />
+            {queue.length > 1 && (
+              <span className="absolute -top-1 -right-1 px-1 min-w-[14px] h-[14px] rounded-full bg-[#FA243C] text-[9px] font-bold text-white flex items-center justify-center leading-none">
+                {queue.length}
+              </span>
+            )}
           </button>
 
           {/* Now Playing Panel Toggle */}

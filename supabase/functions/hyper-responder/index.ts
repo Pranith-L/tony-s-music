@@ -29,10 +29,10 @@ const INSTAMOJO_AUTH_TOKEN = Deno.env.get('INSTAMOJO_AUTH_TOKEN') || Deno.env.ge
 const INSTAMOJO_SALT = Deno.env.get('INSTAMOJO_SALT') || '';
 
 const PRICING = {
-  vipPassRupees: 1,
-  vipPassPaise: 100,
-  trackRupees: 1,
-  trackPaise: 100,
+  vipPassRupees: Number(Deno.env.get('VIP_PASS_PRICE_RUPEES')) || 299,
+  vipPassPaise: (Number(Deno.env.get('VIP_PASS_PRICE_RUPEES')) || 299) * 100,
+  trackRupees: Number(Deno.env.get('TRACK_PRICE_RUPEES')) || 99,
+  trackPaise: (Number(Deno.env.get('TRACK_PRICE_RUPEES')) || 99) * 100,
 };
 
 // Cryptographic helpers

@@ -10,6 +10,7 @@ import { offlineStorage } from '../services/offlineStorage.js';
 
 export type RepeatMode = 'off' | 'all' | 'one';
 export type RightSidebarTab = 'now-playing' | 'queue' | 'lyrics';
+export type FullscreenView = 'player' | 'lyrics' | 'queue';
 
 const MAX_FREE_SKIPS_PER_DAY = 6;
 
@@ -29,6 +30,7 @@ interface PlayerContextType {
   rightSidebarTab: RightSidebarTab;
   isFullscreenPlayer: boolean;
   isMobileNowPlayingOpen: boolean;
+  fullscreenView: FullscreenView;
   remainingSkips: number;
   showPreviewLimitModal: boolean;
   showSkipLimitModal: boolean;
@@ -42,6 +44,7 @@ interface PlayerContextType {
   // Actions
   playTrack: (track: Track, newQueue?: Track[]) => void;
   playOrToggleTrack: (track: Track, newQueue?: Track[]) => void;
+  playTrackAt: (index: number) => void;
   togglePlay: () => void;
   pause: () => void;
   seek: (time: number) => void;
@@ -56,6 +59,7 @@ interface PlayerContextType {
   playNextInQueue: (track: Track) => void;
   addToQueue: (track: Track) => void;
   removeFromQueue: (index: number) => void;
+  reorderQueue: (fromIndex: number, toIndex: number) => void;
   clearQueue: () => void;
   toggleRightSidebar: () => void;
   setRightSidebarOpen: (open: boolean) => void;
@@ -63,6 +67,7 @@ interface PlayerContextType {
   toggleFullscreenPlayer: () => void;
   setFullscreenPlayer: (open: boolean) => void;
   setMobileNowPlayingOpen: (open: boolean) => void;
+  setFullscreenView: (view: FullscreenView) => void;
 }
 
 const PlayerContext = createContext<PlayerContextType | undefined>(undefined);
@@ -103,6 +108,7 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const [rightSidebarTab, setRightSidebarTab] = useState<RightSidebarTab>('now-playing');
   const [isFullscreenPlayer, setIsFullscreenPlayer] = useState<boolean>(false);
   const [isMobileNowPlayingOpen, setIsMobileNowPlayingOpen] = useState<boolean>(false);
+  const [fullscreenView, setFullscreenView] = useState<FullscreenView>('player');
 
   // Modals for limits
   const [showPreviewLimitModal, setShowPreviewLimitModal] = useState<boolean>(false);
@@ -129,11 +135,28 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     return Math.max(0, MAX_FREE_SKIPS_PER_DAY - getDailySkipsCount());
   });
 
-  // Track reference for event listeners
+  // Live mutable refs synchronized with state to prevent React stale closures in audio event listeners
   const currentTrackRef = useRef<Track | null>(currentTrack);
+  const queueRef = useRef<Track[]>(queue);
+  const shuffleRef = useRef<boolean>(shuffle);
+  const repeatModeRef = useRef<RepeatMode>(repeatMode);
+  const playedShuffleIndicesRef = useRef<number[]>([]);
+
   useEffect(() => {
     currentTrackRef.current = currentTrack;
   }, [currentTrack]);
+
+  useEffect(() => {
+    queueRef.current = queue;
+  }, [queue]);
+
+  useEffect(() => {
+    shuffleRef.current = shuffle;
+  }, [shuffle]);
+
+  useEffect(() => {
+    repeatModeRef.current = repeatMode;
+  }, [repeatMode]);
 
   const isBackingTrack = (track: Track | null): boolean => {
     if (!track) return false;
@@ -251,9 +274,10 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     if (typeof window !== 'undefined') {
       (window as any).__tonyAudio = audio;
     }
-    if (currentTrack) {
-      offlineStorage.getOfflineAudioUrl(currentTrack.id).then((localUrl) => {
-        audio.src = localUrl || currentTrack.audioUrl;
+    const initialTrack = currentTrackRef.current;
+    if (initialTrack) {
+      offlineStorage.getOfflineAudioUrl(initialTrack.id).then((localUrl) => {
+        audio.src = localUrl || initialTrack.audioUrl;
       });
     }
 
@@ -282,9 +306,10 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     };
 
     const handleEnded = () => {
-      if (repeatMode === 'one') {
+      if (repeatModeRef.current === 'one') {
         audio.currentTime = 0;
         audio.play().catch(() => {});
+        setIsPlaying(true);
       } else {
         // Natural progression to next track doesn't count against user's manual skip limit
         advanceToNextTrack();
@@ -335,22 +360,35 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       audio.removeEventListener('ended', handleEnded);
       audio.removeEventListener('error', handleError);
     };
-  }, [isSubscriber, user]);
+  }, []);
 
   const playTrack = (track: Track, newQueue?: Track[]) => {
     if (!audioRef.current) return;
     previewDismissedTrackIdRef.current = null;
     stopFallbackAudio();
 
+    let activeQueue = queueRef.current;
     if (newQueue && newQueue.length > 0) {
+      activeQueue = newQueue;
+      queueRef.current = newQueue;
       setQueue(newQueue);
-    } else if (!queue.some((t) => t.id === track.id)) {
-      setQueue((prev) => [...prev, track]);
+      playedShuffleIndicesRef.current = [];
+    } else if (!activeQueue.some((t) => t.id === track.id)) {
+      activeQueue = [...activeQueue, track];
+      queueRef.current = activeQueue;
+      setQueue(activeQueue);
     }
 
     setCurrentTrack(track);
+    currentTrackRef.current = track;
 
-    // Prioritize in-app offline cache (like Spotify / Apple Music) before network streaming
+    // Track index in shuffle history to avoid repeats in current shuffle session
+    const trackIdx = activeQueue.findIndex((t) => t.id === track.id);
+    if (trackIdx !== -1 && !playedShuffleIndicesRef.current.includes(trackIdx)) {
+      playedShuffleIndicesRef.current.push(trackIdx);
+    }
+
+    // Prioritize in-app offline cache before network streaming
     offlineStorage.getOfflineAudioUrl(track.id).then((offlineUrl) => {
       if (!audioRef.current) return;
       if (offlineUrl) {
@@ -360,9 +398,7 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         audioRef.current.src = track.audioUrl;
       }
       audioRef.current.volume = isMuted ? 0 : volume;
-
-      // Automatically open Fullscreen Player to showcase the dynamic color changing experience
-      setIsFullscreenPlayer(true);
+      audioRef.current.loop = repeatModeRef.current === 'one';
 
       audioRef.current
         .play()
@@ -379,7 +415,7 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   };
 
   const playOrToggleTrack = (track: Track, newQueue?: Track[]) => {
-    if (currentTrack?.id === track.id) {
+    if (currentTrackRef.current?.id === track.id) {
       togglePlay();
       setIsFullscreenPlayer(true);
     } else {
@@ -387,18 +423,27 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     }
   };
 
+  const playTrackAt = (index: number) => {
+    const q = queueRef.current;
+    if (index >= 0 && index < q.length) {
+      playTrack(q[index]);
+    }
+  };
+
   const togglePlay = () => {
     if (!audioRef.current) return;
-    if (!currentTrack && queue.length > 0) {
-      playTrack(queue[0]);
+    const current = currentTrackRef.current;
+    const q = queueRef.current;
+    if (!current && q.length > 0) {
+      playTrack(q[0]);
       return;
     }
 
     // Check if backing track preview has expired
     if (
-      currentTrack &&
-      isBackingTrack(currentTrack) &&
-      !hasTrackAccess(currentTrack) &&
+      current &&
+      isBackingTrack(current) &&
+      !hasTrackAccess(current) &&
       currentTime >= 30
     ) {
       setShowPreviewLimitModal(true);
@@ -435,10 +480,11 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     if (!audioRef.current) return;
 
     // Enforce 30s limit for unpurchased studio backing tracks
+    const current = currentTrackRef.current;
     if (
-      currentTrack &&
-      isBackingTrack(currentTrack) &&
-      !hasTrackAccess(currentTrack) &&
+      current &&
+      isBackingTrack(current) &&
+      !hasTrackAccess(current) &&
       time > 30
     ) {
       audioRef.current.currentTime = 30;
@@ -478,25 +524,68 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     }
   };
 
-  // Internal helper to advance track
+  // Internal helper to advance track with live refs and unplayed shuffle memory
   const advanceToNextTrack = () => {
-    if (queue.length === 0) return;
-    if (!currentTrack) {
-      playTrack(queue[0]);
+    const q = queueRef.current;
+    const current = currentTrackRef.current;
+    const mode = repeatModeRef.current;
+    const isShuffled = shuffleRef.current;
+
+    if (!q || q.length === 0) return;
+
+    // 1. Repeat ONE: replay current track seamlessly
+    if (mode === 'one') {
+      if (audioRef.current) {
+        audioRef.current.currentTime = 0;
+        audioRef.current.play().catch(() => {});
+        setIsPlaying(true);
+      }
       return;
     }
 
-    if (shuffle) {
-      const randomIndex = Math.floor(Math.random() * queue.length);
-      playTrack(queue[randomIndex]);
+    // 2. SHUFFLE Mode: pick an unplayed track without repeating current song
+    if (isShuffled) {
+      const curIdx = current ? q.findIndex((t) => t.id === current.id) : -1;
+      if (curIdx !== -1 && !playedShuffleIndicesRef.current.includes(curIdx)) {
+        playedShuffleIndicesRef.current.push(curIdx);
+      }
+
+      // Filter unplayed indices that are not current track
+      let unplayedIndices = q
+        .map((_, idx) => idx)
+        .filter((idx) => !playedShuffleIndicesRef.current.includes(idx) && idx !== curIdx);
+
+      // If all tracks in queue have been played
+      if (unplayedIndices.length === 0) {
+        if (mode !== 'off') {
+          // Reset shuffle history for continuous repeat all
+          playedShuffleIndicesRef.current = curIdx !== -1 ? [curIdx] : [];
+          unplayedIndices = q
+            .map((_, idx) => idx)
+            .filter((idx) => idx !== curIdx);
+          if (unplayedIndices.length === 0) unplayedIndices = [0];
+        } else {
+          // Reached end in shuffle mode with repeat off
+          pause();
+          return;
+        }
+      }
+
+      const randomIdx = unplayedIndices[Math.floor(Math.random() * unplayedIndices.length)];
+      playedShuffleIndicesRef.current.push(randomIdx);
+      const nextTrack = q[randomIdx];
+      if (nextTrack) {
+        playTrack(nextTrack);
+      }
       return;
     }
 
-    const currentIndex = queue.findIndex((t) => t.id === currentTrack.id);
-    if (currentIndex >= 0 && currentIndex < queue.length - 1) {
-      playTrack(queue[currentIndex + 1]);
-    } else if (repeatMode !== 'off' && queue.length > 0) {
-      playTrack(queue[0]); // loop back to first
+    // 3. SEQUENTIAL Mode
+    const currentIndex = current ? q.findIndex((t) => t.id === current.id) : -1;
+    if (currentIndex >= 0 && currentIndex < q.length - 1) {
+      playTrack(q[currentIndex + 1]);
+    } else if (mode !== 'off' && q.length > 0) {
+      playTrack(q[0]); // Loop back to start of queue
     } else {
       pause();
     }
@@ -511,12 +600,6 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   };
 
   const playPrev = () => {
-    if (queue.length === 0) return;
-    if (!currentTrack) {
-      playTrack(queue[0]);
-      return;
-    }
-
     if (currentTime > 3) {
       seek(0);
       return;
@@ -527,25 +610,43 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       return;
     }
 
-    const currentIndex = queue.findIndex((t) => t.id === currentTrack.id);
+    const q = queueRef.current;
+    const current = currentTrackRef.current;
+    const mode = repeatModeRef.current;
+
+    if (!q || q.length === 0) return;
+
+    const currentIndex = current ? q.findIndex((t) => t.id === current.id) : -1;
     if (currentIndex > 0) {
-      playTrack(queue[currentIndex - 1]);
-    } else if (repeatMode !== 'off') {
-      playTrack(queue[queue.length - 1]);
+      playTrack(q[currentIndex - 1]);
+    } else if (mode !== 'off' && q.length > 0) {
+      playTrack(q[q.length - 1]);
     } else {
       seek(0);
     }
   };
 
   const toggleShuffle = () => {
-    setShuffle((prev) => !prev);
+    setShuffle((prev) => {
+      const next = !prev;
+      shuffleRef.current = next;
+      playedShuffleIndicesRef.current = [];
+      return next;
+    });
   };
 
   const toggleRepeat = () => {
     setRepeatMode((prev) => {
-      if (prev === 'off') return 'all';
-      if (prev === 'all') return 'one';
-      return 'off';
+      let next: RepeatMode;
+      if (prev === 'off') next = 'all';
+      else if (prev === 'all') next = 'one';
+      else next = 'off';
+
+      repeatModeRef.current = next;
+      if (audioRef.current) {
+        audioRef.current.loop = next === 'one';
+      }
+      return next;
     });
   };
 
@@ -559,34 +660,53 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
   const playNextInQueue = (track: Track) => {
     setQueue((prev) => {
-      const curIndex = currentTrack ? prev.findIndex((t) => t.id === currentTrack.id) : -1;
+      const curIndex = currentTrackRef.current ? prev.findIndex((t) => t.id === currentTrackRef.current!.id) : -1;
       const filtered = prev.filter((t) => t.id !== track.id);
+      let updated: Track[];
       if (curIndex === -1) {
-        return [track, ...filtered];
+        updated = [track, ...filtered];
+      } else {
+        updated = [...filtered];
+        updated.splice(curIndex + 1, 0, track);
       }
-      const newQueue = [...filtered];
-      newQueue.splice(curIndex + 1, 0, track);
-      return newQueue;
+      queueRef.current = updated;
+      return updated;
     });
   };
 
   const addToQueue = (track: Track) => {
     setQueue((prev) => {
       if (prev.some((t) => t.id === track.id)) return prev;
-      return [...prev, track];
+      const updated = [...prev, track];
+      queueRef.current = updated;
+      return updated;
     });
   };
 
   const removeFromQueue = (index: number) => {
-    setQueue((prev) => prev.filter((_, i) => i !== index));
+    setQueue((prev) => {
+      const updated = prev.filter((_, i) => i !== index);
+      queueRef.current = updated;
+      return updated;
+    });
+  };
+
+  const reorderQueue = (fromIndex: number, toIndex: number) => {
+    setQueue((prev) => {
+      const result = Array.from(prev);
+      const [removed] = result.splice(fromIndex, 1);
+      result.splice(toIndex, 0, removed);
+      queueRef.current = result;
+      return result;
+    });
   };
 
   const clearQueue = () => {
-    if (currentTrack) {
-      setQueue([currentTrack]);
-    } else {
-      setQueue([]);
-    }
+    const current = currentTrackRef.current;
+    const updated = current ? [current] : [];
+    setQueue(updated);
+    queueRef.current = updated;
+    playedShuffleIndicesRef.current = [];
   };
 
   const toggleRightSidebar = () => {
@@ -615,6 +735,7 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         rightSidebarTab,
         isFullscreenPlayer,
         isMobileNowPlayingOpen,
+        fullscreenView,
         remainingSkips,
         showPreviewLimitModal,
         showSkipLimitModal,
@@ -624,6 +745,7 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         setShowSkipLimitModal,
         playTrack,
         playOrToggleTrack,
+        playTrackAt,
         togglePlay,
         pause,
         seek,
@@ -638,6 +760,7 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         playNextInQueue,
         addToQueue,
         removeFromQueue,
+        reorderQueue,
         clearQueue,
         toggleRightSidebar,
         setRightSidebarOpen: setIsRightSidebarOpen,
@@ -645,6 +768,7 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         toggleFullscreenPlayer,
         setFullscreenPlayer: setIsFullscreenPlayer,
         setMobileNowPlayingOpen: setIsMobileNowPlayingOpen,
+        setFullscreenView,
       }}
     >
       {children}

@@ -108,7 +108,7 @@ export const Home: React.FC = () => {
 
   const handlePlayAll = () => {
     if (popularTracks.length > 0) {
-      playTrack(popularTracks[0]);
+      playTrack(popularTracks[0], popularTracks);
     }
   };
 
@@ -191,12 +191,16 @@ export const Home: React.FC = () => {
             const isThisCurrent = card.track && currentTrack?.id === card.track.id;
             const isThisPlaying = isThisCurrent && isPlaying;
 
+            const quickCardsQueue = quickCards
+              .map((c) => c.track)
+              .filter((t): t is Track => Boolean(t));
+
             const handleCardClick = () => {
               if (card.track) {
                 if (isThisCurrent) {
                   togglePlay();
                 } else {
-                  playTrack(card.track);
+                  playTrack(card.track, quickCardsQueue);
                 }
               } else if (card.route) {
                 navigate(card.route);
@@ -237,7 +241,7 @@ export const Home: React.FC = () => {
                     onClick={(e) => {
                       e.stopPropagation();
                       if (isThisCurrent) togglePlay();
-                      else playTrack(card.track);
+                      else playTrack(card.track, quickCardsQueue);
                     }}
                     className={`w-10 h-10 rounded-full bg-gradient-to-tr from-[#FC3C44] to-[#FA243C] text-[#FFFFFF] flex items-center justify-center shadow-xl border border-[#D4A017]/40 transition-all duration-200 shrink-0 ${
                       isThisPlaying

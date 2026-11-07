@@ -819,7 +819,7 @@ export const LibraryPage: React.FC = () => {
                 </span>
               </div>
               <p className="text-[11px] text-[#86868B] mt-0.5">
-                Encrypted in-app storage for 100% offline playback with zero internet required (Spotify/Apple Music style).
+                Encrypted in-app storage for 100% offline playback with zero internet required.
               </p>
             </div>
 
