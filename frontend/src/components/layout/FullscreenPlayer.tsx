@@ -18,7 +18,6 @@ import {
   ListMusic,
   Music2,
   Trash2,
-  Disc3,
 } from 'lucide-react';
 import { usePlayer } from '../../context/PlayerContext.js';
 
@@ -142,8 +141,8 @@ export const FullscreenPlayer: React.FC = () => {
         />
       </div>
 
-      {/* Top Bar: Close / Minimize + Responsive Apple Music / Spotify Tab Switcher */}
-      <div className="relative z-10 px-3 sm:px-8 py-2.5 sm:py-3 flex items-center justify-between border-b border-[#E5E5EA] bg-white/80 backdrop-blur-xl shrink-0 gap-2">
+      {/* Top Bar: Close / Minimize */}
+      <div className="relative z-10 px-4 sm:px-8 py-2.5 sm:py-3 flex items-center justify-between border-b border-[#E5E5EA] bg-white/80 backdrop-blur-xl shrink-0">
         <button
           onClick={toggleFullscreenPlayer}
           className="fullscreen-control-icon p-1.5 sm:p-2 rounded-full hover:bg-black/5 transition-colors"
@@ -152,57 +151,13 @@ export const FullscreenPlayer: React.FC = () => {
           <ChevronDown className="w-5 sm:w-6 h-5 sm:h-6" />
         </button>
 
-        {/* View Switcher Tabs: Now Playing | Lyrics (Scroll) | Up Next Queue */}
-        <div className="flex items-center gap-1 bg-[#F5F5F7] p-1 rounded-2xl border border-[#E5E5EA] shadow-inner">
-          <button
-            onClick={() => {
-              setFullscreenView('player');
-              scrollToMobileTop();
-            }}
-            className={`px-3 py-1 rounded-xl text-xs font-semibold transition-all flex items-center gap-1.5 ${
-              fullscreenView === 'player'
-                ? 'bg-white text-[#FA243C] shadow-sm'
-                : 'text-[#86868B] hover:text-[#1D1D1F]'
-            }`}
-          >
-            <Disc3 className="w-3.5 h-3.5" />
-            <span>Now Playing</span>
-          </button>
-
-          <button
-            onClick={() => {
-              if (window.innerWidth < 768) {
-                scrollToMobileLyrics();
-              } else {
-                setFullscreenView('player');
-              }
-            }}
-            className={`px-3 py-1 rounded-xl text-xs font-semibold transition-all flex items-center gap-1.5 ${
-              fullscreenView === 'lyrics'
-                ? 'bg-white text-[#FA243C] shadow-sm'
-                : 'text-[#86868B] hover:text-[#1D1D1F]'
-            }`}
-          >
-            <FileText className="w-3.5 h-3.5" />
-            <span>Lyrics</span>
-          </button>
-
-          <button
-            onClick={() => setFullscreenView('queue')}
-            className={`px-3 py-1 rounded-xl text-xs font-semibold transition-all flex items-center gap-1.5 relative ${
-              fullscreenView === 'queue'
-                ? 'bg-white text-[#FA243C] shadow-sm'
-                : 'text-[#86868B] hover:text-[#1D1D1F]'
-            }`}
-          >
-            <ListMusic className="w-3.5 h-3.5" />
-            <span>Queue</span>
-            {upNextTracks.length > 0 && (
-              <span className="px-1.5 py-0.2 rounded-full bg-[#FA243C]/15 text-[#FA243C] text-[10px] font-bold">
-                {upNextTracks.length}
-              </span>
-            )}
-          </button>
+        <div className="flex flex-col items-center justify-center max-w-[60%] text-center">
+          <span className="text-[10px] sm:text-[11px] font-mono uppercase tracking-wider text-[#86868B]">
+            {fullscreenView === 'queue' ? 'Up Next Queue' : 'Now Playing'}
+          </span>
+          <span className="text-xs sm:text-sm font-semibold truncate text-[#1D1D1F] max-w-full">
+            {currentTrack.titleEnglish}
+          </span>
         </div>
 
         <button
@@ -488,18 +443,6 @@ export const FullscreenPlayer: React.FC = () => {
                     </p>
                   </div>
                 </div>
-
-                <button
-                  onClick={togglePlay}
-                  className="w-10 h-10 rounded-full bg-[#FA243C] text-white flex items-center justify-center shadow hover:scale-105 active:scale-95 transition-transform shrink-0"
-                  title={isPlaying ? 'Pause' : 'Play'}
-                >
-                  {isPlaying ? (
-                    <Pause className="w-5 h-5 fill-current" />
-                  ) : (
-                    <Play className="w-5 h-5 fill-current ml-0.5" />
-                  )}
-                </button>
               </div>
 
               {/* BELOW IT: Queue Header */}
@@ -697,31 +640,6 @@ export const FullscreenPlayer: React.FC = () => {
                   <p className="text-xs text-gray-500 truncate font-medium">
                     {currentTrack.singer || 'Rev. Tony Prakash'} • {currentTrack.category || 'Devotional'}
                   </p>
-                </div>
-
-                {/* Left Mini Transport Controls */}
-                <div className="flex items-center gap-3 mt-4">
-                  <button
-                    onClick={playPrev}
-                    className="p-2 rounded-full hover:bg-black/5 text-gray-700 active:scale-95 transition-transform"
-                    title="Previous"
-                  >
-                    <SkipBack className="w-5 h-5 fill-current" />
-                  </button>
-                  <button
-                    onClick={togglePlay}
-                    className="w-12 h-12 rounded-full bg-[#FA243C] text-white flex items-center justify-center shadow-lg hover:scale-105 active:scale-95 transition-all"
-                    title={isPlaying ? 'Pause' : 'Play'}
-                  >
-                    {isPlaying ? <Pause className="w-5 h-5 fill-current" /> : <Play className="w-5 h-5 fill-current ml-0.5" />}
-                  </button>
-                  <button
-                    onClick={playNext}
-                    className="p-2 rounded-full hover:bg-black/5 text-gray-700 active:scale-95 transition-transform"
-                    title="Next"
-                  >
-                    <SkipForward className="w-5 h-5 fill-current" />
-                  </button>
                 </div>
               </div>
 
@@ -1043,14 +961,6 @@ export const FullscreenPlayer: React.FC = () => {
                 style={{ accentColor: songTheme.primary }}
               />
             </div>
-
-            <button
-              onClick={toggleMute}
-              className="lg:hidden p-2 fullscreen-control-icon transition-colors"
-              title="Mute/Unmute"
-            >
-              {isMuted ? <VolumeX className="w-5 h-5 text-red-500" /> : <Volume2 className="w-5 h-5" />}
-            </button>
           </div>
         </div>
       </div>
