@@ -15,10 +15,24 @@ import {
   ChevronRight,
   Heart,
 } from 'lucide-react';
-import { Track } from '../types/index.js';
+import { Track, User } from '../types/index.js';
 import { useAuth } from '../context/AuthContext.js';
 import { api } from '../services/api.js';
 import { openCashfreeCheckout } from '../services/cashfree.js';
+
+function checkUserAccess(u: User | null, isVip: boolean, trkId?: string): boolean {
+  if (!u) return false;
+  if (isVip) {
+    return Boolean(u.isSubscriberActive || (u as any).hasVipPass || (u as any).subscription?.status === 'ACTIVE');
+  }
+  if (trkId) {
+    return Boolean(
+      u.purchases?.some((p) => p.trackId === trkId || (p as any).track?.id === trkId) ||
+      (u as any).purchasedTrackIds?.includes(trkId)
+    );
+  }
+  return false;
+}
 
 export interface UnifiedCheckoutModalProps {
   isOpen: boolean;
@@ -123,19 +137,58 @@ export const UnifiedCheckoutModal: React.FC<UnifiedCheckoutModalProps> = ({
 
         // After Cashfree modal closes or finishes, independently verify with backend
         setStatusState('VERIFYING');
-        const verification = await api.payments.verifyUnifiedPayment({
-          orderId: order.orderId,
-          gateway: 'CASHFREE',
-        });
+        let isVerified = false;
+        let lastMsg = '';
 
-        if (verification.success) {
-          setStatusState('SUCCESS');
-          setSuccessMessage(verification.message);
-          await refreshUser();
-          if (onSuccess) onSuccess();
-        } else {
-          setStatusState('FAILED');
-          setErrorMessage(verification.message || 'Payment was not confirmed.');
+        // Retry loop: check up to 5 times (~7.5s) to allow webhook and bank processing to sync
+        for (let attempt = 0; attempt < 5; attempt++) {
+          try {
+            const verification = await api.payments.verifyUnifiedPayment({
+              orderId: order.orderId,
+              gateway: 'CASHFREE',
+            });
+
+            if (verification.success) {
+              isVerified = true;
+              setStatusState('SUCCESS');
+              setSuccessMessage(verification.message || 'Payment confirmed successfully!');
+              await refreshUser();
+              if (onSuccess) onSuccess();
+              break;
+            } else {
+              lastMsg = verification.message || 'Payment is processing...';
+            }
+          } catch (pollErr: any) {
+            console.warn(`Verify attempt ${attempt + 1} notice:`, pollErr);
+          }
+
+          // Check if session subscription or track access is already active
+          try {
+            const updatedUser = await refreshUser();
+            if (checkUserAccess(updatedUser, isVipPass, track?.id)) {
+              isVerified = true;
+              setStatusState('SUCCESS');
+              setSuccessMessage('Payment confirmed! Your access has been activated.');
+              if (onSuccess) onSuccess();
+              break;
+            }
+          } catch {}
+
+          if (attempt < 4) {
+            await new Promise((resolve) => setTimeout(resolve, 1500));
+          }
+        }
+
+        if (!isVerified) {
+          const finalUser = await refreshUser();
+          if (checkUserAccess(finalUser, isVipPass, track?.id)) {
+            setStatusState('SUCCESS');
+            setSuccessMessage('Payment confirmed! Your access has been activated.');
+            if (onSuccess) onSuccess();
+          } else {
+            setStatusState('FAILED');
+            setErrorMessage(lastMsg || 'Payment is being processed by your bank. If ₹1 was debited, please click "Verify Payment" below.');
+          }
         }
       } else if (selectedGateway === 'INSTAMOJO') {
         if (!order.paymentUrl) {
@@ -148,6 +201,17 @@ export const UnifiedCheckoutModal: React.FC<UnifiedCheckoutModalProps> = ({
       }
     } catch (err: any) {
       console.error('Payment error:', err);
+      // Check if user actually got access before failing
+      try {
+        const checkUser = await refreshUser();
+        if (checkUserAccess(checkUser, isVipPass, track?.id)) {
+          setStatusState('SUCCESS');
+          setSuccessMessage('Payment confirmed! Your access has been activated.');
+          if (onSuccess) onSuccess();
+          return;
+        }
+      } catch {}
+
       setStatusState('FAILED');
       setErrorMessage(err.message || 'Payment initiation failed. Please try again.');
     }
@@ -158,6 +222,16 @@ export const UnifiedCheckoutModal: React.FC<UnifiedCheckoutModalProps> = ({
     setStatusState('VERIFYING');
     setErrorMessage(null);
     try {
+      // 1. Check user state first
+      const currentUser = await refreshUser();
+      if (checkUserAccess(currentUser, isVipPass, track?.id)) {
+        setStatusState('SUCCESS');
+        setSuccessMessage('Payment verified! Your access is fully active.');
+        if (onSuccess) onSuccess();
+        return;
+      }
+
+      // 2. Query backend verify endpoint
       const verification = await api.payments.verifyUnifiedPayment({
         orderId: activeOrderId,
         gateway: selectedGateway,
@@ -165,16 +239,35 @@ export const UnifiedCheckoutModal: React.FC<UnifiedCheckoutModalProps> = ({
 
       if (verification.success) {
         setStatusState('SUCCESS');
-        setSuccessMessage(verification.message);
+        setSuccessMessage(verification.message || 'Payment confirmed successfully!');
         await refreshUser();
         if (onSuccess) onSuccess();
       } else {
-        setStatusState('FAILED');
-        setErrorMessage(verification.message || 'Payment is still pending or not completed.');
+        // One final check on refreshUser
+        const finalUser = await refreshUser();
+        if (checkUserAccess(finalUser, isVipPass, track?.id)) {
+          setStatusState('SUCCESS');
+          setSuccessMessage('Payment confirmed! Your access has been activated.');
+          if (onSuccess) onSuccess();
+        } else {
+          setStatusState('FAILED');
+          setErrorMessage(verification.message || 'Payment is still processing with the bank. Please try again in 10 seconds.');
+        }
       }
     } catch (err: any) {
+      // Final fallback to user state
+      try {
+        const finalUser = await refreshUser();
+        if (checkUserAccess(finalUser, isVipPass, track?.id)) {
+          setStatusState('SUCCESS');
+          setSuccessMessage('Payment confirmed! Your access has been activated.');
+          if (onSuccess) onSuccess();
+          return;
+        }
+      } catch {}
+
       setStatusState('FAILED');
-      setErrorMessage(err.message || 'Verification failed. Please contact support.');
+      setErrorMessage('Verification is taking longer than expected. If amount was deducted, your access will be activated shortly.');
     }
   };
 

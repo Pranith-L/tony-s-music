@@ -514,20 +514,32 @@ export const api = {
       razorpay_payment_id?: string;
       razorpay_signature?: string;
     }) {
-      const res = await fetch(`${API_BASE}/payments/verify-unified-payment`, {
-        method: 'POST',
-        headers: getAuthHeaders(),
-        body: JSON.stringify(data),
-      });
-      return handleResponse<{
-        success: boolean;
-        status: string;
-        orderId: string;
-        itemType: string;
-        message: string;
-        alreadyFulfilled?: boolean;
-        track?: { id: string; titleEnglish: string };
-      }>(res);
+      try {
+        const res = await fetch(`${API_BASE}/payments/verify-unified-payment`, {
+          method: 'POST',
+          headers: getAuthHeaders(),
+          body: JSON.stringify(data),
+        });
+        if (!res.ok) {
+          const errData = await res.json().catch(() => ({}));
+          return {
+            success: false,
+            status: 'PENDING',
+            orderId: data.orderId,
+            itemType: 'VIP_PASS',
+            message: errData.message || errData.error || 'Payment verification pending with bank...',
+          };
+        }
+        return await res.json();
+      } catch (err: any) {
+        return {
+          success: false,
+          status: 'PENDING',
+          orderId: data.orderId,
+          itemType: 'VIP_PASS',
+          message: err.message || 'Payment verification in progress...',
+        };
+      }
     },
 
     async getOrder(orderId: string) {

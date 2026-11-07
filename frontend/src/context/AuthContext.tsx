@@ -15,7 +15,7 @@ interface AuthContextType {
   register: (name: string, email: string, password: string, phone?: string) => Promise<void>;
   resetPassword: (email: string) => Promise<void>;
   logout: () => Promise<void>;
-  refreshUser: () => Promise<void>;
+  refreshUser: () => Promise<User | null>;
   setAuthToken: (token: string) => Promise<void>;
 }
 
@@ -54,8 +54,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           };
           setUser(fallbackUser);
           setToken(accessToken);
+          return fallbackUser;
         }
-        return;
+        return null;
       }
 
       const subscriptions = (dbUser as any).subscriptions || [];
@@ -77,8 +78,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       setUser(mappedUser);
       setToken(accessToken);
+      return mappedUser;
     } catch (err) {
       console.error('Error loading user profile:', err);
+      return null;
     }
   };
 
@@ -245,13 +248,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  const refreshUser = async () => {
+  const refreshUser = async (): Promise<User | null> => {
     const { data: { session } } = await supabase.auth.getSession();
     if (session?.user) {
-      await loadProfile(session.user.id, session.access_token);
+      return await loadProfile(session.user.id, session.access_token);
     } else {
       setUser(null);
       setToken(null);
+      return null;
     }
   };
 

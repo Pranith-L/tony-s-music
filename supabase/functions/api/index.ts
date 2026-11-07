@@ -29,10 +29,10 @@ const INSTAMOJO_AUTH_TOKEN = Deno.env.get('INSTAMOJO_AUTH_TOKEN') || Deno.env.ge
 const INSTAMOJO_SALT = Deno.env.get('INSTAMOJO_SALT') || '';
 
 const PRICING = {
-  vipPassRupees: Number(Deno.env.get('VIP_PASS_PRICE_RUPEES')) || 1,
-  vipPassPaise: (Number(Deno.env.get('VIP_PASS_PRICE_RUPEES')) || 1) * 100,
-  trackRupees: Number(Deno.env.get('TRACK_PRICE_RUPEES')) || 1,
-  trackPaise: (Number(Deno.env.get('TRACK_PRICE_RUPEES')) || 1) * 100,
+  vipPassRupees: 1,
+  vipPassPaise: 100,
+  trackRupees: 1,
+  trackPaise: 100,
 };
 
 // Cryptographic helpers
@@ -89,38 +89,74 @@ async function verifyInstamojoMac(postData: Record<string, string>): Promise<boo
 }
 
 // Database Order Fulfillment
-async function fulfillOrder(orderId: string, gateway: string, gatewayOrderId: string, gatewayPaymentId: string) {
+async function fulfillOrder(orderId: string, gateway: string, gatewayOrderId: string, gatewayPaymentId: string, paymentMethod?: string) {
   try {
-    // 1. Fetch Transaction
+    // 1. Attempt PostgreSQL ACID RPC function fulfill_order_atomic
+    try {
+      const { data: rpcData, error: rpcError } = await supabase.rpc('fulfill_order_atomic', {
+        p_order_id: orderId,
+        p_gateway: gateway,
+        p_gateway_order_id: gatewayOrderId,
+        p_gateway_payment_id: gatewayPaymentId,
+        p_payment_method: paymentMethod || null,
+      });
+
+      if (!rpcError && rpcData?.success) {
+        console.log(`Order ${orderId} atomically fulfilled via PostgreSQL RPC:`, rpcData);
+        return;
+      }
+      if (rpcError) {
+        console.warn('fulfill_order_atomic RPC error, falling back to direct table updates:', rpcError.message);
+      }
+    } catch (rpcErr) {
+      console.warn('RPC execution exception, using direct fallback:', rpcErr);
+    }
+
+    // 2. Fetch Transaction for direct fallback
     const { data: tx } = await supabase
       .from('PaymentTransaction')
       .select('*')
       .eq('orderId', orderId)
-      .single();
+      .maybeSingle();
 
     if (!tx || tx.status === 'SUCCESS') return;
 
-    // 2. Update Transaction to SUCCESS
+    // Resolve user ID if missing from transaction
+    let resolvedUserId = tx.userId;
+    if (!resolvedUserId && tx.customerEmail) {
+      const { data: userRow } = await supabase
+        .from('User')
+        .select('id')
+        .ilike('email', tx.customerEmail)
+        .maybeSingle();
+      if (userRow?.id) {
+        resolvedUserId = userRow.id;
+      }
+    }
+
+    // 3. Update Transaction to SUCCESS
     await supabase
       .from('PaymentTransaction')
       .update({
         status: 'SUCCESS',
+        userId: resolvedUserId,
         gatewayOrderId,
         gatewayPaymentId,
+        paymentMethod: paymentMethod || tx.paymentMethod,
         updatedAt: new Date().toISOString(),
       })
       .eq('orderId', orderId);
 
-    // 3. Grant Product Access
-    if (tx.itemType === 'VIP_PASS' && tx.userId) {
+    // 4. Grant Product Access
+    if (tx.itemType === 'VIP_PASS' && resolvedUserId) {
       const hundredYearsLater = new Date();
       hundredYearsLater.setFullYear(hundredYearsLater.getFullYear() + 100);
 
       await supabase.from('Subscription').upsert({
-        userId: tx.userId,
+        userId: resolvedUserId,
         planName: "Tony's VIP Pass",
         status: 'ACTIVE',
-        amountPaise: PRICING.vipPassPaise,
+        amountPaise: tx.amountPaise || PRICING.vipPassPaise,
         currentPeriodStart: new Date().toISOString(),
         currentPeriodEnd: hundredYearsLater.toISOString(),
         gateway,
@@ -128,11 +164,11 @@ async function fulfillOrder(orderId: string, gateway: string, gatewayOrderId: st
         gatewayPaymentId,
         updatedAt: new Date().toISOString(),
       });
-    } else if (tx.itemType === 'TRACK' && tx.userId && tx.trackId) {
+    } else if (tx.itemType === 'TRACK' && resolvedUserId && tx.trackId) {
       await supabase.from('Purchase').insert({
-        userId: tx.userId,
+        userId: resolvedUserId,
         trackId: tx.trackId,
-        amountPaise: PRICING.trackPaise,
+        amountPaise: tx.amountPaise || PRICING.trackPaise,
         status: 'SUCCESS',
         gateway,
         gatewayOrderId,
@@ -141,7 +177,7 @@ async function fulfillOrder(orderId: string, gateway: string, gatewayOrderId: st
       });
 
       await supabase.from('Entitlement').upsert({
-        userId: tx.userId,
+        userId: resolvedUserId,
         trackId: tx.trackId,
         entitlementType: 'PURCHASE',
         createdAt: new Date().toISOString(),
@@ -422,31 +458,135 @@ Deno.serve(async (req: Request) => {
       const body = await req.json();
       const { orderId, gateway } = body;
 
-      const { data: tx } = await supabase
+      if (!orderId) {
+        return new Response(JSON.stringify({ success: false, message: 'Order ID is required' }), {
+          status: 400,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
+      }
+
+      // 1. Check local database record first
+      let { data: tx } = await supabase
         .from('PaymentTransaction')
         .select('*')
         .eq('orderId', orderId)
-        .single();
+        .maybeSingle();
 
-      if (!tx) {
-        return new Response(JSON.stringify({ success: false, message: 'Order not found' }), {
-          status: 404,
+      if (tx && tx.status === 'SUCCESS') {
+        return new Response(JSON.stringify({
+          success: true,
+          status: 'SUCCESS',
+          message: 'Payment confirmed successfully!',
+          orderId,
+          itemType: tx.itemType,
+        }), {
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         });
       }
 
-      if (tx.status === 'SUCCESS') {
-        return new Response(JSON.stringify({ success: true, message: 'Payment confirmed successfully!' }), {
+      // 2. Direct Cashfree Gateway Status Fallback
+      if ((!gateway || gateway === 'CASHFREE' || orderId.startsWith('tp_')) && CASHFREE_APP_ID && CASHFREE_SECRET_KEY) {
+        try {
+          const cfUrl = CASHFREE_ENV === 'PROD'
+            ? `https://api.cashfree.com/pg/orders/${orderId}`
+            : `https://sandbox.cashfree.com/pg/orders/${orderId}`;
+
+          const cfRes = await fetch(cfUrl, {
+            headers: {
+              'x-client-id': CASHFREE_APP_ID,
+              'x-client-secret': CASHFREE_SECRET_KEY,
+              'x-api-version': '2023-08-01',
+            },
+          });
+
+          if (cfRes.ok) {
+            const cfData = await cfRes.json();
+            if (cfData.order_status === 'PAID') {
+              console.log(`Direct Cashfree verification confirmed order ${orderId} is PAID! Fulfilling now...`);
+              await fulfillOrder(
+                orderId,
+                'CASHFREE',
+                String(cfData.cf_order_id || ''),
+                String(cfData.order_id || '')
+              );
+
+              return new Response(JSON.stringify({
+                success: true,
+                status: 'SUCCESS',
+                message: 'Payment confirmed successfully!',
+                orderId,
+                itemType: tx?.itemType || 'VIP_PASS',
+              }), {
+                headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+              });
+            }
+          }
+        } catch (cfErr) {
+          console.error('Direct Cashfree lookup error:', cfErr);
+        }
+      }
+
+      // 3. Direct Instamojo Gateway Status Fallback
+      const paymentReqId = tx?.gatewayOrderId || body.paymentRequestId;
+      if ((gateway === 'INSTAMOJO' || paymentReqId) && INSTAMOJO_API_KEY && INSTAMOJO_AUTH_TOKEN) {
+        try {
+          const imRes = await fetch(`https://www.instamojo.com/api/1.1/payment-requests/${paymentReqId}/`, {
+            headers: {
+              'X-Api-Key': INSTAMOJO_API_KEY,
+              'X-Auth-Token': INSTAMOJO_AUTH_TOKEN,
+            },
+          });
+
+          if (imRes.ok) {
+            const imData = await imRes.json();
+            const pr = imData.payment_request || imData;
+            if (pr.status === 'Completed') {
+              const paymentId = pr.payments?.[0]?.payment_id || `im_pay_${Date.now()}`;
+              console.log(`Direct Instamojo verification confirmed order ${orderId} is Completed! Fulfilling now...`);
+              await fulfillOrder(orderId, 'INSTAMOJO', String(paymentReqId), String(paymentId));
+
+              return new Response(JSON.stringify({
+                success: true,
+                status: 'SUCCESS',
+                message: 'Payment confirmed successfully!',
+                orderId,
+                itemType: tx?.itemType || 'VIP_PASS',
+              }), {
+                headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+              });
+            }
+          }
+        } catch (imErr) {
+          console.error('Direct Instamojo lookup error:', imErr);
+        }
+      }
+
+      // 4. If transaction exists but not yet marked SUCCESS and not yet confirmed by gateway API
+      if (tx) {
+        return new Response(JSON.stringify({
+          success: false,
+          status: tx.status,
+          message: 'Payment is being processed by the bank. Please hold on a moment...',
+          orderId,
+        }), {
+          status: 200,
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         });
       }
 
-      return new Response(JSON.stringify({ success: false, status: tx.status, message: 'Payment pending or processing' }), {
+      // 5. If order row hasn't synced yet (network race condition), return PENDING 200 (never 404)
+      return new Response(JSON.stringify({
+        success: false,
+        status: 'PENDING',
+        message: 'Order status is synchronizing, please wait...',
+        orderId,
+      }), {
+        status: 200,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     } catch (err: any) {
       return new Response(JSON.stringify({ success: false, error: err.message }), {
-        status: 500,
+        status: 200,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
