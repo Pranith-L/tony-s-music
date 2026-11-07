@@ -571,7 +571,6 @@ export const api = {
         gateways: {
           cashfree: { enabled: boolean; environment: string };
           instamojo: { enabled: boolean; environment: string };
-          razorpay: { enabled: boolean; environment: string };
         };
         pricing: {
           vipPassPaise: number;
@@ -586,7 +585,7 @@ export const api = {
       itemType: 'VIP_PASS' | 'TRACK';
       trackId?: string;
       slug?: string;
-      gateway: 'CASHFREE' | 'INSTAMOJO' | 'RAZORPAY';
+      gateway: 'CASHFREE' | 'INSTAMOJO';
       customerName?: string;
       customerEmail?: string;
       customerPhone?: string;
@@ -619,9 +618,6 @@ export const api = {
       gateway?: string;
       paymentId?: string;
       paymentRequestId?: string;
-      razorpay_order_id?: string;
-      razorpay_payment_id?: string;
-      razorpay_signature?: string;
     }) {
       try {
         const res = await fetch(`${API_BASE}/payments/verify-unified-payment`, {
@@ -797,7 +793,6 @@ export const api = {
           byGateway: {
             cashfree: { count: number; revenueRupees: number };
             instamojo: { count: number; revenueRupees: number };
-            razorpay: { count: number; revenueRupees: number };
           };
         };
         transactions: any[];

@@ -39,30 +39,6 @@ export const MembershipPage: React.FC = () => {
     setShowCheckoutModal(true);
   };
 
-  const handleRazorpaySuccess = async (paymentData: {
-    razorpay_order_id: string;
-    razorpay_payment_id: string;
-    razorpay_signature: string;
-  }) => {
-    try {
-      const verified = await api.payments.verifySubscription({
-        subscriptionId: paymentData.razorpay_order_id,
-        paymentId: paymentData.razorpay_payment_id,
-        razorpay_order_id: paymentData.razorpay_order_id,
-        razorpay_payment_id: paymentData.razorpay_payment_id,
-        razorpay_signature: paymentData.razorpay_signature,
-      });
-
-      if (verified.success) {
-        setSuccessMsg("Payment verified! Your One-Time Lifetime VIP Pass has been activated successfully.");
-        await refreshUser();
-      }
-    } catch (err: any) {
-      setErrorMsg(err.message || 'Verification failed. Please contact support.');
-      throw err;
-    }
-  };
-
   const faqs = [
     {
       q: 'Is this really a one-time payment with no recurring fees?',
@@ -252,7 +228,7 @@ export const MembershipPage: React.FC = () => {
               </button>
             )}
             <p className="text-[10px] text-gray-400 text-center mt-2.5 font-mono">
-              Live Test payment of ₹1 (100 paise). Secure Cashfree & Instamojo checkout.
+              Secure Cashfree Payments. Instant UPI (GPay, PhonePe, Paytm, QR), Cards & Net Banking.
             </p>
           </div>
         </div>

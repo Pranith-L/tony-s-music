@@ -120,7 +120,7 @@ export const TrackPreviewLimitModal: React.FC<TrackPreviewLimitModalProps> = ({
             </div>
           )}
 
-          {/* Action 1: Buy Track via Razorpay */}
+          {/* Action 1: Buy Track via Cashfree */}
           <button
             id="modal-buy-track-btn"
             type="button"

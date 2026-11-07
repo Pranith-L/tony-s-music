@@ -96,7 +96,7 @@ export const Footer: React.FC = () => {
             All songs, lyrics, and compositions presented are verified ministry works. Audio downloads require entitlement confirmation or active subscription.
           </p>
           <div className="pt-2 text-[10px] text-sacred-ivoryMuted/60">
-            Secure Payments via Razorpay. Integer paise accounting. No unauthorized media ripping.
+            Secure Payments via Cashfree. Instant UPI, Cards & Net Banking. Integer paise accounting. No unauthorized media ripping.
           </div>
         </div>
       </div>

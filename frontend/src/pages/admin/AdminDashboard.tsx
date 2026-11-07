@@ -1214,16 +1214,16 @@ export const AdminDashboard: React.FC = () => {
                             Customer: <span className="font-bold">{sub.user?.name}</span> ({sub.user?.email})
                           </div>
                           <div className="flex items-center gap-2 pt-1">
-                            <span className="text-[11px] text-[#86868B] dark:text-[#A1A1AA]">Submitted UTR:</span>
+                            <span className="text-[11px] text-[#86868B] dark:text-[#A1A1AA]">Submitted UTR / Ref:</span>
                             <span className="font-mono font-bold text-[#1D1D1F] dark:text-white bg-white dark:bg-[#202023] px-2.5 py-1 rounded-md border border-amber-500/30 text-xs">
-                              {sub.razorpayPaymentId || 'N/A'}
+                              {sub.gatewayPaymentId || sub.razorpayPaymentId || 'N/A'}
                             </span>
-                            {sub.razorpayPaymentId && (
+                            {(sub.gatewayPaymentId || sub.razorpayPaymentId) && (
                               <button
                                 type="button"
-                                onClick={() => handleCopyUtr(sub.id, sub.razorpayPaymentId)}
+                                onClick={() => handleCopyUtr(sub.id, sub.gatewayPaymentId || sub.razorpayPaymentId)}
                                 className="px-2.5 py-1 rounded-md bg-white dark:bg-[#202023] hover:bg-[#FA243C] hover:text-white border border-gray-200 dark:border-gray-700 text-[10px] font-semibold flex items-center gap-1 transition-colors"
-                                title="Copy UTR to paste in PhonePe"
+                                title="Copy UTR / Reference"
                               >
                                 {copiedUtrId === sub.id ? (
                                   <>
@@ -1286,16 +1286,16 @@ export const AdminDashboard: React.FC = () => {
                             Customer: <span className="font-bold">{pur.user?.name}</span> ({pur.user?.email})
                           </div>
                           <div className="flex items-center gap-2 pt-1">
-                            <span className="text-[11px] text-[#86868B] dark:text-[#A1A1AA]">Submitted UTR:</span>
+                            <span className="text-[11px] text-[#86868B] dark:text-[#A1A1AA]">Submitted UTR / Ref:</span>
                             <span className="font-mono font-bold text-[#1D1D1F] dark:text-white bg-white dark:bg-[#202023] px-2.5 py-1 rounded-md border border-amber-500/30 text-xs">
-                              {pur.razorpayPaymentId || 'N/A'}
+                              {pur.gatewayPaymentId || pur.razorpayPaymentId || 'N/A'}
                             </span>
-                            {pur.razorpayPaymentId && (
+                            {(pur.gatewayPaymentId || pur.razorpayPaymentId) && (
                               <button
                                 type="button"
-                                onClick={() => handleCopyUtr(pur.id, pur.razorpayPaymentId)}
+                                onClick={() => handleCopyUtr(pur.id, pur.gatewayPaymentId || pur.razorpayPaymentId)}
                                 className="px-2.5 py-1 rounded-md bg-white dark:bg-[#202023] hover:bg-[#FA243C] hover:text-white border border-gray-200 dark:border-gray-700 text-[10px] font-semibold flex items-center gap-1 transition-colors"
-                                title="Copy UTR to paste in PhonePe"
+                                title="Copy UTR / Reference"
                               >
                                 {copiedUtrId === pur.id ? (
                                   <>
@@ -1356,9 +1356,9 @@ export const AdminDashboard: React.FC = () => {
                         <div>
                           <div className="font-bold text-[#1D1D1F] dark:text-white">{s.user?.name}</div>
                           <div className="text-[11px] text-[#86868B] dark:text-[#A1A1AA] mt-0.5">{s.user?.email}</div>
-                          {s.razorpayPaymentId && (
+                          {(s.gatewayPaymentId || s.razorpayPaymentId) && (
                             <div className="text-[10px] font-mono text-[#64748B] mt-0.5">
-                              UTR: {s.razorpayPaymentId}
+                              Ref: {s.gatewayPaymentId || s.razorpayPaymentId}
                             </div>
                           )}
                         </div>
@@ -1402,9 +1402,9 @@ export const AdminDashboard: React.FC = () => {
                           <div className="text-[11px] text-[#86868B] dark:text-[#A1A1AA] mt-0.5">
                             {p.user?.name} ({p.user?.email})
                           </div>
-                          {p.razorpayPaymentId && (
+                          {(p.gatewayPaymentId || p.razorpayPaymentId) && (
                             <div className="text-[10px] font-mono text-[#64748B] mt-0.5">
-                              UTR: {p.razorpayPaymentId}
+                              Ref: {p.gatewayPaymentId || p.razorpayPaymentId}
                             </div>
                           )}
                         </div>

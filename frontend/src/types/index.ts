@@ -113,8 +113,9 @@ export interface Subscription {
   amountPaise: number;
   currentPeriodStart: string;
   currentPeriodEnd: string;
-  razorpaySubscriptionId?: string | null;
-  razorpayPaymentId?: string | null;
+  gateway?: string | null;
+  gatewayOrderId?: string | null;
+  gatewayPaymentId?: string | null;
   createdAt: string;
 }
 
@@ -125,8 +126,9 @@ export interface Purchase {
   track?: Track;
   amountPaise: number;
   status: 'SUCCESS' | 'PENDING' | 'FAILED';
-  razorpayOrderId?: string | null;
-  razorpayPaymentId?: string | null;
+  gateway?: string | null;
+  gatewayOrderId?: string | null;
+  gatewayPaymentId?: string | null;
   createdAt: string;
 }
 

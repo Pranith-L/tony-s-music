@@ -51,7 +51,7 @@ export const UnifiedCheckoutModal: React.FC<UnifiedCheckoutModalProps> = ({
 }) => {
   const { user, refreshUser } = useAuth();
 
-  const [selectedGateway, setSelectedGateway] = useState<'CASHFREE' | 'INSTAMOJO'>('CASHFREE');
+  const [selectedGateway] = useState<'CASHFREE' | 'INSTAMOJO'>('CASHFREE');
   const [customerName, setCustomerName] = useState<string>(user?.name || '');
   const [customerEmail, setCustomerEmail] = useState<string>(user?.email || '');
   const [customerPhone, setCustomerPhone] = useState<string>((user as any)?.phone || '');
@@ -84,8 +84,7 @@ export const UnifiedCheckoutModal: React.FC<UnifiedCheckoutModalProps> = ({
   if (!isOpen) return null;
 
   const isVipPass = itemType === 'VIP_PASS';
-  const standardPrice = isVipPass ? 299 : 99;
-  const priceRupees = selectedGateway === 'INSTAMOJO' ? Math.max(standardPrice, 9) : standardPrice;
+  const priceRupees = isVipPass ? 299 : 99;
   const itemTitle = isVipPass
     ? "Tony's One-Time VIP Lifetime Pass"
     : track
@@ -403,61 +402,25 @@ export const UnifiedCheckoutModal: React.FC<UnifiedCheckoutModalProps> = ({
                 <span>All 68 Telugu devotional songs remain 100% free to stream anytime!</span>
               </div>
 
-              {/* Gateway Selection Cards */}
+              {/* Payment Gateway Card: Official Cashfree Gateway */}
               <div className="space-y-2">
                 <label className="text-[11px] font-mono uppercase tracking-wider text-gray-400 block font-semibold">
-                  Select Payment Gateway:
+                  Payment Gateway:
                 </label>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  {/* Cashfree Option */}
-                  <div
-                    onClick={() => setSelectedGateway('CASHFREE')}
-                    className={`p-4 rounded-2xl border cursor-pointer transition-all ${
-                      selectedGateway === 'CASHFREE'
-                        ? 'bg-[#D4A017]/10 border-[#D4A017] ring-1 ring-[#D4A017]/50 shadow-md'
-                        : 'bg-white/5 border-white/10 hover:border-white/25'
-                    }`}
-                  >
-                    <div className="flex items-center justify-between mb-2">
-                      <div className="flex items-center gap-2">
-                        <span className="w-2.5 h-2.5 rounded-full bg-emerald-400" />
-                        <span className="font-bold text-sm text-white">Cashfree</span>
-                      </div>
-                      <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-mono font-bold">
-                        Popular
-                      </span>
+                <div className="p-4 rounded-2xl border bg-[#D4A017]/10 border-[#D4A017] ring-1 ring-[#D4A017]/50 shadow-md transition-all">
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center gap-2.5">
+                      <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
+                      <span className="font-bold text-sm sm:text-base text-white">Cashfree Payments</span>
                     </div>
-                    <p className="text-[11px] text-gray-300">
-                      UPI (GPay, PhonePe, Paytm, QR), Cards, Net Banking
-                    </p>
-                  </div>
-
-                  {/* Instamojo Option */}
-                  <div
-                    onClick={() => setSelectedGateway('INSTAMOJO')}
-                    className={`p-4 rounded-2xl border cursor-pointer transition-all ${
-                      selectedGateway === 'INSTAMOJO'
-                        ? 'bg-[#D4A017]/10 border-[#D4A017] ring-1 ring-[#D4A017]/50 shadow-md'
-                        : 'bg-white/5 border-white/10 hover:border-white/25'
-                    }`}
-                  >
-                    <div className="flex items-center justify-between mb-2">
-                      <div className="flex items-center gap-2">
-                        <span className="w-2.5 h-2.5 rounded-full bg-blue-400" />
-                        <span className="font-bold text-sm text-white">Instamojo</span>
-                      </div>
-                      <span className="text-[10px] px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-300 font-mono font-bold">
-                        Fast UPI
-                      </span>
-                    </div>
-                    <p className="text-[11px] text-gray-300">
-                      UPI QR, Debit/Credit Cards, Wallets, Net Banking
-                    </p>
-                    <span className="text-[10px] text-blue-300 font-mono mt-1 block">
-                      (Instant UPI, Net Banking & Cards)
+                    <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-emerald-500/20 border border-emerald-400/30 text-emerald-300 font-mono font-bold">
+                      Verified & Active
                     </span>
                   </div>
+                  <p className="text-[11px] text-gray-300 leading-relaxed">
+                    Instant UPI (Google Pay, PhonePe, Paytm, Any UPI QR), Debit/Credit Cards & Net Banking
+                  </p>
                 </div>
               </div>
 
@@ -506,7 +469,7 @@ export const UnifiedCheckoutModal: React.FC<UnifiedCheckoutModalProps> = ({
               >
                 <Sparkles className="w-4 h-4" />
                 <span>
-                  Pay ₹{priceRupees} via {selectedGateway === 'CASHFREE' ? 'Cashfree' : 'Instamojo'}
+                  Pay ₹{priceRupees} via Cashfree
                 </span>
                 <ArrowRight className="w-4 h-4" />
               </button>
@@ -528,7 +491,7 @@ export const UnifiedCheckoutModal: React.FC<UnifiedCheckoutModalProps> = ({
               {/* Security Badge */}
               <div className="text-center text-[10px] text-gray-400 flex items-center justify-center gap-1.5 pt-1">
                 <Lock className="w-3.5 h-3.5 text-emerald-400" />
-                <span>256-Bit SSL Encrypted • Official Cashfree & Instamojo Payment Integration</span>
+                <span>256-Bit SSL Encrypted • Official Cashfree Payment Gateway</span>
               </div>
             </div>
           )}

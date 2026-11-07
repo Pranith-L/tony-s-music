@@ -107,36 +107,8 @@ export const TracksPage: React.FC = () => {
     return a.orderIndex - b.orderIndex;
   });
 
-  const [razorpayOrder, setRazorpayOrder] = useState<{
-    orderId: string;
-    amount: number;
-    track: Track;
-  } | null>(null);
-
   const handleBuyTrack = (track: Track) => {
     setCheckoutTrack(track);
-  };
-
-  const handleRazorpaySuccess = async (paymentData: {
-    razorpay_order_id: string;
-    razorpay_payment_id: string;
-    razorpay_signature: string;
-  }) => {
-    if (!razorpayOrder) return;
-    try {
-      const verified = await api.payments.verifyOrder({
-        razorpay_order_id: paymentData.razorpay_order_id,
-        razorpay_payment_id: paymentData.razorpay_payment_id,
-        razorpay_signature: paymentData.razorpay_signature,
-      });
-
-      if (verified.success) {
-        await refreshUser();
-      }
-    } catch (err: any) {
-      alert(err.message || 'Payment verification failed');
-      throw err;
-    }
   };
 
   const handleDownload = async (track: Track) => {

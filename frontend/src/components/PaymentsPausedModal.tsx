@@ -108,7 +108,7 @@ export const PaymentsPausedModal: React.FC<PaymentsPausedModalProps> = ({
           {/* Notice about online checkout */}
           <div className="space-y-2 text-xs text-gray-300 leading-relaxed">
             <p>
-              Automated online checkout is temporarily paused while we finalize official live banking verification for our Razorpay gateway.
+              Automated online checkout is temporarily paused while we finalize official live banking verification for our payment gateway.
             </p>
             <p className="text-gray-400">
               For early access to <strong className="text-white">Tony's VIP Lifetime Pass (₹299)</strong> or <strong className="text-white">Studio Minus-One Backing Tracks (₹99)</strong>, you can contact Rev. Tony Prakash directly via WhatsApp or phone:

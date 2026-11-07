@@ -686,7 +686,6 @@ Deno.serve(async (req: Request) => {
             count: instamojoSuccess.length,
             revenueRupees: instamojoSuccess.reduce((acc: number, t: any) => acc + (t.amountPaise || 0), 0) / 100,
           },
-          razorpay: { count: 0, revenueRupees: 0 },
         },
       };
 
